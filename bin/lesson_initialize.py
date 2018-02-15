@@ -207,6 +207,8 @@ repository: <USERNAME>/<PROJECT>
 
 # Sites.
 amy_site: "https://amy.software-carpentry.org/workshops"
+bst_site: "https://docs.computecanada.ca/wiki/Biomolecular_simulation"
+cc_site: "https://www.computecanada.ca"
 dc_site: "http://datacarpentry.org"
 swc_github: "https://github.com/swcarpentry"
 swc_site: "https://software-carpentry.org"
