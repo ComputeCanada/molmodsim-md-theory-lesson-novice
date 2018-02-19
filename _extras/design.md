@@ -52,18 +52,85 @@ up with fully customized analysis methods.
 
 ## Process Used
 
+* 
+
 ## Stage 1: Assumptions
 
 *   Audience
-  * 
+    * Gradstudents in with some background in chemistry (e.g. Biochemistry, 
+      Chemical Engineering, Condensed Matter Physics or similar),
+      who want to start a research project with Molecular Dynamics.
+    * Had a course in thermodynamics and possibly statistical thermodynamics.
+    * Have either attended lesson 1 of this series or worked through a MD 
+      tutorial or two.  
+      At this point they are likely overwhelmed by the number of simulation 
+      parameters that need to be set and need some practical guidance.
+
 *   Constraints
-  * 
+    * A half day or maybe full day?
+    * Difficult to make this interactive.  
+        * One could have the students run simulations with bad settings, 
+          which then either are unstable and fail, result on obviously bad 
+          results or compare observables with simulations with better settings.
+        * This however will take a lot longer than a traditional lecture.
+        * One could prepare pairs of simulations with bad and good settings
+          and compare the results.
+
 *   Motivating Example
-  * 
+    * 
+
 *   Data
-  * 
+    * 
 
 ## Stage 2: Desired Results
+
+### Topics to cover 
+(in no particular order)
+
+* System prepatation
+    * complete input structre (check for missing atoms/residues)
+    * balance charges (the world does not have net-charge)
+    * non-integer charges point to broken topology
+
+* Periodic Boundary Conditions
+    * there is no "outside of the box" with PBC
+    * minimum image convention
+    * cut-off restrictions
+
+* Force fields
+    * Genealogy of common Forcefields
+    * bonded interactions
+    * non-bonded interactions
+        * cut-offs
+        * long range interactions (PME)
+
+* The Global MD algorithm
+    * choice of time steps
+    * applying constraints
+
+* Phases of MD Workflow
+    * energy minimizaton
+    * position restrained MD
+    * equillibration
+    * production MD
+
+* Thermostats/Barostats
+    * Flying ice cube -> resetting COM-movement
+    * Hot-Solvent/Cold-Solute -> tcoupl groups
+    * Size of temperature coupling groups
+    * Berendsen's algorithms are suitable for equillibration (exponential 
+      approach to target temperature/pressure) but result in a non-physical
+      ensamble.
+    * Parinello-Rahmnan and Nose-Hoover are suitable for production MD
+      (correct physical ensamble), but approach the target temperature/pressure
+      in a dampended oscillation, which might be unstable and takes much longer.
+
+* Parallelization/Performance
+    * Particle decomposition vs. Domain Decomposition
+    * MPI / OpenMP / GPU
+    * PME nodes /  shifting of real-space/PME cutoff
+    * Load balancing
+
 
 ### Questions
 
