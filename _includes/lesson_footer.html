@@ -4,7 +4,7 @@
 <footer>
   <div class="row">
     <div class="col-md-6" align="left">
-      <h4>
+      <h5>
 	Copyright &copy; 2016–{{ 'now' | date: "%Y" }}
 	{% if site.carpentry == "swc" %}
 	<a href="{{ site.swc_site }}">Software Carpentry Foundation</a>
@@ -12,10 +12,17 @@
 	<a href="{{ site.dc_site }}">Data Carpentry</a>
 	{% elsif site.carpentry == "lc" %}
 	<a href="{{ site.lc_site }}">Library Carpentry</a>
+	{% elsif site.carpentry == "an" %}
+	<a href="{{ site.an_site }}">ACENET</a>
+	{% elsif site.carpentry == "cc" %}
+	<a href="{{ site.cc_site }}">Compute Canada</a>
 	{% elsif site.carpentry == "bst" %}
 	<a href="{{ site.bst_site }}">Compute Canada Biomolecular Simulation Team</a>
 	{% endif %}
-      </h4>
+        {% if site.carpentry != "swc" and site.carpentry != "dc" and site.carpentry != "lc"  %}
+        &dash; Derived from <a href="https://software-carpentry.org/">Software Carpentry</a>
+        {% endif %}
+      </h5>
     </div>
     <div class="col-md-6" align="right">
       <h4>

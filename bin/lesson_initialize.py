@@ -16,9 +16,9 @@ FIXME: describe how to cite this lesson.
 '''
 
 ROOT_CONTRIBUTING_MD = '''\
-# Contributing - Biomolecular Simulation Team
+# Contributing - Compute Canada
 
-**This lesson is currently under active development by the Compute Canada Biomolecular Simulation Team.**
+**This lesson is currently under active development by Compute Canada.**
 
 Although this is intended to be an open lesson that follows the general 
 Software and Data Carpentry contribution guidelines,
@@ -183,7 +183,7 @@ ROOT_CONFIG_YML = '''\
 # Values for this lesson.
 #------------------------------------------------------------
 
-# Which carpentry is this ("swc", "dc", "lc", or "bst")?
+# Which carpentry is this ("swc", "dc", "lc", "cc", "an" or "bst")?
 carpentry: "swc"
 
 # Overall title for pages.
@@ -207,6 +207,7 @@ repository: <USERNAME>/<PROJECT>
 
 # Sites.
 amy_site: "https://amy.software-carpentry.org/workshops"
+an_site: "https://www.ace-net.ca"
 bst_site: "https://docs.computecanada.ca/wiki/Biomolecular_simulation"
 cc_site: "https://www.computecanada.ca"
 dc_site: "http://datacarpentry.org"
