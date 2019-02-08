@@ -7,11 +7,13 @@
       <h4>
 	Copyright &copy; 2016–{{ 'now' | date: "%Y" }}
 	{% if site.carpentry == "swc" %}
-	<a href="{{ site.swc_site }}">Software Carpentry Foundation</a>
+	<a href="{{ site.swc_site }}">Software Carpentry</a>
 	{% elsif site.carpentry == "dc" %}
 	<a href="{{ site.dc_site }}">Data Carpentry</a>
 	{% elsif site.carpentry == "lc" %}
 	<a href="{{ site.lc_site }}">Library Carpentry</a>
+	{% elsif site.carpentry == "cp" %}
+	<a href="{{ site.carpentries_site }}">The Carpentries</a>
 	{% elsif site.carpentry == "an" %}
 	<a href="{{ site.an_site }}">ACENET</a>
 	{% elsif site.carpentry == "cc" %}
@@ -19,7 +21,7 @@
 	{% elsif site.carpentry == "bst" %}
 	<a href="{{ site.bst_site }}">Compute Canada Biomolecular Simulation Team</a>
 	{% endif %}
-        {% if site.carpentry != "swc" and site.carpentry != "dc" and site.carpentry != "lc"  %}
+        {% if site.carpentry != "swc" and site.carpentry != "dc" and site.carpentry != "lc" and site.carpentry != "cp"  %}
         &dash; Derived from <a href="https://software-carpentry.org/">Software Carpentry</a>
         {% endif %}
       </h4>
