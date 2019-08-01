@@ -11,7 +11,7 @@
          - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
    - 1.2. [Boundary conditions](#boundary-conditions)   
    - 1.3. [Truncation of interactions](#truncation-of-interactions)   
-   - 1.4. [Balancing of Charges](#balancing-of-charges)   
+   - 1.4. [Balancing of charges](#balancing-of-charges)   
    - 1.5. [Integrating the equations of motion](#integrating-the-equations-of-motion)   
 
 <!-- /MDTOC -->
@@ -41,5 +41,5 @@ A force field is a set of energy functions and parameters used to calculate the 
 #### The torsion angle potential
 ## Boundary conditions
 ## Truncation of interactions
-## Balancing of Charges
+## Balancing of charges
 ## Integrating the equations of motion
