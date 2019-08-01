@@ -1,23 +1,20 @@
-<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->
 
-- [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)   
-   - [Force Fields](#force-fields)   
-      - [Non-bonded interactions](#non-bonded-interactions)   
-         - [The Lennard-Jones potential](#the-lennard-jones-potential)   
-         - [The electrostatic potential](#the-electrostatic-potential)   
-      - [Bonded interactions](#bonded-interactions)   
-         - [The bond potential](#the-bond-potential)   
-         - [The angle potential](#the-angle-potential)   
-         - [The torsion angle potential](#the-torsion-angle-potential)   
-      - [Boundary conditions](#boundary-conditions)   
-      - [Truncation of interactions](#truncation-of-interactions)   
-      - [Balancing of Charges](#balancing-of-charges)   
-      - [Integrating the equations of motion](#integrating-the-equations-of-motion)   
+- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)   
+   - 1.1. [Force Fields](#force-fields)   
+      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
+         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
+         - 1.1.1.2. [The electrostatic potential](#the-electrostatic-potential)   
+      - 1.1.2. [Bonded interactions](#bonded-interactions)   
+         - 1.1.2.1. [The bond potential](#the-bond-potential)   
+         - 1.1.2.2. [The angle potential](#the-angle-potential)   
+         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
+   - 1.2. [Boundary conditions](#boundary-conditions)   
+   - 1.3. [Truncation of interactions](#truncation-of-interactions)   
+   - 1.4. [Balancing of Charges](#balancing-of-charges)   
+   - 1.5. [Integrating the equations of motion](#integrating-the-equations-of-motion)   
 
 <!-- /MDTOC -->
-
-
-
 
 # Basic principles of molecular dynamics
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{p}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{p}" title="\vec{p}" /></a> of an object equals the force <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{F}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{F}" title="\vec{F}" /></a> acting on it:
@@ -42,7 +39,7 @@ A force field is a set of energy functions and parameters used to calculate the 
 #### The bond potential
 #### The angle potential
 #### The torsion angle potential
-### Boundary conditions
-### Truncation of interactions
-### Balancing of Charges
-### Integrating the equations of motion
+## Boundary conditions
+## Truncation of interactions
+## Balancing of Charges
+## Integrating the equations of motion
