@@ -28,12 +28,13 @@ Molecular dynamics (MD) simulations are widely used as tools to investigate stru
   the potential energy function acts as a cornerstone of the MD simulations.
 
 ## Force Fields
-A force field is a set of energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes intermolecular (non-bonded) and intramolecular (bonded) interactions.
+A force field is a set of energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions.
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" title="U(\vec{r})=\sum U_{bonded}(\vec{r})+\sum U_{nonbonded}(\vec{r})" /></a>
 
 ### Non-bonded interactions
 #### The Lennard-Jones potential
+The Lennard-Jones potential approximates the potential energy of interaction between two neutral non-bonding atoms or molecules with a simple mathematical function.
 #### The electrostatic potential
 ### Bonded interactions
 #### The bond potential
@@ -41,5 +42,6 @@ A force field is a set of energy functions and parameters used to calculate the 
 #### The torsion angle potential
 ## Boundary conditions
 ## Truncation of interactions
+The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated. Several different ways to terminate the interaction between two atoms have been developed.
 ## Balancing of charges
 ## Integrating the equations of motion
