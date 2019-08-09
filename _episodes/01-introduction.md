@@ -42,7 +42,17 @@ A force field is a set of empirical energy functions and parameters used to calc
 
 ### Non-bonded interactions
 #### The Lennard-Jones potential
-The Lennard-Jones potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function.
+The Lennard-Jones potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=V_{LJ}(r)=\frac{C_{12}}{r^{12}}&plus;\frac{C_{6}}{r^{6}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?V_{LJ}(r)=\frac{C_{12}}{r^{12}}&plus;\frac{C_{6}}{r^{6}}" /></a>
+It is commonly expressed in terms of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon" /> (the measure of the strength of the interaction) and the *van der Waals* radius <img src="https://latex.codecogs.com/gif.latex?\sigma" /> (the distance at which the intermolecular potential between the two particles is zero).
+<img src="https://latex.codecogs.com/gif.latex?V_{LJ}(r)=4\epsilon\left&space;[&space;\left&space;(&space;\frac{\sigma}{r}\right&space;)^{12}-&space;\left&space;(&space;\frac{\sigma}{r}\right&space;)^{6}&space;\right&space;]" title="V_{LJ}(r)=4\epsilon\left [ \left ( \frac{\sigma}{r}\right )^{12}- \left ( \frac{\sigma}{r}\right )^{6} \right ]" />
+
+The *LJ* coefficients *C* are related to the <img src="https://latex.codecogs.com/gif.latex?\sigma"/>  and the <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>  with the equations:
+
+ <img src="https://latex.codecogs.com/gif.latex?\inline&space;C_{12}=4\epsilon\sigma^{12}, C_{6}=4\epsilon\sigma^{6}"/>
+
+To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constucted. The *LJ* interaction between different types of atoms are computed by combining the *LJ* parameters.
 
 Combining rules:
 
