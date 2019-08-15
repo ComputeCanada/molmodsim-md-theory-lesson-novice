@@ -10,6 +10,7 @@
          - 1.1.2.1. [The bond potential](#the-bond-potential)   
          - 1.1.2.2. [The angle potential](#the-angle-potential)   
          - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
+         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
    - 1.2. [Boundary conditions](#boundary-conditions)   
    - 1.3. [Truncation of interactions](#truncation-of-interactions)   
    - 1.4. [Balancing of charges](#balancing-of-charges)   
@@ -65,8 +66,12 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 - **Lorentz–Berthelot:**
 <img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\frac{\sigma_{ii}&plus;\sigma_{jj}}{2},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}"  />, (CHARM, AMBER)
 
-- **Hybrid: Lorentz–Berthelot for H and the Waldman–Hagler for other elements**
-  Implemented in the AMBER-ii, specialized force field for perfluoroalkanes
+- **Waldman–Hagler:**
+<img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\left&space;(&space;\frac{&space;\sigma_{ii}^{6}&space;&plus;&space;\sigma_{jj}^{6}}{2}&space;\right&space;)^{\frac{1}{6}}"/>  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{ij}=\sqrt{\epsilon_{ij}&space;\epsilon_{jj}}\times\frac{2\sigma_{ii}^3&space;\sigma_{jj}^3}{\sigma_{ii}^6&space;&plus;\sigma_{jj}^6&space;}"/><br>Developed for noble gases
+
+
+- **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
+  Implemented in the AMBER-ii force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
 
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
@@ -77,11 +82,12 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 #### The bond potential
 #### The angle potential
 #### The torsion angle potential
+#### The Ureu-Bradley potential
 ## Boundary conditions
 ## Truncation of interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated. There are several different ways to truncate the non-bonded interaction.
 ## Balancing of charges
-Neutralizing a system is a practice carried out for obtaining correct electrostatic values during the simulation. This is done because under periodic boundary and using PME electrostatics the system has to be neutral. Otherwise the electrostatics will essentially add to infinity from the interaction of your box with the presence of your infinite periodic images.
+Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images.
 ## Integrating the equations of motion
 
 ## MD software available on CC clusters
