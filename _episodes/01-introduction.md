@@ -118,6 +118,9 @@ GROMACS and NAMD support triclinic PBC specified by 3 unit cell vectors.
 ## Integrating the equations of motion
 ### The Leap-frog algorithm
 
+In this algorithm, the velocities are first calculated at time t+1/2dt; these are used to calculate the positions, r, at time t+dt. In this way, the velocities leap over the positions, then the positions leap over the velocities. The advantage of this algorithm is that the velocities are explicitly calculated, however, the disadvantage is that they are not calculated at the same time as the positions. The velocities at time t can be approximated by the relationship:
+
+
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
 
 
@@ -126,6 +129,13 @@ GROMACS and NAMD support triclinic PBC specified by 3 unit cell vectors.
 ### The Verlet algorithm
 
 ### The Velocity Verlet algorithm
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/>
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}[a(t)&plus;a(t&plus;\delta{t})]\delta{t}"/>
+
+
+NAMD uses this algorithm
 
 ## MD software available on CC clusters
 ### AMBER
