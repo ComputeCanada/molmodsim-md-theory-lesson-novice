@@ -1,30 +1,35 @@
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->
 
-- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)
-   - 1.1. [Force Fields](#force-fields)
-      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)
-         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)
-         - 1.1.1.2. [Combining rules](#combining-rules)
-         - 1.1.1.3. [The electrostatic potential](#the-electrostatic-potential)
-      - 1.1.2. [Bonded interactions](#bonded-interactions)
-         - 1.1.2.1. [The bond potential](#the-bond-potential)
-         - 1.1.2.2. [The angle potential](#the-angle-potential)
-         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)
-         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)
-   - 1.2. [Boundary conditions](#boundary-conditions)
-   - 1.3. [Truncation of interactions](#truncation-of-interactions)
-      - 1.3.1. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)
-      - 1.3.2. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)
-   - 1.4. [Balancing of charges](#balancing-of-charges)
-   - 1.5. [Integrating the equations of motion](#integrating-the-equations-of-motion)
-   - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)
-      - 1.6.1. [AMBER](#amber)
-      - 1.6.2. [GROMACS](#gromacs)
-         - 1.6.2.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)
-      - 1.6.3. [NAMD](#namd)
-         - 1.6.3.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)
-      - 1.6.4. [LAMMPS](#lammps)
-      - 1.6.5. [DL_POLY](#dl_poly)
+- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)   
+   - 1.1. [Force Fields](#force-fields)   
+      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
+         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
+         - 1.1.1.2. [Combining rules](#combining-rules)   
+         - 1.1.1.3. [The electrostatic potential](#the-electrostatic-potential)   
+      - 1.1.2. [Bonded interactions](#bonded-interactions)   
+         - 1.1.2.1. [The bond potential](#the-bond-potential)   
+         - 1.1.2.2. [The angle potential](#the-angle-potential)   
+         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
+         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
+   - 1.2. [Truncation of interactions](#truncation-of-interactions)   
+      - 1.2.1. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
+      - 1.2.2. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
+   - 1.3. [Balancing of charges](#balancing-of-charges)   
+   - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
+   - 1.5. [Integrating the equations of motion.](#integrating-the-equations-of-motion)   
+      - 1.5.1. [The Euler algorithm](#the-euler-algorithm)   
+      - 1.5.2. [The Verlet algorithm](#the-verlet-algorithm)   
+      - 1.5.3. [The Velocity Verlet algorithm](#the-velocity-verlet-algorithm)   
+      - 1.5.4. [The Leap-frog algorithm](#the-leap-frog-algorithm)   
+   - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
+      - 1.6.1. [AMBER](#amber)   
+      - 1.6.2. [GROMACS](#gromacs)   
+         - 1.6.2.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)   
+      - 1.6.3. [NAMD](#namd)   
+         - 1.6.3.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)   
+      - 1.6.4. [LAMMPS](#lammps)   
+      - 1.6.5. [DL_POLY](#dl_poly)   
+   - 1.7. [Water Models](#water-models)   
 
 <!-- /MDTOC -->
 
@@ -38,6 +43,11 @@ Molecular dynamics (MD) simulations are widely used as tools to investigate stru
 The potential energy function *U* acts as a cornerstone of the MD simulations because it allows to calculate the forces. The force on an object is the negative of the derivative of the potential energy function:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\vec{F}=-\nabla&space;U(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\vec{F}=-\nabla&space;U(\vec{r})" title="\vec{F}=-\nabla U(\vec{r})" /></a>
+
+- Molecular dynamics helps to link physics, chemistry and biology
+- With the help of MD it is possible to model phenomena that cannot be studied experimentally.
+-  Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
+- Study thermodynamics properties (free energies, binding energies)
 
 
 ## Force Fields
@@ -62,7 +72,7 @@ The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/
 
  <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12}, C6=4\epsilon\sigma^{6}"/>
 
-To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constucted. The *LJ* interaction between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
+To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constucted. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
 #### Combining rules
 
@@ -88,13 +98,15 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 #### The angle potential
 #### The torsion angle potential
 #### The Ureu-Bradley potential
+The presece of cross terms in a force field reflects couplings between the internal coordinates.
+• As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
 
 
 ## Truncation of interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated. There are several different ways to truncate the non-bonded interaction.
 
 ### Truncation of the Lennard-Jones interactions
-The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O,N,C,S,P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
+The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
 The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching funcion starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
@@ -115,30 +127,86 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 GROMACS and NAMD support triclinic PBC specified by 3 unit cell vectors.
 
 
-## Integrating the equations of motion
-### The Leap-frog algorithm
+## Integrating the equations of motion.
 
-In this algorithm, the velocities are first calculated at time t+1/2dt; these are used to calculate the positions, r, at time t+dt. In this way, the velocities leap over the positions, then the positions leap over the velocities. The advantage of this algorithm is that the velocities are explicitly calculated, however, the disadvantage is that they are not calculated at the same time as the positions. The velocities at time t can be approximated by the relationship:
+The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If time step is small enough the trajectory will be reasonable accurate.
 
-
-<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
+Usually bond stretching is the fastest motion: C-H is ~10fs so use time step of 1fs
 
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\frac{1}{2}\delta&space;t)=\vec{v}(t-\frac{1}{2}\delta&space;t)\cdot&space;\delta&space;t&plus;\vec{a}(t)\cdot\delta{t}"  />
+### The Euler algorithm
+
+first order: error at a given time is proportional to the step size
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/><br>
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}a(t)\delta{t}"/>
+
+The Euler algorithm is neither time-reversible nor phase-space preserving and hence rather unfavorable. Nevertheless, the Euler scheme can be used to integrate other equations of motion, e.g. the Boltzmann equation??.
+
+GROMACS offers an Euler integrator for Brownian or position Langevin dynamics.
 
 ### The Verlet algorithm
 
+Using the positions at the current and the previous time steps calculate the positions at the next time step:
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})&plus;a(t)\delta{t}^2"/><br>
+
+The verlet algorithm needs positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, but they are useful to compute the kinetic energy. When neede velocities can be computed using:
+
+<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\frac{r{(t&plus;\delta{t})-&space;r(t-\delta{t})&space;}}{2\delta{t}}"  />
+
 ### The Velocity Verlet algorithm
+
+The velocities and positions are calculated at the same time:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/>
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}[a(t)&plus;a(t&plus;\delta{t})]\delta{t}"/>
 
+explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm
+
+- Second order
+- Time reversible
+- Energy conserving
+
+
+### The Leap-frog algorithm
+The Leap frog algorithm is essentially the same algorithm as the Velocity Verlet. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions x(t) and velocities v(t) at interleaved time points, staggered in such a way that they "leapfrog" over each other.
+
+1. Using accelerations of the current time step, compute the velocities at half-time step:
+<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\frac{1}{2}\delta&space;t)=\vec{v}(t-\frac{1}{2}\delta&space;t)\cdot&space;\delta&space;t&plus;\vec{a}(t)\cdot\delta{t}"  />
+
+2. Determine positions at the next time step:
+<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
+
+- Second order
+- Time reversible
+- Conserves the energy
+- Stable for deltaT <= 2/omega
+
+
+Algebraically (i.e. ignoring effects of finite precision floating point calculations) these methods (VV and LF) give equivalent trajectories.
+
+Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For a motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
+
+
+Most practical simulations use SHAKE and/or a thermostat or barostat.  These add a lot of complexity, and defeat attempts to use simple phrases like "velocity Verlet" or "leapfrog" to describe what is done.
+
+AMBER redtart files are "leapfrogish": the  velocities are written to the file at a different time point than the coordinates.
+
+
+GROMACS offers 4 types of the integration algorithms that can be selected using the **integrator** keyword.
+
+They differ in the calculation of kinetic energy: md, sd - leap frog type; md-vv, md-vv-avek - VV type.
+
+GROMACS also offers an Euler integrator for Brownian or position Langevin dynamics. Why Euler?
 
 NAMD uses this algorithm
 
 ## MD software available on CC clusters
 ### AMBER
+[Web page](http://ambermd.org)
 ### GROMACS
 #### Force fields implemented in GROMACS:
 - AMBER: 94, 96, 99, 99sb, 99sb-ildn, 03, GS (amberGS is amber94 with both backbone torsion potentals set to 0).
