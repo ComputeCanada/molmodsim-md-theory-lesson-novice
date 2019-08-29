@@ -20,7 +20,8 @@
       - 1.5.1. [The Euler algorithm](#the-euler-algorithm)   
       - 1.5.2. [The Verlet algorithm](#the-verlet-algorithm)   
       - 1.5.3. [The Velocity Verlet algorithm](#the-velocity-verlet-algorithm)   
-      - 1.5.4. [The Leap-frog algorithm](#the-leap-frog-algorithm)   
+      - 1.5.4. [The Leap Frog algorithm](#the-leap-frog-algorithm)   
+      - 1.5.5. [Choosing the simulation time step](#choosing-the-simulation-time-step)   
    - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
       - 1.6.1. [AMBER](#amber)   
       - 1.6.2. [GROMACS](#gromacs)   
@@ -120,73 +121,72 @@ Neutralizing a system is a practice carried out for obtaining correct electrosta
 ## Periodic boundary conditions
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed in order to preserve thermodynamic properties like temperature, pressure and density.
 
-To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. Therefore each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by interaction of the isolated system with vacuum with the PBC artifacts which are in general less severe.
+To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by interaction of the isolated system with vacuum with the PBC artifacts which are in general much less severe.
 
 In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its own image.
 
-GROMACS and NAMD support triclinic PBC specified by 3 unit cell vectors.
+PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
 
 ## Integrating the equations of motion.
 
-The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If time step is small enough the trajectory will be reasonable accurate.
+The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If time step is small enough the trajectory will be reasonably accurate.
 
-Usually bond stretching is the fastest motion: C-H is ~10fs so use time step of 1fs
-
+A good intergration algorithm for MD should be time-reversible and energy conserving.
 
 ### The Euler algorithm
 
-first order: error at a given time is proportional to the step size
+The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/><br>
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}a(t)\delta{t}"/>
 
-The Euler algorithm is neither time-reversible nor phase-space preserving and hence rather unfavorable. Nevertheless, the Euler scheme can be used to integrate other equations of motion, e.g. the Boltzmann equation??.
-
-GROMACS offers an Euler integrator for Brownian or position Langevin dynamics.
+The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavorable. Nevertheless, the Euler scheme can be used to integrate other equations of motion. For example GROMACS offers an Euler integrator for Brownian or position Langevin dynamics.
 
 ### The Verlet algorithm
 
-Using the positions at the current and the previous time steps calculate the positions at the next time step:
+Using the current positions and forces and the previous positions calculate the positions at the next time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})&plus;a(t)\delta{t}^2"/><br>
 
-The verlet algorithm needs positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, but they are useful to compute the kinetic energy. When neede velocities can be computed using:
+The Verlet algorithm requires positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\frac{r{(t&plus;\delta{t})-&space;r(t-\delta{t})&space;}}{2\delta{t}}"  />
 
+The Verlet algorithm is time reversible and energy conserving.
+
 ### The Velocity Verlet algorithm
 
-The velocities and positions are calculated at the same time:
+The velocities, positions and forces are calculated at the same time according to:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/>
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}[a(t)&plus;a(t&plus;\delta{t})]\delta{t}"/>
 
-explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm
-
-- Second order
-- Time reversible
-- Energy conserving
+The Velocity Verlet algorithm is mahtematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simpliciry and stability is has become the most widely used algorithm in the MD simulations.
 
 
-### The Leap-frog algorithm
-The Leap frog algorithm is essentially the same algorithm as the Velocity Verlet. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions x(t) and velocities v(t) at interleaved time points, staggered in such a way that they "leapfrog" over each other.
+### The Leap Frog algorithm
 
-1. Using accelerations of the current time step, compute the velocities at half-time step:
+Using accelerations of the current time step, compute the velocities at half-time step:
+
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\frac{1}{2}\delta&space;t)=\vec{v}(t-\frac{1}{2}\delta&space;t)\cdot&space;\delta&space;t&plus;\vec{a}(t)\cdot\delta{t}"  />
 
-2. Determine positions at the next time step:
+Then determine positions at the next time step:
+
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
 
-- Second order
-- Time reversible
-- Conserves the energy
-- Stable for deltaT <= 2/omega
+The Leap Frog algorithm is essentially the same algorithm as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 
-Algebraically (i.e. ignoring effects of finite precision floating point calculations) these methods (VV and LF) give equivalent trajectories.
+### Choosing the simulation time step
+Mathematically Vertet family intergators are stable for time steps
+
+<img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
+
+In molecular dynamics stretching of the bonds involving the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice the time step of 1 fs is recommended to describe this motion reliably. If dynamics of the hydrogen bonds is not essential for a simulation, bonds with hydrogens can be constrained and time step increased to 2 fs.
+
 
 Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For a motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
 
