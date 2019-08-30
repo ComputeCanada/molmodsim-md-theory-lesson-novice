@@ -86,13 +86,15 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 #### Combining rules
 
-- **Geometric mean:**<br><img src="https://latex.codecogs.com/gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\times{C6_{jj}}}"/>  , (GROMOS)<br><img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}" />, (OPLS)
+- **Geometric mean:**<br>
+<img src="https://latex.codecogs.com/
+gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\times{C6_{jj}}}"/>  , (GROMOS)<br><img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}" />, (OPLS)<br><br>
 
-- **Lorentz–Berthelot:**
+- **Lorentz–Berthelot:**<br>
 <img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\frac{\sigma_{ii}&plus;\sigma_{jj}}{2},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}"  />, (CHARM, AMBER)
 
-- **Waldman–Hagler:**
-<img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\left&space;(&space;\frac{&space;\sigma_{ii}^{6}&space;&plus;&space;\sigma_{jj}^{6}}{2}&space;\right&space;)^{\frac{1}{6}}"/>  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{ij}=\sqrt{\epsilon_{ij}&space;\epsilon_{jj}}\times\frac{2\sigma_{ii}^3&space;\sigma_{jj}^3}{\sigma_{ii}^6&space;&plus;\sigma_{jj}^6&space;}"/><br>This combining rule was developed specifically for simulation of noble gases
+- **Waldman–Hagler:**<br>
+<img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\left&space;(&space;\frac{&space;\sigma_{ii}^{6}&space;&plus;&space;\sigma_{jj}^{6}}{2}&space;\right&space;)^{\frac{1}{6}}"/>  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{ij}=\sqrt{\epsilon_{ij}&space;\epsilon_{jj}}\times\frac{2\sigma_{ii}^3&space;\sigma_{jj}^3}{\sigma_{ii}^6&space;&plus;\sigma_{jj}^6&space;}"/><br>This combining rule was developed specifically for simulation of noble gases<br><br>
 
 - **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
   Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
