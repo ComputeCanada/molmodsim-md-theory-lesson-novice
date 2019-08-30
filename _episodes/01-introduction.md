@@ -5,7 +5,10 @@
       - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
          - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
          - 1.1.1.2. [Combining rules](#combining-rules)   
-         - 1.1.1.3. [The electrostatic potential](#the-electrostatic-potential)   
+         - 1.1.1.3. [Specifying Combining Rule](#specifying-combining-rule)   
+            - 1.1.1.3.1. [GROMACS](#gromacs)   
+            - 1.1.1.3.2. [NAMD](#namd)   
+         - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)   
       - 1.1.2. [Bonded interactions](#bonded-interactions)   
          - 1.1.2.1. [The bond potential](#the-bond-potential)   
          - 1.1.2.2. [The angle potential](#the-angle-potential)   
@@ -16,12 +19,18 @@
       - 1.2.2. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
-   - 1.5. [Integrating the equations of motion.](#integrating-the-equations-of-motion)   
-      - 1.5.1. [The Euler algorithm](#the-euler-algorithm)   
-      - 1.5.2. [The Verlet algorithm](#the-verlet-algorithm)   
-      - 1.5.3. [The Velocity Verlet algorithm](#the-velocity-verlet-algorithm)   
-      - 1.5.4. [The Leap Frog algorithm](#the-leap-frog-algorithm)   
-      - 1.5.5. [Choosing the simulation time step](#choosing-the-simulation-time-step)   
+   - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
+      - 1.5.1. [Integration Algorithms](#integration-algorithms)   
+         - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
+         - 1.5.1.2. [The Verlet Algorithm](#the-verlet-algorithm)   
+         - 1.5.1.3. [The Velocity Verlet Algorithm](#the-velocity-verlet-algorithm)   
+         - 1.5.1.4. [The Leap Frog Algorithm](#the-leap-frog-algorithm)   
+      - 1.5.2. [Choosing Time Step](#choosing-time-step)   
+      - 1.5.3. [Specifying Time Step Parameters](#specifying-time-step-parameters)   
+      - 1.5.4. [Specifying Integration Method](#specifying-integration-method)   
+         - 1.5.4.1. [GROMACS](#gromacs)   
+         - 1.5.4.2. [NAMD](#namd)   
+         - 1.5.4.3. [AMBER](#amber)   
    - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
       - 1.6.1. [AMBER](#amber)   
       - 1.6.2. [GROMACS](#gromacs)   
@@ -41,7 +50,7 @@ Molecular dynamics (MD) simulations are widely used as tools to investigate stru
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\vec{F}=\frac{d\vec{p}}{dt}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\vec{F}=\frac{d\vec{p}}{dt}" title="\vec{F}=\frac{d\vec{p}}{dt}" /></a>
 
-The potential energy function *U* acts as a cornerstone of the MD simulations because it allows to calculate the forces. The force on an object is the negative of the derivative of the potential energy function:
+The potential energy function *U* acts as a cornerstone of the MD simulations because it allows calculating the forces. The force on an object is the negative of the derivative of the potential energy function:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\vec{F}=-\nabla&space;U(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\vec{F}=-\nabla&space;U(\vec{r})" title="\vec{F}=-\nabla U(\vec{r})" /></a>
 
@@ -73,7 +82,7 @@ The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/
 
  <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12}, C6=4\epsilon\sigma^{6}"/>
 
-To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constucted. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
+To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
 #### Combining rules
 
@@ -85,9 +94,19 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 - **Waldman–Hagler:**
 <img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\left&space;(&space;\frac{&space;\sigma_{ii}^{6}&space;&plus;&space;\sigma_{jj}^{6}}{2}&space;\right&space;)^{\frac{1}{6}}"/>  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{ij}=\sqrt{\epsilon_{ij}&space;\epsilon_{jj}}\times\frac{2\sigma_{ii}^3&space;\sigma_{jj}^3}{\sigma_{ii}^6&space;&plus;\sigma_{jj}^6&space;}"/><br>This combining rule was developed specifically for simulation of noble gases
 
-
 - **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
-  Implemented in the AMBER-ii force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
+  Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
+
+#### Specifying Combining Rule
+##### GROMACS
+In GROMACS combining rules are specified in the `[nonbond_params]` section of the parameter file `ffnonbonded.itp`. Geometric mean is selected by using rules #1 and #3,  Lorentz–Berthelot rule is selected using rule #2.
+- GROMOS force field requires rule #1
+- OPLS force field requires rule #3
+- CHARM and AMBER force fields require rule  #2.
+##### NAMD
+By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
+
+`vdwGeometricSigma=yes`
 
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
@@ -99,9 +118,10 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 #### The angle potential
 #### The torsion angle potential
 #### The Ureu-Bradley potential
-The presece of cross terms in a force field reflects couplings between the internal coordinates.
-• As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
 
+The presence of cross terms in a force field reflects couplings between the internal coordinates.
+• As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
+ U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
 
 ## Truncation of interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated. There are several different ways to truncate the non-bonded interaction.
@@ -109,32 +129,32 @@ The most computationally demanding part of a molecular dynamics simulation is th
 ### Truncation of the Lennard-Jones interactions
 The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
-The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching funcion starts to modify the LJ potential to bring it to zero at the cutoff distance.
+The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 - NAMD uses the X-PLOR switching function
 
 ### Truncation of the electrostatic interactions
 
 ## Balancing of charges
-Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
+Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
 
 ## Periodic boundary conditions
-Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed in order to preserve thermodynamic properties like temperature, pressure and density.
+Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density.
 
-To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by interaction of the isolated system with vacuum with the PBC artifacts which are in general much less severe.
+To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
-In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its own image.
+In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
 PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
 
-## Integrating the equations of motion.
+## Integrating the Equations of Motion.
 
-The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If time step is small enough the trajectory will be reasonably accurate.
+The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
 
-A good intergration algorithm for MD should be time-reversible and energy conserving.
-
-### The Euler algorithm
+A good integration algorithm for MD should be time-reversible and energy conserving.
+### Integration Algorithms
+#### The Euler Algorithm
 
 The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
 
@@ -142,9 +162,9 @@ The Euler algorithm uses the second order Taylor expansion to estimate position 
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}a(t)\delta{t}"/>
 
-The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavorable. Nevertheless, the Euler scheme can be used to integrate other equations of motion. For example GROMACS offers an Euler integrator for Brownian or position Langevin dynamics.
+The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate other equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
-### The Verlet algorithm
+#### The Verlet Algorithm
 
 Using the current positions and forces and the previous positions calculate the positions at the next time step:
 
@@ -154,9 +174,9 @@ The Verlet algorithm requires positions at two time steps. It is inconvenient wh
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\frac{r{(t&plus;\delta{t})-&space;r(t-\delta{t})&space;}}{2\delta{t}}"  />
 
-The Verlet algorithm is time reversible and energy conserving.
+The Verlet algorithm is time-reversible and energy conserving.
 
-### The Velocity Verlet algorithm
+#### The Velocity Verlet Algorithm
 
 The velocities, positions and forces are calculated at the same time according to:
 
@@ -164,10 +184,10 @@ The velocities, positions and forces are calculated at the same time according t
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}[a(t)&plus;a(t&plus;\delta{t})]\delta{t}"/>
 
-The Velocity Verlet algorithm is mahtematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simpliciry and stability is has become the most widely used algorithm in the MD simulations.
+The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simplicity and stability is has become the most widely used algorithm in the MD simulations.
 
 
-### The Leap Frog algorithm
+#### The Leap Frog Algorithm
 
 Using accelerations of the current time step, compute the velocities at half-time step:
 
@@ -180,43 +200,58 @@ Then determine positions at the next time step:
 The Leap Frog algorithm is essentially the same algorithm as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 
-### Choosing the simulation time step
-Mathematically Vertet family intergators are stable for time steps
+### Choosing Time Step
+Mathematically Vertet family integrators are stable for time steps
 
 <img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
 
-In molecular dynamics stretching of the bonds involving the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice the time step of 1 fs is recommended to describe this motion reliably. If dynamics of the hydrogen bonds is not essential for a simulation, bonds with hydrogens can be constrained and time step increased to 2 fs.
+where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.
 
+In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
-Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For a motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
+### Specifying Time Step Parameters
+parameter | GROMACS keyword  |  NAMD keyword
+---| ---------|----------
+time step| dt       |  timestep
+number of steps| nstep    |  numsteps
+time of the first step| tinit|  firsttimestep
 
+### Specifying Integration Method
+#### GROMACS
+GROMACS offers several types of integration algorithms that can be selected using the `integrator` keyword.
 
-Most practical simulations use SHAKE and/or a thermostat or barostat.  These add a lot of complexity, and defeat attempts to use simple phrases like "velocity Verlet" or "leapfrog" to describe what is done.
+- `integrator = md` is a leap frog algorithm
+- `integrator = md-vv` is a velocity Verlet algorithm
+- `integrator = md-vv-avek` is a velocity Verlet algorithm same as `md-vv` except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
+- `integrator = sd` is an accurate leap frog stochastic dynamics integrator.
+- `integrator = bd` is a Euler integrator for Brownian or position Langevin dynamics.
 
-AMBER redtart files are "leapfrogish": the  velocities are written to the file at a different time point than the coordinates.
+#### NAMD
 
+Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
+#### AMBER
 
-GROMACS offers 4 types of the integration algorithms that can be selected using the **integrator** keyword.
+Most practical simulations use SHAKE and/or a thermostat or barostat.  These add a lot of complexity and defeat attempts to use simple phrases like "velocity Verlet" or "leapfrog" to describe what is done.
 
-They differ in the calculation of kinetic energy: md, sd - leap frog type; md-vv, md-vv-avek - VV type.
-
-GROMACS also offers an Euler integrator for Brownian or position Langevin dynamics. Why Euler?
+AMBER restart files are "leapfrogish": the velocities are written to the file at a different time point than the coordinates.
 
 NAMD uses this algorithm
+
+
 
 ## MD software available on CC clusters
 ### AMBER
 [Web page](http://ambermd.org)
 ### GROMACS
 #### Force fields implemented in GROMACS:
-- AMBER: 94, 96, 99, 99sb, 99sb-ildn, 03, GS (amberGS is amber94 with both backbone torsion potentals set to 0).
+- AMBER: 94, 96, 99, 99sb, 99sb-ildn, 03, GS (amberGS is amber94 with both backbone torsion potentials set to 0).
 - CHARMM: 27 (optimized for proteins and nucleic acids).
 - [CHARMM for GROMACS](http://mackerell.umaryland.edu/charmm_ff.shtml#charmm) (CHARMM36, CGenFF)
 - GROMOS: 43a1, 43a2, 45a3, 53a5, 53a6, 54a7.
 - OPLS-AA (OPLS-AA implemented in GROMACS is actually OPLS-AA/L. OPLS-AA/L uses OPLS-AA atom types with the torsions and impropers refitted to QM calculations at the HF/6-31G** level followed by single-point LMP2/cc-pVTZ(-f))
 ### NAMD
 #### Force fields implemented in NAMD:
-- [AMBER](http://ambermd.org/AmberModels.php) (amber format tolopogy prepared with AMBERTOOLS). Currently AMBER recommends the following force fields: ff14SB for proteins, OL15 for DNA, OL3 for RNA, GLYCAM_06j for carbohydrates, lipid17 for lipids, and a general force field gaff2.
+- [AMBER](http://ambermd.org/AmberModels.php) (amber format topology prepared with AMBERTOOLS). Currently AMBER recommends the following force fields: ff14SB for proteins, OL15 for DNA, OL3 for RNA, GLYCAM_06j for carbohydrates, lipid17 for lipids, and a general force field gaff2.
 - [CHARMM](http://mackerell.umaryland.edu/charmm_ff.shtml#charmm) (charmm format, topology prepared with psfgen)
 - [CHARMM-Drude](http://mackerell.umaryland.edu/charmm_drude_ff.shtml) (the polarizable force field based on the classical Drude oscillator model, charmm format)
 - GROMOS (from GROMACS distribution, topology prepared with pdb2gmx)
@@ -229,3 +264,8 @@ NAMD uses this algorithm
 ## Water Models
 OPC family water models: OPC, OPC3
 The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
+
+
+#SBATCH --cpus-per-task=8
+
+-parallel -openmp 4
