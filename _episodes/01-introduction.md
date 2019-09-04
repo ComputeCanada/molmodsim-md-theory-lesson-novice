@@ -190,19 +190,16 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
 #### NAMD ####
-**cellBasisVector1**
-
+**cellBasisVector1**<br>
 **cellBasisVector2**<br>
-**cellBasisVector3**
+**cellBasisVector3**<br>
 
 #### GROMACS ####
 In gromacs the box is integrated into the structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box:
 
-**-bt** box type (triclinic, cubic, dodecahedron, octahedron)
-
-**-box** box vectors lengths (a,b,c)
-
-**-angles** box vectors angles   (bc,ac,ab)
+**-bt** box type (triclinic, cubic, dodecahedron, octahedron)<br>
+**-box** box vectors lengths (a,b,c)<br>
+**-angles** box vectors angles   (bc,ac,ab)<br>
 
 ## Integrating the Equations of Motion.
 
