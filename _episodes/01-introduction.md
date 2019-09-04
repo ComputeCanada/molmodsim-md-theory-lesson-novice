@@ -20,6 +20,8 @@
          - 1.2.1.2. [Verlet lists](#verlet-lists)   
       - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
       - 1.2.3. [Specifying cut-off](#specifying-cut-off)   
+         - 1.2.3.1. [NAMD](#namd)   
+         - 1.2.3.2. [GROMACS](#gromacs)   
       - 1.2.4. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
@@ -157,22 +159,27 @@ The main option to control how LJ potential is truncated is the switching parame
 
 ### Specifying cut-off
 
-NAMD: combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
+#### NAMD ####
+ When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
-- cutoff:
-- pairlistdist:   distance between pairs for inclusion in pair lists, angstrom
-- stepspercycle: Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments
-- pairlistsPerCycle: regenerate x times per cycle.
+Keywords:
+
+**cutoff**
+> pairlistdist:   distance between pairs for inclusion in pair lists, angstrom
+>
+**stepspercycle**
+> Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments
+
+**pairlistsPerCycle**
+> regenerate pairlists x times per cycle.
 
 
-GROMACS Verlet lists
+#### GROMACS ####
+GROMACS uses Verlet lists
 Range of non-bonded interactions: rc=max(rlist,rVdW,rCoul)
 
 
-
-
 ### Truncation of the electrostatic interactions
-
 
 
 ## Balancing of charges
