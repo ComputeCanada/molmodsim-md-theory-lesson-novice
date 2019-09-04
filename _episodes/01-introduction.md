@@ -210,7 +210,7 @@ In gromacs the box is integrated into the structure file. The [editconf](http://
 
 ## Integrating the Equations of Motion.
 
-The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/><br> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
+The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
 
 A good integration algorithm for MD should be time-reversible and energy conserving.
 ### Integration Algorithms
