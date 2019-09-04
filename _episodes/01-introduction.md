@@ -292,8 +292,8 @@ GROMACS offers several types of integration algorithms that can be selected usin
 
 The only available integration method in NAMD is Verlet. To further reduce the cost of computing full electrostatics, NAMD uses a multiple timestepping integration scheme.
 
-**fullElectFrequency**  controls the number of timesteps between full electrostatic evaluations `
-**nonbondedFreq** controls the number of timesteps between nonbonded evaluation
+**fullElectFrequency**  controls the number of timesteps between full electrostatic evaluations <br>`
+**nonbondedFreq** controls the number of timesteps between nonbonded evaluation<br>
 
 Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
 #### AMBER
