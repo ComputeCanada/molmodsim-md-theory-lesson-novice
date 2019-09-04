@@ -24,6 +24,7 @@
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
       - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
+         - 1.4.1.1. [NAMD](#namd)   
    - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
       - 1.5.1. [Integration Algorithms](#integration-algorithms)   
          - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
@@ -187,10 +188,10 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 ### Specifying periodic box ###
 PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
-####NAMD
+#### NAMD ####
 **cellBasisVector1**
 **cellBasisVector2**
-**cellBasisVector3**
+**cellBasisVector3** 
 
 ####GROMACS
 In gromacs the box is integrated into the structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box:
@@ -271,7 +272,7 @@ time of the first step| `tinit`    |  `firsttimestep`
 #### GROMACS
 GROMACS offers several types of integration algorithms that can be selected using the **integrator** keyword.
 
-**md** 
+**md**
 > a leap frog algorithm
 >
 **md-vv**
