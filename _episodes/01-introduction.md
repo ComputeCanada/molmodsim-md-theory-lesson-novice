@@ -25,6 +25,7 @@
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
       - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
          - 1.4.1.1. [NAMD](#namd)   
+         - 1.4.1.2. [GROMACS](#gromacs)   
    - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
       - 1.5.1. [Integration Algorithms](#integration-algorithms)   
          - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
@@ -190,14 +191,18 @@ PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
 #### NAMD ####
 **cellBasisVector1**
-**cellBasisVector2**
-**cellBasisVector3** 
 
-####GROMACS
+**cellBasisVector2**
+
+**cellBasisVector3**
+
+#### GROMACS ####
 In gromacs the box is integrated into the structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box:
 
 **-bt** box type (triclinic, cubic, dodecahedron, octahedron)
+
 **-box** box vectors lengths (a,b,c)
+
 **-angles** box vectors angles   (bc,ac,ab)
 
 ## Integrating the Equations of Motion.
