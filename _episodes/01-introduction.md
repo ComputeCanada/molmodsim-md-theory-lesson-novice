@@ -19,9 +19,11 @@
          - 1.2.1.1. [Cell lists](#cell-lists)   
          - 1.2.1.2. [Verlet lists](#verlet-lists)   
       - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
-      - 1.2.3. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
+      - 1.2.3. [Specifying cut-off](#specifying-cut-off)   
+      - 1.2.4. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
+      - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
    - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
       - 1.5.1. [Integration Algorithms](#integration-algorithms)   
          - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
@@ -133,17 +135,25 @@ The presence of cross terms in a force field reflects couplings between the inte
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
 
 ### Neighbour lists
-To accelerate the search for pairs of particles that are needed for calculation of the short range nonbonded interactions simulation programs store a list of all particles within a cutoff distance of each other.  Particle neighbours are stored either per grid cell (cell linked lists) or for each individual particle (Verlet lists).
+ The search for pairs of particles that are needed for calculation of the short range nonbonded interactions is usually accelerated  by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each individual particle (Verlet lists).
 
 #### Cell lists
 The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighboring cells (26 cells for 3 dimensional simulation).
 
 #### Verlet lists
- A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than a half of the buffer distance. At this point the list is invalidated and the new list must be constucted.
+A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than a half of the buffer distance. At this point the list is invalidated and the new list must be constucted. Verlet offer more efficient computation of pairwise interactions at the expence of relatively large memory requirement which can be a limiting factor. In practice almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
-  The most obvious problem is the relatively large space requirements which can be a limiting factor,
 
-Parallel simulations use a combination of spatial decomposition and Verlet lists.
+### Truncation of the Lennard-Jones interactions
+There are several different ways to truncate the non-bonded interaction.
+The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
+
+The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
+
+- NAMD uses the X-PLOR switching function
+
+
+### Specifying cut-off
 
 NAMD: combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
@@ -156,17 +166,12 @@ NAMD: combination of spatial decomposition into grid cells, "patches" and Verlet
 GROMACS Verlet lists
 Range of non-bonded interactions: rc=max(rlist,rVdW,rCoul)
 
-### Truncation of the Lennard-Jones interactions
-There are several different ways to truncate the non-bonded interaction.
-The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
-
-The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
-
-- NAMD uses the X-PLOR switching function
 
 
 
 ### Truncation of the electrostatic interactions
+
+
 
 ## Balancing of charges
 Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
@@ -178,8 +183,21 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 
 In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
+
+### Specifying periodic box ###
 PBC in GROMACS and NAMD are defined by three unit cell vectors.
 
+####NAMD
+**cellBasisVector1**
+**cellBasisVector2**
+**cellBasisVector3**
+
+####GROMACS
+In gromacs the box is integrated into the structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box:
+
+**-bt** box type (triclinic, cubic, dodecahedron, octahedron)
+**-box** box vectors lengths (a,b,c)
+**-angles** box vectors angles   (bc,ac,ab)
 
 ## Integrating the Equations of Motion.
 
@@ -243,23 +261,37 @@ where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular freque
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
 ### Specifying Time Step Parameters
-parameter | GROMACS keyword  |  NAMD keyword
----| ---------|----------
-time step| dt       |  timestep
-number of steps| nstep    |  numsteps
-time of the first step| tinit|  firsttimestep
+parameter             | GROMACS    |  NAMD
+----------------------| -----------|----------
+time step             | `dt`, ps   |  `timestep`, fs
+number of steps       | `nstep`    |  `numsteps`
+time of the first step| `tinit`    |  `firsttimestep`
 
 ### Specifying Integration Method
 #### GROMACS
-GROMACS offers several types of integration algorithms that can be selected using the `integrator` keyword.
+GROMACS offers several types of integration algorithms that can be selected using the **integrator** keyword.
 
-- `integrator = md` is a leap frog algorithm
-- `integrator = md-vv` is a velocity Verlet algorithm
-- `integrator = md-vv-avek` is a velocity Verlet algorithm same as `md-vv` except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
-- `integrator = sd` is an accurate leap frog stochastic dynamics integrator.
-- `integrator = bd` is a Euler integrator for Brownian or position Langevin dynamics.
+**md** 
+> a leap frog algorithm
+>
+**md-vv**
+> a velocity Verlet algorithm
+>
+**md-vv-avek**
+> a velocity Verlet algorithm same as **md-vv** except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
+>
+**sd**
+> an accurate leap frog stochastic dynamics integrator.
+>
+**bd**
+> a Euler integrator for Brownian or position Langevin dynamics.
 
 #### NAMD
+
+The only available integration method in NAMD is Verlet. To further reduce the cost of computing full electrostatics, NAMD uses a multiple timestepping integration scheme.
+
+**fullElectFrequency**  controls the number of timesteps between full electrostatic evaluations `
+**nonbondedFreq** controls the number of timesteps between nonbonded evaluation
 
 Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
 #### AMBER
@@ -267,8 +299,6 @@ Energy drift. Numerical integration using discrete time stepping results in a li
 Most practical simulations use SHAKE and/or a thermostat or barostat.  These add a lot of complexity and defeat attempts to use simple phrases like "velocity Verlet" or "leapfrog" to describe what is done.
 
 AMBER restart files are "leapfrogish": the velocities are written to the file at a different time point than the coordinates.
-
-NAMD uses this algorithm
 
 
 
