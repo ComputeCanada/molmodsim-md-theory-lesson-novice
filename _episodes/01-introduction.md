@@ -192,8 +192,7 @@ PBC in GROMACS and NAMD are defined by three unit cell vectors.
 #### NAMD ####
 **cellBasisVector1**
 
-**cellBasisVector2**
-
+**cellBasisVector2**<br>
 **cellBasisVector3**
 
 #### GROMACS ####
