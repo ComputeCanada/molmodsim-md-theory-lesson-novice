@@ -15,8 +15,11 @@
          - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
          - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
    - 1.2. [Truncation of interactions](#truncation-of-interactions)   
-      - 1.2.1. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
-      - 1.2.2. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
+      - 1.2.1. [Neighbour lists](#neighbour-lists)   
+         - 1.2.1.1. [Cell lists](#cell-lists)   
+         - 1.2.1.2. [Verlet lists](#verlet-lists)   
+      - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
+      - 1.2.3. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
    - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
@@ -125,15 +128,43 @@ The presence of cross terms in a force field reflects couplings between the inte
 • As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
  U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
 
+
 ## Truncation of interactions
-The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated. There are several different ways to truncate the non-bonded interaction.
+The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
+
+### Neighbour lists
+To accelerate the search for pairs of particles that are needed for calculation of the short range nonbonded interactions simulation programs store a list of all particles within a cutoff distance of each other.  Particle neighbours are stored either per grid cell (cell linked lists) or for each individual particle (Verlet lists).
+
+#### Cell lists
+The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighboring cells (26 cells for 3 dimensional simulation).
+
+#### Verlet lists
+ A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than a half of the buffer distance. At this point the list is invalidated and the new list must be constucted.
+
+  The most obvious problem is the relatively large space requirements which can be a limiting factor,
+
+Parallel simulations use a combination of spatial decomposition and Verlet lists.
+
+NAMD: combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
+
+- cutoff:
+- pairlistdist:   distance between pairs for inclusion in pair lists, angstrom
+- stepspercycle: Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments
+- pairlistsPerCycle: regenerate x times per cycle.
+
+
+GROMACS Verlet lists
+Range of non-bonded interactions: rc=max(rlist,rVdW,rCoul)
 
 ### Truncation of the Lennard-Jones interactions
+There are several different ways to truncate the non-bonded interaction.
 The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
 The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 - NAMD uses the X-PLOR switching function
+
+
 
 ### Truncation of the electrostatic interactions
 
