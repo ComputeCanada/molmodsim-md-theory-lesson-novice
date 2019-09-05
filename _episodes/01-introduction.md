@@ -1,54 +1,54 @@
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->
 
-- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)   
-   - 1.1. [Force Fields](#force-fields)   
-      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
-         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
-         - 1.1.1.2. [Combining rules](#combining-rules)   
-         - 1.1.1.3. [Specifying Combining Rule](#specifying-combining-rule)   
-            - 1.1.1.3.1. [GROMACS](#gromacs)   
-            - 1.1.1.3.2. [NAMD](#namd)   
-         - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)   
-      - 1.1.2. [Bonded interactions](#bonded-interactions)   
-         - 1.1.2.1. [The bond potential](#the-bond-potential)   
-         - 1.1.2.2. [The angle potential](#the-angle-potential)   
-         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
-         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
-   - 1.2. [Truncation of interactions](#truncation-of-interactions)   
-      - 1.2.1. [Neighbour lists](#neighbour-lists)   
-         - 1.2.1.1. [Cell lists](#cell-lists)   
-         - 1.2.1.2. [Verlet lists](#verlet-lists)   
-      - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
-      - 1.2.3. [Specifying cut-off](#specifying-cut-off)   
-         - 1.2.3.1. [NAMD](#namd)   
-         - 1.2.3.2. [GROMACS](#gromacs)   
-      - 1.2.4. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
-   - 1.3. [Balancing of charges](#balancing-of-charges)   
-   - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
-      - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
-         - 1.4.1.1. [NAMD](#namd)   
-         - 1.4.1.2. [GROMACS](#gromacs)   
-   - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
-      - 1.5.1. [Integration Algorithms](#integration-algorithms)   
-         - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
-         - 1.5.1.2. [The Verlet Algorithm](#the-verlet-algorithm)   
-         - 1.5.1.3. [The Velocity Verlet Algorithm](#the-velocity-verlet-algorithm)   
-         - 1.5.1.4. [The Leap Frog Algorithm](#the-leap-frog-algorithm)   
-      - 1.5.2. [Choosing Time Step](#choosing-time-step)   
-      - 1.5.3. [Specifying Time Step Parameters](#specifying-time-step-parameters)   
-      - 1.5.4. [Specifying Integration Method](#specifying-integration-method)   
-         - 1.5.4.1. [GROMACS](#gromacs)   
-         - 1.5.4.2. [NAMD](#namd)   
-         - 1.5.4.3. [AMBER](#amber)   
-   - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
-      - 1.6.1. [AMBER](#amber)   
-      - 1.6.2. [GROMACS](#gromacs)   
-         - 1.6.2.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)   
-      - 1.6.3. [NAMD](#namd)   
-         - 1.6.3.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)   
-      - 1.6.4. [LAMMPS](#lammps)   
-      - 1.6.5. [DL_POLY](#dl_poly)   
-   - 1.7. [Water Models](#water-models)   
+- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)
+   - 1.1. [Force Fields](#force-fields)
+      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)
+         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)
+         - 1.1.1.2. [Combining rules](#combining-rules)
+         - 1.1.1.3. [Specifying Combining Rule](#specifying-combining-rule)
+            - 1.1.1.3.1. [GROMACS](#gromacs)
+            - 1.1.1.3.2. [NAMD](#namd)
+         - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)
+      - 1.1.2. [Bonded interactions](#bonded-interactions)
+         - 1.1.2.1. [The bond potential](#the-bond-potential)
+         - 1.1.2.2. [The angle potential](#the-angle-potential)
+         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)
+         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)
+   - 1.2. [Truncation of interactions](#truncation-of-interactions)
+      - 1.2.1. [Neighbour lists](#neighbour-lists)
+         - 1.2.1.1. [Cell lists](#cell-lists)
+         - 1.2.1.2. [Verlet lists](#verlet-lists)
+      - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)
+      - 1.2.3. [Specifying cut-off](#specifying-cut-off)
+         - 1.2.3.1. [NAMD](#namd)
+         - 1.2.3.2. [GROMACS](#gromacs)
+      - 1.2.4. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)
+   - 1.3. [Balancing of charges](#balancing-of-charges)
+   - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)
+      - 1.4.1. [Specifying periodic box](#specifying-periodic-box)
+         - 1.4.1.1. [NAMD](#namd)
+         - 1.4.1.2. [GROMACS](#gromacs)
+   - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)
+      - 1.5.1. [Integration Algorithms](#integration-algorithms)
+         - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)
+         - 1.5.1.2. [The Verlet Algorithm](#the-verlet-algorithm)
+         - 1.5.1.3. [The Velocity Verlet Algorithm](#the-velocity-verlet-algorithm)
+         - 1.5.1.4. [The Leap Frog Algorithm](#the-leap-frog-algorithm)
+      - 1.5.2. [Choosing Time Step](#choosing-time-step)
+      - 1.5.3. [Specifying Time Step Parameters](#specifying-time-step-parameters)
+      - 1.5.4. [Specifying Integration Method](#specifying-integration-method)
+         - 1.5.4.1. [GROMACS](#gromacs)
+         - 1.5.4.2. [NAMD](#namd)
+         - 1.5.4.3. [AMBER](#amber)
+   - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)
+      - 1.6.1. [AMBER](#amber)
+      - 1.6.2. [GROMACS](#gromacs)
+         - 1.6.2.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)
+      - 1.6.3. [NAMD](#namd)
+         - 1.6.3.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)
+      - 1.6.4. [LAMMPS](#lammps)
+      - 1.6.5. [DL_POLY](#dl_poly)
+   - 1.7. [Water Models](#water-models)
 
 <!-- /MDTOC -->
 
@@ -110,14 +110,14 @@ gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\
 
 #### Specifying Combining Rule
 ##### GROMACS
-In GROMACS combining rules are specified in the `[nonbond_params]` section of the parameter file `ffnonbonded.itp`. Geometric mean is selected by using rules #1 and #3,  Lorentz–Berthelot rule is selected using rule #2.
+In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp**. Geometric mean is selected by using rules #1 and #3,  Lorentz–Berthelot rule is selected using rule #2.
 - GROMOS force field requires rule #1
 - OPLS force field requires rule #3
 - CHARM and AMBER force fields require rule  #2.
 ##### NAMD
 By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
 
-`vdwGeometricSigma=yes`
+**vdwGeometricSigma=yes**
 
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
@@ -133,7 +133,6 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 The presence of cross terms in a force field reflects couplings between the internal coordinates.
 • As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
  U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
-
 
 ## Truncation of interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
@@ -157,7 +156,7 @@ The main option to control how LJ potential is truncated is the switching parame
 - NAMD uses the X-PLOR switching function
 
 
-### Specifying cut-off
+### Specifying cutoff and neighbour searching
 
 #### NAMD ####
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
@@ -165,18 +164,42 @@ The main option to control how LJ potential is truncated is the switching parame
 Keywords:
 
 **cutoff**
-> pairlistdist:   distance between pairs for inclusion in pair lists, angstrom
+> Local interaction distance same for both electrostatic and VDW interactions
+
+**pairlistdist**
+> Distance between pairs for inclusion in pair lists. Should be >= cutoff.
+> Default value: cutoff
 >
 **stepspercycle**
-> Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments
+> Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments.
+> Default Value: 20
 
 **pairlistsPerCycle**
-> regenerate pairlists x times per cycle.
+> Specifies how many times per cycle to regenerate pairlists.
+> Default value: 2
 
 
 #### GROMACS ####
-GROMACS uses Verlet lists
-Range of non-bonded interactions: rc=max(rlist,rVdW,rCoul)
+
+**cutoff-scheme**
+> Since version 5.1 group lists has been deprecated and only Verlet scheme is available
+
+**rlist**
+> Cutoff distance for the short-range neighbour list. Active when **verlet-buffer-tolerance = -1**, otherwise ignored
+
+**verlet-buffer-tolerance**
+> The maximum allowed error for pair interactions per particle caused by the Verlet buffer. To achieve the predefined tolerance the cutoff distance **rlist** is adjusted indirectly. To override this feature set the value to -1
+> Default value: 0.005 [kJ mol<sup>-1</sup> ps<sup>-1</sup>]
+
+**nstlist**
+> Frequency to update the neighbor list. If set to 0 the neighbour list is constructed only once and never updated.
+> Default Value: 10
+
+**ns-type**
+> Neighbour search method.
+> Acceptable values:
+>> **grid** - make a grid in the box and only check atoms in neighboring grid cells.
+>> **simple** - loop over every atom in the box.
 
 
 ### Truncation of the electrostatic interactions
@@ -265,16 +288,15 @@ Mathematically Vertet family integrators are stable for time steps
 
 <img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
 
-where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.
-
+ where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.<br>
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
 ### Specifying Time Step Parameters
 parameter             | GROMACS    |  NAMD
 ----------------------| -----------|----------
-time step             | `dt`, ps   |  `timestep`, fs
-number of steps       | `nstep`    |  `numsteps`
-time of the first step| `tinit`    |  `firsttimestep`
+time step             | **dt**, ps   |  **timestep**, fs
+number of steps       | **nstep**    |  **numsteps**
+time of the first step| **tinit**    |  **firsttimestep**
 
 ### Specifying Integration Method
 #### GROMACS
