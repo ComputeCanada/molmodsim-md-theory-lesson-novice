@@ -219,7 +219,7 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 
 #### NAMD ####
-Periodic box is defined by three unit cell vectors:
+Periodic box is defined by three unit cell vectors:<br>
 **cellBasisVector1**<br>
 >Default value: 0 0 0
 
@@ -232,9 +232,14 @@ Periodic box is defined by three unit cell vectors:
 #### GROMACS ####
 The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
 
->**-bt**: box type (triclinic, cubic, dodecahedron, octahedron)<br>
-**-box**: box vectors lengths (a,b,c)<br>
-**-angles**: box vectors angles   (bc,ac,ab)<br>
+**-bt**
+>box type (triclinic, cubic, dodecahedron, octahedron)<br>
+
+**-box**
+> box vectors lengths (a,b,c)<br>
+>
+**-angles**
+> box vectors angles   (bc,ac,ab)<br>
 
 ## Integrating the Equations of Motion.
 
