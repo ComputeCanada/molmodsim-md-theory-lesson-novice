@@ -198,7 +198,7 @@ Keywords:
 **ns-type**
 > Neighbour search method.
 > Acceptable values:
->> **grid** - make a grid in the box and only check atoms in neighboring grid cells.
+>> **grid** - make a grid in the box and only check atoms in neighboring grid cells.<br>
 >> **simple** - loop over every atom in the box.
 
 
