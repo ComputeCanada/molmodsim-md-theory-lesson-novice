@@ -161,13 +161,13 @@ The main option to control how LJ potential is truncated is the switching parame
 #### NAMD ####
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
-Keywords:
 
 **cutoff**
-> Local interaction distance same for both electrostatic and VDW interactions
+> Local interaction distance. Same for both electrostatic and VDW interactions
 
 **pairlistdist**
 > Distance between pairs for inclusion in pair lists. Should be >= cutoff.
+>
 > Default value: cutoff
 >
 **stepspercycle**
@@ -176,30 +176,33 @@ Keywords:
 
 **pairlistsPerCycle**
 > Specifies how many times per cycle to regenerate pairlists.
+>
 > Default value: 2
 
 
 #### GROMACS ####
 
 **cutoff-scheme**
-> Since version 5.1 group lists has been deprecated and only Verlet scheme is available
+> Since version 5.1 group lists has been deprecated and only **Verlet** scheme is available
 
 **rlist**
 > Cutoff distance for the short-range neighbour list. Active when **verlet-buffer-tolerance = -1**, otherwise ignored
 
 **verlet-buffer-tolerance**
 > The maximum allowed error for pair interactions per particle caused by the Verlet buffer. To achieve the predefined tolerance the cutoff distance **rlist** is adjusted indirectly. To override this feature set the value to -1
+>
 > Default value: 0.005 [kJ mol<sup>-1</sup> ps<sup>-1</sup>]
 
 **nstlist**
 > Frequency to update the neighbor list. If set to 0 the neighbour list is constructed only once and never updated.
+>
 > Default Value: 10
 
 **ns-type**
 > Neighbour search method.
 > Acceptable values:
->> **grid** - make a grid in the box and only check atoms in neighboring grid cells.<br>
->> **simple** - loop over every atom in the box.
+>> **grid**: make a grid in the box and only check atoms in neighboring grid cells.<br>
+>> **simple**: loop over every atom in the box.
 
 
 ### Truncation of the electrostatic interactions
