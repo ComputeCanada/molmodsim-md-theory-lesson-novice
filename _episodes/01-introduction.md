@@ -19,10 +19,10 @@
          - 1.2.1.1. [Cell lists](#cell-lists)   
          - 1.2.1.2. [Verlet lists](#verlet-lists)   
       - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
-      - 1.2.3. [Specifying cutoff and neighbour searching](#specifying-cutoff-and-neighbour-searching)   
-         - 1.2.3.1. [NAMD](#namd)   
-         - 1.2.3.2. [GROMACS](#gromacs)   
-      - 1.2.4. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
+      - 1.2.3. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
+      - 1.2.4. [Specifying cutoff and neighbour searching](#specifying-cutoff-and-neighbour-searching)   
+         - 1.2.4.1. [NAMD](#namd)   
+         - 1.2.4.2. [GROMACS](#gromacs)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
       - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
@@ -39,7 +39,6 @@
       - 1.5.4. [Specifying Integration Method](#specifying-integration-method)   
          - 1.5.4.1. [GROMACS](#gromacs)   
          - 1.5.4.2. [NAMD](#namd)   
-         - 1.5.4.3. [AMBER](#amber)   
    - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
       - 1.6.1. [AMBER](#amber)   
       - 1.6.2. [GROMACS](#gromacs)   
@@ -155,20 +154,20 @@ The main option to control how LJ potential is truncated is the switching parame
 
 - NAMD uses the X-PLOR switching function
 
+### Truncation of the electrostatic interactions
 
 ### Specifying cutoff and neighbour searching
 
 #### NAMD ####
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
-
 **cutoff**
 > Local interaction distance. Same for both electrostatic and VDW interactions
 
 **pairlistdist**
-> Distance between pairs for inclusion in pair lists. Should be >= cutoff.
+> Distance between pairs for inclusion in pair lists. Should be bigger or equal than the **cutoff**.
 >
-> Default value: cutoff
+> Default value: **cutoff**
 >
 **stepspercycle**
 > Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments.
@@ -205,9 +204,6 @@ The main option to control how LJ potential is truncated is the switching parame
 >> **simple**: loop over every atom in the box.
 
 
-### Truncation of the electrostatic interactions
-
-
 ## Balancing of charges
 Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
 
@@ -224,9 +220,14 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 #### NAMD ####
 Periodic box is defined by three unit cell vectors:
->**cellBasisVector1**<br>
+**cellBasisVector1**<br>
+>Default value: 0 0 0
+
 **cellBasisVector2**<br>
+>Default value: 0 0 0
+
 **cellBasisVector3**<br>
+>Default value: 0 0 0
 
 #### GROMACS ####
 The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
@@ -323,24 +324,22 @@ GROMACS offers several types of integration algorithms that can be selected usin
 
 #### NAMD
 
-The only available integration method in NAMD is Verlet. To further reduce the cost of computing full electrostatics, NAMD uses a multiple timestepping integration scheme.
+The only available integration method is Verlet. To further reduce the cost of computing short-range nonbonded interactions and full electrostatics, NAMD uses a multiple timestepping integration scheme controlled by the following keywords:
 
-**fullElectFrequency**  controls the number of timesteps between full electrostatic evaluations<br>
-**nonbondedFreq** controls the number of timesteps between nonbonded evaluation<br>
+**nonbondedFreq**
+> number of timesteps between nonbonded evaluation<br>
 
-Energy drift. Numerical integration using discrete time stepping results in a limited sampling of motions with frequencies close to the frequency of velocity updates.  For motion with a natural frequency ω, artificial resonances are introduced when  (see energy drift)
-#### AMBER
+**fullElectFrequency**
+>number of timesteps between full electrostatic evaluations<br>
 
-Most practical simulations use SHAKE and/or a thermostat or barostat.  These add a lot of complexity and defeat attempts to use simple phrases like "velocity Verlet" or "leapfrog" to describe what is done.
-
-AMBER restart files are "leapfrogish": the velocities are written to the file at a different time point than the coordinates.
 
 
 
 ## MD software available on CC clusters
 ### AMBER
-[Web page](http://ambermd.org)
+> [Web page](http://ambermd.org)
 ### GROMACS
+>[Web page](http://gromacs.org)
 #### Force fields implemented in GROMACS:
 - AMBER: 94, 96, 99, 99sb, 99sb-ildn, 03, GS (amberGS is amber94 with both backbone torsion potentials set to 0).
 - CHARMM: 27 (optimized for proteins and nucleic acids).
@@ -348,6 +347,7 @@ AMBER restart files are "leapfrogish": the velocities are written to the file at
 - GROMOS: 43a1, 43a2, 45a3, 53a5, 53a6, 54a7.
 - OPLS-AA (OPLS-AA implemented in GROMACS is actually OPLS-AA/L. OPLS-AA/L uses OPLS-AA atom types with the torsions and impropers refitted to QM calculations at the HF/6-31G** level followed by single-point LMP2/cc-pVTZ(-f))
 ### NAMD
+>[Web page](https://www.ks.uiuc.edu/Research/namd/)
 #### Force fields implemented in NAMD:
 - [AMBER](http://ambermd.org/AmberModels.php) (amber format topology prepared with AMBERTOOLS). Currently AMBER recommends the following force fields: ff14SB for proteins, OL15 for DNA, OL3 for RNA, GLYCAM_06j for carbohydrates, lipid17 for lipids, and a general force field gaff2.
 - [CHARMM](http://mackerell.umaryland.edu/charmm_ff.shtml#charmm) (charmm format, topology prepared with psfgen)
@@ -357,13 +357,9 @@ AMBER restart files are "leapfrogish": the velocities are written to the file at
 
 1. The organic solvents with OPLS force field generate slightly better properties than those with GAFF. [ C. Caleman, P.J. van Maaren, M. Hong, J. S. Hub, L. T. Costa and D. van der Spoel. Force Field Benchmark of Organic Liquids: Density, Enthalpy of Vaporization, Heat Capacities, Surface Tension, Isothermal Compressibility, Volumetric Expansion Coefficient, and Dielectric Constant, J. Chem. Theor. Comput., 8, 61-74 (2012) ].
 ### LAMMPS
+>[Web page](https://lammps.sandia.gov)
 ### DL_POLY
-
+>[Web page](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
 ## Water Models
 OPC family water models: OPC, OPC3
 The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
-
-
-#SBATCH --cpus-per-task=8
-
--parallel -openmp 4
