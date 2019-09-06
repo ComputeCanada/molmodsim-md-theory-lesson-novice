@@ -4,23 +4,23 @@
    - 1.1. [Force Fields](#force-fields)   
       - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
          - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
-         - 1.1.1.2. [Combining rules](#combining-rules)   
-         - 1.1.1.3. [Specifying Combining Rule](#specifying-combining-rule)   
+         - 1.1.1.2. [The Combining rules](#the-combining-rules)   
+         - 1.1.1.3. [Specifying Combining Rules](#specifying-combining-rules)   
             - 1.1.1.3.1. [GROMACS](#gromacs)   
             - 1.1.1.3.2. [NAMD](#namd)   
          - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)   
-      - 1.1.2. [Bonded interactions](#bonded-interactions)   
+      - 1.1.2. [Bonded Interactions](#bonded-interactions)   
          - 1.1.2.1. [The bond potential](#the-bond-potential)   
          - 1.1.2.2. [The angle potential](#the-angle-potential)   
          - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
          - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
-   - 1.2. [Truncation of interactions](#truncation-of-interactions)   
-      - 1.2.1. [Neighbour lists](#neighbour-lists)   
-         - 1.2.1.1. [Cell lists](#cell-lists)   
-         - 1.2.1.2. [Verlet lists](#verlet-lists)   
-      - 1.2.2. [Truncation of the Lennard-Jones interactions](#truncation-of-the-lennard-jones-interactions)   
-      - 1.2.3. [Truncation of the electrostatic interactions](#truncation-of-the-electrostatic-interactions)   
-      - 1.2.4. [Specifying cutoff and neighbour searching](#specifying-cutoff-and-neighbour-searching)   
+   - 1.2. [Truncation of Interactions](#truncation-of-interactions)   
+      - 1.2.1. [Neighbour Searching Methods](#neighbour-searching-methods)   
+         - 1.2.1.1. [Cell Lists](#cell-lists)   
+         - 1.2.1.2. [Verlet Lists](#verlet-lists)   
+      - 1.2.2. [Truncation of Lennard-Jones Interactions](#truncation-of-lennard-jones-interactions)   
+      - 1.2.3. [Truncation of the Electrostatic Interactions](#truncation-of-the-electrostatic-interactions)   
+      - 1.2.4. [Specifying Cutoff and Neighbour Searching Methods](#specifying-cutoff-and-neighbour-searching-methods)   
          - 1.2.4.1. [NAMD](#namd)   
          - 1.2.4.2. [GROMACS](#gromacs)   
    - 1.3. [Balancing of charges](#balancing-of-charges)   
@@ -92,7 +92,7 @@ The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/
 
 To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
-#### Combining rules
+#### The Combining rules
 
 - **Geometric mean:**<br>
 <img src="https://latex.codecogs.com/
@@ -107,7 +107,7 @@ gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\
 - **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
   Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
 
-#### Specifying Combining Rule
+#### Specifying Combining Rules
 ##### GROMACS
 In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp**. Geometric mean is selected by using rules #1 and #3,  Lorentz–Berthelot rule is selected using rule #2.
 - GROMOS force field requires rule #1
@@ -116,14 +116,14 @@ In GROMACS combining rules are specified in the **[nonbond_params]** section of 
 ##### NAMD
 By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
 
-**vdwGeometricSigma=yes**
+**vdwGeometricSigma**=yes
 
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
 
 <img src="https://latex.codecogs.com/gif.latex?V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}&space;r_{ij}}" /><br>
 where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>* and *q<sub>j</sub>* are the charges on the atoms *i* and *j*, <img src="https://latex.codecogs.com/gif.latex?\epsilon_{0}"/> is the permittivity of vacuum. and  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{r}"/> is the relative permittivity.
-### Bonded interactions
+### Bonded Interactions
 #### The bond potential
 #### The angle potential
 #### The torsion angle potential
@@ -133,20 +133,19 @@ The presence of cross terms in a force field reflects couplings between the inte
 • As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
  U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
 
-## Truncation of interactions
+## Truncation of Interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
 
-### Neighbour lists
+### Neighbour Searching Methods
  The search for pairs of particles that are needed for calculation of the short range nonbonded interactions is usually accelerated  by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each individual particle (Verlet lists).
 
-#### Cell lists
+#### Cell Lists
 The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighboring cells (26 cells for 3 dimensional simulation).
 
-#### Verlet lists
+#### Verlet Lists
 A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than a half of the buffer distance. At this point the list is invalidated and the new list must be constucted. Verlet offer more efficient computation of pairwise interactions at the expence of relatively large memory requirement which can be a limiting factor. In practice almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
-
-### Truncation of the Lennard-Jones interactions
+### Truncation of Lennard-Jones Interactions
 There are several different ways to truncate the non-bonded interaction.
 The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
@@ -154,9 +153,9 @@ The main option to control how LJ potential is truncated is the switching parame
 
 - NAMD uses the X-PLOR switching function
 
-### Truncation of the electrostatic interactions
+### Truncation of the Electrostatic Interactions
 
-### Specifying cutoff and neighbour searching
+### Specifying Cutoff and Neighbour Searching Methods
 
 #### NAMD ####
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
@@ -182,10 +181,10 @@ The main option to control how LJ potential is truncated is the switching parame
 #### GROMACS ####
 
 **cutoff-scheme**
-> Since version 5.1 group lists has been deprecated and only **Verlet** scheme is available
+> Since version 5.1 **group** list has been deprecated and only **Verlet** scheme is available
 
 **rlist**
-> Cutoff distance for the short-range neighbour list. Active when **verlet-buffer-tolerance = -1**, otherwise ignored
+> Cutoff distance for the short-range neighbour list. Active when **verlet-buffer-tolerance** = -1, otherwise ignored
 
 **verlet-buffer-tolerance**
 > The maximum allowed error for pair interactions per particle caused by the Verlet buffer. To achieve the predefined tolerance the cutoff distance **rlist** is adjusted indirectly. To override this feature set the value to -1
@@ -228,7 +227,11 @@ Periodic box is defined by three unit cell vectors:<br>
 **cellBasisVector3**<br>
 >Default value: 0 0 0
 
-The box parameters for restart are saved in the separate file with extension .xsc
+**extendedSystem**<br>
+>NAMD generates a .xsc (eXtended System Configuration) file which contains the periodic cell parameters. If this keyword is used periodic box parameters will be read from .xsc file ignoring cellBasisVectors.
+>Value: filename
+
+
 
 #### GROMACS ####
 The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
