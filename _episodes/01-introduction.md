@@ -39,14 +39,14 @@
       - 1.5.4. [Specifying Integration Method](#specifying-integration-method)   
          - 1.5.4.1. [GROMACS](#gromacs)   
          - 1.5.4.2. [NAMD](#namd)   
-   - 1.6. [MD software available on CC clusters](#md-software-available-on-cc-clusters)   
+   - 1.6. [Molecular Dynamics Software Available on Compute Canada Systems](#molecular-dynamics-software-available-on-compute-canada-systems)   
       - 1.6.1. [AMBER](#amber)   
-      - 1.6.2. [GROMACS](#gromacs)   
-         - 1.6.2.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)   
-      - 1.6.3. [NAMD](#namd)   
-         - 1.6.3.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)   
-      - 1.6.4. [LAMMPS](#lammps)   
-      - 1.6.5. [DL_POLY](#dl_poly)   
+      - 1.6.2. [DL_POLY](#dl_poly)   
+      - 1.6.3. [GROMACS](#gromacs)   
+         - 1.6.3.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)   
+      - 1.6.4. [NAMD](#namd)   
+         - 1.6.4.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)   
+      - 1.6.5. [LAMMPS](#lammps)   
    - 1.7. [Water Models](#water-models)   
 
 <!-- /MDTOC -->
@@ -216,10 +216,9 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 
 ### Specifying periodic box ###
-
-
 #### NAMD ####
 Periodic box is defined by three unit cell vectors:<br>
+
 **cellBasisVector1**<br>
 >Default value: 0 0 0
 
@@ -228,6 +227,8 @@ Periodic box is defined by three unit cell vectors:<br>
 
 **cellBasisVector3**<br>
 >Default value: 0 0 0
+
+The box parameters for restart are saved in the separate file with extension .xsc
 
 #### GROMACS ####
 The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
@@ -340,9 +341,11 @@ The only available integration method is Verlet. To further reduce the cost of c
 
 
 
-## MD software available on CC clusters
+## Molecular Dynamics Software Available on Compute Canada Systems
 ### AMBER
 > [Web page](http://ambermd.org)
+### DL_POLY
+>[Web page](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
 ### GROMACS
 >[Web page](http://gromacs.org)
 #### Force fields implemented in GROMACS:
@@ -363,8 +366,7 @@ The only available integration method is Verlet. To further reduce the cost of c
 1. The organic solvents with OPLS force field generate slightly better properties than those with GAFF. [ C. Caleman, P.J. van Maaren, M. Hong, J. S. Hub, L. T. Costa and D. van der Spoel. Force Field Benchmark of Organic Liquids: Density, Enthalpy of Vaporization, Heat Capacities, Surface Tension, Isothermal Compressibility, Volumetric Expansion Coefficient, and Dielectric Constant, J. Chem. Theor. Comput., 8, 61-74 (2012) ].
 ### LAMMPS
 >[Web page](https://lammps.sandia.gov)
-### DL_POLY
->[Web page](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
+
 ## Water Models
 OPC family water models: OPC, OPC3
 The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
