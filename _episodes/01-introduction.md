@@ -88,15 +88,14 @@ The LJ potential is commonly expressed in terms of the well depth <img src="http
 
 The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/gif.latex?\sigma"/>  and the <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>  with the equations:
 
- <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12}, C6=4\epsilon\sigma^{6}"/>
+ <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12}, C6=4\epsilon\sigma^{6}"/><br>
 
 To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
 #### The Combining rules
 
 - **Geometric mean:**<br>
-<img src="https://latex.codecogs.com/
-gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\times{C6_{jj}}}"/>  , (GROMOS)<br><img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}" />, (OPLS)<br><br>
+<img src="https://latex.codecogs.com/gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\times{C6_{jj}}}"/>  , (GROMOS)<br><img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}" />, (OPLS)<br><br>
 
 - **Lorentz–Berthelot:**<br>
 <img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\frac{\sigma_{ii}&plus;\sigma_{jj}}{2},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}"  />, (CHARM, AMBER)
@@ -124,7 +123,10 @@ To describe the elecrostatic interactions in MD the point charges are assigned t
 <img src="https://latex.codecogs.com/gif.latex?V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}&space;r_{ij}}" /><br>
 where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>* and *q<sub>j</sub>* are the charges on the atoms *i* and *j*, <img src="https://latex.codecogs.com/gif.latex?\epsilon_{0}"/> is the permittivity of vacuum. and  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{r}"/> is the relative permittivity.
 ### Bonded Interactions
+
 #### The bond potential
+The bond potential is used to model the interaction of covalently bonded atoms in a molecule.
+
 #### The angle potential
 #### The torsion angle potential
 #### The Ureu-Bradley potential
@@ -154,6 +156,7 @@ The main option to control how LJ potential is truncated is the switching parame
 - NAMD uses the X-PLOR switching function
 
 ### Truncation of the Electrostatic Interactions
+Electrostatic interactions occuring over a long distances are known to be important for biological molecules. Electrostatic intractions decay slowly and simple increase of the cutoff distance to account for long range interactions can dramatically raise computational cost. In periodic simulation systems the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated in real space.
 
 ### Specifying Cutoff and Neighbour Searching Methods
 
@@ -373,3 +376,9 @@ The only available integration method is Verlet. To further reduce the cost of c
 ## Water Models
 OPC family water models: OPC, OPC3
 The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
+
+1bvi
+1de3
+1goa
+1h4g
+1lni *
