@@ -88,7 +88,7 @@ The LJ potential is commonly expressed in terms of the well depth <img src="http
 
 The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/gif.latex?\sigma"/>  and the <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>  with the equations:
 
- <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12}, C6=4\epsilon\sigma^{6}"/><br>
+ <img src="https://latex.codecogs.com/gif.latex?&C12=4\epsilon\sigma^{12},C6=4\epsilon\sigma^{6}"/>
 
 To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
