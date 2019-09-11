@@ -51,7 +51,9 @@
 
 <!-- /MDTOC -->
 
-[Link to the Repository](https://git.computecanada.ca/svassili/bst-md-theory-lesson-novice/blob/gh-pages/_episodes/01-introduction.md)
+[Link to the GitLab Repository](https://git.computecanada.ca/svassili/bst-md-theory-lesson-novice/blob/gh-pages/_episodes/01-introduction.md)
+
+[Link to the GitHub Repository](https://github.com/ssvassiliev/bst-md-theory-lesson-novice/blob/gh-pages/_episodes/01-introduction.md#the-lennard-jones-potential)
 
 # Basic principles of molecular dynamics
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{p}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{p}" title="\vec{p}" /></a> of an object equals the force <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{F}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{F}" title="\vec{F}" /></a> acting on it:
@@ -131,7 +133,7 @@ The bond potential is used to model the interaction of covalently bonded atoms i
 #### The torsion angle potential
 #### The Ureu-Bradley potential
 
-The presence of cross terms in a force field reflects couplings between the internal coordinates.
+The presence of cross-terms in a force field reflects couplings between the internal coordinates.
 • As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
  U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
 
@@ -139,24 +141,24 @@ The presence of cross terms in a force field reflects couplings between the inte
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
 
 ### Neighbour Searching Methods
- The search for pairs of particles that are needed for calculation of the short range nonbonded interactions is usually accelerated  by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each individual particle (Verlet lists).
+ The search for pairs of particles that are needed for calculation of the short-range nonbonded interactions is usually accelerated by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each particle (Verlet lists).
 
 #### Cell Lists
-The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighboring cells (26 cells for 3 dimensional simulation).
+The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighbouring cells (26 cells for 3-dimensional simulation).
 
 #### Verlet Lists
-A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than a half of the buffer distance. At this point the list is invalidated and the new list must be constucted. Verlet offer more efficient computation of pairwise interactions at the expence of relatively large memory requirement which can be a limiting factor. In practice almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
+A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than half of the buffer distance. At this point the list is invalidated and the new list must be constructed. Verlet offer more efficient computation of pairwise interactions at the expence of relatively large memory requirement which can be a limiting factor. In practice, almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
 ### Truncation of Lennard-Jones Interactions
 There are several different ways to truncate the non-bonded interaction.
-The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
+The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance, the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
 The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 - NAMD uses the X-PLOR switching function
 
 ### Truncation of the Electrostatic Interactions
-Electrostatic interactions occuring over a long distances are known to be important for biological molecules. Electrostatic intractions decay slowly and simple increase of the cutoff distance to account for long range interactions can dramatically raise computational cost. In periodic simulation systems the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated in real space.
+Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated in real space.
 
 ### Specifying Cutoff and Neighbour Searching Methods
 
@@ -195,7 +197,7 @@ Electrostatic interactions occuring over a long distances are known to be import
 > Default value: 0.005 [kJ mol<sup>-1</sup> ps<sup>-1</sup>]
 
 **nstlist**
-> Frequency to update the neighbor list. If set to 0 the neighbour list is constructed only once and never updated.
+> Frequency to update the neighbour list. If set to 0 the neighbour list is constructed only once and never updated.
 >
 > Default Value: 10
 
@@ -297,7 +299,7 @@ Then determine positions at the next time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
 
-The Leap Frog algorithm is essentially the same algorithm as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
+The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 
 ### Choosing Time Step
@@ -336,7 +338,7 @@ GROMACS offers several types of integration algorithms that can be selected usin
 
 #### NAMD
 
-The only available integration method is Verlet. To further reduce the cost of computing short-range nonbonded interactions and full electrostatics, NAMD uses a multiple timestepping integration scheme controlled by the following keywords:
+The only available integration method is Verlet. To further reduce the cost of computing short-range nonbonded interactions and full electrostatics, NAMD uses a multiple time-stepping integration scheme controlled by the following keywords:
 
 **nonbondedFreq**
 > number of timesteps between nonbonded evaluation<br>
