@@ -1,53 +1,53 @@
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->
 
-- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)   
-   - 1.1. [Force Fields](#force-fields)   
-      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)   
-         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)   
-         - 1.1.1.2. [The Combining rules](#the-combining-rules)   
-         - 1.1.1.3. [Specifying Combining Rules](#specifying-combining-rules)   
-            - 1.1.1.3.1. [GROMACS](#gromacs)   
-            - 1.1.1.3.2. [NAMD](#namd)   
-         - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)   
-      - 1.1.2. [Bonded Interactions](#bonded-interactions)   
-         - 1.1.2.1. [The bond potential](#the-bond-potential)   
-         - 1.1.2.2. [The angle potential](#the-angle-potential)   
-         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)   
-         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)   
-   - 1.2. [Truncation of Interactions](#truncation-of-interactions)   
-      - 1.2.1. [Neighbour Searching Methods](#neighbour-searching-methods)   
-         - 1.2.1.1. [Cell Lists](#cell-lists)   
-         - 1.2.1.2. [Verlet Lists](#verlet-lists)   
-      - 1.2.2. [Truncation of Lennard-Jones Interactions](#truncation-of-lennard-jones-interactions)   
-      - 1.2.3. [Truncation of the Electrostatic Interactions](#truncation-of-the-electrostatic-interactions)   
-      - 1.2.4. [Specifying Cutoff and Neighbour Searching Methods](#specifying-cutoff-and-neighbour-searching-methods)   
-         - 1.2.4.1. [NAMD](#namd)   
-         - 1.2.4.2. [GROMACS](#gromacs)   
-   - 1.3. [Balancing of charges](#balancing-of-charges)   
-   - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)   
-      - 1.4.1. [Specifying periodic box](#specifying-periodic-box)   
-         - 1.4.1.1. [NAMD](#namd)   
-         - 1.4.1.2. [GROMACS](#gromacs)   
-   - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)   
-      - 1.5.1. [Integration Algorithms](#integration-algorithms)   
-         - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)   
-         - 1.5.1.2. [The Verlet Algorithm](#the-verlet-algorithm)   
-         - 1.5.1.3. [The Velocity Verlet Algorithm](#the-velocity-verlet-algorithm)   
-         - 1.5.1.4. [The Leap Frog Algorithm](#the-leap-frog-algorithm)   
-      - 1.5.2. [Choosing Time Step](#choosing-time-step)   
-      - 1.5.3. [Specifying Time Step Parameters](#specifying-time-step-parameters)   
-      - 1.5.4. [Specifying Integration Method](#specifying-integration-method)   
-         - 1.5.4.1. [GROMACS](#gromacs)   
-         - 1.5.4.2. [NAMD](#namd)   
-   - 1.6. [Molecular Dynamics Software Available on Compute Canada Systems](#molecular-dynamics-software-available-on-compute-canada-systems)   
-      - 1.6.1. [AMBER](#amber)   
-      - 1.6.2. [DL_POLY](#dl_poly)   
-      - 1.6.3. [GROMACS](#gromacs)   
-         - 1.6.3.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)   
-      - 1.6.4. [NAMD](#namd)   
-         - 1.6.4.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)   
-      - 1.6.5. [LAMMPS](#lammps)   
-   - 1.7. [Water Models](#water-models)   
+- 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)
+   - 1.1. [Force Fields](#force-fields)
+      - 1.1.1. [Non-bonded interactions](#non-bonded-interactions)
+         - 1.1.1.1. [The Lennard-Jones potential](#the-lennard-jones-potential)
+         - 1.1.1.2. [The Combining rules](#the-combining-rules)
+         - 1.1.1.3. [Specifying Combining Rules](#specifying-combining-rules)
+            - 1.1.1.3.1. [GROMACS](#gromacs)
+            - 1.1.1.3.2. [NAMD](#namd)
+         - 1.1.1.4. [The electrostatic potential](#the-electrostatic-potential)
+      - 1.1.2. [Bonded Interactions](#bonded-interactions)
+         - 1.1.2.1. [The bond potential](#the-bond-potential)
+         - 1.1.2.2. [The angle potential](#the-angle-potential)
+         - 1.1.2.3. [The torsion angle potential](#the-torsion-angle-potential)
+         - 1.1.2.4. [The Ureu-Bradley potential](#the-ureu-bradley-potential)
+   - 1.2. [Truncation of Interactions](#truncation-of-interactions)
+      - 1.2.1. [Neighbour Searching Methods](#neighbour-searching-methods)
+         - 1.2.1.1. [Cell Lists](#cell-lists)
+         - 1.2.1.2. [Verlet Lists](#verlet-lists)
+      - 1.2.2. [Truncation of Lennard-Jones Interactions](#truncation-of-lennard-jones-interactions)
+      - 1.2.3. [Truncation of the Electrostatic Interactions](#truncation-of-the-electrostatic-interactions)
+      - 1.2.4. [Specifying Cutoff and Neighbour Searching Methods](#specifying-cutoff-and-neighbour-searching-methods)
+         - 1.2.4.1. [NAMD](#namd)
+         - 1.2.4.2. [GROMACS](#gromacs)
+   - 1.3. [Balancing of charges](#balancing-of-charges)
+   - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)
+      - 1.4.1. [Specifying periodic box](#specifying-periodic-box)
+         - 1.4.1.1. [NAMD](#namd)
+         - 1.4.1.2. [GROMACS](#gromacs)
+   - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)
+      - 1.5.1. [Integration Algorithms](#integration-algorithms)
+         - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)
+         - 1.5.1.2. [The Verlet Algorithm](#the-verlet-algorithm)
+         - 1.5.1.3. [The Velocity Verlet Algorithm](#the-velocity-verlet-algorithm)
+         - 1.5.1.4. [The Leap Frog Algorithm](#the-leap-frog-algorithm)
+      - 1.5.2. [Choosing Time Step](#choosing-time-step)
+      - 1.5.3. [Specifying Time Step Parameters](#specifying-time-step-parameters)
+      - 1.5.4. [Specifying Integration Method](#specifying-integration-method)
+         - 1.5.4.1. [GROMACS](#gromacs)
+         - 1.5.4.2. [NAMD](#namd)
+   - 1.6. [Molecular Dynamics Software Available on Compute Canada Systems](#molecular-dynamics-software-available-on-compute-canada-systems)
+      - 1.6.1. [AMBER](#amber)
+      - 1.6.2. [DL_POLY](#dl_poly)
+      - 1.6.3. [GROMACS](#gromacs)
+         - 1.6.3.1. [Force fields implemented in GROMACS:](#force-fields-implemented-in-gromacs)
+      - 1.6.4. [NAMD](#namd)
+         - 1.6.4.1. [Force fields implemented in NAMD:](#force-fields-implemented-in-namd)
+      - 1.6.5. [LAMMPS](#lammps)
+   - 1.7. [Water Models](#water-models)
 
 <!-- /MDTOC -->
 
@@ -110,14 +110,13 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 #### Specifying Combining Rules
 ##### GROMACS
-In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp**. Geometric mean is selected by using rules #1 and #3,  Lorentz–Berthelot rule is selected using rule #2.
-- GROMOS force field requires rule #1
-- OPLS force field requires rule #3
-- CHARM and AMBER force fields require rule  #2.
+>In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp**. Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
+>
+>Use rule 1 for GROMOS force fields, 3 for OPLS force fields, and 2 for CHARM and AMBER force fields
 ##### NAMD
-By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
-
-**vdwGeometricSigma**=yes
+>By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
+>
+>**vdwGeometricSigma**=yes
 
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
@@ -155,14 +154,46 @@ The LJ potential is always truncated at the cutoff distance. How to choose the a
 
 The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
-- NAMD uses the X-PLOR switching function
+### Specifying Truncation of LJ Potential
+#### GROMACS
+**vdw-modifier**
+> **potential-shift**
+>> shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
+>
+> **force-switch**
+>>smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
+> **potential-switch**: smoothly switches the potential to zero between **rvdw-switch** and **rvdw**.
+>
+>**none**
+
+**rvdw-switch**
+> Where to start switching
+
+**rvdw**
+> Cut-off distance
+
+
+#### NAMD
+**cutoff**
+> Cut-off distance common to both electrostatic and van der Waals calculations
+
+**switching**
+> Turn switching on/off
+
+**switchdist**
+> Where to start switching
+
+**vdwForceSwitching**
+> use force switching for VDW
+> Default Value: off
+
 
 ### Truncation of the Electrostatic Interactions
-Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated in real space.
+Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
 
 ### Specifying Cutoff and Neighbour Searching Methods
 
-#### NAMD ####
+#### NAMD
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
 **cutoff**
