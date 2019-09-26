@@ -110,12 +110,15 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 #### Specifying Combining Rules
 ##### GROMACS
->In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp**. Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
+>In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
 >
->Use rule 1 for GROMOS force fields, 3 for OPLS force fields, and 2 for CHARM and AMBER force fields
+>Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
+>
+>GROMOS requires rule 1,
+>OPLS requires rule 3
+>CHARM and AMBER require rule 2
 ##### NAMD
->By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file by using the keyword:
->
+>By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
 >**vdwGeometricSigma**=yes
 
 #### The electrostatic potential
