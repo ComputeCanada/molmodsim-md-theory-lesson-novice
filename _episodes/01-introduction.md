@@ -149,19 +149,29 @@ The cell lists method divides the simulation domain into *n* cells within edge l
 A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than half of the buffer distance. At this point the list is invalidated and the new list must be constructed. Verlet offer more efficient computation of pairwise interactions at the expence of relatively large memory requirement which can be a limiting factor. In practice, almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
 ### Truncation of Lennard-Jones Interactions
-There are several different ways to truncate the non-bonded interaction.
-The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? Often the LJ potential is truncated at a distance of <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/>.  At this distance, the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/>. This means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>.
 
-The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
+The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? A common practice is to truncate at <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/> and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/> and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on <img src="https://latex.codecogs.com/gif.latex?\sigma"/> means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>. Thus the minimum acceptable cutoff, in this case, is 8.5.
+
+In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
+
+#### Cutoffs Used for Development of Common Force Fields
+> AMBER: 9
+> CHARMM: 12
+> GROMOS: 14
+> OPLS: 11-15 (depending on a molecule size)
+
+
+
+There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 ### Specifying Truncation of LJ Potential
 #### GROMACS
 **vdw-modifier**
-> **potential-shift**
->> shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
+Acceptable values:
+> **potential-shift**: shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
 >
-> **force-switch**
->>smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
+> **force-switch**: smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
+>
 > **potential-switch**: smoothly switches the potential to zero between **rvdw-switch** and **rvdw**.
 >
 >**none**
