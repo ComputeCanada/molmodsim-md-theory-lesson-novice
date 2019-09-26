@@ -158,9 +158,9 @@ The LJ potential is always truncated at the cutoff distance. How to choose the a
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
 #### Cutoffs Used for Development of Common Force Fields
-> AMBER: 9, 
-> CHARMM: 12,
-> GROMOS: 14,
+> AMBER: 9,__
+> CHARMM: 12,__
+> GROMOS: 14,__
 > OPLS: 11-15 (depending on a molecule size)
 
 
