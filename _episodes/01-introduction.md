@@ -115,7 +115,7 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 >Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
 >
 >GROMOS requires rule 1,
->OPLS requires rule 3
+>OPLS requires rule 3,
 >CHARM and AMBER require rule 2
 ##### NAMD
 >By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
@@ -158,9 +158,9 @@ The LJ potential is always truncated at the cutoff distance. How to choose the a
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
 #### Cutoffs Used for Development of Common Force Fields
-> AMBER: 9
-> CHARMM: 12
-> GROMOS: 14
+> AMBER: 9, 
+> CHARMM: 12,
+> GROMOS: 14,
 > OPLS: 11-15 (depending on a molecule size)
 
 
