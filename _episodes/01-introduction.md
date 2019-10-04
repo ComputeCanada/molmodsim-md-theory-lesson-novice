@@ -19,15 +19,19 @@
          - 1.2.1.1. [Cell Lists](#cell-lists)
          - 1.2.1.2. [Verlet Lists](#verlet-lists)
       - 1.2.2. [Truncation of Lennard-Jones Interactions](#truncation-of-lennard-jones-interactions)
-      - 1.2.3. [Truncation of the Electrostatic Interactions](#truncation-of-the-electrostatic-interactions)
-      - 1.2.4. [Specifying Cutoff and Neighbour Searching Methods](#specifying-cutoff-and-neighbour-searching-methods)
-         - 1.2.4.1. [NAMD](#namd)
-         - 1.2.4.2. [GROMACS](#gromacs)
+         - 1.2.2.1. [Cutoffs Used for Development of Common Force Fields](#cutoffs-used-for-development-of-common-force-fields)
+      - 1.2.3. [Specifying Truncation of LJ Potential](#specifying-truncation-of-lj-potential)
+         - 1.2.3.1. [GROMACS](#gromacs)
+         - 1.2.3.2. [NAMD](#namd)
+      - 1.2.4. [Truncation of the Electrostatic Interactions](#truncation-of-the-electrostatic-interactions)
+      - 1.2.5. [Specifying Cutoff and Neighbour Searching Methods](#specifying-cutoff-and-neighbour-searching-methods)
+         - 1.2.5.1. [GROMACS](#gromacs)
+         - 1.2.5.2. [NAMD](#namd)
    - 1.3. [Balancing of charges](#balancing-of-charges)
    - 1.4. [Periodic boundary conditions](#periodic-boundary-conditions)
       - 1.4.1. [Specifying periodic box](#specifying-periodic-box)
-         - 1.4.1.1. [NAMD](#namd)
-         - 1.4.1.2. [GROMACS](#gromacs)
+         - 1.4.1.1. [GROMACS](#gromacs)
+         - 1.4.1.2. [NAMD](#namd)
    - 1.5. [Integrating the Equations of Motion.](#integrating-the-equations-of-motion)
       - 1.5.1. [Integration Algorithms](#integration-algorithms)
          - 1.5.1.1. [The Euler Algorithm](#the-euler-algorithm)
@@ -129,15 +133,37 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 ### Bonded Interactions
 
 #### The bond potential
-The bond potential is used to model the interaction of covalently bonded atoms in a molecule.
+The bond potential is used to model the interaction of covalently bonded atoms in a molecule. Bond stretch is approximated by a simple harmonic function describing oscillation about an equilibrium bond length *r<sub>0</sub>* with bond constant *k<sub>b</sub>*:
 
+<img src="https://latex.codecogs.com/gif.latex?V_{Bond}=k_b(r_{ij}-r_0)^2" /><br>
+
+This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate.
 #### The angle potential
-#### The torsion angle potential
+The angle potential describes the bond bending energy. It is defined for every triplet of bonded atoms. It is also approximated by a harmonic function describing oscillation about an equilibrium angle  <img src="https://latex.codecogs.com/gif.latex?\theta_{0}"/>  with force constant  <img src="https://latex.codecogs.com/gif.latex?k_\theta"/> :
+
+<img src="https://latex.codecogs.com/gif.latex?V_{Angle}=k_\theta(\theta_{ijk}-\theta_0)^2" /><br>
+
+The force constants for angle potential are about 5 times smaller that for bond stretching.
+
+#### The torsion (dihedral) angle potential
+The torsion energy is defined for every 4 bonded atoms.
+The torsion angle <img src="https://latex.codecogs.com/gif.latex?\phi"/> is the angle between 2 planes defined by the first and the last 3 atoms of the 4 atoms involved in the torsion interaction.
+
+<img src="https://latex.codecogs.com/gif.latex?V_{Dihed}=k_\phi(1+cos(n\phi-\delta))" /><br>
+
+ The non-negative integer constant *n* defines periodicity and  <img src="https://latex.codecogs.com/gif.latex?\delta"/> is the phase shift angle.
+
 #### The Ureu-Bradley potential
 
-The presence of cross-terms in a force field reflects couplings between the internal coordinates.
-• As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
- U-B terms have been used to improve agreement with vibrational spectra when a harmonic term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
+The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
+
+The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
+
+<img src="https://latex.codecogs.com/gif.latex?V_{UB}=k_{ub}(r_{ik}-r_{ub})^2" /><br>
+
+
+
+ U-B terms have been used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
 
 ## Truncation of Interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
@@ -158,12 +184,10 @@ The LJ potential is always truncated at the cutoff distance. How to choose the a
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
 #### Cutoffs Used for Development of Common Force Fields
-> AMBER: 9,__
-> CHARMM: 12,__
-> GROMOS: 14,__
+> AMBER: 9,
+> CHARMM: 12,
+> GROMOS: 14,
 > OPLS: 11-15 (depending on a molecule size)
-
-
 
 There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
@@ -206,27 +230,6 @@ Electrostatic interactions occurring over long distances are known to be importa
 
 ### Specifying Cutoff and Neighbour Searching Methods
 
-#### NAMD
- When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
-
-**cutoff**
-> Local interaction distance. Same for both electrostatic and VDW interactions
-
-**pairlistdist**
-> Distance between pairs for inclusion in pair lists. Should be bigger or equal than the **cutoff**.
->
-> Default value: **cutoff**
->
-**stepspercycle**
-> Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments.
-> Default Value: 20
-
-**pairlistsPerCycle**
-> Specifies how many times per cycle to regenerate pairlists.
->
-> Default value: 2
-
-
 #### GROMACS ####
 
 **cutoff-scheme**
@@ -251,6 +254,26 @@ Electrostatic interactions occurring over long distances are known to be importa
 >> **grid**: make a grid in the box and only check atoms in neighboring grid cells.<br>
 >> **simple**: loop over every atom in the box.
 
+#### NAMD
+ When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
+
+**cutoff**
+> Local interaction distance. Same for both electrostatic and VDW interactions
+
+**pairlistdist**
+> Distance between pairs for inclusion in pair lists. Should be bigger or equal than the **cutoff**.
+>
+> Default value: **cutoff**
+>
+**stepspercycle**
+> Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments.
+> Default Value: 20
+
+**pairlistsPerCycle**
+> Specifies how many times per cycle to regenerate pairlists.
+>
+> Default value: 2
+
 
 ## Balancing of charges
 Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
@@ -264,6 +287,20 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 
 ### Specifying periodic box ###
+
+#### GROMACS ####
+The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
+
+**-bt**
+>box type (triclinic, cubic, dodecahedron, octahedron)<br>
+
+**-box**
+> box vectors lengths (a,b,c)<br>
+>
+**-angles**
+> box vectors angles   (bc,ac,ab)<br>
+
+
 #### NAMD ####
 Periodic box is defined by three unit cell vectors:<br>
 
@@ -280,19 +317,6 @@ Periodic box is defined by three unit cell vectors:<br>
 >NAMD generates a .xsc (eXtended System Configuration) file which contains the periodic cell parameters. If this keyword is used periodic box parameters will be read from .xsc file ignoring cellBasisVectors.
 >Value: filename
 
-
-
-#### GROMACS ####
-The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
-
-**-bt**
->box type (triclinic, cubic, dodecahedron, octahedron)<br>
-
-**-box**
-> box vectors lengths (a,b,c)<br>
->
-**-angles**
-> box vectors angles   (bc,ac,ab)<br>
 
 ## Integrating the Equations of Motion.
 
@@ -410,11 +434,13 @@ The only available integration method is Verlet. To further reduce the cost of c
 >[Web page](https://www.ks.uiuc.edu/Research/namd/)
 #### Force fields implemented in NAMD:
 - [AMBER](http://ambermd.org/AmberModels.php) (amber format topology prepared with AMBERTOOLS). Currently AMBER recommends the following force fields: ff14SB for proteins, OL15 for DNA, OL3 for RNA, GLYCAM_06j for carbohydrates, lipid17 for lipids, and a general force field gaff2.
-- [CHARMM](http://mackerell.umaryland.edu/charmm_ff.shtml#charmm) (charmm format, topology prepared with psfgen)
+- [CHARMM](http://mackerell.umaryland.edu/charmm_ff.shtml#charmm) (charmm format, topology can be prepared with the included **psfgen** program)
 - [CHARMM-Drude](http://mackerell.umaryland.edu/charmm_drude_ff.shtml) (the polarizable force field based on the classical Drude oscillator model, charmm format)
 - GROMOS (from GROMACS distribution, topology prepared with pdb2gmx)
 - [OPLS-AA/M](http://zarbi.chem.yale.edu/oplsaam.html) New peptide dihedral parameters, significantly outperform the previous versions for proteins  (charmm format)
 
+
+----------------------------------------------------------
 1. The organic solvents with OPLS force field generate slightly better properties than those with GAFF. [ C. Caleman, P.J. van Maaren, M. Hong, J. S. Hub, L. T. Costa and D. van der Spoel. Force Field Benchmark of Organic Liquids: Density, Enthalpy of Vaporization, Heat Capacities, Surface Tension, Isothermal Compressibility, Volumetric Expansion Coefficient, and Dielectric Constant, J. Chem. Theor. Comput., 8, 61-74 (2012) ].
 ### LAMMPS
 >[Web page](https://lammps.sandia.gov)
@@ -423,8 +449,9 @@ The only available integration method is Verlet. To further reduce the cost of c
 OPC family water models: OPC, OPC3
 The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
 
+Good pdb files for the tutorial:
 1bvi
 1de3
-1goa
+1goa *
 1h4g
 1lni *
