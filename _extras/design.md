@@ -85,32 +85,33 @@ up with fully customized analysis methods.
 ## Stage 2: Desired Results
 
 ### Topics to cover 
-(in no particular order)
+(in no particular order; might need to be pruned)
 
 * System preparation
     * complete input structure (check for missing atoms/residues)
     * balance charges (the world does not have net-charge)
     * non-integer charges point to broken topology
-    * interfaces
-    * membranes
+    * interfaces (?)
+    * membranes (?)
 
 * Periodic Boundary Conditions
     * there is no "outside of the box" with PBC
     * minimum image convention
     * cut-off restrictions
 
-* Force fields
-    * Genealogy of common Forcefields
+* Force fields and Cut-Offs
+    * Genealogy of common Forcefields (?)
     * bonded interactions
     * non-bonded interactions
-        * Electrostatics
         * cut-offs
+        * Electrostatics
         * long range interactions (PME)
-    * Water models
+    * Water models (?)
 
 * The Global MD algorithm
     * choice of time steps
     * applying constraints
+    * (but probably not going into differences between Leap-Frog and Velocity-Verlet)
 
 * Phases of MD Workflow
     * energy minimization
@@ -124,19 +125,23 @@ up with fully customized analysis methods.
         * Berendsen 's algorithms are suitable for equilibration (exponential 
           approach to target temperature/pressure) but result in a non-physical
           ensemble.
-        * Parinello-Rahman and Nose-Hoover are suitable for production MD
+        * Parrinello-Rahman and Nose-Hoover are suitable for production MD
           (correct physical ensemble), but approach the target temperature/pressure
           in a dampened oscillation, which might be unstable and takes much longer.
     * Size of temperature coupling groups
     * Flying ice cube -> resetting COM-movement
     * Hot-Solvent/Cold-Solute -> tcoupl groups
+    * Literature:
+        * [Basconi2013]({{ page.root }}/reference.html#Basconi2013)
+        * [Wong-ekkabut2016]({{ page.root }}/reference.html#Wong-ekkabut2016)
 
 * Parallelization/Performance
     * Particle decomposition vs. Domain Decomposition
     * MPI / OpenMP / GPU
     * PME nodes /  shifting of real-space/PME cutoff
     * Load balancing
-
+    * Literature:
+        * [Larsson2011]({{ page.root }}/reference.html#Larsson2011)
 
 ### Questions
 
