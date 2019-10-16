@@ -13,7 +13,7 @@ objectives:
 - "Set cutoff distance and truncation method in MD input files "
 ---
 
-# Computation of Intermolecular Interactions
+# Computation of Nonbonded Interactions
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
 
 ## Neighbour Searching Methods
