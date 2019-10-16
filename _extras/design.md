@@ -27,19 +27,21 @@ submit a MD simulation.  There are numerous good GROMACS tutorials available and
 maybe one of them could be adapted for this.  In addition to general instructions 
 and commands, there should be specific instructions on how to do this on Compute 
 Canada clusters.  As in Software Carpentry lessons, certain steps should be 
-implelemented as exercises for the learner - the correct answer can be hidden in 
+implemented as exercises for the learner - the correct answer can be hidden in 
 an answer box.  
 Theory should be skipped over as much as possible and should be covered in the 
 second module.  
 This lesson could be adapted for other MD-codes (e.g. NAMD) as well.
+
 
 The **second lesson** is a small theory review to remind the learners of important 
 concepts and how they influence the choice of simulation parameters.  The aim is
 that people can avoid pit-falls and misunderstandings that are commonly made
 by novice MD users. Topics to cover are Periodic Boundary Conditions (and why 
 there is no "outside" with a periodic box), thermostats/barostats, cut-offs, etc.  
-This shold be no substitute for a formal course in statistical thermodynamics 
+This should be no substitute for a formal course in statistical thermodynamics 
 but should help users make more informed choices of simulation settings/parameters.
+
 
 The **third lesson** is again a hands-on tutorial to use Python and the Python 
 packages [MDAnalysis](https://www,mdanalysis.org), [MDtraj](http://mdtraj.org/),
@@ -49,6 +51,17 @@ tools out-of-the-box, users often limit themselves to those tools and the option
 and variations that they offer.  The above frameworks make it very easy to read 
 MD-trajectories in different formats and get access to the coordinates and come 
 up with fully customized analysis methods.
+
+
+The mentioned lessons *one* and *three* are currently put on hold and are subject
+to be created at a later time.  In the meantime we can recommend to work through
+online tutorials that are already available such as:
+* http://www.mdtutorials.com/ 
+* https://www.mdanalysis.org/MDAnalysisTutorial/
+
+This module here will implement the *second lesson* focusing on theory and giving
+guidance on choosing good parameters for MD-Simulations.
+
 
 ## Process Used
 
