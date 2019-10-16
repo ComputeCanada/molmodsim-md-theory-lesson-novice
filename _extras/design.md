@@ -132,8 +132,8 @@ up with fully customized analysis methods.
     * Flying ice cube -> resetting COM-movement
     * Hot-Solvent/Cold-Solute -> tcoupl groups
     * Literature:
-        * [Basconi2013]({{ page.root }}/reference.html#Basconi2013)
-        * [Wong-ekkabut2016]({{ page.root }}/reference.html#Wong-ekkabut2016)
+        * [Basconi2013]({{ page.root }}/reference.html#Basconi-2013)
+        * [Wong-ekkabut2016]({{ page.root }}/reference.html#Wong-ekkabut-2016)
 
 * Parallelization/Performance
     * Particle decomposition vs. Domain Decomposition
@@ -141,7 +141,7 @@ up with fully customized analysis methods.
     * PME nodes /  shifting of real-space/PME cutoff
     * Load balancing
     * Literature:
-        * [Larsson2011]({{ page.root }}/reference.html#Larsson2011)
+        * [Larsson2011]({{ page.root }}/reference.html#Larsson-2011)
 
 ### Questions
 
