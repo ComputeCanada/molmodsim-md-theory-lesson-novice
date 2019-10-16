@@ -1,3 +1,13 @@
+title: "Introduction"
+teaching: 0
+exercises: 0
+questions:
+- "Key question"
+objectives:
+- "First objective."
+keypoints:
+- "First key point."
+
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->
 
 - 1. [Basic principles of molecular dynamics](#basic-principles-of-molecular-dynamics)
@@ -137,7 +147,8 @@ The bond potential is used to model the interaction of covalently bonded atoms i
 
 <img src="https://latex.codecogs.com/gif.latex?V_{Bond}=k_b(r_{ij}-r_0)^2" /><br>
 
-This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate.
+This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
+
 #### The angle potential
 The angle potential describes the bond bending energy. It is defined for every triplet of bonded atoms. It is also approximated by a harmonic function describing oscillation about an equilibrium angle  <img src="https://latex.codecogs.com/gif.latex?\theta_{0}"/>  with force constant  <img src="https://latex.codecogs.com/gif.latex?k_\theta"/> :
 
