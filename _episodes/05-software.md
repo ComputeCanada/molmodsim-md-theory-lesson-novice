@@ -1,13 +1,11 @@
 ---
-title: "Introducing molecular dynamics simulation"
+title: "Molecular Dynamics Software Available on Compute Canada Systems"
 teaching: 30
 exercises: 0
 questions:
-- "What is Molecular Dynamics and how can I benefit from using it"
-- "What is a force field"
+- "What software is available on CC systems"
 objectives:
-- "Explain strengths and weaknesses of MD simulations"
-- "Explain the interactions between particles in a molecular dynamics simulation"
+- "List MD packages"
 ---
 
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:1 flatten:0 bullets:1 updateOnSave:1 -->

@@ -1,3 +1,13 @@
+---
+title: "Integrating the Equations of Motion"
+teaching: 30
+exercises: 0
+questions:
+- "How to advance simulation time?"
+objectives:
+- "Explain how to choose simulation timestep"
+---
+
 ## Integrating the Equations of Motion.
 
 The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
