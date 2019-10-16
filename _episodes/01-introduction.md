@@ -1,11 +1,11 @@
 ---
-title: "Introduction"
-teaching: 0
+title: "Force Fields"
+teaching: 30
 exercises: 0
 questions:
-- "Key question"
+- "What is a force field"
 objectives:
-- "First objective."
+- "Understand the interactions between particles in a molecular dynamics simulation"
 keypoints:
 - "First key point."
 ---
