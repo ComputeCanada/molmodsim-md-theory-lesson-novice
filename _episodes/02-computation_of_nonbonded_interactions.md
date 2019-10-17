@@ -56,7 +56,7 @@ There are several different ways to truncate the non-bonded interaction. The mai
 > **rvdw**
 > Cut-off distance
 {: .callout}
-> Specifying Truncation of LJ Potential in NAMD
+> ## Specifying Truncation of LJ Potential in NAMD
 > **cutoff**
 > Cut-off distance common to both electrostatic and van der Waals calculations
 >
