@@ -40,7 +40,7 @@ In practice, increasing cutoff does not necessarily improve accuracy. Each force
 There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 > ## Specifying Truncation of LJ Potential
-> ### GROMACS
+> #### GROMACS
 > **vdw-modifier**
 > Controls how to truncate LJ potential. Acceptable values:
 > >**potential-shift**: shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
@@ -52,28 +52,26 @@ There are several different ways to truncate the non-bonded interaction. The mai
 >>**none**
 >
 > **rvdw-switch**
->
 > Where to start switching.
 >
 > **rvdw**
->
 > Cut-off distance
-{: .callout}
-
-
-### NAMD
-**cutoff**
+>
+> #### NAMD
+> **cutoff**
 > Cut-off distance common to both electrostatic and van der Waals calculations
-
-**switching**
+>
+> **switching**
 > Turn switching on/off
-
-**switchdist**
+>
+> **switchdist**
 > Where to start switching
-
-**vdwForceSwitching**
+>
+> **vdwForceSwitching**
 > use force switching for VDW
 > Default Value: off
+{: .callout}
+
 
 
 ## Truncation of the Electrostatic Interactions
