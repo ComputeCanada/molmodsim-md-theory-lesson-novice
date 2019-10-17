@@ -74,36 +74,35 @@ There are several different ways to truncate the non-bonded interaction. The mai
 
 
 
-## Truncation of the Electrostatic Interactions
+# Truncation of the Electrostatic Interactions
 Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
 
-## Specifying Cutoff and Neighbour Searching Methods
-
-### GROMACS ####
-
-**cutoff-scheme**
+> ## Specifying Cutoff and Neighbour Searching Methods
+> #### GROMACS
+> **cutoff-scheme**
 > Since version 5.1 **group** list has been deprecated and only **Verlet** scheme is available
-
-**rlist**
+>
+> **rlist**
 > Cutoff distance for the short-range neighbour list. Active when **verlet-buffer-tolerance** = -1, otherwise ignored
-
-**verlet-buffer-tolerance**
+>
+> **verlet-buffer-tolerance**
 > The maximum allowed error for pair interactions per particle caused by the Verlet buffer. To achieve the predefined tolerance the cutoff distance **rlist** is adjusted indirectly. To override this feature set the value to -1
 >
-> Default value: 0.005 [kJ mol<sup>-1</sup> ps<sup>-1</sup>]
-
-**nstlist**
+>> Default value: 0.005 [kJ mol<sup>-1</sup> ps<sup>-1</sup>]
+>
+>**nstlist**
 > Frequency to update the neighbour list. If set to 0 the neighbour list is constructed only once and never updated.
 >
-> Default Value: 10
-
-**ns-type**
-> Neighbour search method.
-> Acceptable values:
->> **grid**: make a grid in the box and only check atoms in neighboring grid cells.<br>
+>> Default Value: 10
+>
+>**ns-type**
+> Neighbour search method. Acceptable values:
+>> **grid**: make a grid in the box and only check atoms in neighboring grid cells.
+>>
 >> **simple**: loop over every atom in the box.
+{: .callout}
 
-### NAMD
+#### NAMD
  When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
 
 **cutoff**
