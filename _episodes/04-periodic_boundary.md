@@ -7,6 +7,9 @@ questions:
 - "Why the simulation system should be neutralized"
 objectives:
 - "Explain how to setup periodic boundary"
+keypoints:
+- "Simulation system should be neutralized by adding counterions"
+- "Periodic boundary conditions are used to approximate an infinitely large system"
 ---
 
 ## Periodic boundary conditions
@@ -32,17 +35,9 @@ Neutralizing a system is a practice carried out for obtaining correct electrosta
 > ## Specifying periodic box in NAMD
 > Periodic box is defined by three unit cell vectors:
 >
-> **cellBasisVector1**
+> **cellBasisVector1**, **cellBasisVector2**, **cellBasisVector3**
 >>
->> Default value: 0 0 0
->
-> **cellBasisVector2**
->
->> Default value: 0 0 0
->
-> **cellBasisVector3**
->
->> Default value: 0 0 0
+>> Default values: 0 0 0
 >
 > **extendedSystem**
 >> NAMD generates a .xsc (eXtended System Configuration) file which contains the periodic cell parameters. If this keyword is used periodic box parameters will be read from .xsc file ignoring cellBasisVectors.
