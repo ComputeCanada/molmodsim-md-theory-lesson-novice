@@ -1,20 +1,20 @@
 ---
-title: "Integrating the Equations of Motion"
+title: "Solving the Equations of Motion"
 teaching: 30
 exercises: 0
 questions:
-- "How to advance simulation time?"
+- "How is simulation time advanced?"
+- "How to choose an appropriate simulation time step"
 objectives:
-- "Explain how to choose simulation timestep"
+- "Explain how to choose simulation timestep and integration method"
 ---
 
-## Integrating the Equations of Motion.
-
-The integration algorithm advances simulation system by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
+To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
 
 A good integration algorithm for MD should be time-reversible and energy conserving.
-### Integration Algorithms
-#### The Euler Algorithm
+
+# Integration Algorithms
+## The Euler Algorithm
 
 The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
 
@@ -24,7 +24,7 @@ The Euler algorithm uses the second order Taylor expansion to estimate position 
 
 The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate other equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
-#### The Verlet Algorithm
+## The Verlet Algorithm
 
 Using the current positions and forces and the previous positions calculate the positions at the next time step:
 
@@ -36,7 +36,7 @@ The Verlet algorithm requires positions at two time steps. It is inconvenient wh
 
 The Verlet algorithm is time-reversible and energy conserving.
 
-#### The Velocity Verlet Algorithm
+## The Velocity Verlet Algorithm
 
 The velocities, positions and forces are calculated at the same time according to:
 
@@ -47,7 +47,7 @@ The velocities, positions and forces are calculated at the same time according t
 The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simplicity and stability is has become the most widely used algorithm in the MD simulations.
 
 
-#### The Leap Frog Algorithm
+## The Leap Frog Algorithm
 
 Using accelerations of the current time step, compute the velocities at half-time step:
 
@@ -60,7 +60,7 @@ Then determine positions at the next time step:
 The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 
-### Choosing Time Step
+# Choosing Time Step
 Mathematically Vertet family integrators are stable for time steps
 
 <img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
@@ -68,12 +68,24 @@ Mathematically Vertet family integrators are stable for time steps
  where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.<br>
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
-### Specifying Time Step Parameters
+> ## Specifying Time Step Parameters
+> GROMACS
+>
+> **dt** Time step, ps
+>
+> **nstep** Number of steps to simulate
+>
+> **tinit** Time of the first step
+{: .callout}
+
+
 parameter             | GROMACS    |  NAMD
 ----------------------| -----------|----------
 time step             | **dt**, ps   |  **timestep**, fs
 number of steps       | **nstep**    |  **numsteps**
 time of the first step| **tinit**    |  **firsttimestep**
+
+
 
 ### Specifying Integration Method
 #### GROMACS
