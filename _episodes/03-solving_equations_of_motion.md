@@ -1,6 +1,6 @@
 ---
 title: "Solving the Equations of Motion"
-teaching: 30
+teaching: 10
 exercises: 0
 questions:
 - "How is simulation time advanced?"
@@ -83,24 +83,19 @@ In molecular dynamics stretching of the bonds with the lightest atom H is usuall
 {: .callout}
 
 
-### Specifying Integration Method
-#### GROMACS
-GROMACS offers several types of integration algorithms that can be selected using the **integrator** keyword.
+> ## Specifying Integration Method in GROMACS
+> GROMACS offers several types of integration algorithms that can be selected using the **integrator** keyword.
+>
+> **md** A leap frog algorithm
+>
+> **md-vv** A velocity Verlet algorithm
+>
+> **md-vv-avek** A velocity Verlet algorithm same as **md-vv** except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
+>
+> **sd** an accurate leap frog stochastic dynamics integrator.
+> **bd** a Euler integrator for Brownian or position Langevin dynamics.
+{: .callout}
 
-**md**
-> a leap frog algorithm
->
-**md-vv**
-> a velocity Verlet algorithm
->
-**md-vv-avek**
-> a velocity Verlet algorithm same as **md-vv** except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
->
-**sd**
-> an accurate leap frog stochastic dynamics integrator.
->
-**bd**
-> a Euler integrator for Brownian or position Langevin dynamics.
 
 #### NAMD
 
