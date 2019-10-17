@@ -1,5 +1,5 @@
 ---
-title: "Solving the Equations of Motion"
+title: "Advancing Simulation in Time"
 teaching: 10
 exercises: 0
 questions:
@@ -11,7 +11,6 @@ keypoints:
 - "Simulation time step must be short enough to describe the fastest motion"
 - "The most widely used integration method is the velocity Verlet"
 ---
-
 To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
 # Integration Algorithms
