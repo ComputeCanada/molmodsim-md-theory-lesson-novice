@@ -1,5 +1,5 @@
 ---
-title: "Molecular Dynamics Software Available on Compute Canada Systems"
+title: "Available MD Software"
 teaching: 5
 exercises: 0
 questions:
@@ -9,14 +9,11 @@ objectives:
 ---
 
 # Molecular Dynamics Software Available on Compute Canada Systems
-## AMBER
-> [Web page](http://ambermd.org)
+## [AMBER](http://ambermd.org)
 
-## DL_POLY
->[Web page](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
+## [DL_POLY](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
 
-## GROMACS
->[Web page](http://gromacs.org)
+## [GROMACS](http://gromacs.org)
 ### Force fields implemented in GROMACS:
 
 - AMBER: 94, 96, 99, 99sb, 99sb-ildn, 03, GS (amberGS is amber94 with both backbone torsion potentials set to 0).
@@ -25,8 +22,7 @@ objectives:
 - GROMOS: 43a1, 43a2, 45a3, 53a5, 53a6, 54a7.
 - OPLS-AA (OPLS-AA implemented in GROMACS is actually OPLS-AA/L. OPLS-AA/L uses OPLS-AA atom types with the torsions and impropers refitted to QM calculations at the HF/6-31G** level followed by single-point LMP2/cc-pVTZ(-f))
 
-## NAMD
->[Web page](https://www.ks.uiuc.edu/Research/namd/)
+## [NAMD](https://www.ks.uiuc.edu/Research/namd/)
 
 ### Force fields implemented in NAMD:
 - [AMBER](http://ambermd.org/AmberModels.php) (amber format topology prepared with AMBERTOOLS). Currently AMBER recommends the following force fields: ff14SB for proteins, OL15 for DNA, OL3 for RNA, GLYCAM_06j for carbohydrates, lipid17 for lipids, and a general force field gaff2.
@@ -35,20 +31,4 @@ objectives:
 - GROMOS (from GROMACS distribution, topology prepared with pdb2gmx)
 - [OPLS-AA/M](http://zarbi.chem.yale.edu/oplsaam.html) New peptide dihedral parameters, significantly outperform the previous versions for proteins (charmm format)
 
-## LAMMPS
->[Web page](https://lammps.sandia.gov)
-
-----------------------------------------------------------
-1. The organic solvents with OPLS force field generate slightly better properties than those with GAFF. [ C. Caleman, P.J. van Maaren, M. Hong, J. S. Hub, L. T. Costa and D. van der Spoel. Force Field Benchmark of Organic Liquids: Density, Enthalpy of Vaporization, Heat Capacities, Surface Tension, Isothermal Compressibility, Volumetric Expansion Coefficient, and Dielectric Constant, J. Chem. Theor. Comput., 8, 61-74 (2012) ].
-
-
-## Water Models
-OPC family water models: OPC, OPC3
-The accuracy of OPC water model is dramatically better compared to the commonly used rigid models.
-
-Good pdb files for the tutorial:
-1bvi
-1de3
-1goa *
-1h4g
-1lni *
+## [LAMPPS](https://lammps.sandia.gov)
