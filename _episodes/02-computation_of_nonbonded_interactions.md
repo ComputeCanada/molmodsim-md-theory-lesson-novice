@@ -42,8 +42,7 @@ There are several different ways to truncate the non-bonded interaction. The mai
 > ## Specifying Truncation of LJ Potential
 > ### GROMACS
 > **vdw-modifier**
->
-> Acceptable values:
+> Controls how to truncate LJ potential. Acceptable values:
 > >**potential-shift**: shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
 >>
 >>**force-switch**: smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
@@ -54,10 +53,10 @@ There are several different ways to truncate the non-bonded interaction. The mai
 >
 > **rvdw-switch**
 >
-> Where to start switching
+> Where to start switching.
 >
 > **rvdw**
-> 
+>
 > Cut-off distance
 {: .callout}
 
