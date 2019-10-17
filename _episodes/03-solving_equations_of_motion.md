@@ -68,23 +68,19 @@ Mathematically Vertet family integrators are stable for time steps
  where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.<br>
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
-> ## Specifying Time Step Parameters
-> GROMACS
->
+> ## Specifying Time Step Parameters in GROMACS
 > **dt** Time step, ps
 >
 > **nstep** Number of steps to simulate
 >
 > **tinit** Time of the first step
+> ## Specifying Time Step Parameters in NAMD
+> **TimeStep** Time step, fs
+>
+> **NumSteps** Number of steps to simulate
+>
+> **FirtsTimeStep** Time of the first step
 {: .callout}
-
-
-parameter             | GROMACS    |  NAMD
-----------------------| -----------|----------
-time step             | **dt**, ps   |  **timestep**, fs
-number of steps       | **nstep**    |  **numsteps**
-time of the first step| **tinit**    |  **firsttimestep**
-
 
 
 ### Specifying Integration Method
