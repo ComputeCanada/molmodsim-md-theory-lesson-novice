@@ -56,7 +56,7 @@ There are several different ways to truncate the non-bonded interaction. The mai
 > **rvdw**
 > Cut-off distance
 {: .callout}
-> ## Specifying Truncation of LJ Potential in NAMD
+> Specifying Truncation of LJ Potential in NAMD
 > **cutoff**
 > Cut-off distance common to both electrostatic and van der Waals calculations
 >
@@ -76,8 +76,7 @@ There are several different ways to truncate the non-bonded interaction. The mai
 # Truncation of the Electrostatic Interactions
 Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
 
-> ## Specifying Cutoff and Neighbour Searching Methods
-> #### GROMACS
+> ## Specifying Cutoff and Neighbour Searching Methods in GROMACS
 > **cutoff-scheme**
 > Since version 5.1 **group** list has been deprecated and only **Verlet** scheme is available
 >
@@ -101,22 +100,22 @@ Electrostatic interactions occurring over long distances are known to be importa
 >> **simple**: loop over every atom in the box.
 {: .callout}
 
-#### NAMD
- When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
-
-**cutoff**
+> ## Specifying Cutoff and Neighbour Searching Methods in NAMD
+> When run in parallel NAMD uses a combination of spatial decomposition into grid cells, "patches" and Verlet lists with extended cutoff distance
+>
+> **cutoff**
 > Local interaction distance. Same for both electrostatic and VDW interactions
-
-**pairlistdist**
+>
+> **pairlistdist**
 > Distance between pairs for inclusion in pair lists. Should be bigger or equal than the **cutoff**.
 >
-> Default value: **cutoff**
+>> Default value: **cutoff**
 >
-**stepspercycle**
+> **stepspercycle**
 > Number of timesteps in each cycle. Each cycle represents the number of timesteps between atom reassignments.
-> Default Value: 20
-
-**pairlistsPerCycle**
-> Specifies how many times per cycle to regenerate pairlists.
+>> Default Value: 20
 >
-> Default value: 2
+>**pairlistsPerCycle**
+> Specifies how many times per cycle to regenerate pairlists.
+>> Default value: 2
+{: .callout}
