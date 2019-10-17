@@ -1,5 +1,5 @@
 ---
-title: "Introducing molecular dynamics simulation"
+title: "Force Fields and Interactions"
 teaching: 30
 exercises: 0
 questions:

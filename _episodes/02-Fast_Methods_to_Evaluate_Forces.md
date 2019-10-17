@@ -1,5 +1,5 @@
 ---
-title: "Computation of Nonbonded Interactions"
+title: "Fast Methods to Evaluate Forces"
 teaching: 20
 exercises: 0
 questions:
