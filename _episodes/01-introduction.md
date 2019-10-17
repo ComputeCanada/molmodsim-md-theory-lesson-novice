@@ -78,7 +78,6 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 >
 >  **NAMD**
 > By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
->
 > **vdwGeometricSigma**=yes
 {: .callout}
 
