@@ -70,7 +70,7 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 > ## Specifying Combining Rules
 >
-> ### GROMACS
+>  GROMACS
 >
 > In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
 >
@@ -78,10 +78,9 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 >
 > GROMOS requires rule 1, OPLS requires rule 3, CHARM and AMBER require rule 2
 >
-> ### NAMD
+>  NAMD
 > By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
 > **vdwGeometricSigma**=yes
->
 {: .callout}
 
 #### The electrostatic potential
