@@ -1,6 +1,6 @@
 ---
 title: "Computation of Nonbonded Interactions"
-teaching: 30
+teaching: 20
 exercises: 0
 questions:
 - "Why computation of nonbonded interactions is the speed limiting factor?"
@@ -13,7 +13,7 @@ objectives:
 - "Set cutoff distance and truncation method in MD input files."
 keypoints:
 - Nonbonded interactions are truncated to speed up simulations of the large systems.
-- To ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
+- To ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field and the size of the periodic box.
 ---
 
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
@@ -34,9 +34,12 @@ The LJ potential is always truncated at the cutoff distance. How to choose the a
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
 > ## Cutoffs Used for Development of Common Force Fields
-> AMBER: 9,
-> CHARMM: 12,
-> GROMOS: 14,
+> AMBER: 9
+>
+> CHARMM: 12
+>
+> GROMOS: 14
+>
 > OPLS: 11-15 (depending on a molecule size)
 {: .callout}
 
