@@ -14,7 +14,6 @@ keypoints:
 - "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
 
-# Basic principles of molecular dynamics
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{p}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{p}" title="\vec{p}" /></a> of an object equals the force <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{F}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{F}" title="\vec{F}" /></a> acting on it:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\vec{F}=\frac{d\vec{p}}{dt}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\vec{F}=\frac{d\vec{p}}{dt}" title="\vec{F}=\frac{d\vec{p}}{dt}" /></a>
@@ -29,14 +28,14 @@ The potential energy function *U* acts as a cornerstone of the MD simulations be
 - Study thermodynamics properties (free energies, binding energies)
 
 
-## Force Fields
+# Force Fields
 A force field is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions.
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" title="U(\vec{r})=\sum U_{bonded}(\vec{r})+\sum U_{nonbonded}(\vec{r})" /></a>
 
 
-### Non-bonded interactions
-#### The Lennard-Jones potential
+# Non-bonded interactions
+## The Lennard-Jones potential
 The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function:
 
 <img src="https://latex.codecogs.com/gif.latex?V_{LJ}(r)=\frac{C12}{r^{12}}&plus;\frac{C6}{r^{6}}" />
@@ -53,7 +52,7 @@ The LJ coefficients *C* are related to the <img src="https://latex.codecogs.com/
 
 To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
-#### The Combining rules
+## The Combining rules
 
 - **Geometric mean:**<br>
 <img src="https://latex.codecogs.com/gif.latex?C12_{ij}=\sqrt{C12_{ii}\times{C12_{jj}}},&space;C6_{ij}=\sqrt{C6_{ii}\times{C6_{jj}}}"/>  , (GROMOS)<br><img src="https://latex.codecogs.com/gif.latex?\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},&space;\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}" />, (OPLS)<br><br>
@@ -70,40 +69,41 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 > ## Specifying Combining Rules
 >
->  **GROMACS**
-> In GROMACS combining rule is specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
+>  **GROMACS:**
+> combining rule is specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
 >
 > Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
 > GROMOS force field requires rule 1, OPLS requires rule 3, CHARM and AMBER require rule 2
 >
->  **NAMD**
-> By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
+>  **NAMD:**
+> by default, Lorentz–Berthelot rules are used. Geometric mean can be turned on in the run parameter file:
 > **vdwGeometricSigma**=yes
 {: .callout}
 
 
-#### The electrostatic potential
+## The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
 
 <img src="https://latex.codecogs.com/gif.latex?V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}&space;r_{ij}}" /><br>
 where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>* and *q<sub>j</sub>* are the charges on the atoms *i* and *j*, <img src="https://latex.codecogs.com/gif.latex?\epsilon_{0}"/> is the permittivity of vacuum. and  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{r}"/> is the relative permittivity.
-### Bonded Interactions
 
-#### The bond potential
+# Bonded Interactions
+
+## The bond potential
 The bond potential is used to model the interaction of covalently bonded atoms in a molecule. Bond stretch is approximated by a simple harmonic function describing oscillation about an equilibrium bond length *r<sub>0</sub>* with bond constant *k<sub>b</sub>*:
 
 <img src="https://latex.codecogs.com/gif.latex?V_{Bond}=k_b(r_{ij}-r_0)^2" /><br>
 
 This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
 
-#### The angle potential
+## The angle potential
 The angle potential describes the bond bending energy. It is defined for every triplet of bonded atoms. It is also approximated by a harmonic function describing oscillation about an equilibrium angle  <img src="https://latex.codecogs.com/gif.latex?\theta_{0}"/>  with force constant  <img src="https://latex.codecogs.com/gif.latex?k_\theta"/> :
 
 <img src="https://latex.codecogs.com/gif.latex?V_{Angle}=k_\theta(\theta_{ijk}-\theta_0)^2" /><br>
 
 The force constants for angle potential are about 5 times smaller that for bond stretching.
 
-#### The torsion (dihedral) angle potential
+## The torsion (dihedral) angle potential
 The torsion energy is defined for every 4 bonded atoms.
 The torsion angle <img src="https://latex.codecogs.com/gif.latex?\phi"/> is the angle between 2 planes defined by the first and the last 3 atoms of the 4 atoms involved in the torsion interaction.
 
@@ -111,12 +111,13 @@ The torsion angle <img src="https://latex.codecogs.com/gif.latex?\phi"/> is the 
 
  The non-negative integer constant *n* defines periodicity and  <img src="https://latex.codecogs.com/gif.latex?\delta"/> is the phase shift angle.
 
-#### The Ureu-Bradley potential
+> ## The Ureu-Bradley potential
 
-The Ureu-Bradley potential describes cross-terms (correlation between bond length and bond angle). The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
-
-The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
-
-<img src="https://latex.codecogs.com/gif.latex?V_{UB}=k_{ub}(r_{ik}-r_{ub})^2" /><br>
-
- U-B terms have been used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
+> The Ureu-Bradley potential describes cross-terms (correlation between bond length and bond angle). The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
+>
+>The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
+>
+><img src="https://latex.codecogs.com/gif.latex?V_{UB}=k_{ub}(r_{ik}-r_{ub})^2" />
+>
+> U-B terms have been used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
+{: .callout}
