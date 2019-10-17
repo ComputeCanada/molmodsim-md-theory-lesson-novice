@@ -68,18 +68,20 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
   Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
 
 
-> ##Specifying Combining Rules
+> ## Specifying Combining Rules
+>
 > ### GROMACS
->In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
 >
->Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
+> In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
 >
->GROMOS requires rule 1,
->OPLS requires rule 3,
->CHARM and AMBER require rule 2
+> Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
+>
+> GROMOS requires rule 1, OPLS requires rule 3, CHARM and AMBER require rule 2
+>
 > ### NAMD
->By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
->**vdwGeometricSigma**=yes
+> By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
+> **vdwGeometricSigma**=yes
+>
 {: .callout}
 
 #### The electrostatic potential
