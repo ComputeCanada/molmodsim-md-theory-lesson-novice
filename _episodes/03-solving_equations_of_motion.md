@@ -9,9 +9,7 @@ objectives:
 - "Explain how to choose simulation timestep and integration method"
 ---
 
-To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate.
-
-A good integration algorithm for MD should be time-reversible and energy conserving.
+To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
 # Integration Algorithms
 ## The Euler Algorithm
@@ -82,27 +80,23 @@ In molecular dynamics stretching of the bonds with the lightest atom H is usuall
 > **FirtsTimeStep** Time of the first step
 {: .callout}
 
-
 > ## Specifying Integration Method in GROMACS
-> GROMACS offers several types of integration algorithms that can be selected using the **integrator** keyword.
+> **integrator** Selects integration algorithm. Acceptable values:
 >
-> **md** A leap frog algorithm
->
-> **md-vv** A velocity Verlet algorithm
->
-> **md-vv-avek** A velocity Verlet algorithm same as **md-vv** except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
->
-> **sd** an accurate leap frog stochastic dynamics integrator.
-> **bd** a Euler integrator for Brownian or position Langevin dynamics.
+>> **md** A leap frog algorithm
+>>
+>> **md-vv** A velocity Verlet algorithm
+>>
+>> **md-vv-avek** A velocity Verlet algorithm same as **md-vv** except the kinetic energy is calculated as the average of the two half step kinetic energies. It is more accurate than the md-vv
+>>
+>> **sd** an accurate leap frog stochastic dynamics integrator.
+>> **bd** a Euler integrator for Brownian or position Langevin dynamics.
 {: .callout}
 
-
-#### NAMD
-
-The only available integration method is Verlet. To further reduce the cost of computing short-range nonbonded interactions and full electrostatics, NAMD uses a multiple time-stepping integration scheme controlled by the following keywords:
-
-**nonbondedFreq**
-> number of timesteps between nonbonded evaluation<br>
-
-**fullElectFrequency**
->number of timesteps between full electrostatic evaluations<br>
+> ## Specifying Integration Method in  NAMD
+>The only available integration method is Verlet. To further reduce the cost of computing short-range nonbonded interactions and full electrostatics, NAMD uses a multiple time-stepping integration scheme controlled by the following keywords:
+>
+> **nonbondedFreq** Number of timesteps between nonbonded evaluation<br>
+>
+> **fullElectFrequency** Number of timesteps between full electrostatic evaluations
+{: .callout}
