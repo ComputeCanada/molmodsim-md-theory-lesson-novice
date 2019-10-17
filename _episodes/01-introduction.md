@@ -3,9 +3,9 @@ title: "Introducing molecular dynamics simulation"
 teaching: 30
 exercises: 0
 questions:
-- "What is Molecular Dynamics and how can I benefit from using it"
-- "What is a force field"
-- "What mathematical functions are used to approximate interactions between atoms and molecules in MD simulations"
+- "What is Molecular Dynamics and how can I benefit from using it?"
+- "What is a force field?"
+- "What mathematical functions are used to approximate interactions between atoms and molecules in MD simulations?"
 objectives:
 - "Explain strengths and weaknesses of MD simulations"
 - "Explain the interactions between particles in a molecular dynamics simulation"
