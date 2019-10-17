@@ -5,9 +5,13 @@ exercises: 0
 questions:
 - "What is Molecular Dynamics and how can I benefit from using it"
 - "What is a force field"
+- "What mathematical functions are used to approximate interactions between atoms and molecules in MD simulations"
 objectives:
 - "Explain strengths and weaknesses of MD simulations"
 - "Explain the interactions between particles in a molecular dynamics simulation"
+keypoints:
+- "Molecular dynamics simulates atomic positions in time using forces acting between atoms"
+- "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
 
 # Basic principles of molecular dynamics
@@ -107,7 +111,7 @@ The torsion angle <img src="https://latex.codecogs.com/gif.latex?\phi"/> is the 
 
 #### The Ureu-Bradley potential
 
-The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
+The Ureu-Bradley potential describes cross-terms (correlation between bond length and bond angle). The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
 
 The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
 
