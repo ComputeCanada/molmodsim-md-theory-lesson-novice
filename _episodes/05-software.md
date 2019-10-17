@@ -8,7 +8,6 @@ objectives:
 - "List MD packages"
 ---
 
-# Molecular Dynamics Software Available on Compute Canada Systems
 ## [AMBER](http://ambermd.org)
 
 ## [DL_POLY](https://www.scd.stfc.ac.uk/Pages/DL_POLY.aspx)
