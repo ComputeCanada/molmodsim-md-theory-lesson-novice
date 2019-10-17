@@ -112,7 +112,6 @@ The torsion angle <img src="https://latex.codecogs.com/gif.latex?\phi"/> is the 
  The non-negative integer constant *n* defines periodicity and  <img src="https://latex.codecogs.com/gif.latex?\delta"/> is the phase shift angle.
 
 > ## The Ureu-Bradley potential
-
 > The Ureu-Bradley potential describes cross-terms (correlation between bond length and bond angle). The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
 >
 >The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
