@@ -66,7 +66,7 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 
 - **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
   Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
-
+~~~
 #### Specifying Combining Rules
 ##### GROMACS
 >In GROMACS combining rules are specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
@@ -79,7 +79,8 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 ##### NAMD
 >By default, NAMD uses Lorentz–Berthelot rules. Geometric mean can be turned on in the run parameter file:
 >**vdwGeometricSigma**=yes
-
+~~~
+{: .callout}
 #### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
 
