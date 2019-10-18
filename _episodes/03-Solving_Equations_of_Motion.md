@@ -13,8 +13,8 @@ keypoints:
 ---
 To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step <img src="https://latex.codecogs.com/gif.latex?\delta{t}"/> during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
-# Integration Algorithms
-## The Euler Algorithm
+## Integration Algorithms
+### The Euler Algorithm
 The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/><br>
@@ -23,7 +23,7 @@ The Euler algorithm uses the second order Taylor expansion to estimate position 
 
 The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate other equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
-## The Verlet Algorithm
+### The Verlet Algorithm
 Using the current positions and forces and the previous positions calculate the positions at the next time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})&plus;a(t)\delta{t}^2"/><br>
@@ -34,7 +34,7 @@ The Verlet algorithm requires positions at two time steps. It is inconvenient wh
 
 The Verlet algorithm is time-reversible and energy conserving.
 
-## The Velocity Verlet Algorithm
+### The Velocity Verlet Algorithm
 The velocities, positions and forces are calculated at the same time according to:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/>
@@ -44,7 +44,7 @@ The velocities, positions and forces are calculated at the same time according t
 The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simplicity and stability is has become the most widely used algorithm in the MD simulations.
 
 
-## The Leap Frog Algorithm
+### The Leap Frog Algorithm
 Using accelerations of the current time step, compute the velocities at half-time step:
 
 <img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\frac{1}{2}\delta&space;t)=\vec{v}(t-\frac{1}{2}\delta&space;t)\cdot&space;\delta&space;t&plus;\vec{a}(t)\cdot\delta{t}"  />
@@ -55,7 +55,7 @@ Then determine positions at the next time step:
 
 The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
-# Choosing Time Step
+## Choosing Time Step
 Mathematically Vertet family integrators are stable for time steps
 
 <img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
