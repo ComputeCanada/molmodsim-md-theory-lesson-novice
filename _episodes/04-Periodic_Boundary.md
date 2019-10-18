@@ -6,10 +6,12 @@ questions:
 - "How to simlate a large system?"
 - "Why the simulation system should be neutralized"
 objectives:
-- "Explain how to setup periodic boundary"
+- "Explain why and when periodic boundary conditions are used"
+- "Explain how to setup periodic box"
+- "Explain why it is necessary to neutlalize the simulation system"
 keypoints:
-- "Simulation system should be neutralized by adding counterions"
 - "Periodic boundary conditions are used to approximate an infinitely large system"
+-  "Simulation system should be neutralized by adding counterions"
 ---
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density.
 
