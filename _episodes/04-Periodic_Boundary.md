@@ -1,6 +1,6 @@
 ---
-title: "Periodic boundary conditions"
-teaching: 30
+title: "Periodic Boundary Conditions"
+teaching: 10
 exercises: 0
 questions:
 - "How to simlate a large system?"
@@ -38,7 +38,8 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 >
 > **extendedSystem**
 >> NAMD generates a .xsc (eXtended System Configuration) file which contains the periodic cell parameters. If this keyword is used periodic box parameters will be read from .xsc file ignoring cellBasisVectors.
->>Value: filename
+>>
+>> Value: filename
 {: .callout}
 
 ## Balancing of charges
