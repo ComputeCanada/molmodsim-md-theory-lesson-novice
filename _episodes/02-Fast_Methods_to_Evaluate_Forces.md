@@ -45,35 +45,53 @@ In practice, increasing cutoff does not necessarily improve accuracy. Each force
 
 There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
+## Problems with Cutoff and How to Avoid Them
+A cutoff introduces a sharp difference in the potential energy at the cutoff value. Recall that forces are computed by differentiating potential, so a sharp difference in potential may result in an infinite forces at the cutoff distance. Cutoff problems are especially pronounced when energy conservation is required.
+
+Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).
+
+This ensures continuity of the potential at cutoff distance and avoids an infinite force here.
+
+
+ - a constant term does not affect the dynamics, it disappears when the potential is differentiated
+
+- a shifted potential does change the total energy
+
+- it does introduce a discontinuity in the force field at the cutoff distance
+
+
+
+
+
+Communication: Shifted forces in molecular dynamics
+J. Chem. Phys. 134, 081102 (2011); https://doi.org/10.1063/1.3558787
+
+quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point,2 the surface tension,2,3 and the solid–liquid coexistence line.4,5 For such quantities even a cutoff at 2.5σ gives inaccurate results, and in some cases the cutoff must be larger than 6σ to get reliable results.3
+
+
 > ## Specifying Truncation of LJ Potential in GROMACS
-> **vdw-modifier**
-> Controls how to truncate LJ potential. Acceptable values:
-> >**potential-shift**: shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
+> **vdw-modifier** Controls how to truncate LJ potential. Acceptable values:
+> >**potential-shift** Shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
 >>
->>**force-switch**: smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
+>>**force-switch** Smoothly switches the forces to zero between **rvdw-switch** and **rvdw**.
 >>
->> **potential-switch**: smoothly switches the potential to zero between **rvdw-switch** and **rvdw**.
+>> **potential-switch** Smoothly switches the potential to zero between **rvdw-switch** and **rvdw**.
 >>
 >>**none**
 >
-> **rvdw-switch**
-> Where to start switching.
+> **rvdw-switch** Where to start switching.
 >
 > **rvdw**
 > Cut-off distance
 {: .callout}
 > ## Specifying Truncation of LJ Potential in NAMD
-> **cutoff**
-> Cut-off distance common to both electrostatic and van der Waals calculations
+> **cutoff** Cut-off distance common to both electrostatic and van der Waals calculations
 >
-> **switching**
-> Turn switching on/off
+> **switching** Turn switching on/off
 >
-> **switchdist**
-> Where to start switching
+> **switchdist** Where to start switching
 >
-> **vdwForceSwitching**
-> use force switching for VDW
+> **vdwForceSwitching** Use force switching for VDW
 >> Default Value: off
 {: .callout}
 

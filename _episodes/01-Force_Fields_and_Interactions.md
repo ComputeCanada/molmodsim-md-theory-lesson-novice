@@ -65,18 +65,19 @@ To describe all *LJ* interactions in a simulations system the matrix of the pair
 - **Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements)
   Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
 
+> ## Specifying Combining Rules in GROMACS
+>
+> Combining rule is specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
+>
+> Geometric mean is selected by using rules 1 and 3;
+>  Lorentz–Berthelot rule is selected using rule 2.
+>
+> GROMOS force field requires rule 1; OPLS requires rule 3; CHARM and AMBER require rule 2
+{: .callout}
 
-> ## Specifying Combining Rules
->
->  **GROMACS:**
-> combining rule is specified in the **[nonbond_params]** section of the parameter file **ffnonbonded.itp** (in the column 'func').
->
-> Geometric mean is selected by using rules 1 and 3,  Lorentz–Berthelot rule is selected using rule 2.
-> GROMOS force field requires rule 1, OPLS requires rule 3, CHARM and AMBER require rule 2
->
->  **NAMD:**
-> by default, Lorentz–Berthelot rules are used. Geometric mean can be turned on in the run parameter file:
-> **vdwGeometricSigma**=yes
+> ## Specifying Combining Rules in NAMD
+>By default, Lorentz–Berthelot rules are used. Geometric mean can be turned on in the run parameter file:
+>> **vdwGeometricSigma**=yes
 {: .callout}
 
 
@@ -86,6 +87,9 @@ To describe the elecrostatic interactions in MD the point charges are assigned t
 <img src="https://latex.codecogs.com/gif.latex?V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}&space;r_{ij}}" /><br>
 where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>* and *q<sub>j</sub>* are the charges on the atoms *i* and *j*, <img src="https://latex.codecogs.com/gif.latex?\epsilon_{0}"/> is the permittivity of vacuum. and  <img src="https://latex.codecogs.com/gif.latex?\epsilon_{r}"/> is the relative permittivity.
 
+> ## Short-range and Long-range Interactions
+> The interaction is termed short-range if the potential decreases faster than *r<sup>-d</sup>*, where *r* is the distance between 2 particles and *d* is dimensionality. Otherwise the interaction is long-ranged. Accordingly the Lennard-Jones interactions are short-ranged, the Coulomb interactions are long-ranged.
+{: .callout}
 ## Bonded Interactions
 
 ### The bond potential
