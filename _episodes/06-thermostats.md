@@ -22,8 +22,20 @@ keypoints:
 
 ## Temperature at the molecular level (Maxwell-Boltzmann distributions)
 
-![Plot of Maxwell Boltzmann distributions at different temperatures]({{ page.root }}/fig/Maxwell_Boltzmann_distributions.svg)
+Temperature is a macroscopic property and thermodynamics tells us that on the molecular level, the
+temperature of a system is basically defined by the average kinetic energy of all the particles 
+(atoms, molecules) that make up the system. At equilibrium, each degree of freedom (that is not
+in the quantum regime) will have on average the same energy of  
+![equation: k_{B}T/2](https://latex.codecogs.com/gif.latex?k_{B}T/2){:style="display: inline;"} 
+where ![equation: k_{B}](https://latex.codecogs.com/gif.latex?k_{B}){:style="display: inline;"} 
+is the Boltzmann constant.
+Therefore the kinetic energies of all particles in a system, that has a specific temperature *T*,
+are distributed in a specific way and as the mass of each particle remains constant in MD 
+simulations, the velocities follow such a distribution, called the Maxwell-Boltzmann distribution.
 
+![Plot of Maxwell-Boltzmann distributions]({{ page.root }}/fig/Maxwell_Boltzmann_distributions.svg)
+The plot above shows the Maxwell-Boltzmann distributions for the velocities of oxygen atoms
+from water molecules that have been simulated at three different temperatures (280K, 320K and 360K).
 
 ## Thermodynamic ensembles
 
