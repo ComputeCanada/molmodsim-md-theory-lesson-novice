@@ -57,7 +57,7 @@ This ensures continuity of the potential at cutoff distance and avoids an infini
 
 - a shifted potential does change the total energy
 
-- it does introduce a discontinuity in the force field at the cutoff distance
+- it does introduce a discontinuity in the force field at the cutoff distance. Particles experience sudden unphysical acceleration when other particles cross their respective cutoff distance.
 
 
 
