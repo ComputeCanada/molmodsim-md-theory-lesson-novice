@@ -50,12 +50,11 @@ In practice, increasing cutoff does not necessarily improve accuracy. Each force
 There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 ## Problems with Cutoff and How to Avoid Them
-A cutoff introduces a sharp difference in the potential energy at the cutoff value. Recall that forces are computed by differentiating potential, so a sharp difference in potential may result in an infinite forces at the cutoff distance. Cutoff problems are especially pronounced when energy conservation is required.
+A cutoff introduces discontinuity in the potential energy at the cutoff value. The forces are computed by differentiating potential, so a sharp difference in potential may result in an infinite forces at the cutoff distance. Cutoff problems are especially pronounced when energy conservation is required.
 
-Several approaches to minimize impact of the cutoff exist.
+![Cutoff Methods](../fig/Cutoff_Methods.svg)
 
-The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).
-This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force field at the cutoff distance. Particles experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total energy changes when potential is shifted.
+Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total potential energy changes when potential is shifted.
 
 
 Communication: Shifted forces in molecular dynamics
