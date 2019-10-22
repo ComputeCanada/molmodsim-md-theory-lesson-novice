@@ -16,11 +16,13 @@ keypoints:
 
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
 
-$ \vec{F}=\frac{d\vec{p}}{dt} $
+
+$ \vec{F}=\frac{d\vec{p}}{dt}
+
 
 The potential energy function *U* acts as a cornerstone of the MD simulations because it allows calculating the forces. The force on an object is the negative of the derivative of the potential energy function:
 
- $ \vec{F}=-\nabla U(\vec{r}) $
+<a href="https://www.codecogs.com/eqnedit.php?latex=\vec{F}=-\nabla&space;U(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\vec{F}=-\nabla&space;U(\vec{r})" title="\vec{F}=-\nabla U(\vec{r})" /></a>
 
 - Molecular dynamics helps to link physics, chemistry and biology
 - With the help of MD it is possible to model phenomena that cannot be studied experimentally.
@@ -30,15 +32,16 @@ The potential energy function *U* acts as a cornerstone of the MD simulations be
 ## Force Fields
 A force field is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions.
 
-$ U(\vec{r})=\sum U_{bonded}(\vec{r})\sum U_{nonbonded}(\vec{r})$
+<a href="https://www.codecogs.com/eqnedit.php?latex=U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?U(\vec{r})=\sum&space;U_{bonded}(\vec{r})&plus;\sum&space;U_{nonbonded}(\vec{r})" title="U(\vec{r})=\sum U_{bonded}(\vec{r})+\sum U_{nonbonded}(\vec{r})" /></a>
+
 
 ## Non-bonded interactions
 ### The Lennard-Jones potential
 The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function:
 
-$ V_{LJ}(r)=\frac{C12}{r^{12}}\frac{C6}{r^{6}} $
+<img src="https://latex.codecogs.com/gif.latex?V_{LJ}(r)=\frac{C12}{r^{12}}&plus;\frac{C6}{r^{6}}" />
 
-The $$ r^{-12} $$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$ r^{-6} $$ term describes weaker attractive van der Waals forces acting between local dynamically induced dipoles in the valence orbitals.
+The <img src="https://latex.codecogs.com/gif.latex?r^{-12}"/> term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the <img src="https://latex.codecogs.com/gif.latex?r^{-6}"/> term describes weaker attractive van der Waals forces acting between local dynamically induced dipoles in the valence orbitals.
 
 The LJ potential is commonly expressed in terms of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon" /> (the measure of the strength of the interaction) and the van der Waals radius <img src="https://latex.codecogs.com/gif.latex?\sigma" /> (the distance at which the intermolecular potential between the two particles is zero).
 
