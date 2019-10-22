@@ -1,3 +1,10 @@
+
+[HKEY_CURRENT_USER\SOFTWARE\Martin Prikryl\WinSCP 2\SshHostKeys]
+
+Open up ‘regedit.exe’ by doing a search.
+Navigate to HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\SshHostKeys
+Delete all keys in there or delete the individual host key.
+
 ---
 title: "Force Fields and Interactions"
 teaching: 30

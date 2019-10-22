@@ -54,6 +54,8 @@ A cutoff introduces discontinuity in the potential energy at the cutoff value. T
 
 ![Cutoff Methods](../fig/Cutoff_Methods.svg)
 
+[AhmedYYYY]({{ page.root }}/reference.html#Ahmed-2010)
+
 Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total potential energy changes when potential is shifted.
 
 
