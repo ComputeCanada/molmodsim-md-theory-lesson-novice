@@ -29,7 +29,11 @@ A Verlet list stores all particles within the cutoff distance of every particle 
 
 ## Truncation of Lennard-Jones Interactions
 
-The LJ potential is always truncated at the cutoff distance. How to choose the appropriate cutoff distance? A common practice is to truncate at <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/> and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/> and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on <img src="https://latex.codecogs.com/gif.latex?\sigma"/> means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>. Thus the minimum acceptable cutoff, in this case, is 8.5.
+The LJ potential is always truncated at the cutoff distance.
+
+
+
+ How to choose the appropriate cutoff distance? A common practice is to truncate at <img src="https://latex.codecogs.com/gif.latex?2.5\sigma"/> and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth <img src="https://latex.codecogs.com/gif.latex?\epsilon"/> and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on <img src="https://latex.codecogs.com/gif.latex?\sigma"/> means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of <img src="https://latex.codecogs.com/gif.latex?\sigma"/> are in the range 1.7-2.1,  while for the Cs ions  <img src="https://latex.codecogs.com/gif.latex?\sigma=3.4"/>. Thus the minimum acceptable cutoff, in this case, is 8.5.
 
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
@@ -48,25 +52,16 @@ There are several different ways to truncate the non-bonded interaction. The mai
 ## Problems with Cutoff and How to Avoid Them
 A cutoff introduces a sharp difference in the potential energy at the cutoff value. Recall that forces are computed by differentiating potential, so a sharp difference in potential may result in an infinite forces at the cutoff distance. Cutoff problems are especially pronounced when energy conservation is required.
 
-Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).
+Several approaches to minimize impact of the cutoff exist.
 
-This ensures continuity of the potential at cutoff distance and avoids an infinite force here.
-
-
- - a constant term does not affect the dynamics, it disappears when the potential is differentiated
-
-- a shifted potential does change the total energy
-
-- it does introduce a discontinuity in the force field at the cutoff distance. Particles experience sudden unphysical acceleration when other particles cross their respective cutoff distance.
-
-
-
+The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).
+This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force field at the cutoff distance. Particles experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total energy changes when potential is shifted.
 
 
 Communication: Shifted forces in molecular dynamics
 J. Chem. Phys. 134, 081102 (2011); https://doi.org/10.1063/1.3558787
 
-quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point,2 the surface tension,2,3 and the solid–liquid coexistence line.4,5 For such quantities even a cutoff at 2.5σ gives inaccurate results, and in some cases the cutoff must be larger than 6σ to get reliable results.3
+Thermodynamic quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point, the surface tension, and the solid–liquid coexistence line. For such quantities even a cutoff at 2.5 $\sigma$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $\sigma$ to get reliable results.
 
 
 > ## Specifying Truncation of LJ Potential in GROMACS
