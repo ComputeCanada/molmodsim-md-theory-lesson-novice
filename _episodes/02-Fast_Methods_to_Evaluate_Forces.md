@@ -59,19 +59,10 @@ A cutoff introduces discontinuity in the potential energy at the cutoff value. T
 
 Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total potential energy changes when potential is shifted.
 
-sas
-haha
-
-sadsddadasdasdasdsd
-
-[Ahmed2010]({{ page.root }}/reference.html#Ahmed-2010)
-
-
-
 Communication: Shifted forces in molecular dynamics
 J. Chem. Phys. 134, 081102 (2011); https://doi.org/10.1063/1.3558787
 
-Thermodynamic quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point, the surface tension, and the solid–liquid coexistence line. For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \Sigma $$ to get reliable results.
+Thermodynamic quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point, the surface tension, and the solid–liquid coexistence line [](Ahmed,2010)]({{ page.root }}/reference.html#Ahmed-2010). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \Sigma $$ to get reliable results.
 
 
 > ## Specifying Truncation of LJ Potential in GROMACS
