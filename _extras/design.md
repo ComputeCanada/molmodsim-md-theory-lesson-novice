@@ -128,7 +128,7 @@ guidance on choosing good parameters for MD-Simulations.
 
 * Phases of MD Workflow
     * energy minimization
-    * position restrained MD
+    * relaxation / position restrained MD
     * equilibration
     * production MD
 
