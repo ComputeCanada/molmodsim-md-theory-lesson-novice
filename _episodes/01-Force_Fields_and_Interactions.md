@@ -16,9 +16,7 @@ keypoints:
 
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
 
-
-$ \vec{F}=\frac{d\vec{p}}{dt}
-
+$ \vec{F}=\frac{d\vec{p}}{dt} $
 
 The potential energy function *U* acts as a cornerstone of the MD simulations because it allows calculating the forces. The force on an object is the negative of the derivative of the potential energy function:
 
