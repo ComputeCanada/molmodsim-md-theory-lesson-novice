@@ -56,7 +56,7 @@ You can add links to this entry by using on any page:
 
 {:auto_ids}
 Ahmed-2010
- :  Ahmed A, Sadus RJ.
+:  Ahmed A, Sadus RJ.
  *Effect of potential truncations and shifts on the solid-liquid phase coexistence of Lennard-Jones fluids.*
  J Chem Phys. 2010;133: 124515. [doi:10.1063/1.3481102](http://dx.doi.org/doi:10.1063/1.3481102)
 
