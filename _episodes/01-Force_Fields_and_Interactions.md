@@ -14,7 +14,12 @@ keypoints:
 - "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
 
-test $$ k_{B}T/2 $$
+## MathJax test
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, $$ k_{B}T/2 $$ sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua.
+
+$k_{n+1} = n^2 + k_n^2 - k_{n-1}$
 
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{p}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{p}" title="\vec{p}" /></a> of an object equals the force <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\vec{F}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\vec{F}" title="\vec{F}" /></a> acting on it:
 
