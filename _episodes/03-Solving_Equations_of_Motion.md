@@ -17,29 +17,29 @@ To simulate evolution of the system in time the integration algorithm advances p
 ### The Euler Algorithm
 The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/><br>
+$\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}^2$
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}a(t)\delta{t}"/>
+$\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}a(t)\delta{t}$
 
 The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate some other than classical MD equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
 ### The Verlet Algorithm
 Using the current positions and forces and the previous positions calculate the positions at the next time step:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})&plus;a(t)\delta{t}^2"/><br>
+$\vec{r}(t+\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})+a(t)\delta{t}^2$
 
 The Verlet algorithm requires positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\frac{r{(t&plus;\delta{t})-&space;r(t-\delta{t})&space;}}{2\delta{t}}"  />
+$\vec{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
 
 The Verlet algorithm is time-reversible and energy conserving.
 
 ### The Velocity Verlet Algorithm
 The velocities, positions and forces are calculated at the same time according to:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta{t})=\vec{r}(t)&plus;\vec{v}(t)\delta{t}&plus;\frac{1}{2}a(t)\delta{t}^2"/>
+$\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}$
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\delta{t})=\vec{v}(t)&plus;\frac{1}{2}[a(t)&plus;a(t&plus;\delta{t})]\delta{t}"/>
+$\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}[a(t)+a(t+\delta{t})]\delta{t}$
 
 The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simplicity and stability is has become the most widely used algorithm in the MD simulations.
 
@@ -47,20 +47,19 @@ The Velocity Verlet algorithm is mathematically equivalent to the original Verle
 ### The Leap Frog Algorithm
 Using accelerations of the current time step, compute the velocities at half-time step:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{v}(t&plus;\frac{1}{2}\delta&space;t)=\vec{v}(t-\frac{1}{2}\delta&space;t)\cdot&space;\delta&space;t&plus;\vec{a}(t)\cdot\delta{t}"  />
+$\vec{v}(t+\frac{1}{2}\delta+t)=\vec{v}(t-\frac{1}{2}\delta{t})\cdot\delta{t}+\vec{a}(t)\cdot\delta{t}$
 
 Then determine positions at the next time step:
 
-<img src="https://latex.codecogs.com/gif.latex?\vec{r}(t&plus;\delta&space;t)=\vec{r}(t)&plus;\vec{v}(t&plus;\frac{1}{2}\delta&space;t))\cdot&space;\delta&space;t"/>
+$\vec{r}(t+\delta t)=\vec{r}(t)+\vec{v}(t+\frac{1}{2}\delta{t}))\cdot\delta{t}$
 
 The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 ## Choosing Time Step
 Mathematically Vertet family integrators are stable for time steps
 
-<img src="https://latex.codecogs.com/gif.latex?\delta{t}\leq\frac{2}{w}"/>
+$$\delta{t}\leq\frac{2}{w}$$ where $$\omega$$ is angular frequency.
 
- where <img src="https://latex.codecogs.com/gif.latex?\omega"/> is angular frequency.<br>
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
 > ## Specifying Time Parameters in GROMACS
