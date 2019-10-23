@@ -33,7 +33,7 @@ The LJ potential is always truncated at the cutoff distance.
 
 
 
- How to choose the appropriate cutoff distance? A common practice is to truncate at $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$ and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
+ How to choose the appropriate cutoff distance? A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$ and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
 
 In practice, increasing cutoff does not necessarily improve accuracy. Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
@@ -47,22 +47,42 @@ In practice, increasing cutoff does not necessarily improve accuracy. Each force
 > OPLS: 11-15 <span>&#8491;</span> (depending on a molecule size)
 {: .callout}
 
-There are several different ways to truncate the non-bonded interaction. The main option to control how LJ potential is truncated is the switching parameter. If the switching is turned on, the smooth switching function is applied to truncate the Lennard-Jones potential smoothly at the cutoff distance. If the switching function is applied the switching distance parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
 
 ## Problems with Cutoff and How to Avoid Them
-A cutoff introduces discontinuity in the potential energy at the cutoff value. The forces are computed by differentiating potential, so a sharp difference in potential may result in an infinite forces at the cutoff distance. Cutoff problems are especially pronounced when energy conservation is required.
+A cutoff introduces discontinuity in the potential energy at the cutoff value. The forces are computed by differentiating potential, hence a sharp difference in potential may result in an infinite forces at the cutoff distance, Figure 1A.
 
 ![Cutoff Methods](../fig/Cutoff_Methods.svg)
 
+Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (shifted potential method, Figure 1B).This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total potential energy changes when potential is shifted.
 
-
-
-Several approaches to minimize impact of the cutoff exist. The standard solution is to shift the whole potential uniformly by subtracting a constant at a values below cutoff (potential shift).This ensures continuity of the potential at cutoff distance and avoids an infinite forces here. Addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. The total potential energy changes when potential is shifted.
-
+Shifted Force
 Communication: Shifted forces in molecular dynamics
 J. Chem. Phys. 134, 081102 (2011); https://doi.org/10.1063/1.3558787
 
-Thermodynamic quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff. Examples include the location of the critical point, the surface tension, and the solid–liquid coexistence line [(Ahmed,2010)]({{ page.root }}/reference.html#Ahmed-2010). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \Sigma $$ to get reliable results.
+Our results show that different molecular properties are affected differently by the various approximations. The extent to which these approximations can be tolerated thus depends in part on the questions the simulations are intended to answer. We find that short cutoffs or the use of the force-shifting truncating (SHIFT) approximation have the effect of subtly shifting the balance between hydrophobic and hydrophilic interactions such that more compact structures are stabilized.
+[Effect of potential truncations and shifts on the solid-liquid phase coexistence of Lennard-Jones fluids]
+
+http://localhost:4000/reference.html#Ahmed-2010
+
+The net effect is a steady increase in the temperature of the system over time.
+
+a prudent practice is to carry out trial simulations of the system under study--without temperature scaling--in order to assess the relative accuracy of the trajectory under the particular simulation conditions to be used for production runs
+
+carefully testing the new-RF set for energy leaks or sources before production use
+
+An alternative approach for dealing with trun- cation effects is to alter the form of the potential function in a zone at the cutoff boundary so that the potential and its first derivative (the force) go to zero smoothly at the cutoff. The application of
+a smoothing function leads to much more stable trajectories in simulations of liquids.4’13 The smoothing procedure does not affect the short range liquid structure and has a very small effect on the internal energy, but it does have a large effect on the long range orientational order. As the long range orientational order is related to the dielectric response of the liquid, the use of a smoothing function will, in general, alter the dielectric properties of the liquid.~
+
+
+
+Another solution is to apply a switching function (usually polynomial) to truncate the non-bonded interaction smoothly at the cutoff distance. If the switching function is applied the switching parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance.
+
+
+Cutoff problems are especially pronounced when energy conservation is required.
+
+Thermodynamic quantities depending explicitly on the free energy are generally quite sensitive to how large is the cutoff.
+
+ Examples include the location of the critical point, the surface tension, and the solid–liquid coexistence line [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \Sigma $$ to get reliable results.
 
 
 > ## Specifying Truncation of LJ Potential in GROMACS
