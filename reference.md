@@ -85,20 +85,30 @@ Hoover-1985
     *Canonical dynamics: Equilibrium phase-space distributions.*  
     Phys Rev A. APS; 1985;31: 1695–1697. [doi:10.1103/PhysRevA.31.1695](http://dx.doi.org/10.1103/PhysRevA.31.1695)
 
+Koopman-2006
+:   Koopman EA, Lowe CP.  
+    *Advantages of a Lowe-Andersen thermostat in molecular dynamics simulations.*  
+    J Chem Phys. 2006;124: 1–6. [doi:10.1063/1.2198824](http://dx.doi.org/10.1063/1.2198824)
+
 Larsson-2011
 :   Larsson P, Hess B, Lindahl E.  
     *Algorithm improvements for molecular dynamics simulations.*  
     Wiley Interdiscip Rev Comput Mol Sci. 2011;1: 93–108. [doi:10.1002/wcms.3](http://dx.doi.org/doi:10.1002/wcms.3)
 
+Martyna-1992
+    :   Martyna GJ, Klein ML, Tuckerman M.  
+    *Nosé–Hoover chains: The canonical ensemble via continuous dynamics.*  
+    J Chem Phys. 1992;97: 2635–2643. [doi:10.1063/1.463940](http://dx.doi.org/10.1063/1.463940)
+    
 Nose-1984
 :   Nosé S.  
     *A molecular dynamics method for simulations in the canonical ensemble.*  
     Mol Phys. 1984;52: 255–268. [doi:10.1080/00268978400101201](http://dx.doi.org/10.1080/00268978400101201)
 
-Martyna-1992
-:   Martyna GJ, Klein ML, Tuckerman M.  
-    *Nosé–Hoover chains: The canonical ensemble via continuous dynamics.*  
-    J Chem Phys. 1992;97: 2635–2643. [doi:10.1063/1.463940](http://dx.doi.org/10.1063/1.463940)
+Shirts-2013
+:   Shirts MR.  
+    *Simple Quantitative Tests to Validate Sampling from Thermodynamic Ensembles.*  
+    J Chem Theory Comput. 2013;9: 909–926. [doi:10.1021/ct300688p](http://dx.doi.org/10.1021/ct300688p)
 
 Wong-ekkabut-2016
 :   Wong-ekkabut J, Karttunen M.  

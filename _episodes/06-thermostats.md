@@ -66,29 +66,91 @@ MD packages.
 ## Overview of common Temperature Control Algorithms
 
 Temperature control algorithms or *thermostats* have been described as the "necessary evil"
-[[Wong-ekkabut-2016]({{ page.root }}/reference.html#Wong-ekkabut-2016)].
+[[Wong-ekkabut-2016][Wong-ekkabut-2016]].
 
 Their role is to allow energy to enter and leave the simulated system to keep its temperature
-constant.  Thermostats do that by adjusting the velocities of one or more particles.
+constant.  In practice thermostats do that by adjusting the velocities of one or more particles,
+but more conceptually they work analogous coupling the simulated system to a fictitious heat bath
+at some target temperature $$T_0$$. [[Basconi-2013][Basconi-2013]]
 
-
+The strength by which the system is coupled to the heat bath is determined by a time constant
+$$\tau_T$$, where small values of $$\tau_T$$ mean tight coupling and large values of $$\tau_T$$
+mean weak coupling, however the physical meaning of $$\tau_T$$ depends on the particular algorithm.
 
 ### Andersen thermostat
-[Andersen-1980]({{ page.root }}/reference.html#Andersen-1980)
+The Andersen thermostat [[Andersen-1980][Andersen-1980]] controls the temperature by assigning 
+a subset of atoms new velocities that are randomly selected from the Maxwell-Boltzmann distributed
+for the target temperature.
+The probability for a give particle to have it's velocity reassigned is $$\Delta t / \tau_T$$
+where $$\Delta t$$ is the time step.  This means that effectively on average every atom experiences
+a stochastic collision with a virtual particle every $$\Delta t$$ [[Basconi-2013][Basconi-2013]].
+
+The "massive Andersen" thermostat is a variant in which the velocities of all atoms are randomized
+every $$\Delta t$$  [[Basconi-2013][Basconi-2013]].
+
+While the Andersen algorithm avoid ergodicity issues because energy can't flow between energetically
+decoupled parts of the system like with other algorithms that scale velocities, it can slow down
+the kinetics of the system because the momentum is not conserved.
+
+Lowe-Andersen dynamics [[Koopman-2006][Koopman-2006]] is a variant of the Andersen thermostat 
+that conserves momentum.
+
+| Thermostat/MD package | GROMACS                     |  NAMD             |
+|-----------------------|-----------------------------|-------------------| 
+| Andersen thermostat   | `tcoupl = andersen`         |                   |
+| massive Andersen      | `tcoupl = andersen-massive` | `reassignFreq  <# of steps betw. temperature reassignment>` |
+| Lowe-Andersen         | not available               | `loweAndersen on` |
 
 ### Berendsen thermostat
-[Berendsen-1984]({{ page.root }}/reference.html#Berendsen-1984)
+
+The Berendsen thermostat, which is also sometimes referred to as "weak temperature coupling", uses
+an exponential decay of the temperature to the target temperature by rescaling the velocities of all 
+atoms [[Berendsen-1984][Berendsen-1984]].
+
+This makes the Berendsen thermostat a quickly converging and robust thermostat, which can be very
+useful when allowing the system to relax, when running the first few steps of molecular dynamics
+after an energy minimization.
+
+However it has been shown that it produces an energy distribution with a lower variance than of
+a true canonical ensemble because it disproportionally samples kinetic energies closer to
+$$T_0$$ than would be observed in the Maxwell-Boltzmann distribution [[Basconi-2013][Basconi-2013]
+and [Shirts-2013][Shirts-2013]].  Therefore the Berendsen should be avoided for production MD
+simulations in most cases.
+
+
+| Thermostat/MD package | GROMACS                     |  NAMD             |
+|-----------------------|-----------------------------|-------------------| 
+| Berendsen thermostat  | `tcoupl = berendsen`        | `tCouple on`      |
+
 
 ### Bussi's stochastic velocity rescaling thermostat
-[Bussi-2007]({{ page.root }}/reference.html#Bussi-2007)
+[[Bussi-2007][Bussi-2007]]
+
+
+| MD package | option                |
+| ---------- | --------------------- |
+| GROMACS    |  `tcoupl = V-rescale` |
+| NAMD       |  `stochRescale  on`   |
 
 ### Nosé-Hoover thermostat
-[Nose-1984]({{ page.root }}/reference.html#Nose-1984), [Hoover-1985]({{ page.root }}/reference.html#Hoover-1985)
+[Nose-1984][Nose-1984], [Hoover-1985][Hoover-1985]
 
 ### Nosé-Hoover-chains
-[Martyna-1992]({{ page.root }}/reference.html#Martyna-1992)
+[Martyna-1992][Martyna-1992]
 
 ## Important parameters
 
 
 ## Conclusions
+
+
+[Andersen-1980]: {{ page.root }}/reference.html#andersen-1980
+[Basconi-2013]: {{ page.root }}/reference.html#basconi-2013
+[Berendsen-1984]: {{ page.root }}/reference.html#berendsen-1984
+[Bussi-2007]: {{ page.root }}/reference.html#bussi-2007
+[Hoover-1985]: {{ page.root }}/reference.html#hoover-1985
+[Koopman-2006]: {{ page.root }}/reference.html#koopman-2006
+[Martyna-1992]: {{ page.root }}/reference.html#martyna-1992
+[Nose-1984]: {{ page.root }}/reference.html#nose-1984
+[Shirts-2013]: {{ page.root }}/reference.html#shirts-2013
+[Wong-ekkabut-2016]: {{ page.root }}/reference.html#wong-ekkabut-2016
