@@ -70,6 +70,16 @@ Basconi-2013
     *Effects of Temperature Control Algorithms on Transport Properties and Kinetics in Molecular Dynamics Simulations.*
     J Chem Theory Comput. 2013;9: 2887–2899.  [doi:10.1021/ct400109a](http://dx.doi.org/10.1021/ct400109a)
 
+Grosfils-2009
+:    Grosfils P, Lutsko JF.
+     *Dependence of the liquid-vapor surface tension on the range of interaction: a test of the law of corresponding states.*
+     J Chem Phys. 2009;130: 054703. [doi:10.1063/1.3072156](http://dx.doi.org/doi:10.1063/1.3072156)
+
+Huang-2014
+:     Huang K, García AE.
+      *Effects of truncating van der Waals interactions in lipid bilayer simulations.*
+      Journal of Chemical Physics. 2014;141. [doi:10.1063/1.4893965](http://dx.doi.org/doi:10.1063/1.4893965)
+
 <!--
 Gowers-2016
 :   Gowers RJ, Linke M, Barnoud J, Reddy TJE, Melo MN, Seyler SL, et al.
@@ -91,8 +101,16 @@ Michaud-Agrawal-2011
 :    Michaud-Agrawal N, Denning EJ, Woolf TB, Beckstein O.
     *MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.*
     J Comput Chem. 2011;32: 2319–27. [doi:10.1002/jcc.21787](http://dx.doi.org/10.1002/jcc.21787) -->
+Piana-2012
+:    Piana S, Lindorff-Larsen K, Dirks RM, Salmon JK, Dror RO, Shaw DE.
+    *Evaluating the Effects of Cutoffs and Treatment of Long-range Electrostatics in Protein Folding Simulations.*
+    PLOS ONE. 2012;7: e39918. [doi:10.1371/journal.pone.0039918](http://dx.doi.org/doi:10.1371/journal.pone.0039918)
 
 Wong-ekkabut-2016
 :   Wong-ekkabut J, Karttunen M.
     *The good, the bad and the user in soft matter simulations.*
     Biochim Biophys Acta - Biomembr. Elsevier B.V.; 2016;1858: 2529–2538. [doi:10.1016/j.bbamem.2016.02.004](http://dx.doi.org/10.1016/j.bbamem.2016.02.004)
+
+Yonetani-2006
+:    Yonetani Y.
+     *Liquid water simulation: A critical examination of cutoff length.* Journal of Chemical Physics. 2006;124. [doi:10.1063/1.2198208](http://dx.doi.org/doi:10.1063/1.2198208)
