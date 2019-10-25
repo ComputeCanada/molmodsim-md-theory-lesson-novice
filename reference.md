@@ -14,6 +14,12 @@ barostat
     size of the simulation box.  Therefore they can only be used in conjunction with 
     [periodic boundary conditions (PBC)](#periodic-boundary-conditions).
 
+ergodicity
+:   In statistical mechanics ergodicity describes the principle that studying a single particle 
+    averaged over a long time is equivalent to averaging over many particles which are studied
+    for a short time.
+    See also: ["Ergodicity" on Wikipedia](https://en.wikipedia.org/wiki/Ergodicity)
+
 periodic boundary conditions
 :   Periodic boundary conditions (PBC) ...  
     See also:
@@ -96,10 +102,10 @@ Larsson-2011
     Wiley Interdiscip Rev Comput Mol Sci. 2011;1: 93–108. [doi:10.1002/wcms.3](http://dx.doi.org/doi:10.1002/wcms.3)
 
 Martyna-1992
-    :   Martyna GJ, Klein ML, Tuckerman M.  
+:   Martyna GJ, Klein ML, Tuckerman M.  
     *Nosé–Hoover chains: The canonical ensemble via continuous dynamics.*  
     J Chem Phys. 1992;97: 2635–2643. [doi:10.1063/1.463940](http://dx.doi.org/10.1063/1.463940)
-    
+
 Nose-1984
 :   Nosé S.  
     *A molecular dynamics method for simulations in the canonical ensemble.*  
