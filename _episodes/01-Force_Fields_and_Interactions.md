@@ -28,10 +28,11 @@ $\vec{F}=-\nabla{U}(\vec{r})$
 - Study thermodynamics properties (free energies, binding energies)
 
 ## Force Fields
-A force field is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions:
+A force field (FF) is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions:
 
 $U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{nonbonded}}(\vec{r})$
 
+The origins of FF based calculations, and the theory and methodology of FF development is reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF rigor and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
 
 ## Non-bonded interactions
 ### The Lennard-Jones potential
