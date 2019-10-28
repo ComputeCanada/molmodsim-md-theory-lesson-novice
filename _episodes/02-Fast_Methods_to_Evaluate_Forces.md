@@ -58,7 +58,6 @@ Different molecular properties are affected differently by various cutoff approx
 
 Cutoff problems are especially pronounced when energy conservation is required. The net effect could be an increase in the temperature of the system over time. The best practice is to carry out trial simulations of the system under study without temperature scaling to test it for energy leaks or sources before a production run.
 
-
 > ## Specifying Truncation of LJ Potential in GROMACS
 > **vdw-modifier** Controls how to truncate LJ potential. Acceptable values:
 > >**potential-shift** Shifts the Van der Waals potential by a constant such that it is zero at the **rvdw**.
