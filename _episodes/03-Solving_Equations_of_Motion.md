@@ -28,7 +28,7 @@ Using the current positions and forces and the previous positions calculate the 
 
 $\vec{r}(t+\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})+a(t)\delta{t}^2$
 
-The Verlet algorithm requires positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
+The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 
 $\vec{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
 
@@ -45,7 +45,7 @@ The Velocity Verlet algorithm is mathematically equivalent to the original Verle
 
 
 ### The Leap Frog Algorithm
-Using accelerations of the current time step, compute the velocities at half-time step:
+ The leap frog algorithm is a modified version of the Verlet algorithm. Using accelerations of the current time step, compute the velocities at half-time step:
 
 $\vec{v}(t+\frac{1}{2}\delta+t)=\vec{v}(t-\frac{1}{2}\delta{t})\cdot\delta{t}+\vec{a}(t)\cdot\delta{t}$
 
@@ -63,7 +63,6 @@ $$\delta{t}\leq\frac{2}{w}$$ where $$\omega$$ is angular frequency.
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
 On using a too large integration time step in molecular dynamics simulations of coarse-grained molecular models.
-
 
 > ## Specifying Time Parameters in GROMACS
 > **dt** Time step, ps
