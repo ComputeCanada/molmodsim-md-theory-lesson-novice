@@ -18,7 +18,7 @@ Molecular dynamics (MD) simulations are widely used as tools to investigate stru
 
 $ \vec{F}=\frac{d\vec{p}}{dt} $
 
-The potential energy function *U* acts as a cornerstone of the MD simulations because it allows calculating the forces. The force on an object is the negative of the derivative of the potential energy function:
+The potential energy function *U* is a cornerstone of the MD simulations because it allows calculating the forces. The force on an object is the negative of the derivative of the potential energy function:
 
 $\vec{F}=-\nabla{U}(\vec{r})$
 
@@ -28,19 +28,31 @@ $\vec{F}=-\nabla{U}(\vec{r})$
 - Study thermodynamics properties (free energies, binding energies)
 
 ## Force Fields
-A force field (FF) is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules in molecular dynamics simulations. The potential energy includes non-bonded and bonded interactions:
+
+A force field (FF) is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics (MM) potential energy function used in MD simulations is an empirical function comprised of non-bonded and bonded interactions:
 
 $U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{nonbonded}}(\vec{r})$
 
-The origins of FF based calculations, and the theory and methodology of FF development is reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF rigor and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
+Typically MD simulations are confined to evaluating only interactions between pairs of atoms. In this approximation force fields are based on two-body potentials, and the energy of the whole system is described by the 2-dimensional force matrix.
 
-## Non-bonded interactions
-### The Lennard-Jones potential
+For convenience force fields can be divided into 3 general classes based on how complex they are. In the class 1 force field dynamics of bond stretching and angle bending is described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement this approximation is called quadratic. Anharmonic higher-order energy terms are required for a more accurate description of molecular motions. Correlations between bond stretching and angle bending are omitted in the class 1 force field hence force matrix is diagonal.
+
+Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals.
+Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters. Until recently biomolecular force fields were focused on nonbonded interactions and accurate reproduction of critical torsion potentials.
+
+Class 3 force fields explicitly add special effects of organic chemistry. For example stereoelectronic effects, electronegativity effect, pi stacking, Jahn–Teller effect, etc.
+
+
+## Energy Terms of Biomolecular Force Fields
+Most force fields for biomolecular simulations are minimalistic forcefields sacrificing accuracy and rigor of the physical representation for the ability to simulate large systems for a long time.
+
+### Non-bonded Terms
+#### The Lennard-Jones potential
 The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function:
 
-$V_{LJ}(r)=\frac{C12}{r^{12}}+\frac{C6}{r^{6}}$
+$V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 
-The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive van der Waals forces acting between local dynamically induced dipoles in the valence orbitals.
+The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive van der Waals forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially falling off repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
 
 The LJ potential is commonly expressed in terms of the well depth $$\epsilon$$ (the measure of the strength of the interaction) and the van der Waals radius $$\sigma$$ (the distance at which the intermolecular potential between the two particles is zero).
 
@@ -50,9 +62,15 @@ The LJ coefficients *C* are related to the $$\sigma$$  and the $$\epsilon$$  wit
 
  $C12=4\epsilon\sigma^{12},C6=4\epsilon\sigma^{6}$
 
-To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
+#### The Buckingham potential
+The Buckingham potential replaces the repulsive $$r^{-12}$$ term in Lennard-Jones potential by exponential function of distance:
 
-### The Combining rules
+$V_{BU}(r)=Aexp(-Br) -\frac{C6}{r^{6}}$
+
+Exponential function describes electron density more realistically but it is computationally more expensive to calculate. While using Buckingham potential there is a risk of "Buckingham Catastrophe", the condition when at short-range electrostatic attraction artificially overcomes the repulsive barrier and collision between atoms occurs. This can be remedied by the addition of $$r^{-12}$$ term.
+
+#### The Combining rules
+To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
 
 **Geometric mean:**
 
@@ -62,7 +80,7 @@ $$\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},\epsilon_{ij}=\sqrt{\epsilon_{
 
 **Lorentz–Berthelot:**
 
-$$\sigma_{ij}=\frac{\sigma_{ii}+\sigma_{jj}}{2},\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}$$ (CHARM, AMBER)
+$$\sigma_{ij}=\frac{\sigma_{ii}+\sigma_{jj}}{2},\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}$$ (CHARM, AMBER). This combining rule is known to overestimate the well depth
 
 **Waldman–Hagler:**
 
@@ -88,7 +106,7 @@ This combining rule was developed specifically for simulation of noble gases.
 {: .callout}
 
 
-### The electrostatic potential
+#### The electrostatic potential
 To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
 
 $V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}r_{ij}}$
@@ -98,36 +116,121 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 > ## Short-range and Long-range Interactions
 > The interaction is termed short-range if the potential decreases faster than *r<sup>-d</sup>*, where *r* is the distance between 2 particles and *d* is dimensionality. Otherwise the interaction is long-ranged. Accordingly the Lennard-Jones interactions are short-ranged, the Coulomb interactions are long-ranged.
 {: .callout}
-## Bonded Interactions
 
-### The bond potential
+### Bonded Terms
+
+#### The bond potential
 The bond potential is used to model the interaction of covalently bonded atoms in a molecule. Bond stretch is approximated by a simple harmonic function describing oscillation about an equilibrium bond length *r<sub>0</sub>* with bond constant *k<sub>b</sub>*:
 
 $V_{Bond}=k_b(r_{ij}-r_0)^2$
 
 This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
 
-### The angle potential
+#### The angle potential
 The angle potential describes the bond bending energy. It is defined for every triplet of bonded atoms. It is also approximated by a harmonic function describing oscillation about an equilibrium angle  $$\theta_{0}$$  with force constant $$k_\theta$$ :
 
 $V_{Angle}=k_\theta(\theta_{ijk}-\theta_0)^2$
 
 The force constants for angle potential are about 5 times smaller that for bond stretching.
 
-### The torsion (dihedral) angle potential
-The torsion energy is defined for every 4 bonded atoms.
-The torsion angle $$\phi$$ is the angle between 2 planes defined by the first and the last 3 atoms of the 4 atoms involved in the torsion interaction.
+#### The torsion (dihedral) angle potential
+The torsion energy is defined for every 4 sequentially bonded atoms. The torsion angle $$\phi$$ is the angle of rotation about the covalent bond between the middle two atoms and the potential is given by:
 
 $V_{Dihed}=k_\phi(1+cos(n\phi-\delta))$
 
- The non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
+ Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
-> ## The Ureu-Bradley potential
-> The Ureu-Bradley potential describes cross-terms (correlation between bond length and bond angle). The presence of cross-terms in a force field reflects couplings between the internal coordinates. As a bond angle is decreased, it is found that the adjacent bonds stretch to reduce the interaction between the 1,3 atoms.
->
->The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
->
->$V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
->
-> U-B terms have been used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation.
-{: .callout}
+#### The improper torsion potential
+The improper torsion potentialis defined for a group of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
+
+$V_{Improper}=k_\phi(\phi-\phi_0)^2$
+
+Where the dihedral angle $$\phi$$ is the angle between planes ijk and jkl.
+
+#### CMAP potential
+
+### Coupling Terms
+#### The Ureu-Bradley potential
+It is known that as a bond angle is decreased, the adjacent bonds stretch to reduce the interaction between the outer atoms of the bonded triplet. This means that there is a coupling between bond length and bond angle. This coupling can be decribed by the Ureu-Bradley potential. The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
+
+$V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
+
+U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Ureu-Bradley term is implemented in the CHARMM force fields.
+
+
+## History of Force Field Develoment
+
+### Consistent Force Field (CFF)
+CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.html#Lifson-1968) Introduced a concept of a 'consistent force field'. Introduced a methodology for deriving and validating force fields. The term 'consistent' emphasized importance of the ability to describe a wide range of compounds and physical observables (conformation, crystal structure, thermodynamic properties and vibrational spectra). After the initial derivation for hydrocarbons CFF was extended to proteins, but was very crude at that time.
+
+### Allinger force fields: MM1, MM2, MM3, MM4.
+MM1, MM2 - Class 1
+MM3 - Class 2
+MM4 - Class 3
+Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level ab initio quantum chemistry computations, and the parameters were additionally adjusted.
+
+For calculations on small and medium size organic molecules.
+
+### Empirical Conformational Energy Program for Peptides (ECEPP)
+ECEPP was the first force field targeting polypeptides and proteins. Crystal data of small organic compounds and semi-empirical QM calculations were used extensively in derivation of this force field. As more experimental data became available, force field parameters have been refined and modified versions ECEPP-2, ECEPP-3 were published.
+
+
+Over the years of evaluations the problems originating from the deficiency of these FF became apparent and various approaches has been undertaken to correct them.
+
+Force Fields with development focused on application to proteins:
+
+AMBER
+CHARM
+GROMOS
+OPLS
+
+Most relevant processes require very long simulations. Large systems create computational restraints. The goal is to develop a "minimalistic" force field to expand simulation time window as much as possible.
+
+Force fields with development focused on improving representation of molecular interactions
+
+CVFF
+CFF93
+MMX series
+
+
+Development Phase I
+
+Refinement after the initial introduction.
+-Converted back to AA, except GROMOS
+
+CHARMM22
+AMBER ff99, GAFF
+OPLS-AA, OPLS-AA/L
+
+Used large datasets for training. Training datasets were different for different FF.
+
+Large deviations in different observables. Inability to pedict conformations of peptides and proteins.
+Simple 12‑6‑1 quadratic diagonal FFs (as used
+in standard biomolecular FFs) are not adequate
+to achieve quantitative accuracy. A major problem with all widely used protein force fields is the functional form of the potential energy.
+
+2 paths:
+
+1. expand and improve the rigor of the representation of the underlying physics.
+2. Develop empirical corrections to compensate for deficiency of physical representation
+
+Unaccounted physics:
+-atomic charges depend on the geometry (charge flux)
+
+
+
+AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function
+
+#### AMBER
+
+After publication of ff99 a number of studies devoted primarily to modifying the torsion correction in order to correct the observed discrepancies.
+
+ff14ipq
+- overstabilization of salt bridges.
+
+ff15ipq
+- addessed overstabilization by increasing radius of polar hydrogens bonded to nitrogen.  The corrected FF performed as well or better than the other fixed charge FF. Polarizable CHARMM Drude-2013 and AMOEBA performed better in this respect, as expected.
+- secondary structure of polyprptides: even 4 μs simulations “were not sufficiently long to obtain converged estimates.”
+- protein stability some proteins deviated significantly in 4-10 us simulations and it is not clear whether this is a transient fluctuation or transition to a different state.
+
+The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
