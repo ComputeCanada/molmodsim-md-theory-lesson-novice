@@ -60,7 +60,7 @@ Mathematically Vertet family integrators are stable for time steps
 
 $$\delta{t}\leq\frac{2}{w}$$ where $$\omega$$ is angular frequency.
 
-In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is ~10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
+In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is about 10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably. If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained, and time step increased to 2 fs.
 
 On using a too large integration time step in molecular dynamics simulations of coarse-grained molecular models [(Winger, 2009)]({{ page.root }}/reference.html#Winger-2009).
 
@@ -99,3 +99,16 @@ On using a too large integration time step in molecular dynamics simulations of 
 >
 > **fullElectFrequency** Number of timesteps between full electrostatic evaluations
 {: .callout}
+
+## Constraints
+Dynamics of the bonds involving hydrogen atoms is often constrained in MD simulations. By replacing these bond vibrations with holonomic (not changing in time) constraints the simulation step can be doubled since the next fastest motions (bond vibrations involving only heavy atoms and angles involving hydrogen atoms) have the fastest modes with a period of about 20 fs. Further increase of the simulation step requires constraining all bonds and angles involving hydrogen atoms. Then the next fastest bond vibration will have a period of 45 fs allowing for another doubling of simulation step.
+
+To constrain bond length in a simulation the equations of motion must be modified. One way to modify the equation of motion  is to apply constraint forces acting along a bond in opposite directions. The total energy of simulation system is not affected in this case because the total work done by constraint forces is zero. In constrained simulation first the unconstrained step is done, then  corrections are applied to satisfy constraints.
+
+Because bonds in molecules are coupled satisfying all constraints is a non-linear problem. Is is fairly easy to solve it for a small molecules like water but as the nuber of coupled bonds increases the problem becomes more difficult. Different types of algorithms have been developed for use with small or large molecules.
+
+**SETTLE** is very fast analytical solution for small molecules. It is widely used to constrain  bonds in water molecules.
+
+**SHAKE** is an iterative algorithm that resets all bonds to the constrained values sequentially until the desided tolerance is achieved. SHAKE is simple and stable, it can be applied for large molecules and it works with both bond and angle constraints. However it is substantially slower than SETTLE and hard to parallelize. SHAKE may fail to find the constrained positions when displacements are large. The original SHAKE algorithm was developed for use with a leap-frog integrator. later on the extension of SHAKE for use with a velocity Verlet integrator called RATTLE has been developed. Several other extensions of the original SHAKE algorithm exist: QSHAKE, WIGGLE, MSHAKE, P-SHAKE.
+
+**LINCS** (lnear constraint solver) algorithm LINCS algorithm,  employs a power series expansion to determine how to move the atoms such that all constraints are satisfied.  It is 3-4 times faster that SHAKE and easy to parallelize. The parallel LINCS (P-LINKS) allows to constrain all bonds in large molecules. The drawback is that approximations of LINCS breakdown with the increase of constraints per atom and it is not suitable for constraining both bonds and angles.
