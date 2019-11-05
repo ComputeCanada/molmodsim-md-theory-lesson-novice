@@ -35,16 +35,16 @@ $U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{nonbonded}}(\vec{r})$
 
 Typically MD simulations are confined to evaluating only interactions between pairs of atoms. In this approximation force fields are based on two-body potentials, and the energy of the whole system is described by the 2-dimensional force matrix.
 
-For convenience force fields can be divided into 3 general classes based on how complex they are. In the class 1 force field dynamics of bond stretching and angle bending is described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement this approximation is called quadratic. Anharmonic higher-order energy terms are required for a more accurate description of molecular motions. Correlations between bond stretching and angle bending are omitted in the class 1 force field hence force matrix is diagonal.
+For convenience force fields can be divided into 3 general classes based on how complex they are. In the class 1 force field dynamics of bond stretching and angle bending are described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement, this approximation is called quadratic. Anharmonic higher-order energy terms are required for a more accurate description of molecular motions. Correlations between bond stretching and angle bending are omitted in the class 1 force field hence force matrix is diagonal.
 
 Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals.
 Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters. Until recently biomolecular force fields were focused on nonbonded interactions and accurate reproduction of critical torsion potentials.
 
-Class 3 force fields explicitly add special effects of organic chemistry. For example stereoelectronic effects, electronegativity effect, pi stacking, Jahn–Teller effect, etc.
+Class 3 force fields explicitly add special effects of organic chemistry. For example stereoelectronic effects, electronegativity effect, Jahn–Teller effect, etc.
 
 
 ## Energy Terms of Biomolecular Force Fields
-Most force fields for biomolecular simulations are minimalistic forcefields sacrificing accuracy and rigor of the physical representation for the ability to simulate large systems for a long time.
+Most force fields for biomolecular simulations are minimalistic class 1 forcefields trading off rigor of the physical representation for the ability to simulate large systems for a long period of time.
 
 ### Non-bonded Terms
 #### The Lennard-Jones potential
@@ -52,7 +52,7 @@ The Lennard-Jones (LJ) potential approximates the potential energy of non-elecro
 
 $V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 
-The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive van der Waals forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially falling off repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
+The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially decaying repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
 
 The LJ potential is commonly expressed in terms of the well depth $$\epsilon$$ (the measure of the strength of the interaction) and the van der Waals radius $$\sigma$$ (the distance at which the intermolecular potential between the two particles is zero).
 
@@ -147,8 +147,6 @@ $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
 Where the dihedral angle $$\phi$$ is the angle between planes ijk and jkl.
 
-#### CMAP potential
-
 ### Coupling Terms
 #### The Ureu-Bradley potential
 It is known that as a bond angle is decreased, the adjacent bonds stretch to reduce the interaction between the outer atoms of the bonded triplet. This means that there is a coupling between bond length and bond angle. This coupling can be decribed by the Ureu-Bradley potential. The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
@@ -156,6 +154,9 @@ It is known that as a bond angle is decreased, the adjacent bonds stretch to red
 $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 
 U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Ureu-Bradley term is implemented in the CHARMM force fields.
+
+### The CMAP potential
+CMAP is a grid based error correction map designed by CHARMM force field developers to correct for errors in nonbonded interactions, electrostatics, lack of coupling terms, inaccurate combination rules and other force field deficiencies. The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields ff99IDPs (force field for intrinsically disordered proteins) and ff12SB-cMAP (force field for implicit-solvent simulations).
 
 
 ## History of Force Field Develoment
@@ -225,6 +226,15 @@ AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple 
 
 After publication of ff99 a number of studies devoted primarily to modifying the torsion correction in order to correct the observed discrepancies.
 
+
+ff99SB* optimized for the correct description of the helix-coil equilibrium
+
+ff99SB-φ'  targeted the reproduction of the intrinsic conformational preferences of tripeptides
+
+ff99SBnmr and FF99SB_φψ  target data during included protein NMR chemical shifts and residual dipolar couplings.
+
+ff99SBildn targeted optimization of four amino acid side chains
+
 ff14ipq
 - overstabilization of salt bridges.
 
@@ -234,3 +244,24 @@ ff15ipq
 - protein stability some proteins deviated significantly in 4-10 us simulations and it is not clear whether this is a transient fluctuation or transition to a different state.
 
 The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
+
+##CHARMM
+
+CHARMM22
+
+CHARMM22/CMAP (CHARMM27)
+
+CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
+
+
+## Constraints
+by replaceinin the bond vibrations with holonomic constraints the simulation step may be increased a factor of 4
+
+Do an unconstrained step, then apply corrections to satisfy constraints.
+
+
+SETTLE Very fast analytical solution. Solves for three constraints. Used to constrain water molecules. Unsuitable for larger molecules.
+
+SHAKE Iterative algorithm. All bonds are seto to the coorect values sequantially. Simple and stable, slower than SETTLE hard to parallelize. May fail when displacements are large.
+
+LINCS algorithm suitable only for molecules with low connectivity. 3-4 times faster that SHAKE.
