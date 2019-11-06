@@ -138,7 +138,7 @@ The torsion energy is defined for every 4 sequentially bonded atoms. The torsion
 
 $V_{Dihed}=k_\phi(1+cos(n\phi-\delta))$
 
- Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
+Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
 #### The improper torsion potential
 The improper torsion potentialis defined for a group of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
@@ -182,8 +182,10 @@ Force Fields with development focused on application to proteins:
 
 AMBER
 CHARM
-GROMOS
-OPLS
+
+GROMOS and OPLS are focused on fitting to thermodynamic properties such as the heats of vaporization, liquid densities, and the solvation properties of small molecules.
+
+
 
 Most relevant processes require very long simulations. Large systems create computational restraints. The goal is to develop a "minimalistic" force field to expand simulation time window as much as possible.
 
@@ -191,8 +193,8 @@ Force fields with development focused on improving representation of molecular i
 
 CVFF
 CFF93
-MMX series
-
+CFF95
+MM1 - MM4
 
 Development Phase I
 
@@ -222,30 +224,54 @@ Unaccounted physics:
 
 AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function
 
-#### AMBER
 
-After publication of ff99 a number of studies devoted primarily to modifying the torsion correction in order to correct the observed discrepancies.
+### COMPASS
+COMPASS and COMPASS II forcefields are developed for simulations of organic molecules, inorganic smallmolecules, and polymers. The VDW parameters are obtained by fitting enthalpy of vaporizations and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account.
+
+### OPLS
+OPLS family force fields are created for liquid simulations containing organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpy of vaporizations and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties.
+
+**OPLS-AA**
+Jorgensen W, Maxwell D, Tirado-Rives J. Development and testing of the OPLS all-atom force field on conformational energetics and properties of organic liquids. J Am Chem Soc. 1996;118: 11225–11236.
+
+**OPLS-AA/L**
+Kaminski GA, Friesner RA, Tirado-Rives J, Jorgensen WL. Evaluation and Reparametrization of the OPLS-AA Force Field for Proteins via Comparison with Accurate Quantum Chemical Calculations on Peptides. J Phys Chem B. 2001;105: 6474–6487. doi:10.1021/jp003919d
+
+**OPLS_2005**
+Banks JL, Beard HS, Cao Y, Cho AE, Damm W, Farid R, et al. Integrated Modeling Program, Applied Chemical Theory (IMPACT). J Comput Chem. 2005;26: 1752–1780. doi:10.1002/jcc.20292
+
+**OPLS-AA/M**
+Robertson MJ, Tirado-Rives J, Jorgensen WL. Improved Peptide and Protein Torsional Energetics with the OPLS-AA Force Field. J Chem Theory Comput. 2015;11: 3499–3509. doi:10.1021/acs.jctc.5b00356
+
+**OPLS3**
+Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 
-ff99SB* optimized for the correct description of the helix-coil equilibrium
+### AMBER
+AMBER forcefields are developed for simulations of protein and nucleic acides. The VDW parameters are obtained from crystal structures and lattice energies. The atomic partial charges are derived using QM without any agjustments.
 
-ff99SB-φ'  targeted the reproduction of the intrinsic conformational preferences of tripeptides
+**ff99**
+Wang J, Cieplak P, Kollman PA. How well does a restrained electrostatic potential (RESP) model perform in calculating conformational energies of organic and biological molecules? Journal of Computational Chemistry. 2000;21: 1049–1074. doi:10.1002/1096-987X(200009)21:12<1049::AID-JCC3>3.0.CO;2-F
 
-ff99SBnmr and FF99SB_φψ  target data during included protein NMR chemical shifts and residual dipolar couplings.
+After publication of ff99 a number of studies devoted primarily to modifying the torsion potentials in order to correct the observed discrepancies have been publihed:
 
-ff99SBildn targeted optimization of four amino acid side chains
+**ff99sb*** is optimized for the correct description of the helix-coil equilibrium
 
-ff14ipq
+**ff99sb-φ'**  targeted the reproduction of the intrinsic conformational preferences of tripeptides
+
+**ff99sb-nmr** and FF99SB_φψ  target data during included protein NMR chemical shifts and residual dipolar couplings.
+
+**ff99sb-ILDN** targeted optimization of four amino acid side chains.
+
+2003 New charges developed B3LYP/cc-pvTZ quantum calculations in a polarizable continuum (PCM) solvent intended to mimic the interior of a protein
+
+**ff14ipq**
 - overstabilization of salt bridges.
 
-ff15ipq
-- addessed overstabilization by increasing radius of polar hydrogens bonded to nitrogen.  The corrected FF performed as well or better than the other fixed charge FF. Polarizable CHARMM Drude-2013 and AMOEBA performed better in this respect, as expected.
-- secondary structure of polyprptides: even 4 μs simulations “were not sufficiently long to obtain converged estimates.”
-- protein stability some proteins deviated significantly in 4-10 us simulations and it is not clear whether this is a transient fluctuation or transition to a different state.
+**ff15ipq** addessed salt bridge overstabilization by increasing radius of polar hydrogens bonded to nitrogen.  The modified FF performed as well or better than the other fixed charge FF. Polarizable CHARMM Drude-2013 and AMOEBA performed better in this respect, as expected.
+Problems related to protein stability persist. Even 4 μs simulations “were not sufficiently long to obtain converged estimates of secondary structure of polypeptides”. In simulation tests some proteins deviated significantly near the end of several microsecond simulations, and it is not clear whether this is a transient fluctuation or transition to a different state.
 
-The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
-
-##CHARMM
+### CHARMM
 
 CHARMM22
 
@@ -254,14 +280,13 @@ CHARMM22/CMAP (CHARMM27)
 CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
 
 
-## Constraints
-by replaceinin the bond vibrations with holonomic constraints the simulation step may be increased a factor of 4
+### Polarizable Force fields
+**Drude-2013**
+**AMOEBA**
 
-Do an unconstrained step, then apply corrections to satisfy constraints.
+The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#Dauber-Osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#Hagler-2019).
 
 
-SETTLE Very fast analytical solution. Solves for three constraints. Used to constrain water molecules. Unsuitable for larger molecules.
+## How to create ligand topology
 
-SHAKE Iterative algorithm. All bonds are seto to the coorect values sequantially. Simple and stable, slower than SETTLE hard to parallelize. May fail when displacements are large.
-
-LINCS algorithm suitable only for molecules with low connectivity. 3-4 times faster that SHAKE.
+[Automated Topology Builder](https://atb.uq.edu.au/index.py)
