@@ -31,7 +31,9 @@ A Verlet list stores all particles within the cutoff distance of every particle 
 We have learned that the LJ potential is always truncated at the cutoff distance. A cutoff introduces a discontinuity in the potential energy at the cutoff value. As forces are computed by differentiating potential, a sharp difference in potential may result in nearly infinite forces at the cutoff distance (Figure 1A). There are several approaches to minimize the impact of the cutoff.
 
 ![Cutoff Methods](../fig/Cutoff_Methods.svg)
-
+<center>
+Figure Truncation Methods
+</center>
 ### Shifted Potential
 The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
 ### Shifted Forces
