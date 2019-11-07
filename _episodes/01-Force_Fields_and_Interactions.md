@@ -46,7 +46,7 @@ Until recently force fields for biomolecular simulations were focused on nonbond
 ## Energy Terms of Biomolecular Force Fields
 Most force fields for biomolecular simulations are minimalistic class 1 force fields trading off rigor of the physical representation for the ability to simulate large systems for a long period of time.
 
-### Non-bonded Terms
+### Non-Bonded Terms
 #### The Lennard-Jones potential
 The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonding atoms or molecules with a simple mathematical function:
 
@@ -200,3 +200,18 @@ Pairs of atoms connected by chemical bonds are normally excluded from computatio
 >
 > If **scaled1-4**  is chosen, the electrostatic interactions for 1-4 pairs are scaled by a constant factor specified by the **1-4scaling** parameter.
 {: .callout}
+
+> ## Counting Non-Bonded Interactions
+>
+> 1. How many non-bonded interactions are in the system comprised of 10 Argon atoms?
+>
+> 2. How many VDW interactions are in the system comprised of 2 propane molecules?
+>
+> > ## Solution
+> >
+> > 1. Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interation ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
+> >
+> > 2. Propane molecule has 11 atoms. Each atom in one molecule interacts with each atom in another molecule, so the number of intermolecular VDW interactions is 11x11=121. In propane molecule only terminal hydrogens are separated by more than 3 bonds. So there are 3x3=9 intramolecular VDW interactions in each of the molecules. The total number of VDW interactions is 121+18=139
+> >
+> {: .solution}
+{: .challenge}
