@@ -19,27 +19,62 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 
 In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
-> ## Specifying periodic box in GROMACS
-> The box specification is integrated into structure file. The [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) utility is used to set the box parameters:
+> ## Specifying periodic box
+>  **GROMACS**
 >
-> **-bt**  Box type (triclinic, cubic, dodecahedron, octahedron)<br>
+> The box specification is integrated into structure file. The box parameters can be set using the [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The **editconf** program accepts the following options:
 >
-> **-box** Box vectors lengths (a,b,c)<br>
+> **-bt**  Box type. Acceptable values: **triclinic, cubic, dodecahedron, octahedron**<br>
 >
-> **-angles** Box vectors angles   (bc,ac,ab)<br>
-{: .callout}
-
-> ## Specifying periodic box in NAMD
-> Periodic box is defined by three unit cell vectors:
+> **-box** Box vectors lengths **a,b,c** in nm.<br>
 >
-> **cellBasisVector1**, **cellBasisVector2**, **cellBasisVector3**
->>
->> Default values: 0 0 0
+> **-angles** Box vectors angles **bc,ac,ab** in degrees.
 >
-> **extendedSystem**
->> NAMD generates a .xsc (eXtended System Configuration) file which contains the periodic cell parameters. If this keyword is used periodic box parameters will be read from .xsc file ignoring **cellBasisVectors**.
->>
->> Value: filename
+> **-d** Distance between the solute and the box in nm.
+>
+>~~~
+> gmx editconf -f system.gro -o system_wbox.gro -d 1.0 -bt cubic
+>~~~
+> {: .source}
+> The **editconf** program appends box vectors to the structure (**.gro**) file. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the **CRYST1** record of a PDB file with the equations:
+>
+>$$xx=a$$
+>
+>$$yy=b*\sin(\gamma)$$
+>
+>$$zz=\frac{v}{(a*b*\sin(\gamma))}$$
+>
+>$$xy=0.0$$
+>
+>$$xz=0.0$$
+>
+>$$yx=b*\cos(\gamma)$$
+>
+>$$yz=0.0$$
+>
+>$$zx=c*\cos(\beta)$$
+>
+>$$zy=\frac{c}{\sin(\gamma)}*(cos(\alpha)-cos(\beta)*cos(\gamma))$$
+>
+>$$v=\sqrt{1.0-\cos^2(\alpha)-cos^2(\beta)-\cos^2(\gamma) +2.0*\cos(\alpha)*\cos(\beta)*\cos(\gamma)}*a*b*c$$
+>
+> **NAMD**
+>
+> Periodic box is specified in the run parameter file **mdin** by three unit cell vectors:
+>
+> **cellBasisVector1**, **cellBasisVector2**, **cellBasisVector3** in <span>&#8491;</span>.
+>~~~
+> # cubic box
+> cellBasisVector1 100 0 0
+> cellBasisVector2 0 100 0
+> cellBasisVector3 0 0 100
+>~~~
+>{: .source}
+> Alternatively periodic box parameters can be read from the **.xsc** (eXtended System Configuration) file by using the **extendedSystem** keyword.  If this keyword is used **cellBasisVectors** are ignored.  NAMD always generates  **.xsc** files at runtime.
+>~~~
+> extendedSystem restart.xsc
+>~~~
+>{: .source}
 {: .callout}
 
 ## Balancing of charges

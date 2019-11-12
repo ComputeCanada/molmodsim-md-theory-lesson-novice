@@ -64,18 +64,35 @@ In molecular dynamics stretching of the bonds with the lightest atom H is usuall
 
 On using a too large integration time step in molecular dynamics simulations of coarse-grained molecular models [(Winger, 2009)]({{ page.root }}/reference.html#Winger-2009).
 
-> ## Specifying Time Parameters in GROMACS
-> **dt** Time step, ps
+> ## Specifying Time Parameters
+> **GROMACS**
 >
-> **nstep** Number of steps to simulate
+> Time parameters are specifies in the run parameter file **.mdp**
+>~~~
+> dt = 0.001
+>; Time step, ps
 >
-> **tinit** Time of the first step
-> ## Specifying Time Parameters in NAMD
-> **TimeStep** Time step, fs
+> nsteps = 10000
+>; Number of steps to simulate
 >
-> **NumSteps** Number of steps to simulate
+> tinit = 0
+>; Time of the first step
+> ~~~
+> {: .source}
+> **NAMD**
+> 
+> Time parameters are specifies in the run parameter file **mdin**
+> ~~~
+> TimeStep = 1
+># Time step, fs
 >
-> **FirtsTimeStep** Time of the first step
+> NumSteps = 10000
+># Number of steps to simulate
+>
+>FirstTimeStep = 0
+># Time of the first step
+> ~~~
+> {: .source}
 {: .callout}
 
 > ## Specifying Integration Method in GROMACS
