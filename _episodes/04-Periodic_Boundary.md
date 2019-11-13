@@ -38,25 +38,13 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 > {: .source}
 > The **editconf** program appends box vectors to the structure (**.gro**) file. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the **CRYST1** record of a PDB file with the equations:
 >
->$$xx=a$$
+>$$xx=a, yy=b\cdot\sin(\gamma), zz=\frac{v}{(a*b*\sin(\gamma))}$$
 >
->$$yy=b*\sin(\gamma)$$
+>$$xy=0, xz=0, yx=b\cdot\cos(\gamma)$$
 >
->$$zz=\frac{v}{(a*b*\sin(\gamma))}$$
+>$$yz=0, zx=c\cdot\cos(\beta), zy=\frac{c}{\sin(\gamma)}\cdot(cos(\alpha)-cos(\beta)\cdot\cos(\gamma))$$
 >
->$$xy=0.0$$
->
->$$xz=0.0$$
->
->$$yx=b*\cos(\gamma)$$
->
->$$yz=0.0$$
->
->$$zx=c*\cos(\beta)$$
->
->$$zy=\frac{c}{\sin(\gamma)}*(cos(\alpha)-cos(\beta)*cos(\gamma))$$
->
->$$v=\sqrt{1.0-\cos^2(\alpha)-cos^2(\beta)-\cos^2(\gamma) +2.0*\cos(\alpha)*\cos(\beta)*\cos(\gamma)}*a*b*c$$
+>$$v=\sqrt{1-\cos^2(\alpha)-cos^2(\beta)-\cos^2(\gamma) +2.0\cdot\cos(\alpha)\cdot\cos(\beta)\cdot\cos(\gamma)}\cdot{a}\cdot{b}\cdot{c}$$
 >
 > **NAMD**
 >
@@ -79,3 +67,5 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 ## Balancing of charges
 Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
+
+gmx genion -s file.tpr -p cg-something.top -o output.gro -neutral.
