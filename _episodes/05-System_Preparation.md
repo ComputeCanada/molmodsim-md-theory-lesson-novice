@@ -68,9 +68,7 @@ Let's generate the topology for the 1GOA_protein.pdb using AMBER ff99SBildn forc
 gmx pdb2gmx -f 1GOA_protein.pdb  -ff amber99sb-ildn -water none
 ~~~
 {: .bash}
-By default the pdb2gmx program saves three files: topology **topol.top**, gromacs coordinates **conf.gro** and position restraints **posre.itp**.
-
-Once the gromacs coordinate file is created we can add a periodic box to it:
+By default the pdb2gmx program saves three files: topology **topol.top**, gromacs coordinates **conf.gro** and position restraints **posre.itp**. Once the gromacs coordinate file is created we can add a periodic box to it:
 ~~~
 gmx editconf -f conf.gro -o boxed.gro -c -d 1.0 -bt cubic
 ~~~
@@ -96,7 +94,7 @@ grep "total charge" grompp.log
 System has non-zero total charge: 2.000000
 ~~~
 {: .output}
-We need to add 2 chloride ions to neutralize this total positive charge:
+We need to replace 2 water molecules with chloride ions to neutralize this total positive charge. The **genion** program can automatically determine the number of ions required to neutralize a system if the option **-neutral** us used:
 ~~~
 $ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -nname CL -neutral -o neutralized.pdb
 ~~~
@@ -113,9 +111,9 @@ Replacing solvent molecule 2365 (atom 9557) with CL
 ...
 ~~~
 {: .output}
-The genion program replaced 2 randomly chosen solvent molecules with 2 chloride ions:
+The **genion** program replaced 2 randomly chosen solvent molecules with 2 chloride ions:
 ~~~
-$ tail -n 2 neutralized.gro
+$ tail -n 4 neutralized.gro
 ~~~
 {: .bash}
 ~~~
@@ -125,7 +123,7 @@ $ tail -n 2 neutralized.gro
    7.67638   7.67638   7.67638
 ~~~
 {: .output}
-And updated the topology file topol.top to include them:
+The topology file **topol.top** has been updated to include 2 chloride ions:
 ~~~
 $ tail -n 2 topol.top
 ~~~
@@ -135,6 +133,8 @@ SOL         13787
 CL               2
 ~~~
 {: .output}
+
+[setup_GROMACS.sh]({{ page.root }}/code/setup_GROMACS.sh)
 
 ~~~
 #!/bin/bash
