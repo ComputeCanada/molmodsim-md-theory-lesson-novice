@@ -4,8 +4,9 @@ teaching: 30
 exercises: 0
 questions:
 - "How to clean up PDB structure file?"
+- "How to assign protonation states"
 - "How to generate molecular topology file?"
-- "How to setup periodic box?
+- "How to setup periodic box?"
 - "How to solvate MD system?"
 - "Why the simulation system should be neutralized"
 - "How to add ions?"
@@ -15,7 +16,6 @@ keypoints:
 - "Periodic boundary conditions are used to approximate an infinitely large system"
 - "Simulation system must be neutralized by adding counterions"
 ---
-
 
 ## Downloading and Cleaning Up PDB Files
 
