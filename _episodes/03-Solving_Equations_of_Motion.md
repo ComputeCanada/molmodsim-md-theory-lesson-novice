@@ -67,7 +67,7 @@ On using a too large integration time step in molecular dynamics simulations of 
 > ## Specifying Time Parameters
 > **GROMACS**
 >
-> Time parameters are specifies in the run parameter file **.mdp**
+> Time parameters are specified in the run parameter file **.mdp**
 >~~~
 > dt = 0.001
 >; Time step, ps
@@ -80,8 +80,8 @@ On using a too large integration time step in molecular dynamics simulations of 
 > ~~~
 > {: .source}
 > **NAMD**
-> 
-> Time parameters are specifies in the run parameter file **mdin**
+>
+> Time parameters are specified in the run parameter file **mdin**
 > ~~~
 > TimeStep = 1
 ># Time step, fs
