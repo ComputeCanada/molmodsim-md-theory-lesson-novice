@@ -5,15 +5,17 @@ exercises: 0
 questions:
 - "How to clean up PDB structure file?"
 - "How to generate molecular topology file?"
-- "How to setup periodic box?"
+- "How to setup periodic box?
 - "How to solvate MD system?"
+- "Why the simulation system should be neutralized"
 - "How to add ions?"
 objectives:
-- "Explain why and when periodic boundary conditions are used"
+- "Explain why it is necessary to neutlalize the simulation system"
 keypoints:
 - "Periodic boundary conditions are used to approximate an infinitely large system"
 - "Simulation system must be neutralized by adding counterions"
 ---
+
 
 ## Downloading and Cleaning Up PDB Files
 
@@ -52,6 +54,17 @@ The **grep** command finds all lines beginning with the word "ATOM" and sends th
 $ grep ^ATOM 1GOA.pdb > protein.pdb
 ~~~
 {: .bash}
+
+## Assigning Protonation States
+The protonation states of the 7 titratable aminoacids (Arg, Lys, Tyr, Cys, His, Glu, Asp) depend on the local microenvironment of the residue and the pH. Highly polar microenvironment will stabilize the charged form, while in less polar microenvironment the neutral form will predominate. The protonation pattern of proteins is critical for their catalytic function and structural stabilization. Numerous MD simulation studies demonstrated importance of protein protonation states [[1](http://doi.org/10.1529/biophysj.105.059329), [2](http://doi.org/10.7554/eLife.16616), [3](https://doi.org/10.1016/j.cplett.2018.12.039), [4](https://doi.org/10.1021/jacs.9b06064), [5](https://doi.org/10.1016/j.dib.2016.07.040)]. In a classic MD simulation protonation states are fixed and therefore must be determined and assigned before simulation. Assigning correct protonation states is crucial for realistic MD simulations because inappropriate charges can have drastic effects and invalidate all of the results.
+
+Protonation states in GROMACS can be assigned by the pdb2gmx program. By default, pdb2gmx will select charged forms of LYS, ASP or GLU. For HIS it will try to place the proton on either ND1 or NE2 based on an optimal hydrogen bonding conformation. Non-standard protonation states can be selected interactively by using options  -lys, -asp, -glu, -his. However, selecting protonation with pdb2gmx can not be automated, and it is cumbersome because pdb2gmx will prompt to select a protonation state for each residue.
+
+A better way is to instruct pdb2gmx to use a desired form of aminoacid by changing its name in the input PDB file. The neutral forms of LYS, ASP, and GLU are selected by renaming them to LYN, ASH, and GLH respectively.  The correct form of HIS can be selected by renaming HIS to HIE (proton on NE1), HID (proton on NE2) or HIP (both protons).
+
+### Limitations of Fixed Protonation State MD Simulations
+Molecular dynamics simulations employing constant protonation states have many drawbacks. In real systems, conformational changes are often accompanied by changes in protonation pattern. In fixed state molecular dynamics simulations, these processes are decoupled hindering understanding proton-coupled conformational dynamics. If proton-coupled dynamics is essential for your research consider using constant pH simulations. Constant pH MD is currently implemented in AMBER and NAMD. At the moment it is not officially implemented in GROMACS, but the modified GROMACS version is available [[6](https://pubs.acs.org/doi/10.1021/ct200061r)].
+
 
 ## Generating Molecular Tolopogy for GROMACS
 Several versions of GROMACS are installed on CC clusters. To start using the progrtam we need to load one of the GROMACS module files, for example:
@@ -164,17 +177,6 @@ CL               2
 
 #### Caveats and limitations of the random ion placement
 As genion places ions randomly the generated system will be most likely in the completely dissociated, energetically unfavourable state. The random placement of charges is particularly problematic if the electric charge of the molecule is big (for example DNA) because ions form screening clouds around charged molecules rather than being distributed randomly. Random placement of ions will negatively impact the time required for the system equilibration and may affect structural stability. A much better approach would be to place ions according to the electrostatic potential of the molecule. Such method is implemented in the **tleap** program from AMBERTOOLS package.
-
-### Assigning Protonation States
-The protonation states of the 7 titratable aminoacids (Arg, Lys, Tyr, Cys, His, Glu, Asp) depend on the local microenvironment of the residue and the pH. Highly polar microenvironment will stabilize the charged form, while in less polar microenvironment the neutral form will predominate. The protonation pattern of proteins is critical for their catalytic function and structural stabilization. Numerous MD simulation studies demonstrated importance of protein protonation states [[1](http://doi.org/10.1529/biophysj.105.059329), [2](http://doi.org/10.7554/eLife.16616), [3](https://doi.org/10.1016/j.cplett.2018.12.039), [4](https://doi.org/10.1021/jacs.9b06064), [5](https://doi.org/10.1016/j.dib.2016.07.040)]. In a classic MD simulation protonation states are fixed and therefore must be determined and assigned before simulation. Assigning correct protonation states is crucial for realistic MD simulations because inappropriate charges can have drastic effects and invalidate all of the results.
-
-Protonation states in GROMACS can be assigned by the pdb2gmx program. By default, pdb2gmx will select charged forms of LYS, ASP or GLU. For HIS it will try to place the proton on either ND1 or NE2 based on an optimal hydrogen bonding conformation. Non-standard protonation states can be selected interactively by using options  -lys, -asp, -glu, -his. However, selecting protonation with pdb2gmx can not be automated, and it is cumbersome because pdb2gmx will prompt to select a protonation state for each residue.
-
-A better way is to instruct pdb2gmx to use a desired form of aminoacid by changing its name in the input PDB file. The neutral forms of LYS, ASP, and GLU are selected by renaming them to LYN, ASH, and GLH respectively.  The correct form of HIS can be selected by renaming HIS to HIE (proton on NE1), HID (proton on NE2) or HIP (both protons).
-
-
-#### Limitations of Fixed Protonation State MD Simulations
-Molecular dynamics simulations employing constant protonation states have many drawbacks. In real systems, conformational changes are often accompanied by changes in protonation pattern. In fixed state molecular dynamics simulations, these processes are decoupled hindering understanding proton-coupled conformational dynamics. If proton-coupled dynamics is essential for your research consider using constant pH simulations. Constant pH MD is currently implemented in AMBER and NAMD. At the moment it is not officially implemented in GROMACS, but the modified GROMACS version is available [[6](https://pubs.acs.org/doi/10.1021/ct200061r)].
 
 
 ### Automating Simulation Setup and Making it Reproducible
