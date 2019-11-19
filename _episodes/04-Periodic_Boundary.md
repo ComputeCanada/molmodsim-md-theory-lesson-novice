@@ -17,6 +17,10 @@ Periodic boundary conditions (PBC) are used to approximate a large system by usi
 
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
+Box size and protonation state is important for protein stability:
+eLife 2018;7:e35560 DOI: 10.7554/eLife.35560
+
+
 In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
 > ## Specifying periodic box
@@ -64,8 +68,3 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 >~~~
 >{: .source}
 {: .callout}
-
-## Balancing of charges
-Neutralizing a system is a practice carried out for obtaining correct electrostatic energy during the simulation. This is done because under periodic boundary and using grid-based electrostatic the system has to be neutral. Otherwise, the electrostatic energy will essentially add to infinity from the interaction of the box with the infinite number of the periodic images. Simulation systems are most commonly neutralized by adding sodium or chloride ions.
-
-gmx genion -s file.tpr -p cg-something.top -o output.gro -neutral.
