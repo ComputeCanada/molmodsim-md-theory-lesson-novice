@@ -178,18 +178,19 @@ Molecular dynamics simulations employing constant protonation states have many d
 
 
 ### Automating Simulation Setup and Making it Reproducible
-The process of molecular dynamics system setup can be automated by saving the  whole sequence of the commands into a text file. This file (shell script) can be subsequently executed to prepare simulation systems from other pdb structure files or it can be used to reproduce a simulation setup. You can download the script carrying out all system preparation steps that we have done manually from here: [setup_GROMACS.sh]({{ page.root }}/code/setup_GROMACS.sh). Make the file setup_GROMACS.sh executable and run it. It will recreate the simulation system in the ~/scratch directory.
+The process of molecular dynamics system setup can be automated by saving the  whole sequence of the commands into a text file. This file (shell script) can be subsequently executed to prepare simulation systems from other pdb structure files or it can be used to reproduce a simulation setup. You can download the script carrying out all system preparation steps that we have done manually from here: [setup_GROMACS.sh]({{ page.root }}/code/setup_GROMACS.sh). Make the file setup_GROMACS.sh executable and run it. It will download the molecular structure file from PDB and recreate the simulation system in the ~/scratch directory.
 
 ### References
 
 
 #### Notes
 
-Rational for the own tutorial:
-- Customize to teach how to use CC for system preparation and MD
-- Focus on automation and reproducibility (scripting)
-- Discuss alternative ways to do things, shortcomings and sthrengths of different codes.
-- Integrate simulation package specific steps into one tutorial.
+Rational to develop our own MD tutorial:
+- Can be customized to teach how to use CC clusters for system preparation and MD
+- Can be focused on automation and reproducibility by  introducing batch mode and scripting.
+- Can discuss alternative ways to do things, shortcomings and sthrengths of different programs/codes.
+- Can integrate steps specific for different simulation packages in one tutorial.
+
 
 AMBER:
 changeProtState command in ParmEd
