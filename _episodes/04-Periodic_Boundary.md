@@ -17,16 +17,12 @@ Periodic boundary conditions (PBC) are used to approximate a large system by usi
 
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
-Box size and protonation state is important for protein stability:
-eLife 2018;7:e35560 DOI: 10.7554/eLife.35560
-
-
 In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
-> ## Specifying periodic box
+> ## Specifying Periodic Box
 >  **GROMACS**
 >
-> The box specification is integrated into structure file. The box parameters can be set using the [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The **editconf** program accepts the following options:
+> The box specification is integrated into structure files. The box parameters can be set using the [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The **editconf** program accepts the following options:
 >
 > **-bt**  Box type. Acceptable values: **triclinic, cubic, dodecahedron, octahedron**<br>
 >

@@ -178,7 +178,7 @@ $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 
 U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Ureu-Bradley term is implemented in the CHARMM force fields.
 
-### The CMAP potential
+### CHARMM CMAP potential
 CMAP is a grid based error correction map used in CHARMM force field to  correct for errors in nonbonded interactions, electrostatics, lack of coupling terms, inaccurate combination rules and other force field deficiencies. The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins) and [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations).
 
 ### Exclusions from Non-Bonded Interactions
@@ -217,9 +217,10 @@ Pairs of atoms connected by chemical bonds are normally excluded from computatio
 > ~~~
 >exclude scaled1-4
 >1-4scaling 0.83
+>scnb 2.0
 > ~~~
 > {: .source}
-> If **scaled1-4**  is chosen, the electrostatic interactions for 1-4 pairs are scaled by a constant factor specified by the **1-4scaling** parameter.
+> If **scaled1-4**  is chosen, the electrostatic interactions for 1-4 pairs are multiplied by a constant factor specified by the **1-4scaling** parameter. The LJ interacions for 1-4 pairs are divided by **scnb**.
 {: .callout}
 
 > ## Counting Non-Bonded Interactions

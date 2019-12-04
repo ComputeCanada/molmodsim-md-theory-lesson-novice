@@ -27,11 +27,17 @@ The cell lists method divides the simulation domain into *n* cells within edge l
 ### Verlet Lists
 A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than half of the buffer distance. At this point, the list is invalidated and the new list must be constructed. Verlet offers more efficient computation of pairwise interactions at the expense of relatively large memory requirement which can be a limiting factor. In practice, almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
-> ## Specifying Neighbour Searching Methods
+> ## Selecting Neighbour Searching Methods
 > **GROMACS**
 >
 > Neighbour searching is specified in the run parameter file **mdp**.
 > ~~~
+>cutoff-scheme  =  group
+>; Generate a pair list for groups of atoms. Since version 5.1 group list has been deprecated and only Verlet scheme is available.
+>
+>cutoff-scheme  =  Verlet
+>; Generate a pair list with buffering. The buffer size is automatically set based on verlet-buffer-tolerance, unless this is set to -1, in which case rlist will is used.
+>
 >; Neighbour search method.
 >ns-type = grid
 >; Make a grid in the box and only check atoms in neighboring grid cells.
@@ -63,7 +69,7 @@ We have learned that the LJ potential is always truncated at the cutoff distance
 
 ![Cutoff Methods](../fig/Cutoff_Methods.svg)
 <center>
-Figure Truncation Methods
+Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
 </center>
 ### Shifted Potential
 The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
@@ -77,18 +83,17 @@ A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become 
 
 In practice, increasing cutoff does not necessarily improve accuracy. There are documented cases showing opposite tendency [(Yonetani, 2006)]({{ page.root }}/reference.html#Yonetani-2006).  Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
 
-### Cutoffs Used for Development of Common Force Fields
+Table 1. Cutoffs Used in Development of the Common Force Fields
 
-| AMBER | CHARM    |  GROMACS  | OPLS
-|:-------:|:----------:|:-----------:|:------
-| 9 <span>&#8491;</span>    | 12 <span>&#8491;</span>      |   14 <span>&#8491;</span>     | 11-15 <span>&#8491;</span> (depending on a molecule size)
-
+| AMBER | CHARM  |  GROMACS  | OPLS |
+|:-----:|:------:|:---------:|:----:|
+| 8 <span>&#8491;</span> | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
 
 Different molecular properties are affected differently by various cutoff approximations. Examples of properties that are very sensitive to the choice of cutoff include the surface tension [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010), the solid–liquid coexistence line [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009), the lipid bilayer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014), and the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009).
 
 Cutoff problems are especially pronounced when energy conservation is required. The net effect could be an increase in the temperature of the system over time. The best practice is to carry out trial simulations of the system under study without temperature scaling to test it for energy leaks or sources before a production run.
 
-> ## Specifying LJ Potential Truncation Method
+> ## Selecting LJ Potential Truncation Method
 > **GROMACS**
 >
 >Truncation of LJ potential is specified in the run parameter file **mdp**.
@@ -134,17 +139,11 @@ Cutoff problems are especially pronounced when energy conservation is required. 
 ## Truncation of the Electrostatic Interactions
 Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
 
-> ## Specifying Cutoff
+> ## Selecting Cutoff Distance
 > **GROMACS**
 >
 > Cutoff and neighbour searching is specified in the run parameter file **mdp**.
 > ~~~
->cutoff-scheme  =  group
->; Generate a pair list for groups of atoms. Since version 5.1 group list has been deprecated and only Verlet scheme is available.
->
->cutoff-scheme  =  Verlet
->; Generate a pair list with buffering. The buffer size is automatically set based on verlet-buffer-tolerance, unless this is set to -1, in which case rlist will is used.
->
 > rlist = 1.0
 >; Cutoff distance for the short-range neighbour list. Active when verlet-buffer-tolerance = -1, otherwise ignored.
 >
