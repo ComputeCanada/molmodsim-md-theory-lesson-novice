@@ -52,7 +52,7 @@ The downside of this method is that it can not be scripted. The manual selection
 
 A more consistent and convenient way to select a desired form of aminoacid is to change its name in the structure file. The neutral forms of LYS, ASP, and GLU can be chosen by renaming them to LYN, ASH, and GLH respectively.  The appropriate form of HIS can be selected by renaming HIS to HIE (proton on NE1), HID (proton on NE2) or HIP (both protons).
 
-Let's change ASP26 in the protein.pdb structure created on the previous step to the neutral form ASH using the leap module from AmberTools and VMD.
+Let's change ASP20 and ASP26 in the protein.pdb structure created on the previous step to the neutral form ASH using the leap module from AmberTools or VMD.
 
 ### Selecting protonation states with the AmberTools leap module.
 ~~~
@@ -90,7 +90,8 @@ Molecular dynamics simulations employing constant protonation states have many d
 > 2. Remove non-protein molecules
 > 3. Select the positions 'B' for residues 5, 54 and the positions 'A' for all other residues that have alternative locations
 > 4. Protonate Asp79 and His53
-> 5. Save the resulting structure as 1RGG_chain_A_prot.pdb
+> 5. Rename CYS 7 and 96 into CYX (cross-linked cystein)
+> 6. Save the resulting structure as 1RGG_chain_A_prot.pdb
 >
 >>## Solution
 >> Save the following commands in a file,  e.g. prep_1RGG.vmd
@@ -110,6 +111,9 @@ Molecular dynamics simulations employing constant protonation states have many d
 >># Protonate HIS53
 >>set s [atomselect top "resid 53"]
 >>$s set resname HIP
+>># Rename cross-linked cysteins
+>>set s [atomselect top "resid 7 96"]
+>>$s set resname CYX
 >># Select the base and the alternate locations
 >>set s [atomselect top "(altloc '') or (altloc A and resid 6 13 42 85 91) or (altloc B and resid 5 54)"]
 >># Save the selection

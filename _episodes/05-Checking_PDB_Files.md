@@ -156,7 +156,9 @@ vmd> quit
 
 #### Checking a PDB File for Disulfide Bonds.
 
-1DPX.pdb
+Cross-linked cysteins should be renamed from CYS to CYX
+
+Example: 1DPX.pdb
 
 #### Useful Links
 [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) Web server can help to identify problems with PDB files and visually inspect them. It can also perform complete simulation setup, but options are limited and waiting time in the queue is quite long.
