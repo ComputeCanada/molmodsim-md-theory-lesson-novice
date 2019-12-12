@@ -1,7 +1,7 @@
 ---
 title: "Checking PDB Files"
-teaching: 30
-exercises: 0
+teaching: 15
+exercises: 20
 questions:
 - "What problems are commonly found in PDB files?"
 - "Why fixing errors in PDB files is essential for a simulation?"
@@ -31,8 +31,8 @@ Small errors in the input structure may cause MD simulations to become unstable 
 
 Some problems can be identified and corrected automatically (e.g. missing atoms) while other may have mutiple solutions (e.g. alternate conformations, several protein chains, non-protein molecules) and require researcher's decision.
 
-#### Download a Protein Structure File from PDB
-Let's create the md_system directory for the MD simulation setup and download 1ERT protein structure file into it.
+#### Downloading a Protein Structure File from PDB
+Let's start with creating a directory for MD simulation setup and downloading a protein structure file into it:
 ~~~
 cd ~/scratch
 mkdir md_system
@@ -42,30 +42,19 @@ wget http://files.rcsb.org/view/1ERT.pdb
 {: .bash}
 
 #### Checking a PDB File for Presence of Non-Protein Molecules
-Any non-protein molecules present in a PDB file would require special treatment. For this introductory lesson we will select protein only.
-
-Let's check if the downloaded file has any non-protein atoms:
+Any non-protein molecules present in a PDB file would require special treatment. Let's check if the downloaded file has any non-protein atoms:
 ~~~
 grep "^HETATM " 1ERT.pdb | wc -l
 ~~~
 {: .bash}
 ~~~
-      92
+      46
 ~~~
 {: .output}
-We used the **grep** command to find all lines beginning with the word "ATOM" and then we sent these lines to the character counting command **wc**.
+We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will limit the simulation to standard protein residues.
 
-The output of the command indicates that the file "1GOA.pdb" contains 92 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will limit the simulation to standard protein residues.
+Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". We will use he molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task:
 
-Let's select only protein atoms from the PDB file (the "ATOM" and the "TER" records) and save them in the new file **protein.pdb**:
-~~~
-grep "^ATOM\|^TER " 1ERT.pdb > protein.pdb
-~~~
-{: .bash}
-
-We selected only protein atoms from the PDB file using the standard unix shell commands. We coud also use the molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task:
-
-**VMD**
 ~~~
 module load nixpkgs/16.09  intel/2016.4 vmd/1.9.3
 vmd
@@ -76,9 +65,22 @@ vmd> quit
 ~~~
 {: .source}
 
+
+> ## Selecting Protein Atoms Using Shell Commands
+> Use "grep" command to select protein atoms (the "ATOM" and the "TER" records) from a PDB file and save them in a new file.
+>
+> > ## Solution
+> >~~~
+> > grep "^ATOM\|^TER " 1ERT.pdb > protein.pdb
+> >~~~
+> >{: .bash}
+> {: .solution}
+{: .challenge}
+
+
 #### Checking a PDB File for Alternate Conformations.
 
-Some PDB files may contain alternate positions of residues. Only one conformation is acceptable for molecular dynamics simulation. Standard simulation preparation programs (for example pdb2gmx or pdb4amber) will automatically select the first conformation labeled by "A" in the altLoc column. If you want to keep a different conformation, all conformations except the desired one must be removed from the PDB file.
+Some PDB files may contain alternate positions of residues. Only one conformation is acceptable for molecular dynamics simulation. Standard simulation preparation programs (for example pdb2gmx or pdb4amber) will automatically select the first conformation labeled "A" in the "altLoc" column. If you want to keep a different conformation, all conformations except the desired one must be removed from a PDB file.
 
 Let's check if the downloaded file has any alternate conformations:
 ~~~
@@ -86,35 +88,11 @@ grep "^.\{16\}[A-Z]" 1ERT.pdb
 ~~~
 {: .bash}
 
-The output of the command indicates that the residues  20, 43 and 90 have alternate conformations A and B.
+The output of the command tells us that residues 20, 43 and 90 have alternate conformations A and B.
 
-Let's select the conformation B for all aminoacids:
+Let's select conformations A for residues 43, 90 and conformation B for resid 20 using VMD:
 ~~~
-grep "^.\{16\}[B]" 1ERT.pdb
-~~~
-{: .bash}
-
-In addition to the conformation B we need to select the base conformation (space in the altLoc column).
-~~~
-grep "^.\{16\}[ B]" 1ERT.pdb
-~~~
-{: .bash}
-
-Finally we can filter out everything except the protein atoms and save the result in the file **protein.pdb**:
-~~~
-grep "^.\{16\}[ B]" 1ERT.pdb | grep "^ATOM \|^TER " > protein.pdb
-~~~
-{: .bash}
-
-We can also be more specific and select a specific alternate conformation for different aminoacids (for example AHIS43,  BASP20, and BSER90):
-~~~
-grep -v "AHIS A  43" 1ERT.pdb | grep -v "ASER A  90" | grep -v "BASP A  20" | grep "^ATOM \|^TER " > protein.pdb
-~~~
-{: .bash}
-
-**Using VMD:**
-~~~
-module load nixpkgs/16.09  intel/2016.4 vmd/1.9.3
+module load nixpkgs/16.09 intel/2016.4 vmd/1.9.3
 vmd
 vmd> mol new 1ERT.pdb
 vmd> set s [atomselect top "(protein and altloc '') or (altloc A and resid 43 90) or (altloc B and resid 20)"]
@@ -123,13 +101,27 @@ vmd> quit
 ~~~
 {: .bash}
 
+
+
 > ## Generating Protein Coordinate File
-> 1. Retrieve the coordinate file for barnase (PDB code 1BNI) and check if there any alternate conformations in the file.
-> 3. Generate structure file for a single molecule (there are 3 molecules in the file). Hint: use chain identifiers to select a molecule. Chain identifiers are found in the column 22 of PDB files.
+> 1. Make PDB file containing only conformations "B" from the file 1ERT.pdb
+> 2. Make PDB file containing only conformations AHIS43, BASP20, BSER90 from the file 1ERT.pdb
+> 3. Retrieve the coordinate file for barnase (PDB code 1BNI) and check if there any alternate conformations in the file.
+> 4. Generate structure file for a single molecule (there are 3 molecules in the file). Hint: use chain identifiers to select a molecule. Chain identifiers are found in the column 22 of PDB files.
 >
 > > ## Solution
-> > Download PDB file:
-> > >~~~
+> Make PDB file containing only conformations “B” from the file 1ERT.pdb:
+> >~~~
+> >grep "^.\{16\}[ B]" 1ERT.pdb | grep "^ATOM \|^TER " > protein.pdb
+> >~~~
+> >{: .bash}
+>  Make PDB file containing conformations AHIS43, BASP20, BSER90 from the file 1ERT.pdb
+>>~~~
+>> grep -v "AHIS A  43" 1ERT.pdb | grep -v "ASER A  90" | grep -v "BASP A  20" | grep "^ATOM \|^TER " > protein.pdb
+>>~~~
+>>{: .bash}
+> > Download PDB file 1BNI:
+> >~~~
 > >wget http://files.rcsb.org/view/1BNI.pdb
 > >~~~
 > >{: .bash}
@@ -155,12 +147,16 @@ vmd> quit
 {: .challenge}
 
 #### Checking a PDB File for Disulfide Bonds.
+Disulfide bonds are covalent bonds between the sulfur atoms of two cystein residues. They are very important for stabilization of protein structure.
+Disulfide bonds are fairly easy to spot in PDB files with any visualisation program. For example [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can identify disulfide bonds as well as many other problems in PDB files. For MD simulations cross-linked cysteins must be renamed to "CYX" to distinguish them from normal cysteins.
 
-Cross-linked cysteins should be renamed from CYS to CYX
+> ## Finding Cross-Linked Cysteins
+> Find all disulfide bonds in PDB entry 1DPX using MDWeb or VMD.
+>
+{: .challenge}
 
-Example: 1DPX.pdb
 
 #### Useful Links
-[MDWeb](http://mmb.irbbarcelona.org/MDWeb2) Web server can help to identify problems with PDB files and visually inspect them. It can also perform complete simulation setup, but options are limited and waiting time in the queue is quite long.
+[MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can help to identify problems with PDB files and visually inspect them. It can also perform complete simulation setup, but options are limited and waiting time in the queue is quite long.
 
 [CHARMM-GUI](http://www.charmm-gui.org) can be used to prepare a simulation for CHARMM program. CHARMM-GUI offers some other useful features, for example the [Membrane Builder](http://www.charmm-gui.org/?doc=input/membrane.bilayer) and the  [Multicomponent Assembler](http://www.charmm-gui.org/?doc=input/multicomp).
