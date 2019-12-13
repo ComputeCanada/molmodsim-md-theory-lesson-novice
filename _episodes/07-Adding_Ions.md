@@ -3,9 +3,9 @@ title: "Solvating a System and Adding Ions"
 teaching: 20
 exercises: 5
 questions:
-- "Why the simulation system should be neutralized"
+- "Why the simulation system should be neutralized?"
 - "How to add water and ions to a simulation system?"
-- "What size/shape of a solvent box should I use?"
+- "How to choose size and shape of a solvent box?"
 objectives:
 - "Explain why it is necessary to neutlalize the simulation system"
 - "Learn how to neutralize a system"
@@ -52,7 +52,7 @@ tleap
 
 
 ## Adding Ions to Mimic the Macroscopic Salt Concentration
-To mimic the macroscopic salt concentration in the environment being studied we will need to add more cation/anion pairs to a simulation system. The number of ion pairs can be estimated using the formula:
+To mimic the macroscopic salt concentration in the environment being studied we will need to add more cation/anion pairs to the simulation system. The number of ion pairs can be estimated using the formula:
 
 $N_{Ions}=0.0187\cdot[Molarity]\cdot{N_{WaterMol}}$
 
@@ -66,9 +66,11 @@ Solvated macromolecules rotate during simulations. Furthermore macromolecules ma
 
  A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron or the truncated octahedron. These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[ref]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[ref]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
 
-In this lesson we will create a simple cubic solvent box. As we discussed above, a properly solvated simulation system should have at least 10 <span>&#8491;</span> distance between the solute and the edge of the periodic box after equilibration. Standard practice is to tile a pre-equilibrated solvent box across the system and eliminate solvent molecules which clash with the solute. When water is initially added to the system in this way, solute-solvent interactions are not optimal and some small gaps between the water molecules and the macromolecule are inevitable. In the process of equilibration the water molecules will move to fill the gaps and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box wil become smaller. To compensate for this box shrinkage we need to start with a bigger than 10 <span>&#8491;</span> solvent padding.
+In this lesson we will create a simple cubic solvent box. As we discussed above, a properly solvated simulation system should have at least 10 <span>&#8491;</span> distance between the solute and the edge of the periodic box after equilibration. Standard practice is to tile a pre-equilibrated solvent box across the system and eliminate solvent molecules which clash with the solute.
 
-We will use the *solvateBox* command to create the periodic solvent box around the macromolecule. The *solvateBox* command has many options. Let's create a cuboid water box around the 1RGG protein. We will use the pre-equilibrated box of SPCE water (SPCBOX). We will set the minimum distance between any atom in the solute and the edge of the periodic box to 15<span>&#8491;</span>, and we will request an isometric (cubic) box:
+When water is added to the system in this way, some VDW voids at the macromolecule and the box interfaces are inevitable because packing is not perfect. In the process of equilibration the water molecules will move to fill the voids and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box wil become smaller. To compensate for this box shrinkage we need to start with a larger box size than the desired 10 <span>&#8491;</span> solvent padding.
+
+We will use the *solvateBox* command to create the periodic solvent box around the macromolecule. The *solvateBox* command has many options. Let's create a cuboid water box around the 1RGG protein. We will use the pre-equilibrated box of SPCE water (SPCBOX), set the minimum distance between the solute and the edge of the box to 15<span>&#8491;</span>, and request an isometric (cubic) box:
 ~~~
 > solvatebox s SPCBOX 15 iso
 ~~~
@@ -87,7 +89,6 @@ We will use the *solvateBox* command to create the periodic solvent box around t
 
 Now that we know the number of water molecules in the simulation system, we can add salt to the desired concentration.
 
-
 > ## Preparing Aqueous Salt Solution
 > How many Na+ and Cl- ions do we need to add to the simulation box with 1RGG protein and 10202 water molecules to prepare 0.15 M salt solution?
 > Calculate the number of ions using two methods: the formula above and the [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server.
@@ -105,6 +106,8 @@ We already have the neutralized and solvated simulation system, and in the exerc
 ~~~
 {: .bash}
 
+
+## Generating Molecular Topology for Simulation with *AMBER* or *NAMD*
 Setup of our simulation is almost complete. Our protein has cross-linked cysteine residues, so the last thing to do is to make disulfide bond between Cys7 and Cys96:
 
 ~~~
@@ -121,7 +124,7 @@ We can now save the molecular topology (*parm7*) file and *AMBER* coordinates (*
 {: .bash}
 
 
-### Summary: script for LEaP to prepare topology and coordinate files
+### Summary: script for LEaP to prepare the topology and the coordinate files
 Save the following commands in a file, e.g. solvate_1RGG.leap
 ~~~
 source leaprc.water.spce
@@ -136,4 +139,105 @@ savepdb s 1RGG_chain_A_solvated.pdb
 quit
 ~~~
 {: .bash}
-Execute the script: tleap < solvate_1RGG.leap
+Execute the script: tleap -f solvate_1RGG.leap
+
+
+## Generating Molecular Topology for Simulation with *GROMACS*.
+### What *GROMACS* force fields are available?
+When the *GROMACS* module is loaded the environment variable *EBROOTGROMACS* will be set. This variable is pointing to the GROMACS installation directory. Knowing where the *GROMACS* installation is we can find out what force fields are available:
+~~~
+$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
+$ ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename | column -c 80
+~~~
+{: .bash}
+~~~
+amber03.ff		amber99sb-ildn.ff	gromos45a3.ff
+amber94.ff		amberGS.ff		gromos53a5.ff
+amber96.ff		charmm27.ff		gromos53a6.ff
+amber99.ff		gromos43a1.ff		gromos54a7.ff
+amber99sb.ff		gromos43a2.ff		oplsaa.ff
+~~~
+{: .output}
+
+### Generate *GROMACS* topology and coordinate files from the solvated system
+We can generate gromacs topology from the complete simulation system prepared previously and saved in the file 1RGG_chain_A_solvated.pdb. For *pdb2gmx* to work correctly we need to rename ions to NA and CL and
+rename CYX to CYS:
+
+~~~
+cat 1RGG_chain_A_solvated.pdb |\
+sed s/"Cl-  Cl-  "/" CL  CL  B"/g |\
+sed s/"Na+  Na+  "/" NA  NA  B"/g |\
+sed s/CYX/CYS/g > 1RGG_chain_A_solvated_gro.pdb
+~~~
+{: .bash}
+
+Let's make the topology using the *AMBER ff99SBildn* force field and the *spc/e* water model:
+~~~
+$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
+$ gmx pdb2gmx -f 1RGG_chain_A_solvated_gro.pdb -ff amber99sb-ildn -water spce -ignh -chainsep id -ss << EOF >log
+y
+EOF
+~~~
+{: .bash}
+
+By default *pdb2gmx* program saved topology, *GROMACS* - formatted coordinates, and position restraints in the files *topol.top*, *conf.gro*, and *posre.itp*, respectively. The names of the output files can be changed by using output options *-p*, *-o* and *-i*.
+
+### Solvate protein and add ions using *GROMACS* module *pdb2gmx*.
+To demonstate how to solvate protein and add ions using *gromacs* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps using *pdb2gmx*. Note that in this case the neutralizing ions will be added in randomly selected positions.
+
+First we generate the topology and the coordinate file using the *AMBER ff99SBildn* force field and the *spc/e* water model:
+~~~
+$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
+$ gmx pdb2gmx -f 1RGG_chain_A_prot.pdb -ff amber99sb-ildn -water spce -ignh -chainsep id -ss << EOF >log
+y
+EOF
+~~~
+{: .bash}
+
+Once the gromacs coordinate file *conf.gro* is created we can add a periodic box to it:
+~~~
+gmx editconf -f conf.gro -o boxed.gro -c -d 1.5 -bt cubic
+~~~
+{: .bash}
+The option '-c' positions solute in the middle of the box, the option -d specifies the distance (in nm) between the solute and the box.
+
+~~~
+gmx solvate -cp boxed.gro -cs spc216.gro -o solvated.gro -p topol.top
+~~~
+{: .bash}
+ Next, we need to create MD run parameters file. An empy file will be sufficient for now. Using the empty file mdrun.mdp we can generate the binary topology *.tpr* file:
+~~~
+$ touch mdrun.mdp
+$ gmx grompp -f mdrun.mdp -p topol.top -c solvated.gro -o solvated.tpr >& grompp.log
+~~~
+{: .bash}
+When the grompp program runs it generates a lot of diagnostic messages and prints out the net charge. We saved the output in the file grompp.log so that we can find out what is the total charge of the system:
+~~~
+grep "total charge" grompp.log
+~~~
+{: .bash}
+~~~
+System has non-zero total charge: -5.000000
+~~~
+{: .output}
+
+The *GROMACS genion* command replaces randomly chosen solvent molecule with ions. We will first add cation/anion pairs to a desired salt concentration and then neutralize the system by adding sodium ions (the options *-conc* [Mol/L] and *-neutral*):
+~~~
+$ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -neutral -conc 0.15 -neutral -o neutralized.pdb
+~~~
+{: .bash}
+
+By default genion uses Na+ and Cl- ions. Other ions can be chosen by selecting options *-pname* [positive ion] and *-nname* [negative ion]
+
+The topology file *topol.top* has been updated to include 38 sodium and 33 chloride ions:
+~~~
+$ tail -n 4 topol.top
+~~~
+{: .bash}
+~~~
+Protein_chain_A     1
+SOL         11482
+NA               38
+CL               33
+~~~
+{: .output}

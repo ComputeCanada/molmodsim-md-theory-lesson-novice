@@ -53,10 +53,13 @@ grep "^HETATM " 1ERT.pdb | wc -l
 {: .output}
 We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will limit the simulation to standard protein residues.
 
-Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". We will use he molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task:
-
+Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". We will use he molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task. To make the program available we need to load its module:
 ~~~
-module load nixpkgs/16.09  intel/2016.4 vmd/1.9.3
+module load nixpkgs/16.09 intel/2016.4 vmd/1.9.3
+~~~
+{: .bash}
+After the module is loaded we can start using the program:
+~~~
 vmd
 vmd> mol new 1ERT.pdb
 vmd> set s [atomselect top "protein"]
@@ -92,7 +95,6 @@ The output of the command tells us that residues 20, 43 and 90 have alternate co
 
 Let's select conformations A for residues 43, 90 and conformation B for resid 20 using VMD:
 ~~~
-module load nixpkgs/16.09 intel/2016.4 vmd/1.9.3
 vmd
 vmd> mol new 1ERT.pdb
 vmd> set s [atomselect top "(protein and altloc '') or (altloc A and resid 43 90) or (altloc B and resid 20)"]
@@ -102,8 +104,7 @@ vmd> quit
 {: .bash}
 
 
-
-> ## Generating Protein Coordinate File
+> ## Preparing a Protein Coordinate File for Simulation
 > 1. Make PDB file containing only conformations "B" from the file 1ERT.pdb
 > 2. Make PDB file containing only conformations AHIS43, BASP20, BSER90 from the file 1ERT.pdb
 > 3. Retrieve the coordinate file for barnase (PDB code 1BNI) and check if there any alternate conformations in the file.
@@ -137,6 +138,7 @@ vmd> quit
 > > {: .bash}
 >> Select chain A using VMD:
 > >~~~
+> >vmd
 > >vmd> mol urlload pdb "http://files.rcsb.org/view/1BNI.pdb"
 > >vmd> set s [atomselect top "chain A"]
 > > vmd> $s writepdb barnase.pdb
@@ -148,10 +150,10 @@ vmd> quit
 
 #### Checking a PDB File for Disulfide Bonds.
 Disulfide bonds are covalent bonds between the sulfur atoms of two cystein residues. They are very important for stabilization of protein structure.
-Disulfide bonds are fairly easy to spot in PDB files with any visualisation program. For example [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can identify disulfide bonds as well as many other problems in PDB files. For MD simulations cross-linked cysteins must be renamed to "CYX" to distinguish them from normal cysteins.
+Disulfide bonds are fairly easy to spot in PDB files with any visualisation program. For example [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can identify disulfide bonds as well as many other problems in PDB files. *GROMACS pdb2gmx* module can add S-S bonds to the topology automatically based on the distance between sulfur atoms (option *-ss*). For MD simulations with *AMBER/NAMD* cross-linked cysteins must be renamed to "CYX" to distinguish them from normal cysteins.
 
 > ## Finding Cross-Linked Cysteins
-> Find all disulfide bonds in PDB entry 1DPX using MDWeb or VMD.
+> Find all disulfide bonds in PDB entry 1DPX using [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) or VMD.
 >
 {: .challenge}
 
