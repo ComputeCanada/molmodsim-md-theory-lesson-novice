@@ -1,7 +1,7 @@
 ---
 title: "Checking PDB Files"
-teaching: 15
-exercises: 20
+teaching: 20
+exercises: 10
 questions:
 - "What problems are commonly found in PDB files?"
 - "Why fixing errors in PDB files is essential for a simulation?"
@@ -151,11 +151,6 @@ vmd> quit
 #### Checking a PDB File for Disulfide Bonds.
 Disulfide bonds are covalent bonds between the sulfur atoms of two cystein residues. They are very important for stabilization of protein structure.
 Disulfide bonds are fairly easy to spot in PDB files with any visualisation program. For example [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can identify disulfide bonds as well as many other problems in PDB files. *GROMACS pdb2gmx* module can add S-S bonds to the topology automatically based on the distance between sulfur atoms (option *-ss*). For MD simulations with *AMBER/NAMD* cross-linked cysteins must be renamed to "CYX" to distinguish them from normal cysteins.
-
-> ## Finding Cross-Linked Cysteins
-> Find all disulfide bonds in PDB entry 1DPX using [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) or VMD.
->
-{: .challenge}
 
 
 #### Useful Links

@@ -1,17 +1,17 @@
 ---
 title: "Periodic Boundary Conditions"
-teaching: 10
+teaching: 20
 exercises: 0
 questions:
-- "How to simlate a large system?"
-- "Why the simulation system should be neutralized"
+- "How to simulate an infinitely large system?"
+- "How to setup a periodic box"
 objectives:
 - "Explain why and when periodic boundary conditions are used"
-- "Explain how to setup periodic box"
-- "Explain why it is necessary to neutlalize the simulation system"
+- "Learn how the shape and the size of a periodic box can affect the simulation"
 keypoints:
 - "Periodic boundary conditions are used to approximate an infinitely large system"
--  "Simulation system should be neutralized by adding counterions"
+- "Periodic box should not restrict molecular motions in any way"
+- "The macromolecule shape, rotation and conformational changes should be taken into account in setup of the periodic box"
 ---
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. Application of PBC to simulations allows to include the influence of bulk solvent or crystalline environments.
 
@@ -22,21 +22,24 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 > ## Specifying Periodic Box
 >  **GROMACS**
 >
-> The box specification is integrated into structure files. The box parameters can be set using the [editconf](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The **editconf** program accepts the following options:
+> The box specification is integrated into structure files. The box parameters can be set using the [*editconf*](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The *editconf* program accepts the following options:
 >
-> **-bt**  Box type. Acceptable values: **triclinic, cubic, dodecahedron, octahedron**<br>
+> *-bt* &emsp; Box type: *triclinic, cubic, dodecahedron, octahedron*<br>
 >
-> **-box** Box vectors lengths **a,b,c** in nm.<br>
+> *-box* &emsp; Box vectors lengths *a, b, c* in nm.<br>
 >
-> **-angles** Box vectors angles **bc,ac,ab** in degrees.
+> *-angles* &emsp; Box vectors angles *bc, ac, ab* in degrees.
 >
-> **-d** Distance between the solute and the box in nm.
+> *-d* &emsp; Distance between the solute and the box in nm.
 >
+>Example:
 >~~~
-> gmx editconf -f system.gro -o system_wbox.gro -d 1.0 -bt cubic
+>wget http://files.rcsb.org/view/1lyz.pdb
+>gmx pdb2gmx -f 1lyz.pdb -ff amber99sb-ildn -water spce -ignh
+>gmx editconf -f conf.gro -o conf_boxed.gro -d 1.0 -bt cubic
 >~~~
 > {: .source}
-> The **editconf** program appends box vectors to the structure (**.gro**) file. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the **CRYST1** record of a PDB file with the equations:
+> in the example above the *editconf* program will append box vectors to the structure file *'conf.gro'* and save it in the file *'conf_boxed.gro'*. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the *CRYST1* record of a PDB file with the equations:
 >
 >$$xx=a, yy=b\cdot\sin(\gamma), zz=\frac{v}{(a*b*\sin(\gamma))}$$
 >
@@ -48,9 +51,9 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 >
 > **NAMD**
 >
-> Periodic box is specified in the run parameter file **mdin** by three unit cell vectors:
+> Periodic box is specified in the run parameter file by three unit cell vectors:
 >
-> **cellBasisVector1**, **cellBasisVector2**, **cellBasisVector3** in <span>&#8491;</span>.
+> *cellBasisVector1*, *cellBasisVector2*, *cellBasisVector3* in <span>&#8491;</span>.
 >~~~
 > # cubic box
 > cellBasisVector1 100 0 0
@@ -58,9 +61,24 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 > cellBasisVector3 0 0 100
 >~~~
 >{: .source}
-> Alternatively periodic box parameters can be read from the **.xsc** (eXtended System Configuration) file by using the **extendedSystem** keyword.  If this keyword is used **cellBasisVectors** are ignored.  NAMD always generates  **.xsc** files at runtime.
+> Alternatively periodic box parameters can be read from the *.xsc* (eXtended System Configuration) file by using the *extendedSystem* keyword.  If this keyword is used *cellBasisVectors* are ignored.  NAMD always generates  *.xsc* files at runtime.
 >~~~
 > extendedSystem restart.xsc
 >~~~
 >{: .source}
 {: .callout}
+
+## What size/shape of a periodic box should I use?
+
+Solvated macromolecules rotate during simulations. Furthermore macromolecules may undergo conformational changes. Often these changes are of major interest and shoud not be restricted in any way. If the molecule is not spherical and the box dimension is not large enough rotation will result in the interaction between copies. This artefactual interaction may influence the motions of the system and affect the outcome of the simulation. To avoid these problems the minimum box dimension should be larger than the largest dimension of the macromolecule plus at least 10 <span>&#8491;</span>.
+
+ A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron or the truncated octahedron. These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[ref]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[ref]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
+
+
+
+ >## Comparing periodic boxes
+ >Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and octahedral boxes with the 15<span>&#8491;</span> distance between the solute and the box edge.
+>
+>Compare the volumes of the boxes.
+>Which of the boxes will be the fastest to simulate?
+{: .challenge}
