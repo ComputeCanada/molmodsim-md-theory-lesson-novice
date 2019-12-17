@@ -3,15 +3,15 @@ title: "Periodic Boundary Conditions"
 teaching: 20
 exercises: 0
 questions:
-- "How to simulate an infinitely large system?"
-- "How to setup a periodic box"
+- "How to simulate a bulk (gas, liquid or solid) system by using only a small part?"
 objectives:
-- "Explain why and when periodic boundary conditions are used"
-- "Learn how the shape and the size of a periodic box can affect the simulation"
+- "Understand why and when periodic boundary conditions are used."
+- "Understand how shape and size of a periodic box can affect simulation."
+- "Learn how to set periodic box parameters in GROMACS and NAMD."
 keypoints:
-- "Periodic boundary conditions are used to approximate an infinitely large system"
-- "Periodic box should not restrict molecular motions in any way"
-- "The macromolecule shape, rotation and conformational changes should be taken into account in setup of the periodic box"
+- "Periodic boundary conditions are used to approximate an infinitely large system."
+- "Periodic box should not restrict molecular motions in any way."
+- "The macromolecule shape, rotation and conformational changes should be taken into account in chosing the periodic box parameters."
 ---
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. Application of PBC to simulations allows to include the influence of bulk solvent or crystalline environments.
 

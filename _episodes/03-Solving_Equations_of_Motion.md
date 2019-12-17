@@ -3,18 +3,19 @@ title: "Advancing Simulation in Time"
 teaching: 30
 exercises: 0
 questions:
-- "How is simulation time advanced?"
-- "How to choose an appropriate simulation time step?"
+- "How is simulation time advanced in a molecular dynamics simulation?"
+- "What factors are limiting a simulation time step?"
+- "How to accelerate a simulation?"
 objectives:
-- "Explain how simulation is advanced in time"
-- "Explain how to choose simulation timestep"
-- "Explain how simulation time step can be increased"
+- "Understand how simulation is advanced in time."
+- "Learn how to choose time parameters and constraints for an efficient and accurate simulation."
+- "Learn how to specify time parameters and constraints in GROMACS and NAMD."
 keypoints:
-- "Simulation time step must be short enough to describe the fastest motion"
-- "Time step can be increased if bonds involving hydrogens are constrained"
-- "Additional time step increase can be acheved by constraining all bonds and angles involving hydrogens"
-- "A good integration algorithm for MD should be time-reversible and energy conserving"
-- "The most widely used integration method is the velocity Verlet"
+- "A good integration algorithm for MD should be time-reversible and energy conserving."
+- "The most widely used integration method is the velocity Verlet."
+- "Simulation time step must be short enough to describe the fastest motion."
+- "Time step can be increased if bonds involving hydrogens are constrained."
+- "Additional time step increase can be acheved by constraining all bonds and angles involving hydrogens."
 ---
 To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step $$\delta{t}$$ during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
@@ -97,7 +98,7 @@ In molecular dynamics stretching of the bonds with the lightest atom H is usuall
 
 If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained. By replacing bond vibrations with holonomic (not changing in time) constraints the simulation step can be doubled since the next fastest motions (bond vibrations involving only heavy atoms and angles involving hydrogen atoms) have a period of about 20 fs. Further increase of the simulation step requires constraining bonds between all atoms and angles involving hydrogen atoms. Then the next fastest bond vibration will have 45 fs period allowing for another doubling of the simulation step.
 
-To accelerate simuations the electrostatic interactions outside of a specified cutoff distance can be computed less often than the short range bonded and non-bonded interactions. It is also possible to employ an intermediate timestep for the short-range non-bonded interactions, performing only bonded interactions every timestep.
+To accelerate a simulation the electrostatic interactions outside of a specified cutoff distance can be computed less often than the short range bonded and non-bonded interactions. It is also possible to employ an intermediate timestep for the short-range non-bonded interactions, performing only bonded interactions every timestep.
 
 > ## Specifying Time Parameters
 > **GROMACS**

@@ -5,10 +5,10 @@ exercises: 10
 questions:
 - "What is Molecular Dynamics and how can I benefit from using it?"
 - "What is a force field?"
-- "What mathematical functions are used to approximate interactions between atoms and molecules in MD simulations?"
+- "What energy terms are used in biomolecular force fields mathematical?"
 objectives:
-- "Explain strengths and weaknesses of MD simulations"
-- "Explain the interactions between particles in a molecular dynamics simulation"
+- "Understand strengths and weaknesses of MD simulations"
+- "Understand how the interactions between particles in a molecular dynamics simulation are modeled"
 keypoints:
 - "Molecular dynamics simulates atomic positions in time using forces acting between atoms"
 - "The forces in molecular dynamics are approximated by simple empirical functions"

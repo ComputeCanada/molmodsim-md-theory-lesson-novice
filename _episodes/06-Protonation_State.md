@@ -1,18 +1,18 @@
 ---
 title: "Assigning Protonation States to Residues in a Protein"
 teaching: 30
-exercises: 0
+exercises: 10
 questions:
-- "Why is it important to use the correct protonation state?"
+- "Why titratable aminoacid residues can have different protonation states?"
 - "How to determine protonation state of a residue in a protein?"
 - "What are the weaknesses of fixed protonation state simulations?"
 objectives:
-- "Explain why it is necessary to assign the correct protonation state"
+- "Understand why it is necessary to assign the correct protonation state"
 - "Learn how to determine protonation state of a protein"
 - "Learn how to assign protonation state to a residue"
 keypoints:
 - "Assigning correct protonation states of aminoacids in proteins is crucial for realistic MD simulations"
-- "Conformational changes in proteins may be accompanied by changes in protonation pattern"
+- "Conformational changes in proteins may be accompanied by changes in protonation pattern."
 ---
 
 The protonation states of titratable aminoacids (Arg, Lys, Tyr, Cys, His, Glu, Asp) depend on the local microenvironment of the residue and the pH. For example, highly polar microenvironment will stabilize the charged form, while in less polar microenvironment the neutral form will predominate.

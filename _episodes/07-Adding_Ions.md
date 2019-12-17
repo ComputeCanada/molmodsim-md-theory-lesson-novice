@@ -7,14 +7,15 @@ questions:
 - "How to add water and ions to a simulation system?"
 - "How to choose size and shape of a solvent box?"
 objectives:
-- "Explain why it is necessary to neutlalize the simulation system"
-- "Learn how to neutralize a system"
-- "Learn how to make a salt solution with a specific molarity"
-- "Learn how to solvate a macromolecule"
+- "Understand why it is necessary to neutlalize the simulation system."
+- "Neutralize a system."
+- "Solvate a macromolecule."
+- "Add ions to a simulation system to mimic a salt solution."
+- "Generate molecular topology for simulation with GROMACS and NAMD."
 keypoints:
-- "Simulation system must be neutralized by adding counterions to obtain the correct electrostatic energy"
-- "Ions are added to a simulations system to mimic composition of a local macromolecule environment"
-- "Solvent box should be large enough to allow for unrestricted conformational dynamics of a macromolecule"
+- "Simulation system must be neutralized by adding counterions to obtain the correct electrostatic energy."
+- "Ions are added to a simulations system to mimic composition of a local macromolecule environment."
+- "Solvent box should be large enough to allow for unrestricted conformational dynamics of a macromolecule."
 ---
 There are two main reasons to add ions to a simulation system:
 

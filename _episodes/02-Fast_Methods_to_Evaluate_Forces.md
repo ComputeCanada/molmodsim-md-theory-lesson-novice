@@ -8,12 +8,14 @@ questions:
 - "What is a cutoff distance?"
 - "How to choose the appropriate cutoff distance?"
 objectives:
-- "Explain how nonbonded interactions are truncated."
-- "Determine the appropriate cutoff distance and truncation method."
-- "Set cutoff distance and truncation method in MD input files."
+- "Understand how nonbonded interactions are truncated."
+- "Understand how a subset of particles for calculation of short-range nonbonded is selected."
+- "Learn how to choose the appropriate cutoff distance and truncation method."
+- "Learn how to select cutoff distance and truncation method in GROMACS and NAMD."
 keypoints:
-- Nonbonded interactions are truncated to speed up simulations of large systems.
-- To ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field and the size of the periodic box.
+- The calculation of nonbonded forces is the most computationally demanding part of a molecular dynamics simulation.
+- Nonbonded interactions are truncated to speed up simulations.
+- The cutoff distance should be appropriate for the force field and the size of the periodic box.
 ---
 
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.

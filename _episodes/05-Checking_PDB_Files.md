@@ -5,13 +5,12 @@ exercises: 10
 questions:
 - "What problems are commonly found in PDB files?"
 - "Why fixing errors in PDB files is essential for a simulation?"
-- "How to find and fix problems in PDB files?"
 objectives:
-- "Explain why it is necessary to check PDB files before simulation"
-- "Explain what things to look for in a PDB file"
-- "Explain how to fix the common errors in PDB files"
+- "Understand why it is necessary to check PDB files before simulation."
+- "Learn how to look for problems in PDB files."
+- "Learn how to fix the common errors in PDB files."
 keypoints:
-- "Small errors in the input structure may cause MD simulations to became unstable or give unrealistic results"
+- "Small errors in the input structure may cause MD simulations to became unstable or give unrealistic results."
 ---
 
 In this lesson we will go through the steps of setting up a fully solvated protein system for simulation with GROMACS and AMBER/NAMD. While there are many commercial programs and interactive graphical interfaces designed to assist with the system preparation, we will describe system preparation using only free command line driven tools. The emphasis of this lesson is to explore the ways to create a reproducible molecular modeling workflow by automating preparation and simulation steps.
