@@ -121,7 +121,7 @@ Mn bound to asp558?
 
 We first need to create a PDB file containing all RNA atoms placed at a reasonable positions. At this initial step we are not particularly concerned with the quality of the 3D structure because we will refine it afterwards.
 
-Insertion of the missing residues can be done using freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. The latter method is preferrable because online server offers an automated process with a limited set of options and the output PDB files will need more processing steps afterwards.
+Insertion of the missing residues could be done using freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. However, the automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. In addition modeRNA server offers a limited set of options and the output PDB files will need more processing steps afterwards. This is not desirable in our case (we want to keep all experimental positions untouched). For these reasons we will use the standalone modeRNA package.
 
 #### Installing [ModeRNA](http://genesilico.pl/moderna/) on CC systems.
 
@@ -204,7 +204,7 @@ write_model(mD, 'chain_D_model_B.pdb')
 ```
 
 Exercise:
-You may wonder why did we do this manually and did not just used ModeRNA server? Try using it. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
+How ModeRNA server will do the same task? Try using it. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
 
 
 **Pitfalls of ModeRNA server.**
