@@ -47,7 +47,8 @@ $\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}$
 
 $\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}[a(t)+a(t+\delta{t})]\delta{t}$
 
-The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm. Due to its simplicity and stability is has become the most widely used algorithm in the MD simulations.
+The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm.
+- *Due to its simplicity and stability the Velocity Verlet has become the most widely used algorithm in the MD simulations.*
 
 
 ### The Leap Frog Algorithm
