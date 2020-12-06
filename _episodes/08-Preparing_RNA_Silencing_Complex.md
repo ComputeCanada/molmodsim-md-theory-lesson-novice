@@ -310,8 +310,7 @@ These commands will load libraries of phosphorylated 5' terminal nucleotides and
 
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
-**Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).**
-Charmm gui changes residue names to 3-letter code and changes chain ID to "R".
+**Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).** You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to CHARMM 3-letter code and changes chain ID to "R".
 
 2. Flag frozen atoms in the occupancy field.
 
