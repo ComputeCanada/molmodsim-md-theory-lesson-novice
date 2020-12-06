@@ -9,20 +9,7 @@ objectives:
 keypoints:
 - "?"
 ---
-
-For this workshop we have chosen a complex of human argonaute-2 (hAgo2) protein with a micro RNA (miRNA) bound to a target messenger RNA (mRNA).
-
-miRNAs are short noncoding RNAs that are critical for the regulation of gene expression and the defence against viruses. miRNAs guide argonaute proteins to mRNAs targeted for repression.
-
-miRNAs regulate a wide variety of human genes. It is estimated that they regulate over 50% of all genes. So there is enormous number of different miRNA types. miRNAS play essential roles in both normal physiological functions and progression of disease such as cancer.
-
-So miRNAs can control production of proteins. They do it by targeting mRNAs (RNAs that are used as blueprints for synthesis of all proteins). miRNAS can very specifically control expression of individual proteins and their selectivity is based on sequence complementarity between miRNAs and mRNAs.
-
-miRNAs which target mRNAs encoding oncoproteins can serve as very selective tumour suppressors. They can inhibit tumor cells without negative impact on all other types of cells in a body. Discovery of this function of miRNAs have made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for therapeutic purposes. That's why understanding of the structural basis of the molecular mechanism by which miRNAs control production of proteins is very important.
-
-To regulate protein synthesis a miRNA has to be loaded into an Ago2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target messenger RNA  with high sequence specificity.
-
-Therefore elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for both the in-depth understanding of miRNA functions and the development of new therapeutics for human diseases.
+For this workshop, we have chosen a complex of human argonaute-2 (hAgo2) protein with a micro RNA (miRNA) bound to a target messenger RNA (mRNA). miRNAs are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual proteins' expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target mRNAs encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
 
 ### Adding missing residues to protein structure files.
 
