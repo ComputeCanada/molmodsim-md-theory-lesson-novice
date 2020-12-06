@@ -197,7 +197,8 @@ CAUUG---CACUCCAA--
 ~~~
 {: .source}
 
-#### Python script to make ModeRNA models, make_models.py:
+#### Python script for inserting missing residues.
+File make_models.py:
 ~~~
 from moderna import *
 # Model chain C
