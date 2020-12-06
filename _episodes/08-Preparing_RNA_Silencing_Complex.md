@@ -145,7 +145,7 @@ As ModeRNA can only model a single RNA strand, we will model chains C and D sepa
 
 #### Preparing structural templates for chains C and D.
 
-Download 6n4o.pdb:
+Download 6n4o.pdb
 ~~~
 $ wget https://files.rcsb.org/download/6n4o.pdb
 ~~~
@@ -185,7 +185,7 @@ CAUUG---CACUCCAA--
 {: .source}
 
 #### Python script for inserting missing residues.
-File make_models.py:
+Once the program is installed, you will be able to use all modeRNA functions. Below are commands needed to build chains C and D. Save then in the file make_models.py. Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
 ~~~
 from moderna import *
 # Model chain C
@@ -194,7 +194,7 @@ aC = load_alignment('6n4o_C.fasta')
 mC = create_model(model_chain_name = 'A')
 apply_alignment(tC, aC, mC)
 apply_indel(mC, '9', '11', 'A')
-apply_indel(mC, '18', '20', 'A')
+apply_indel(mC, '18', '20', 'U')
 apply_missing_ends(aC, mC)
 renumber_chain(mC, '1')
 write_model(mC, 'chain_C_model_A.pdb')
@@ -363,7 +363,7 @@ $ srun -A def-someuser -c10 --mem-per-cpu=1000 --time=30:0 \
 Option -E \<number of replicas> turns on replica exchange mode.
 Replica exchange mode is parallelized with OMP.
 
-The simulation will run for about a minute and produce trajectory file *.trafl for each replica.
+The simulation will run for about two minutes and produce trajectory file *.trafl for each replica.
 
 #### Extracting a structure from a simulation trajectory
 Extract the lowest energy frame from the trajectory of the first replica
