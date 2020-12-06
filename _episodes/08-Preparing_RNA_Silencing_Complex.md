@@ -237,7 +237,6 @@ ModeRNA webserver inserts missing residies with the same residue sequence number
 2. [PDB file format](
 http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM)
 
-
 ### Refining double stranded RNA.
 As RNA strands were modeled independently of each other, the side chains of the complementary strands may clash. To obtain a good duplex structure we need to minimize energy of both chains together.
 
@@ -249,10 +248,12 @@ SimRNA features:
 - The energy function is composed of statistical potential terms, derived from the observed frequencies of occurrence of various proximate structural patterns.
 
 #### Installation of the SimRNA binary package:
-```
-wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
-tar -xf SimRNA_64bitIntel_Linux.tgz
-```
+Simulation on public SimRNAweb server may wait up to a few days in the queue, while it can be done on a local compouter in a couple of minutes. SimRNA is available as a binary distribution, so no installation is required. You only need to download and unpack the package:
+~~~
+$ wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
+$ tar -xf SimRNA_64bitIntel_Linux.tgz
+~~~
+{: .bash}
 
 #### Input required for refinement of the missing residues in double stranded RNA.
 
@@ -270,45 +271,43 @@ The convertion is that the first sequence corresponds to chain A and the second 
 ```
 3. PDB file matching the sequence. All atoms must be present and chains must be named A (matching the first sequence) and B (matching the second). To prepare this file we need to rename chain A in the model of chain D to chain B and then combine models of chains C and D into one file:
 
-Rename chain A to B with VMD:
-```
-mol new chain_D_model_A.pdb
-set sel [atomselect top "chain A"]
-$sel set chain B
-savepdb chain_D_model_B.pdb
-```
 Combine chains A and B:
-```
+~~~
 cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
-```
+~~~
+{: .bash}
 
-#### Preparing PDB file for SimRNA simulation.
-SimRNA expects all residues to have P atom. SimRNA web will do it automatically. For standalone SimRNA software 5' terminal of chain D must be phisphorylated. There are several options to add P. The simplest fix is to rename O5' atom to P.
+#### Preparing pdb file for simulation with standalone SimRNA program.
+SimRNA expects all residues to have P atom. SimRNA web will do it automatically, but for standalone SimRNA program 5' terminal of chain D must be phosphorylated manually. There are several options to add phosphate.
 
-#### Preparing pdb file for standalone SimRNA program.
+The simplest fix is to rename O5' atom to P. You can do this and skip the next step.
+
 **Adding 5' monophosphate with AmberTools/20.**
 
-In chain_D_model_B.pdb file phosphorylated 5' terminal nucleotide should be renamed according to AMBER convention (A5,C5,G5,U5,DA5,DC5,DG5,DT5).
-AmberTools/20 libraries of phosphorylated 5' terminal nucleotides are in the file terminal_monophosphate.lib.
-```
-module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+First the phosphorylated 5' terminal nucleotide should be renamed according to AMBER convention. Phosporylated terminals in AMBER have names A5,C5,G5,U5,DA5,DC5,DG5,DT5.
+AmberTools/20 libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib', so we nned to load RNA force field and this file.
+~~~
+$ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
-```
-Leap commands:
-```
+~~~
+{: .bash}
+The in Leap execute the commands:
+~~~
 loadoff terminal_monophosphate.lib
 chainD = loadpdb chain_D_model_B.pdb
 savepdb chainD chain_D5P.pdb
-```
+~~~
+{: .bash}
+
 We don't want to use PDB file prepared with leap for SimRNA because AMBER has different aminoacid naming conventions. So we just copy phosphate atoms from chain_D5P.pdb, paste them into chain_D_model_B.pdb and edit chain and residue IDs.
 
 Now we can combine chain_C_model_A.pdb and chain_D_model_B.pdb files:
-```
+
 If you used VMD remove the title lne:
----
+~~~
 grep -vh CRYST1 chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
----
-```
+~~~
+
 **Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).**
 Charmm gui changes residue names to 3-letter code and changes chain ID to "R".
 
@@ -324,19 +323,15 @@ $sel set occupancy 1
 set sel [atomselect top "chain B and resid 6 7 8 17 18"]
 $sel set occupancy 1
 set sel [atomselect top all]
-$sel writepdb output.pdb
+$sel writepdb chains_CD_model_AB_frozen.pdb
 ```
 #### Running simulation
 
-```
-~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb -c config -E 10
-```
--E \<number of replicas>. Turns on replica exchange mode.
-Replica exchange mode is parallelized with OMP.
-This command will run for about a minute and produce trajectory for each replica.
-```
-config:
----
+You should have two file is the working directory:
+chains_CD_model_AB_frozen.pdb and the file with SimRNA configuration settings, config.
+
+File config:
+~~~
 NUMBER_OF_ITERATIONS 1000000
 TRA_WRITE_IN_EVERY_N_ITERATIONS 10000
 INIT_TEMP 1.35
@@ -346,7 +341,25 @@ BONDS_WEIGHT 1.0
 ANGLES_WEIGHT 1.0
 TORS_ANGLES_WEIGHT 0.0
 ETA_THETA_WEIGHT 0.40
-```
+~~~
+{: .source}
+
+In the working directory make a symbolic link do the 'data' directory in SimRNA distribution. Assuming that you installed SimRNA in $HOME:
+~~~
+$ ln -s data ~/SimRNA_64bitIntel_Linux/data
+~~~
+{: .bash}
+Then run the simulation:
+~~~
+~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb -c config -E 10
+~~~
+{: .bash}
+
+-E \<number of replicas>. Turns on replica exchange mode.
+Replica exchange mode is parallelized with OMP.
+This command will run for about a minute and produce trajectory for each replica.
+
+
 **Extracting a structure from the simulation trajectory:**
 ```
 # Extract the lowest energy frame
