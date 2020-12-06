@@ -30,34 +30,38 @@ Almost all protein and nucleic acid crystallographic structure files have missin
 
 #### Adding missing residues using SWISS MODEL
 
-1. Download PDB and sequence files from PDB database:
+1. Download structure and sequence files from PDB database:
 
-```
-wget https://files.rcsb.org/download/6n4o.pdb
-wget https://www.rcsb.org/fasta/entry/6N4O/download -O 6n4o.fasta
-
-```
+~~~
+$ wget https://files.rcsb.org/download/6n4o.pdb
+$ wget https://www.rcsb.org/fasta/entry/6N4O/download -O 6n4o.fasta
+~~~
+{: .bash}
 
 Extract full sequence of chain A:
 
-```
-grep -A1 "Chain A" 6n4o.fasta > 6n4o_chain_A.fasta
-```
-Extract chain A atoms from 6n4o.pdb
-```
-bash:
----
-module load vmd
-vmd
-```
-```
-vmd:
----
-mol new 6n4o.pdb
-set sel [atomselect top "chain A"]
-$sel writepdb 6n4o_chain_A.pdb
-quit
-```
+~~~
+$ grep -A1 "Chain A" 6n4o.fasta > 6n4o_chain_A.fasta
+~~~
+{: .bash}
+
+Extract chain A atoms from 6n4o.pdb using VMD.
+Load VMD module and launch VMD:
+~~~
+$ module load vmd
+$ vmd
+~~~
+{: .bash}
+
+In VMD prompt execute the following commands:
+
+~~~
+vmd > mol new 6n4o.pdb
+vmd > set sel [atomselect top "chain A"]
+vmd > $sel writepdb 6n4o_chain_A.pdb
+vmd > quit
+~~~
+{: .bash}
 
 2. Navigate to [SWISS MODEL](https://swissmodel.expasy.org)
 3. Click Start Modelling,
@@ -74,48 +78,56 @@ Were all missing residues added?
 Another homology modeling server [i_TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement uses advanved protocol and is capable for threading terminal fragments. The downside is that i_TASSER process is much longer (about 60 hours for protein like 6n4o) and and positions of all atoms will be optimized. The resuls of i_TASSER model is in file 6N4O_i-TASSER_model_chainA.pdb.
 
 ### Aligning protein models.
-i-TASSER procedure changes orientation of the protein and slightly optimizes positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-tasser model. To be able to combine the i-TASSER model with the original 6n4o coordinates we need to align these two structures.
+i-TASSER procedure changes orientation of the protein and slightly optimizes positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To be able to combine the i-TASSER model with the original 6n4o coordinates we need to align these two structures.
 
-```
-mol new 6N4O_SWISS_PROT_model_chainA.pdb
-mol new 6N4O_i-TASSER_model_chainA.pdb
-set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
-set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
-set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
-set RotMat [measure fit $itasser $swissmodel]
-echo rmsd before fit = [measure rmsd $itasser $swissmodel]
-set itasser_all [atomselect 1 "all"]
-$itasser_all move $RotMat
-echo rmsd after fit = [measure rmsd $itasser $swissmodel]
-set terminal [atomselect 1 "noh resid 1 to 21"]
-$terminal writepdb 6n4o_resid_1-21.pdb
-```
+Launch VMD and in VMD prompt execute the following commands:
+~~~
+vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
+vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
+vmd > set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
+vmd > set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
+vmd > set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
+vmd > set RotMat [measure fit $itasser $swissmodel]
+vmd > echo rmsd before fit = [measure rmsd $itasser $swissmodel]
+vmd > set itasser_all [atomselect 1 "all"]
+vmd > $itasser_all move $RotMat
+vmd > echo rmsd after fit = [measure rmsd $itasser $swissmodel]
+vmd > set terminal [atomselect 1 "noh resid 1 to 21"]
+vmd > $terminal writepdb 6n4o_resid_1-21.pdb
+~~~
+{: .bash}
+
 Now we can combine i-TASSER and SWISS models.
-```
+~~~
 grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
-```
+~~~
+{: .bash}
 
 ### Mutating residues
-PDB entry 6N4O is structure of the catalytically inactive Ago2 mutant D669A. To construct the active form we need to revert this mutation.
+PDB entry 6N4O is structure of the catalytically inactive hAgo2 mutant D669A. To construct the active form we need to revert this mutation.
 
-To do this we need to delete from alanine 669 all atoms that are not present in aspartate. Then we change residue name of alanine 669 to ASP.
-Before we do this let's check what atoms are in residue 669:
-```
-grep 'A 669' 6n4o_chain_A_complete.pdb
-```
+To do this we need to delete from alanine 669 all atoms that are not present in aspartate. Then we change residue name of alanine 669 to ASP. Before we do this let's check what atoms are in residue 669:
+~~~
+$ grep 'A 669' 6n4o_chain_A_complete.pdb
+~~~
+{: .bash}
+
 If you are familiar with aminoacid structures you remember that alanine sidechain is made of only one beta carbon atom (CB). All aminoacids except glycine have beta carbon as well. So there is nothing to delete. All we need to do is to change resName of all five alanine 669 atoms to ASP.
-```
-sed 's/ALA A 669/ASP A 669/g' 6n4o_chain_A_complete.pdb > 6n4o_chain_A_complete_A669D.pdb
-```
+This can be done using stream editor:
+~~~
+$ sed 's/ALA A 669/ASP A 669/g' 6n4o_chain_A_complete.pdb > 6n4o_chain_A_complete_A669D.pdb
+~~~
+{: .bash}
+
 Verify the result:
-```
-grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
-```
+~~~
+$ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
+~~~
+{: .bash}
 
 ### Adding functionally important Mg2+ ion
 Catalytic site of Ago2 is located in PIWI domain and is comprized of the acidic residues D597, E637 and D669. It is known that Ago2 requires divalent metal ion near its catalytic site to inactivate RNA. 6N4O PDB file does not have this ion, but another Ago2 structure, 4W5O does. We can align these two files and them copy Mg2+ ion from 4W5O to out model.
 
-Mn bound to asp558?
 
 ### Adding missing residues to RNA structure files.
 
@@ -129,7 +141,6 @@ You can install ModeRNA on your own computer or use it on CC systems.
 
 1. Install python/2.7.14, numpy/1.11.3, biopython/1.58
 2. [Download ModerRNA](http://genesilico.pl/moderna/download/) and follow [installation instructions](http://genesilico.pl/moderna/installing/).
-
 
 #### Installing [ModeRNA](http://genesilico.pl/moderna/) on CC systems.
 
@@ -301,12 +312,11 @@ savepdb chainD chain_D5P.pdb
 
 We don't want to use PDB file prepared with leap for SimRNA because AMBER has different aminoacid naming conventions. So we just copy phosphate atoms from chain_D5P.pdb, paste them into chain_D_model_B.pdb and edit chain and residue IDs.
 
-Now we can combine chain_C_model_A.pdb and chain_D_model_B.pdb files:
-
-If you used VMD remove the title lne:
+Now we can combine chain_C_model_A.pdb and chain_D_model_B.pdb files. VMD adds the title line to each saved pdb file. This line must be removed. This can be done with the command:
 ~~~
-grep -vh CRYST1 chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
+$ grep -vh CRYST1 chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
+{: .bash}
 
 **Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).**
 Charmm gui changes residue names to 3-letter code and changes chain ID to "R".
@@ -314,7 +324,7 @@ Charmm gui changes residue names to 3-letter code and changes chain ID to "R".
 **Changing occupancy values in PDB files with VMD**
 Standalone SimRNA program accepts PDB file where frozen atoms have occupancy 0 and completely free have occupancy 1 as an input.
 
-```
+~~~
 mol new chains_CD_model_AB.pdb
 set sel [atomselect top all]
 $sel set occupancy 0
@@ -324,13 +334,15 @@ set sel [atomselect top "chain B and resid 6 7 8 17 18"]
 $sel set occupancy 1
 set sel [atomselect top all]
 $sel writepdb chains_CD_model_AB_frozen.pdb
-```
+~~~
+{: .bash}
+
 #### Running simulation
 
 You should have two file is the working directory:
 chains_CD_model_AB_frozen.pdb and the file with SimRNA configuration settings, config.
 
-File config:
+Contents of the file 'config':
 ~~~
 NUMBER_OF_ITERATIONS 1000000
 TRA_WRITE_IN_EVERY_N_ITERATIONS 10000
@@ -351,7 +363,7 @@ $ ln -s data ~/SimRNA_64bitIntel_Linux/data
 {: .bash}
 Then run the simulation:
 ~~~
-~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb -c config -E 10
+$ ~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb -c config -E 10
 ~~~
 {: .bash}
 
@@ -361,12 +373,18 @@ This command will run for about a minute and produce trajectory for each replica
 
 
 **Extracting a structure from the simulation trajectory:**
-```
-# Extract the lowest energy frame
-~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py chains_CD_simRNA.pdb_01.trafl
-# Convert the lowest energy frame to PDB
-~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_simRNA.pdb chains_CD_simRNA.pdb_01_minE.trafl 1 AA
-```
+
+Extract the lowest energy frame from the trajectory of the first replica
+~~~
+$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py chains_CD_simRNA.pdb_01.trafl
+~~~
+{: .bash}
+Convert the lowest energy frame to PDB
+~~~
+$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_simRNA.pdb chains_CD_simRNA.pdb_01_minE.trafl 1 AA
+~~~
+{: .bash}
+
 **References:**
 1. [SimRNA: a coarse-grained method for RNA folding simulations and 3D structure prediction](https://doi.org/10.1093/nar/gkv1479)
 2. [SimRNA manual](https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_UserManual_v3_20_20141002.pdf)
