@@ -306,14 +306,14 @@ The most straightforward fix is to rename O5' atom to P. if you chose to do this
 First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'. We need to load the RNA force field and this file.
 ~~~
 $ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
-tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
+$ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
-The in Leap execute the commands:
+Then in Leap execute the commands:
 ~~~
-loadoff terminal_monophosphate.lib
-chainD = loadpdb chain_D_model_B.pdb
-savepdb chainD chain_D5P.pdb
+> loadoff terminal_monophosphate.lib
+> chainD = loadpdb chain_D_model_B.pdb
+> savepdb chainD chain_D5P.pdb
 ~~~
 {: .bash}
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chain_D_model_B.pdb. We then edit chain ID, residue ID, and residue name.
@@ -347,7 +347,7 @@ vmd> $sel writepdb chains_CD_model_AB_frozen.pdb
 SimRNA needs two files in the working directory:
 'chains_CD_model_AB_frozen.pdb' and 'config', the file with SimRNA simulation parameters.
 
-Example contents of the file 'config':
+Example config file:
 ~~~
 NUMBER_OF_ITERATIONS 1000000
 TRA_WRITE_IN_EVERY_N_ITERATIONS 10000
@@ -361,7 +361,7 @@ ETA_THETA_WEIGHT 0.40
 ~~~
 {: .source}
 
-In the working directory, make a symbolic link to the 'data' directory in SimRNA distribution. Assuming that you installed SimRNA in $HOME the link command is:
+In the working directory, make a symbolic link to the 'data' directory located in SimRNA distribution. Assuming that you installed SimRNA in $HOME the link command is:
 ~~~
 $ ln -s data ~/SimRNA_64bitIntel_Linux/data
 ~~~
