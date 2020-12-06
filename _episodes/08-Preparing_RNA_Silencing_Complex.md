@@ -247,7 +247,7 @@ ModeRNA webserver inserts missing residues with the same residue number as the r
 http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM)
 
 ### Refining double stranded RNA.
-As modeRNA modeled RNA strand independently of each other, they may clash when two chains are combined. To obtain a good duplex structure, we need to minimize the energy of the whole RNA duplex.
+As modeRNA modeled RNA strands independently of each other, they may clash when two chains are combined. To obtain a good duplex structure, we need to minimize the energy of the whole RNA duplex.
 
 Refining of the double stranded RNA can be done using freely available [SimRNAweb server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone  [SimRNA software] (https://genesilico.pl/SimRNAweb). This program allows for RNA 3D structure modeling with optional restraints.
 
