@@ -179,7 +179,7 @@ We created the file 6n4o_chains_CD.pdb suitable for use as a structural template
 #### Sequence alignment files for chains C and D.
 Prepare two sequence alignment files for chains C and D. Each file should contain two sequences, the sequence of the model to be built and the template sequence.
 
-FASTA file for chain C, 6n4o_C.fasta:
+Sequence alignment file for chain C, 6n4o_C.fasta:
 ~~~
 >Model
 UGGAGUGUGACAAUGGUGUUU
@@ -188,7 +188,7 @@ UGGAGUGUG-CAAUGGUG-UU
 ~~~
 {: .source}
 
-FASTA file for chain D, 6n4o_D.fasta:
+Sequence alignment file for chain D, 6n4o_D.fasta:
 ~~~
 >Model
 CAUUGUCACACUCCAAAA
