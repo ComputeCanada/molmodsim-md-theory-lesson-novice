@@ -184,8 +184,8 @@ CAUUG---CACUCCAA--
 ~~~
 {: .source}
 
-#### Python script for inserting missing residues.
-Once the program is installed, you will be able to use all modeRNA functions. Below are commands needed to build chains C and D. Save then in the file make_models.py. Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
+#### Commands for inserting missing residues.
+Once you install the program, you will be able to use all modeRNA functions. Below are commands needed to build chains C and D. Save them in the file make_models.py. Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
 ~~~
 from moderna import *
 # Model chain C
