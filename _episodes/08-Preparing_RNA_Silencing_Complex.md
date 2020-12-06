@@ -211,7 +211,6 @@ write_model(mD, 'chain_D_model_B.pdb')
 {: .source}
 
 #### Running ModeRNA
-
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ source e27/bin/activate
@@ -276,21 +275,24 @@ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-#### Preparing pdb file for simulation with standalone SimRNA program.
+You can now use chains_CD_model_AB.pdb for SimRNAweb simulation. You will need to modify the PDB structure file as described in the next section for simulation with standalone SimRNA program.
 
-Command-line SimRNA program requires only a PDB structure file prepared with frozen atoms flagged in the occupancy field.
+#### Preparing structure file for simulation with standalone SimRNA program.
 
-Combine chains A and B:
+Command-line SimRNA program does not need sequence and list of frozen atoms. You must incorporate this information into the PDB structure file.
+
+Combine chains A and B if you have not done this yet:
 ~~~
 cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-SimRNA expects all residues to have a P atom. SimRNA web will do it automatically, but for simulation with a standalone SimRNA program, you need to add phosphate to the 5' terminal of chain D manually. There are several options to add phosphate.
+You will need to apply two modifications. First, you need to add  phosphate to the 5' terminal of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, you need to do it manually. There are several options to add phosphate.
 
-The most straightforward fix is to rename O5' atom to P. if you chose to do this, you can skip the next section.
+##### Rename O5' atom to P
+The most straightforward fix is to rename O5' atom to P. if you chose to do this, save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb, and skip the next step.
 
-**Adding 5' monophosphate with AmberTools/20.**
+##### Add 5' monophosphate with AmberTools/20.
 First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'. We need to load the RNA force field and this file.
 ~~~
 $ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
@@ -304,21 +306,17 @@ Then in Leap execute the commands:
 > savepdb chainD chain_D5P.pdb
 ~~~
 {: .bash}
-We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chain_D_model_B.pdb. We then edit chain ID, residue ID, and residue name.
-
-Now we can combine chain_C_model_A.pdb and chain_D_model_B.pdb files. VMD adds the title line to each saved PDB file. Remove this line  and combine files with one command:
-~~~
-$ grep -vh CRYST1 chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
-~~~
-{: .bash}
+We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
 **Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).**
 Charmm gui changes residue names to 3-letter code and changes chain ID to "R".
 
+2. Flag frozen atoms in the occupancy field.
+
 **Changing occupancy values in PDB files with VMD**
 Standalone SimRNA program accepts PDB file where frozen atoms have occupancy 0.0 and completely free have occupancy 1.0. You can change values of the occupancy with the following VMD commands:
 ~~~
-vmd> mol new chains_CD_model_AB.pdb
+vmd> mol new chains_CD_model_AB_5P.pdb
 vmd> set sel [atomselect top all]
 vmd> $sel set occupancy 0
 vmd> set sel [atomselect top "chain A and resid 10 19"]
@@ -326,14 +324,15 @@ vmd> $sel set occupancy 1
 vmd> set sel [atomselect top "chain B and resid 6 7 8 17 18"]
 vmd> $sel set occupancy 1
 vmd> set sel [atomselect top all]
-vmd> $sel writepdb chains_CD_model_AB_frozen.pdb
+vmd> $sel writepdb chains_CD_model_AB_5P_frozen.pdb
 ~~~
 {: .bash}
+
 
 #### Running simulation
 
 SimRNA needs two files in the working directory:
-'chains_CD_model_AB_frozen.pdb' and 'config', the file with SimRNA simulation parameters.
+'chains_CD_model_AB_5P_frozen.pdb' and 'config', the file with SimRNA simulation parameters.
 
 Example config file:
 ~~~
@@ -357,30 +356,32 @@ $ ln -s data ~/SimRNA_64bitIntel_Linux/data
 Then run the simulation:
 ~~~
 $ srun -A def-someuser -c10 --mem-per-cpu=1000 --time=30:0 \
-~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb \
--c config -E 10 
+~/SimRNA_64bitIntel_Linux/SimRNA \
+-P chains_CD_model_AB_5P_frozen.pdb \
+-c config -E 10
 ~~~
 {: .bash}
 
--E \<number of replicas>. Turns on replica exchange mode.
+Option -E \<number of replicas> turns on replica exchange mode.
 Replica exchange mode is parallelized with OMP.
-This command will run for about a minute and produce trajectory for each of the replicas.
+
+The simulation will run for about a minute and produce trajectory file *.trafl for each replica.
 
 
-**Extracting a structure from the simulation trajectory:**
+#### Extracting a structure from a simulation trajectory
 
 Extract the lowest energy frame from the trajectory of the first replica
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py chains_CD_simRNA.pdb_01.trafl
+$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \ chains_CD_model_AB_5P_frozen.pdb_01.trafl
 ~~~
 {: .bash}
-Convert the lowest energy frame to PDB
+Convert the lowest energy frame to PDB format
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_simRNA.pdb chains_CD_simRNA.pdb_01_minE.trafl 1 AA
+$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \ chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
 ~~~
 {: .bash}
 
-**References:**
+#### References
 1. [SimRNA: a coarse-grained method for RNA folding simulations and 3D structure prediction](https://doi.org/10.1093/nar/gkv1479)
 2. [SimRNA manual](https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_UserManual_v3_20_20141002.pdf)
 3. [VMD TCL commands](https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.4/ug/node121.html)
