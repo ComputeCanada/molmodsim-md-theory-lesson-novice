@@ -224,8 +224,8 @@ The modeRNA program will run and create two model files, chain_C_model_A.pdb, an
 >
 {: .challenge}
 
-#### Pitfalls with structure generated automatically by ModeRNA.
-ModeRNA webserver inserts missing residues with the same residue number as the residue preceding gap. It uses an insertion code (iCode) to differentiate inserted residues. For example, if residues 6-8 are missing, the program will insert them as residues 5A, 5B, 5C. It is not possible to instruct ModeRNA webserver to renumber residues, and it is not possible to change model chainID either. So you will need to take care of residue numbering and renaming chains manually.
+#### Pitfalls with structure generated automatically by ModeRNA server.
+ModeRNA server inserts missing residues with the same residue number as the residue before insertion. It uses an insertion code (iCode) to mark inserted residues. For example, if residues 6-8 are missing, the program will insert them as residues 5A, 5B, and 5C. It is not possible to instruct ModeRNA webserver to renumber residues, and it is not possible to change chainID either. So you will need to take care of residue numbering and renaming chains manually.
 
 **References:**
 1. [ModeRNA: a tool for comparative modeling of RNA 3D structure](https://doi.org/10.1093/nar/gkq1320)
