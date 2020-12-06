@@ -356,7 +356,9 @@ $ ln -s data ~/SimRNA_64bitIntel_Linux/data
 {: .bash}
 Then run the simulation:
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb -c config -E 10
+$ srun -A def-someuser -c10 --mem-per-cpu=1000 --time=30:0 \
+~/SimRNA_64bitIntel_Linux/SimRNA -P chains_CD_simRNA.pdb \
+-c config -E 10 
 ~~~
 {: .bash}
 
