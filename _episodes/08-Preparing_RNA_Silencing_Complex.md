@@ -233,9 +233,9 @@ ModeRNA server inserts missing residues with the same residue number as the resi
 http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM)
 
 ### Refining double stranded RNA.
-As modeRNA modeled RNA strands independently of each other, they may clash when two chains are combined. To obtain a good duplex structure, we need to minimize the energy of the whole RNA duplex.
+As we built two complementary RNA strands independently of each other, they may clash when two strands are combined. To resolve clashes and obtain a good duplex structure, we need to minimize the energy of the whole RNA duplex.
 
-Refining of the double stranded RNA can be done using freely available [SimRNAweb server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone  [SimRNA software] (https://genesilico.pl/SimRNAweb). This program allows for RNA 3D structure modeling with optional restraints.
+We will refine double stranded RNA using SimRNA. It is available as [SimRNAweb server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone  [SimRNA software] (https://genesilico.pl/SimRNAweb). This program allows for RNA 3D structure modeling with optional restraints.
 
 SimRNA features:
 - Coarse-grained representation (5 atoms per residue)
@@ -251,9 +251,9 @@ $ tar -xf SimRNA_64bitIntel_Linux.tgz
 {: .bash}
 
 #### Preparing input files for simulation with SimRNAweb server.
-If you will be using standalone SimRNA program you can skip this sections.
+If you will be using standalone SimRNA program you can skip this sections and proceed to the next one.
 
-SimRNAweb server requires the user to submit RNA sequence, RNA structure in PDB format, and a list of residues to freeze in simulation.
+SimRNAweb server requires the user to provide RNA sequence, a list of residues not allowed to move in simulation and RNA structure in PDB format.
 
 Sequence:
 ~~~
@@ -267,45 +267,47 @@ List of residues not allowed to move (we don't want the program to move atoms re
  A:1-9,11-18,20-21;B:1-5,9-16
 ~~~
 {: .bash}
-PDB file matching the sequence. All atoms must be present, and chains must be named A and B.
-
-Combine chains A and B:
+PDB file matching the sequence. All atoms must be present, and chains must be named A and B. To prepare this file combine chains A and B:
 ~~~
 cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-You can now use chains_CD_model_AB.pdb for SimRNAweb simulation. You will need to modify the PDB structure file as described in the next section for simulation with standalone SimRNA program.
+You can use chains_CD_model_AB.pdb for SimRNAweb simulation. You will need to modify the PDB structure file as described in the next section for simulation with standalone SimRNA program.
 
 #### Preparing structure file for simulation with standalone SimRNA program.
 
-Command-line SimRNA program does not need sequence and list of frozen atoms. You must incorporate this information into the PDB structure file.
+Command-line SimRNA program does not need sequence and list of frozen atoms. You need to incorporate this information into the PDB structure file.
 
-Combine chains A and B if you have not done this yet:
+Begin with combining chains A and B if you have not done this yet:
 ~~~
 cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-You will need to apply two modifications. First, you need to add  phosphate to the 5' terminal of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, you need to do it manually. There are several options to add phosphate.
+Next apply two modifications to this file. First, you need to add phosphate to the 5' terminal residue of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, you need to do it manually. There are several options to add phosphate.
 
 ##### Rename O5' atom to P
 The most straightforward fix is to rename O5' atom to P. if you chose to do this, save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb, and skip the next step.
 
 ##### Add 5' monophosphate with AmberTools/20.
-First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'. We need to load the RNA force field and this file.
+First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'.
+
+Launch Leap and load RNA force field:
 ~~~
 $ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 $ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
-Then in Leap execute the commands:
+In Leap promt execute the commands:
 ~~~
 > loadoff terminal_monophosphate.lib
 > chainD = loadpdb chain_D_model_B.pdb
 > savepdb chainD chain_D5P.pdb
 ~~~
 {: .bash}
+These commands will load libraries of phosphorylated 5' terminal nucleotides and chain D PDB file. Leap will automatically add all missing atoms based on library entries and save chainD in PDB file chain_D5P.pdb:
+
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
 **Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).**
