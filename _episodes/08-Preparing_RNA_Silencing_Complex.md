@@ -26,35 +26,31 @@ Therefore elucidating the structural basis of the molecular recognition between 
 
 ### Adding missing residues to protein structure files.
 
-Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals and therefore positions of their atoms cannot be accurately determined. These atoms, however may be crucial for MD simulations (e.g. loops connecting functional domains, nucleic acid chains, incomplete aminoacid side chains ... etc). For realistic simulation we need to build a model contating all atoms.
+Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model contacting all atoms.
 
 #### Adding missing residues using SWISS MODEL
 
-1. Download structure and sequence files from PDB database:
-
+Download structure and sequence files from PDB database:
 ~~~
 $ wget https://files.rcsb.org/download/6n4o.pdb
 $ wget https://www.rcsb.org/fasta/entry/6N4O/download -O 6n4o.fasta
 ~~~
 {: .bash}
 
-Extract full sequence of chain A:
-
+Extract the full sequence of chain A:
 ~~~
 $ grep -A1 "Chain A" 6n4o.fasta > 6n4o_chain_A.fasta
 ~~~
 {: .bash}
 
-Extract chain A atoms from 6n4o.pdb using VMD.
-Load VMD module and launch VMD:
+Extract chain A from 6n4o.pdb using VMD. First, load the VMD module and launch VMD:
 ~~~
 $ module load vmd
 $ vmd
 ~~~
 {: .bash}
 
-In VMD prompt execute the following commands:
-
+In the VMD prompt, execute the following commands:
 ~~~
 vmd > mol new 6n4o.pdb
 vmd > set sel [atomselect top "chain A"]
@@ -63,19 +59,26 @@ vmd > quit
 ~~~
 {: .bash}
 
-2. Navigate to [SWISS MODEL](https://swissmodel.expasy.org)
-3. Click Start Modelling,
-4. Click User Template,
-5. Paste a full sequence of your protein or upload 6n4o_chain_A.fasta,
-6. Upload your structure file 6n4o_chain_A.pdb missing residues,
-7. Click Build Model.
-8. Download the homology model, and check it with your original structure.
+Navigate to [SWISS MODEL](https://swissmodel.expasy.org)
 
-Were all missing residues added?
-- SWISS MODEL does not add terminal aminoacids
+Click Start Modelling,
+
+Click User Template,
+
+Paste the full sequence of your protein or upload 6n4o_chain_A.fasta,
+
+Upload your structure file 6n4o_chain_A.pdb missing residues,
+
+Click Build Model,
+
+Download the homology model, and save it in the file '6N4O_SWISS_PROT_model_chainA.pdb'. Compare it with your original structure. Were all missing residues added?
+
+In the following sections we will assume that the SWISS_MODEL is saved 6N4O_SWISS_PROT_model_chainA.pdb.
 
 #### Other homology modeling servers
-Another homology modeling server [i_TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement uses advanved protocol and is capable for threading terminal fragments. The downside is that i_TASSER process is much longer (about 60 hours for protein like 6n4o) and and positions of all atoms will be optimized. The resuls of i_TASSER model is in file 6N4O_i-TASSER_model_chainA.pdb.
+SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i_TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i_TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i_TASSER optimizes, positions of all atoms, which is not always desirable.
+
+The result of the i_TASSER modeling is in file 6N4O_i-TASSER_model_chainA.pdb.
 
 ### Aligning protein models.
 i-TASSER procedure changes orientation of the protein and slightly optimizes positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To be able to combine the i-TASSER model with the original 6n4o coordinates we need to align these two structures.
@@ -97,7 +100,7 @@ vmd > $terminal writepdb 6n4o_resid_1-21.pdb
 ~~~
 {: .bash}
 
-Now we can combine i-TASSER and SWISS models.
+Now we can combine the i-TASSER model of residues 1-21 and the SWISS model.
 ~~~
 grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
@@ -126,14 +129,13 @@ $ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 {: .bash}
 
 ### Adding functionally important Mg2+ ion
-Catalytic site of Ago2 is located in PIWI domain and is comprized of the acidic residues D597, E637 and D669. It is known that Ago2 requires divalent metal ion near its catalytic site to inactivate RNA. 6N4O PDB file does not have this ion, but another Ago2 structure, 4W5O does. We can align these two files and them copy Mg2+ ion from 4W5O to out model.
-
+The catalytic site of hAgo2 is comprized of the three acidic amioacids D597, E637 and D669. It is known that hAgo2 requires divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O does. We can align these two structures and then copy the Mg2+ ion located near the catalytic site from 4W5O to out model.
 
 ### Adding missing residues to RNA structure files.
 
 We first need to create a PDB file containing all RNA atoms placed at a reasonable positions. At this initial step we are not particularly concerned with the quality of the 3D structure because we will refine it afterwards.
 
-Insertion of the missing residues could be done using freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. However, the automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. In addition modeRNA server offers a limited set of options and the output PDB files will need more processing steps afterwards. This is not desirable in our case (we want to keep all experimental positions untouched). For these reasons we will use the standalone modeRNA package.
+Insertion of the missing residues could be done using the freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. However, the automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. In addition modeRNA server offers a limited set of options and the output PDB files will need more processing steps afterwards. This is not desirable in our case (we want to keep all experimental positions untouched). For these reasons we will use the standalone modeRNA package.
 
 You can install ModeRNA on your own computer or use it on CC systems.
 
@@ -271,15 +273,17 @@ $ tar -xf SimRNA_64bitIntel_Linux.tgz
 SimRNAweb server requires user to submit RNA sequence, RNA structure in PDB format and a list of residues to be frozen in simulation. Command line SimRNA program requires only PDB structure file specially prepared to flag frozen atoms in the occupancy field.
 
 1. Sequence:
-```
+~~~
 UGGAGUGUGACAAUGGUGUUU CCAUUGUCACACUCCAAA
-```
+~~~
+{: .bash}
 The convertion is that the first sequence corresponds to chain A and the second to chain B in the PDB strucure file.
 
 2. List of residues not allowed to move (we don't want the program to move atoms resolved in the experimental structure).
-```
+~~~
  A:1-9,11-18,20-21;B:1-5,9-16
-```
+~~~
+{: .bash}
 3. PDB file matching the sequence. All atoms must be present and chains must be named A (matching the first sequence) and B (matching the second). To prepare this file we need to rename chain A in the model of chain D to chain B and then combine models of chains C and D into one file:
 
 Combine chains A and B:
