@@ -123,6 +123,14 @@ We first need to create a PDB file containing all RNA atoms placed at a reasonab
 
 Insertion of the missing residues could be done using freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. However, the automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. In addition modeRNA server offers a limited set of options and the output PDB files will need more processing steps afterwards. This is not desirable in our case (we want to keep all experimental positions untouched). For these reasons we will use the standalone modeRNA package.
 
+You can install ModeRNA on your own computer or use it on CC systems.
+
+#### Installing on your computer
+
+1. Install python/2.7.14, numpy/1.11.3, biopython/1.58
+2. [Download ModerRNA](http://genesilico.pl/moderna/download/) and follow [installation instructions](http://genesilico.pl/moderna/installing/).
+
+
 #### Installing [ModeRNA](http://genesilico.pl/moderna/) on CC systems.
 
 *\*Note that one of the tests fails on Graham - could be some weird problem in the environment of my account.*
@@ -131,7 +139,7 @@ Insertion of the missing residues could be done using freely available [ModeRNA 
 module load StdEnv/2016.4 python/2.7.14
 virtualenv e27
 source e27/bin/activate
-pip install numpy==1.11.3 biopython==1.58 ModeRNA-1.7.1-py2-none-any.whl
+pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ```
 
 #### Files required for insertion of missing residues
@@ -206,8 +214,7 @@ write_model(mD, 'chain_D_model_B.pdb')
 Exercise:
 How ModeRNA server will do the same task? Try using it. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
 
-
-**Pitfalls of ModeRNA server.**
+**Pitfalls with structure generated automatically by ModeRNA.**
 ModeRNA webserver inserts missing residies with the same residue sequence number (ResSeq) as the ResSeq of the residue preceding gap in the template. It uses insertion code (iCode) to differentiate inserted res. For example if residues 6-8 are missing they all will be assigned ResSeq 5 and iCode A, B, C. It is not possible to renumber residues in ModeRNA web server automatically, and it is not possible to change model chainID (it is always A). So you will need to take care of residue numbering and renaming chain D manually (for example using VMD).
 
 **References:**
