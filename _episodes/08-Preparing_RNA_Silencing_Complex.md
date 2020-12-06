@@ -328,9 +328,7 @@ vmd> $sel writepdb chains_CD_model_AB_5P_frozen.pdb
 ~~~
 {: .bash}
 
-
 #### Running simulation
-
 SimRNA needs two files in the working directory:
 'chains_CD_model_AB_5P_frozen.pdb' and 'config', the file with SimRNA simulation parameters.
 
@@ -367,17 +365,17 @@ Replica exchange mode is parallelized with OMP.
 
 The simulation will run for about a minute and produce trajectory file *.trafl for each replica.
 
-
 #### Extracting a structure from a simulation trajectory
-
 Extract the lowest energy frame from the trajectory of the first replica
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \ chains_CD_model_AB_5P_frozen.pdb_01.trafl
+$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \
+chains_CD_model_AB_5P_frozen.pdb_01.trafl
 ~~~
 {: .bash}
 Convert the lowest energy frame to PDB format
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \ chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
+$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \
+chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
 ~~~
 {: .bash}
 
