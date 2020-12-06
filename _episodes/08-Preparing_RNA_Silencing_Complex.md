@@ -133,8 +133,6 @@ You can install ModeRNA on your own computer or use it on CC systems.
 
 #### Installing [ModeRNA](http://genesilico.pl/moderna/) on CC systems.
 
-*\*Note that one of the tests fails on Graham - could be some weird problem in the environment of my account.*
-
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ virtualenv e27
@@ -143,9 +141,11 @@ $ pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ~~~
 {: .bash}
 
+*\*Note: one of the tests failed on Graham - could be some weird problem in the environment of my account.*
+
 ModeRNA can only model a single strand of RNA, so we will model chains C and D separately. For this job we will need the following files:
 
-#### Structural templates for chains C and D.
+#### Preparing structural templates for chains C and D.
 
 Download 6n4o.pdb:
 ~~~
@@ -153,10 +153,9 @@ $ wget https://files.rcsb.org/download/6n4o.pdb
 ~~~
 {: .bash}
 
-Residue 6 has only phosphate and thus can not be used as a template. To prevent modeRNA from using it we need to delete residue 6 from chain D PDB file. Leaving it in PDB file will lead to unwanted results.
+Residue 6 in chain D has only phosphate and thus can not be used as a template. To prevent modeRNA from using it we need to delete residue 6. Leaving it in PDB file will lead to unwanted results.
 
-
-VMD commands to save chain C and chain D without residue 6:
+Execute the following VMD commands to save chain C and chain D without residue 6:
 ~~~
 mol new 6n4o.pdb
 set sel [atomselect top "chain C or (chain D and not resid 6)"]
@@ -164,11 +163,11 @@ $sel writepdb 6n4o_chains_CD.pdb
 ~~~
 {: .bash}
 
-We created 6n4o_chains_CD.pdb with only RNA atoms.
+We created the file 6n4o_chains_CD.pdb suitable for use as a structural template.
 
 
 #### Sequence alignment files for chains C and D.
- Each alignment file contains two sequences, the sequence of the model to be built and the template sequence.
+Prepare two sequence alignment files for chains C and D. Each file should contain two sequences, the sequence of the model to be built and the template sequence.
 
 FASTA file for chain C, 6n4o_C.fasta:
 ~~~
@@ -222,11 +221,16 @@ $ python make_models.py
 ~~~
 {: .source}
 
-Exercise:
-How ModeRNA server will do the same task? Try using it. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
+The modeRNA program will run and create two model files, chain_C_model_A.pdb and chain_D_model_B.pdb. examine them and make sure that all missing residues have been added and all residues present in the original pdb file have not been moved.
 
-**Pitfalls with structure generated automatically by ModeRNA.**
-ModeRNA webserver inserts missing residies with the same residue sequence number (ResSeq) as the ResSeq of the residue preceding gap in the template. It uses insertion code (iCode) to differentiate inserted res. For example if residues 6-8 are missing they all will be assigned ResSeq 5 and iCode A, B, C. It is not possible to renumber residues in ModeRNA web server automatically, and it is not possible to change model chainID (it is always A). So you will need to take care of residue numbering and renaming chain D manually (for example using VMD).
+> ## How will ModeRNA server do the same task?
+> Try using ModeRNA server. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
+>
+{: .challenge}
+
+#### Pitfalls with structure generated automatically by ModeRNA.
+
+ModeRNA webserver inserts missing residies with the same residue sequence number (ResSeq) as the ResSeq of the residue preceding gap in the template. It uses insertion code (iCode) to differentiate inserted res. For example if residues 6-8 are missing they all will be assigned ResSeq 5 and iCode A, B, C. It is not possible to renumber residues in ModeRNA web server automatically, and it is not possible to change model chainID (it is always A). So you will need to take care of residue numbering and renaming chain D manually.
 
 **References:**
 1. [ModeRNA: a tool for comparative modeling of RNA 3D structure](https://doi.org/10.1093/nar/gkq1320)
