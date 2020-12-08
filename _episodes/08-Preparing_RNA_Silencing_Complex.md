@@ -25,7 +25,7 @@ Almost all protein and nucleic acid crystallographic structure files have missin
 
 ##### 1.1.1 Adding missing residues using SWISS MODEL
 
-*This section is merely to inroduce homology servers to the students. Homology modeling must be done from their local computers. I assume it has already been done and users have SWISS-MODEL and i-TASSER results*
+If you have bash and vmd on your computer, you can download and prepare pdb and sequence files locally. Otherwise do it on a CC system and download the results to your computer for insertion of missing fragments.
 
 Download structure and sequence files from PDB database:
 ~~~
@@ -56,8 +56,7 @@ vmd > quit
 ~~~
 {: .bash}
 
-If you created 6n4o_chain_A.pdb and 6n4o_chain_A.fasta remotely
-you can download them to your computer for homology modeling with SWISS-MODEL and i-TASSER.
+Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology modeling with SWISS-MODEL and i-TASSER.
 
 &nbsp;1. On your local computer navigate to [SWISS-MODEL](https://swissmodel.expasy.org)
 
