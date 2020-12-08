@@ -74,7 +74,7 @@ Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology m
 
 &nbsp;8. Compare the model with your original structure. Were all missing residues added?
 
-In the following sections we will assume that the SWISS-MODEL is saved in the file **'6N4O_SWISS_PROT_model_chainA.pdb'**.
+Save the SWISS-MODEL in the file **'6N4O_SWISS_PROT_model_chainA.pdb'**.
 
 ##### 1.1.2 Other homology modeling servers
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
