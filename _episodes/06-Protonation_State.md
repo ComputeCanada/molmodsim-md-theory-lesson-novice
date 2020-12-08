@@ -41,6 +41,12 @@ None of the *pKa* prediction methods are perfect. While the average estimated *p
 >4. Compare calculated *pKa*'s with the experimental. How accurate are the predicted *pKa* values?
 >
 {: .challenge}
+Solution.
+if pKa > pH the probability that the residue is protonated is > 50% and we use the protonated form.
+if pKa < pH the probability that the residue is protonated is < 50% and we use the deprotonated form.
+
+ASP79 has pKa 7.2, it is protonated at pH 6 and we rename it to ASH
+HIS53 has pKa 8.3, it is also protonated at pH 6 and we rename it to HIP
 
 ## How to select protonation state of a residue?
 

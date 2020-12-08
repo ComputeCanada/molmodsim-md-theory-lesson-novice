@@ -19,11 +19,11 @@ $ mkdir ~/scratch/workshop
 {: .bash}
 
 
-### Adding missing residues to protein structure files.
+### 1. Adding missing residues to protein structure files.
 
 Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model contacting all atoms.
 
-#### Adding missing residues using SWISS MODEL
+#### 1.1 Adding missing residues using SWISS MODEL
 
 *This section is merely to inroduce homology servers to the students. Homology modeling must be done from their local computers. I assume it has already been done and users have SWISS-MODEL and i-TASSER results*
 
@@ -75,14 +75,14 @@ you can download them to your computer for homology modeling with SWISS-MODEL an
 
 &nbsp;8. Compare the model with your original structure. Were all missing residues added?
 
-In the following sections we will assume that the SWISS-MODEL is saved in the file 6N4O_SWISS_PROT_model_chainA.pdb.
+In the following sections we will assume that the SWISS-MODEL is saved in the file **'6N4O_SWISS_PROT_model_chainA.pdb'**.
 
-#### Other homology modeling servers
+#### 1.2 Other homology modeling servers
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
 
-The result of the i-TASSER modeling is in file 6N4O_i-TASSER_model_chainA.pdb.
+The result of the i-TASSER modeling is in the file **'6N4O_i-TASSER_model_chainA.pdb'**.
 
-###
+### 2. Prepare working directory
 Login to one of the CC systems
 Create working directory and descend into it:
 
@@ -91,14 +91,14 @@ $ mkdir ~/scratch/workshop
 $ cd ~/scratch/workshop
 ~~~
 {: .bash}
-Upload protein models:
+Upload protein models from your computer:
 ~~~
 $ scp 6N4O_SWISS_PROT_model_chainA.pdb \
 6N4O_i-TASSER_model_chainA.pdb \ someuser@graham.computecanada.ca:scratch/workshop
 ~~~
 {: .bash}
 
-### Aligning protein models.
+### 3. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 
 Launch VMD and in VMD prompt execute the following commands:
@@ -118,13 +118,13 @@ vmd > $terminal writepdb 6n4o_resid_1-21.pdb
 ~~~
 {: .bash}
 
-Now we can combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
+Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
 ~~~
 grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
 
-### Mutating residues
+### 4. Mutating residues
 PDB entry 6N4O is the structure of the catalytically inactive hAgo2 mutant D669A. To construct the active form, we need to revert this mutation.
 
 To accomplish this, we need to delete from ALA669 all atoms that are not present in ASP. Then change the residue name of ALA669 to ASP. Let's  first check what atoms are in residue 669:
@@ -146,10 +146,13 @@ $ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 ~~~
 {: .bash}
 
-### Adding functionally important Mg2+ ion
-The catalytic site of hAgo2 is comprised of the three acidic amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
+### 5. Adding functionally important Mg2+ ion
+The catalytic site of hAgo2 is comprised of the three acidic amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
 
-### Adding missing residues to RNA structure files.
+### 6. Assigning Protonation States to Residues
+Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6 - "Assigning Protonation States to Residues in a Protein".
+
+### 7. Adding missing segments to RNA structure files.
 
 First, we need to create a PDB file containing all RNA atoms placed at proper positions. At this initial step, we are not particularly concerned with the quality of the 3D structure because we will refine it afterward.
 
