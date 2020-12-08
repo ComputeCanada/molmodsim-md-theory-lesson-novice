@@ -92,7 +92,8 @@ $ cd ~/scratch/workshop
 Upload protein models from your computer:
 ~~~
 $ scp 6N4O_SWISS_PROT_model_chainA.pdb \
-6N4O_i-TASSER_model_chainA.pdb \ someuser@graham.computecanada.ca:scratch/workshop
+6N4O_i-TASSER_model_chainA.pdb \
+someuser@graham.computecanada.ca:scratch/workshop
 ~~~
 {: .bash}
 
