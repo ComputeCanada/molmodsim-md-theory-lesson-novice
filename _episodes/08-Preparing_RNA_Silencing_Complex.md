@@ -11,11 +11,21 @@ keypoints:
 ---
 For this workshop, we have chosen a complex of human argonaute-2 (hAgo2) protein with a micro RNA (miRNA) bound to a target messenger RNA (mRNA). miRNAs are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual proteins' expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target mRNAs encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
 
+Create working directory:
+
+~~~
+$ mkdir ~/scratch/workshop
+~~~
+{: .bash}
+
+
 ### Adding missing residues to protein structure files.
 
 Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model contacting all atoms.
 
 #### Adding missing residues using SWISS MODEL
+
+*This section is merely to inroduce homology servers to the students. Homology modeling must be done from their local computers. I assume it has already been done and users have SWISS-MODEL and i-TASSER results*
 
 Download structure and sequence files from PDB database:
 ~~~
@@ -46,19 +56,24 @@ vmd > quit
 ~~~
 {: .bash}
 
-Navigate to [SWISS-MODEL](https://swissmodel.expasy.org)
+If you created 6n4o_chain_A.pdb and 6n4o_chain_A.fasta remotely
+you can download them to your computer for homology modeling with SWISS-MODEL and i-TASSER.
 
-Click Start Modelling,
+&nbsp;1. On your local computer navigate to [SWISS-MODEL](https://swissmodel.expasy.org)
 
-Click User Template,
+&nbsp;2. Click Start Modelling,
 
-Paste the full sequence of your protein or upload 6n4o_chain_A.fasta,
+&nbsp;3. Click User Template,
 
-Upload your structure file 6n4o_chain_A.pdb missing residues,
+&nbsp;4. Paste the full sequence of your protein or upload 6n4o_chain_A.fasta,
 
-Click Build Model,
+&nbsp;5. Upload your structure file 6n4o_chain_A.pdb missing residues,
 
-Download the homology model, and save it in the file '6N4O_SWISS_PROT_model_chainA.pdb'. Compare it with your original structure. Were all missing residues added?
+&nbsp;6. Click Build Model,
+
+&nbsp;7. Download the homology model, and save it in the file '6N4O_SWISS_PROT_model_chainA.pdb'.
+
+&nbsp;8. Compare the model with your original structure. Were all missing residues added?
 
 In the following sections we will assume that the SWISS-MODEL is saved in the file 6N4O_SWISS_PROT_model_chainA.pdb.
 
@@ -66,6 +81,22 @@ In the following sections we will assume that the SWISS-MODEL is saved in the fi
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
 
 The result of the i-TASSER modeling is in file 6N4O_i-TASSER_model_chainA.pdb.
+
+###
+Login to one of the CC systems
+Create working directory and descend into it:
+
+~~~
+$ mkdir ~/scratch/workshop
+$ cd ~/scratch/workshop
+~~~
+{: .bash}
+Upload protein models:
+~~~
+$ scp 6N4O_SWISS_PROT_model_chainA.pdb \
+6N4O_i-TASSER_model_chainA.pdb \ someuser@graham.computecanada.ca:scratch/workshop
+~~~
+{: .bash}
 
 ### Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
@@ -295,7 +326,7 @@ First, rename the phosphorylated 5' terminal nucleotide according to AMBER conve
 
 Launch Leap and load RNA force field:
 ~~~
-$ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+
 $ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
@@ -310,7 +341,7 @@ These commands will load libraries of phosphorylated 5' terminal nucleotides and
 
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
-**Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).** You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to CHARMM 3-letter code and changes chain ID to "R".
+**Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).** You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to the old-style RNA 3-letter names and changes chain ID to "R".
 
 2. Flag frozen atoms in the occupancy field.
 
@@ -384,3 +415,21 @@ chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
 1. [SimRNA: a coarse-grained method for RNA folding simulations and 3D structure prediction](https://doi.org/10.1093/nar/gkv1479)
 2. [SimRNA manual](https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_UserManual_v3_20_20141002.pdf)
 3. [VMD TCL commands](https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.4/ug/node121.html)
+
+
+### Preparing simulation system
+~~~
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+source $EBROOTAMBERTOOLS/amber.sh
+tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
+~~~
+{: .bash}
+Leap commands.
+~~~
+rna=loadpdb chains_CD_buit.pdb
+prot=loadpdb chain_A_built.pdb
+sys=combine {prot,rna}
+saveamberparm sys prmtop.parm7 inpcrd.rst7
+quit
+~~~
+{: .bash}
