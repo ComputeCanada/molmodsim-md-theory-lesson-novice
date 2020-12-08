@@ -18,12 +18,12 @@ $ mkdir ~/scratch/workshop
 ~~~
 {: .bash}
 
-
-### 1. Adding missing residues to protein structure files.
+### 1. Preparing protein for MD simulation
+#### 1.1 Adding missing residues to protein structure files.
 
 Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model contacting all atoms.
 
-#### 1.1 Adding missing residues using SWISS MODEL
+##### 1.1.1 Adding missing residues using SWISS MODEL
 
 *This section is merely to inroduce homology servers to the students. Homology modeling must be done from their local computers. I assume it has already been done and users have SWISS-MODEL and i-TASSER results*
 
@@ -77,15 +77,14 @@ you can download them to your computer for homology modeling with SWISS-MODEL an
 
 In the following sections we will assume that the SWISS-MODEL is saved in the file **'6N4O_SWISS_PROT_model_chainA.pdb'**.
 
-#### 1.2 Other homology modeling servers
+##### 1.1.2 Other homology modeling servers
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
 
 The result of the i-TASSER modeling is in the file **'6N4O_i-TASSER_model_chainA.pdb'**.
 
-### 2. Prepare working directory
+##### 1.1.3. Preparing working directory
 Login to one of the CC systems
 Create working directory and descend into it:
-
 ~~~
 $ mkdir ~/scratch/workshop
 $ cd ~/scratch/workshop
@@ -98,10 +97,10 @@ $ scp 6N4O_SWISS_PROT_model_chainA.pdb \
 ~~~
 {: .bash}
 
-### 3. Aligning protein models.
+#### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 
-Launch VMD and in VMD prompt execute the following commands:
+Navigate to the working directory that you created on graham. Launch VMD and in VMD prompt execute the following commands:
 ~~~
 vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
 vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
@@ -117,14 +116,13 @@ vmd > set terminal [atomselect 1 "noh resid 1 to 21"]
 vmd > $terminal writepdb 6n4o_resid_1-21.pdb
 ~~~
 {: .bash}
-
-Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
+These commands will align the i-TASSER model  with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
 ~~~
 grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
 
-### 4. Mutating residues
+#### 1.3. Mutating residues
 PDB entry 6N4O is the structure of the catalytically inactive hAgo2 mutant D669A. To construct the active form, we need to revert this mutation.
 
 To accomplish this, we need to delete from ALA669 all atoms that are not present in ASP. Then change the residue name of ALA669 to ASP. Let's  first check what atoms are in residue 669:
@@ -146,25 +144,24 @@ $ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 ~~~
 {: .bash}
 
-### 5. Adding functionally important Mg2+ ion
+#### 1.4. Adding functionally important Mg2+ ion.
 The catalytic site of hAgo2 is comprised of the three acidic amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
 
-### 6. Assigning Protonation States to Residues
+#### 1.5. Assigning Protonation States to Residues
 Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6 - "Assigning Protonation States to Residues in a Protein".
 
-### 7. Adding missing segments to RNA structure files.
+### 2. Adding missing segments to RNA structure files.
 
 First, we need to create a PDB file containing all RNA atoms placed at proper positions. At this initial step, we are not particularly concerned with the quality of the 3D structure because we will refine it afterward.
 
-We can insert the missing residues using the freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. The automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. Besides, modeRNA server offers a limited set of options, and the output PDB files will need more processing steps afterward. Changing atomic positions is not desirable because we want to keep all experimental coordinates. For these reasons, we will use the standalone modeRNA package.
+We can insert the missing residues using the freely available [ModeRNA server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone ModeRNA software. The automatic process used by ModeRNA server moves residues adjacent to the inserted fragment. Besides, modeRNA server offers a limited set of options, and the output PDB files will need more processing steps afterward. Changing atomic positions is not desirable because we want to keep all experimental coordinates. For these reasons, we will use the standalone modeRNA package. You can install modeRNA on CC systems, or if you are comfortable with installation of Python, you can install it on your computer.
 
-#### Installing on your computer
+#### 2.1. Installing ModeRNA on your computer
 
 1. Install python/2.7.14, numpy/1.11.3, biopython/1.58
 2. [Download ModerRNA](http://genesilico.pl/moderna/download/) and follow [installation instructions](http://genesilico.pl/moderna/installing/).
 
-#### Installing [ModeRNA](http://genesilico.pl/moderna/) on CC systems.
-
+#### 2.3. Installing ModeRNA on CC systems.
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ virtualenv e27
@@ -173,11 +170,9 @@ $ pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ~~~
 {: .bash}
 
-*\*Note: one of the tests failed on Graham - could be some weird problem in the environment of my account.*
-
 As ModeRNA can only model a single RNA strand, we will model chains C and D separately. For this job, we will need to prepare several files.
 
-#### Preparing structural templates for chains C and D.
+#### 2.4. Preparing structural templates for chains C and D.
 
 Download 6n4o.pdb
 ~~~
@@ -197,7 +192,7 @@ vmd> $sel writepdb 6n4o_chains_CD.pdb
 We created the file 6n4o_chains_CD.pdb suitable for use as a structural template.
 
 
-#### Sequence alignment files for chains C and D.
+#### 2.5. Preparing sequence alignment files for chains C and D.
 Prepare two sequence alignment files for chains C and D. Each file should contain two sequences, the sequence of the model to be built and the template sequence.
 
 Sequence alignment file for chain C, 6n4o_C.fasta:
@@ -218,8 +213,8 @@ CAUUG---CACUCCAA--
 ~~~
 {: .source}
 
-#### Commands for inserting missing residues.
-Once you install the program, you will be able to use all modeRNA functions. Below are commands needed to build chains C and D. Save them in the file make_models.py. Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
+#### 2.6. Inserting missing segments.
+Once you install modeRNA program, you will be able to use all functions. Below are commands needed to build chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
 ~~~
 from moderna import *
 # Model chain C
@@ -244,7 +239,7 @@ write_model(mD, 'chain_D_model_B.pdb')
 ~~~
 {: .source}
 
-#### Running ModeRNA
+Save these commands in the file make_models.py and run the program:
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ source e27/bin/activate
@@ -258,7 +253,7 @@ The modeRNA program will run and create two model files, chain_C_model_A.pdb, an
 >
 {: .challenge}
 
-#### Pitfalls with structure generated automatically by ModeRNA server.
+#### 2.7. Pitfalls with structure generated automatically by ModeRNA server.
 ModeRNA server inserts missing residues with the same residue number as the residue before insertion. It uses an insertion code (iCode) to mark inserted residues. For example, if residues 6-8 are missing, the program will insert them as residues 5A, 5B, and 5C. It is not possible to instruct ModeRNA webserver to renumber residues, and it is not possible to change chainID either. So you will need to take care of residue numbering and renaming chains manually.
 
 **References:**
@@ -266,17 +261,17 @@ ModeRNA server inserts missing residues with the same residue number as the resi
 2. [PDB file format](
 http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM)
 
-### Refining double stranded RNA.
+### 3. Optimizing double stranded RNA.
 As we built two complementary RNA strands independently of each other, they may clash when two strands are combined. To resolve clashes and obtain a good duplex structure, we need to minimize the energy of the whole RNA duplex.
 
-We will refine double stranded RNA using SimRNA. It is available as [SimRNAweb server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone  [SimRNA software] (https://genesilico.pl/SimRNAweb). This program allows for RNA 3D structure modeling with optional restraints.
+We will minimize energy of the double stranded RNA using SimRNA. It is available as [SimRNAweb server](http://iimcb.genesilico.pl/modernaserver/submit/model/) or standalone  [SimRNA software] (https://genesilico.pl/SimRNAweb). This program allows for RNA 3D structure modeling with optional restraints.
 
 SimRNA features:
 - Coarse-grained representation (5 atoms per residue)
 - Monte Carlo method for sampling the conformational space
 - The energy function is composed of statistical potential terms, derived from the observed frequencies of occurrence of various proximate structural patterns.
 
-#### Installation of the SimRNA binary package:
+#### 3.1. Installation of the SimRNA binary package:
 Simulation submitted to public SimRNAweb server may wait up to a few days in the queue, while on a local computer, you can do it in a couple of minutes. SimRNA is available as a binary distribution, so no installation is required. You only need to download and unpack the package:
 ~~~
 $ wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
@@ -284,7 +279,7 @@ $ tar -xf SimRNA_64bitIntel_Linux.tgz
 ~~~
 {: .bash}
 
-#### Preparing input files for simulation with SimRNAweb server.
+#### 3.2. Preparing input files for simulation with SimRNAweb server.
 If you will be using standalone SimRNA program you can skip this sections and proceed to the next one.
 
 SimRNAweb server requires the user to provide RNA sequence, a list of residues not allowed to move in simulation and RNA structure in PDB format.
@@ -309,7 +304,7 @@ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 
 You can use chains_CD_model_AB.pdb for SimRNAweb simulation. You will need to modify the PDB structure file as described in the next section for simulation with standalone SimRNA program.
 
-#### Preparing structure file for simulation with standalone SimRNA program.
+#### 3.3. Preparing structure file for simulation with standalone SimRNA program.
 
 Command-line SimRNA program does not need sequence and list of frozen atoms. You need to incorporate this information into the PDB structure file.
 
@@ -321,10 +316,10 @@ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 
 Next apply two modifications to this file. First, you need to add phosphate to the 5' terminal residue of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, you need to do it manually. There are several options to add phosphate.
 
-##### Rename O5' atom to P
+##### 3.3.1. Renaming O5' atom to P
 The most straightforward fix is to rename O5' atom to P. if you chose to do this, save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb, and skip the next step.
 
-##### Add 5' monophosphate with AmberTools/20.
+##### 3.3.2. Adding 5' monophosphate with AmberTools/20.
 First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'.
 
 Launch Leap and load RNA force field:
@@ -344,11 +339,10 @@ These commands will load libraries of phosphorylated 5' terminal nucleotides and
 
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
-**Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).** You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to the old-style RNA 3-letter names and changes chain ID to "R".
+##### 3.3.3. Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).
+You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to the old-style RNA 3-letter names and changes chain ID to "R".
 
-2. Flag frozen atoms in the occupancy field.
-
-**Changing occupancy values in PDB files with VMD**
+##### 3.3.4 Define frozen atoms.
 Standalone SimRNA program accepts PDB file where frozen atoms have occupancy 0.0 and completely free have occupancy 1.0. You can change values of the occupancy with the following VMD commands:
 ~~~
 vmd> mol new chains_CD_model_AB_5P.pdb
@@ -363,7 +357,7 @@ vmd> $sel writepdb chains_CD_model_AB_5P_frozen.pdb
 ~~~
 {: .bash}
 
-#### Running simulation
+#### 3.4. Running simulation
 SimRNA needs two files in the working directory:
 'chains_CD_model_AB_5P_frozen.pdb' and 'config', the file with SimRNA simulation parameters.
 
@@ -400,7 +394,9 @@ Replica exchange mode is parallelized with OMP.
 
 The simulation will run for about two minutes and produce trajectory file *.trafl for each replica.
 
-#### Extracting a structure from a simulation trajectory
+#### 3.5. Processing simulation trajectory
+The simplest way of processing the trajectory files is obtaining the lowest energy structure. Generally, better results can be obtained by using clustering. Clustering tool is included with the distribution, but using clustering is outside the scope of this workshop.
+
 Extract the lowest energy frame from the trajectory of the first replica
 ~~~
 $ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \
@@ -413,26 +409,30 @@ $ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \
 chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
 ~~~
 {: .bash}
+This command will create PDB file of the lowest energy structure from trajectory of replica 1:
+chains_CD_model_AB_5P_frozen.pdb_01_minE-000001_AA.pdb
+We will use this relaxed structure for simulation. Rename it into a shorter name, for example chains_CD_minimized.pdb
 
-#### References
+
+**References**
 1. [SimRNA: a coarse-grained method for RNA folding simulations and 3D structure prediction](https://doi.org/10.1093/nar/gkv1479)
 2. [SimRNA manual](https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_UserManual_v3_20_20141002.pdf)
 3. [VMD TCL commands](https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.4/ug/node121.html)
 
 
-### Preparing simulation system
+### 4. Preparing simulation system
+Launch Leap and load protein and RNA forcefields:
 ~~~
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
 ~~~
 {: .bash}
-Leap commands.
+Load protein and RNA. Then combine them inot one unit.
 ~~~
-rna=loadpdb chains_CD_buit.pdb
-prot=loadpdb chain_A_built.pdb
-sys=combine {prot,rna}
-saveamberparm sys prmtop.parm7 inpcrd.rst7
-quit
+rna = loadpdb chains_CD_minimized.pdb
+prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
+sys = combine {prot,rna}
 ~~~
 {: .bash}
+After this follow Episode 7 "Solvating a System, Adding Ions and Generating Input Files".
