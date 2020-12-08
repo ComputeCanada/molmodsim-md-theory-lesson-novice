@@ -79,7 +79,7 @@ In the following sections we will assume that the SWISS-MODEL is saved in the fi
 ##### 1.1.2 Other homology modeling servers
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
 
-The result of the i-TASSER modeling is in the file **'6N4O_i-TASSER_model_chainA.pdb'**.
+Save the result of the i-TASSER modeling in the file **'6N4O_i-TASSER_model_chainA.pdb'**.
 
 ##### 1.1.3. Preparing working directory
 Login to one of the CC systems
