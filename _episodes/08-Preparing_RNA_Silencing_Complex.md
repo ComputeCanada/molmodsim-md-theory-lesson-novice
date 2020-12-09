@@ -102,6 +102,7 @@ i-TASSER procedure changes the orientation of the protein and slightly optimizes
 
 Navigate to the working directory that you created on graham. Ensure that you have two files in the working directory:
 ~~~
+[svassili@gra-login3 workshop]$ cd  ~/scratch/workshop
 [svassili@gra-login3 workshop]$ ls
 ~~~
 {: .bash}
