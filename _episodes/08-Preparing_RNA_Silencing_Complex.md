@@ -101,10 +101,16 @@ someuser@graham.computecanada.ca:scratch/workshop
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 
 Navigate to the working directory that you created on graham. Ensure that you have two files in the working directory:
-```
-6N4O_SWISS_PROT_model_chainA.pdb
-6N4O_i-TASSER_model_chainA.pdb
-```
+~~~
+[svassili@gra-login3 workshop]$ ls
+~~~
+{: .bash}
+
+~~~
+6N4O_i-TASSER_model_chainA.pdb	6N4O_SWISS_PROT_model_chainA.pdb
+~~~
+{: .output}
+
  Launch VMD and in VMD prompt execute the following commands:
 ~~~
 vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
