@@ -157,7 +157,7 @@ vmd > $terminal writepdb 6n4o_resid_1-21.pdb
 vmd > quit
 ~~~
 {: .bash}
-These commands will align the i-TASSER model with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
+Combine the i-TASSER model of residues 1-21 with the SWISS-MODEL.
 ~~~
 $ grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
