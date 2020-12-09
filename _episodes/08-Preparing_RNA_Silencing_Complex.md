@@ -96,7 +96,18 @@ $ scp 6N4O_SWISS_PROT_model_chainA.pdb \
 someuser@graham.computecanada.ca:scratch/workshop
 ~~~
 {: .bash}
-In this command "\\" is line continuation character. Ensure that there are no empty spaces between "\\" and the next line, or the command will fail. 
+~~~
+6N4O_SWISS_PROT_model_chainA.pdb              100%  516KB   1.2MB/s   00:00
+6N4O_i-TASSER_model_chainA.pdb                100% 1082KB   5.3MB/s   00:00
+~~~
+{: .output}
+In this command "\\" is line continuation character. Ensure that there are no empty spaces between "\\" and the next line, or the command will fail.
+
+It is equivalent to:
+~~~
+$ scp 6N4O_SWISS_PROT_model_chainA.pdb 6N4O_i-TASSER_model_chainA.pdb someuser@graham.computecanada.ca:scratch/workshop
+~~~
+{: .bash}
 
 #### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
