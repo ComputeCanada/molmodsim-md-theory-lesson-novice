@@ -103,12 +103,6 @@ someuser@graham.computecanada.ca:scratch/workshop
 {: .output}
 In this command "\\" is line continuation character. Ensure that there are no empty spaces between "\\" and the next line, or the command will fail.
 
-It is equivalent to:
-~~~
-$ scp 6N4O_SWISS_PROT_model_chainA.pdb 6N4O_i-TASSER_model_chainA.pdb someuser@graham.computecanada.ca:scratch/workshop
-~~~
-{: .bash}
-
 #### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 
@@ -143,7 +137,7 @@ vmd > quit
 {: .bash}
 These commands will align the i-TASSER model  with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
 ~~~
-grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
+$ grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
 
@@ -220,23 +214,31 @@ We created the file 6n4o_chains_CD.pdb suitable for use as a structural template
 #### 2.5. Preparing sequence alignment files for chains C and D.
 Prepare two sequence alignment files for chains C and D. Each file should contain two sequences, the sequence of the model to be built and the template sequence.
 
-Sequence alignment file for chain C, 6n4o_C.fasta:
+Sequence alignment file for chain C, 6n4o_C.fasta
+~~~
+[svassili@gra-login3 workshop]$ cat 6n4o_C.fasta
+~~~
+{: .bash}
 ~~~
 >Model
 UGGAGUGUGACAAUGGUGUUU
 >Template
 UGGAGUGUG-CAAUGGUG-UU
 ~~~
-{: .source}
+{: .output}
 
 Sequence alignment file for chain D, 6n4o_D.fasta:
+~~~
+[svassili@gra-login3 workshop]$ cat 6n4o_D.fasta
+~~~
+{: .bash}
 ~~~
 >Model
 CAUUGUCACACUCCAAAA
 >Template
 CAUUG---CACUCCAA--
 ~~~
-{: .source}
+{: .output}
 
 #### 2.6. Inserting missing segments.
 Once you install modeRNA program, you will be able to use all functions. Below are commands needed to build chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
