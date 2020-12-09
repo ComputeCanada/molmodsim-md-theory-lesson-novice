@@ -126,7 +126,7 @@ vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
 vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
 ~~~
 {: .bash}
-Missing residues are specified in PDB headers.
+Missing residues are specified in the PDB file header in section "REMARK 465"
 ~~~
 [svassili@gra-login3 workshop]$ grep "REMARK 465" 6n4o.pdb
 ~~~
@@ -189,11 +189,21 @@ $ grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain
 #### 1.3. Mutating residues
 PDB entry 6N4O is the structure of the catalytically inactive hAgo2 mutant D669A. To construct the active form, we need to revert this mutation.
 
-To accomplish this, we need to delete from ALA669 all atoms that are not present in ASP. Then change the residue name of ALA669 to ASP. Let's  first check what atoms are in residue 669:
+To accomplish this, we need to delete from ALA669 all atoms that are not present in ASP. Then change the residue name of ALA669 to ASP.
+
+Let's begin by checking what atoms are present in residue 669:
 ~~~
 $ grep 'A 669' 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
+~~~
+ATOM   5161  N   ALA A 669     -19.332  25.617 -27.862  1.00  0.97           N
+ATOM   5162  CA  ALA A 669     -18.951  24.227 -27.916  1.00  0.97           C
+ATOM   5163  C   ALA A 669     -17.435  24.057 -28.043  1.00  0.97           C
+ATOM   5164  O   ALA A 669     -16.661  25.018 -28.091  1.00  0.97           O
+ATOM   5165  CB  ALA A 669     -19.720  23.530 -29.053  1.00  0.97           C
+~~~
+{: .output}
 
 If you are familiar with aminoacid structures, you remember that the alanine sidechain is made of only one beta carbon atom (CB). All amino acids except glycine have beta carbon as well. So there is nothing to delete. All we need to do is to change the resName of all five ALA669 atoms to ASP.
 You can do it using stream editor:
@@ -207,6 +217,17 @@ Verify the result:
 $ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 ~~~
 {: .bash}
+
+~~~
+ATOM   5161  N   ASP A 669     -19.332  25.617 -27.862  1.00  0.97           N
+ATOM   5162  CA  ASP A 669     -18.951  24.227 -27.916  1.00  0.97           C
+ATOM   5163  C   ASP A 669     -17.435  24.057 -28.043  1.00  0.97           C
+ATOM   5164  O   ASP A 669     -16.661  25.018 -28.091  1.00  0.97           O
+ATOM   5165  CB  ASP A 669     -19.720  23.530 -29.053  1.00  0.97           C
+~~~
+{: .output}
+
+
 
 #### 1.4. Adding functionally important Mg2+ ion.
 The catalytic site of hAgo2 is comprised of the three acidic amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
