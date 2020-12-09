@@ -120,13 +120,36 @@ Navigate to the working directory that you created on graham. Ensure that you ha
 
  Launch VMD.
 
- Load two pdb files. They will be loaded as molecules 0 and 1:
+ Load two pdb files, they will be loaded as molecules 0 and 1:
 ~~~
 vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
 vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
 ~~~
 {: .bash}
-Make a list of all residues present in 6N4O.pdb and save the list in the variable *6n4o_residues*:
+Missing residues are specified in PDB headers.
+~~~
+[svassili@gra-login3 workshop]$ grep "REMARK 465" 6n4o.pdb
+~~~
+{: .bash}
+~~~
+REMARK 465 MISSING RESIDUES
+REMARK 465 THE FOLLOWING RESIDUES WERE NOT LOCATED IN THE
+REMARK 465 EXPERIMENT. (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN
+REMARK 465 IDENTIFIER; SSSEQ=SEQUENCE NUMBER; I=INSERTION CODE.)
+REMARK 465
+REMARK 465   M RES C SSSEQI
+REMARK 465     MET A     1
+REMARK 465     TYR A     2
+REMARK 465     SER A     3
+REMARK 465     GLY A     4
+REMARK 465     ALA A     5
+REMARK 465     GLY A     6
+REMARK 465     PRO A     7
+...
+~~~
+{: .output}
+
+Using this information make a list of all residues present in 6N4O.pdb and save the list in the variable *6n4o_residues*:
 ~~~
 vmd > set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
 ~~~
