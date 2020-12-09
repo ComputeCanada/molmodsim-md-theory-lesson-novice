@@ -118,24 +118,46 @@ Navigate to the working directory that you created on graham. Ensure that you ha
 ~~~
 {: .output}
 
- Launch VMD and in VMD prompt execute the following commands:
+ Launch VMD.
+
+ Load two pdb files. They will be loaded as molecules 0 and 1:
 ~~~
 vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
 vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
+~~~
+{: .bash}
+Make a list of all residues present in 6N4O.pdb and save the list in the variable *6n4o_residues*:
+~~~
 vmd > set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
+~~~
+{: .bash}
+Select residues defined in the variable *6n4o_residues* from both models, and save them in the variables *swissmodel* and *itasser*
+~~~
 vmd > set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
 vmd > set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
+~~~
+{: .bash}
+Compute the transformation matrix *RotMat*
+~~~
 vmd > set RotMat [measure fit $itasser $swissmodel]
+~~~
+{: .bash}
+Select all residies of molecule 1 and apply the transformation matrix to the selection
+~~~
 vmd > echo rmsd before fit = [measure rmsd $itasser $swissmodel]
 vmd > set itasser_all [atomselect 1 "all"]
 vmd > $itasser_all move $RotMat
 vmd > echo rmsd after fit = [measure rmsd $itasser $swissmodel]
+~~~
+{: .bash}
+Select residues 1-21 from molecule 1 and save them in the file 6n4o_resid_1-21.pdb
+~~~
 vmd > set terminal [atomselect 1 "noh resid 1 to 21"]
 vmd > $terminal writepdb 6n4o_resid_1-21.pdb
 vmd > quit
 ~~~
 {: .bash}
-These commands will align the i-TASSER model  with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
+These commands will align the i-TASSER model with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
 ~~~
 $ grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
