@@ -74,12 +74,12 @@ Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology m
 
 &nbsp;8. Compare the model with your original structure. Were all missing residues added?
 
-Save the SWISS-MODEL in the file **'6N4O_SWISS_PROT_model_chainA.pdb'**.
+In the following sections we will assume that the SWISS-MODEL is saved in the file **6N4O_SWISS_PROT_model_chainA.pdb**
 
 ##### 1.1.2 Other homology modeling servers
 SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
 
-Save the result of the i-TASSER modeling in the file **'6N4O_i-TASSER_model_chainA.pdb'**.
+Save the result of the i-TASSER modeling in the file **6N4O_i-TASSER_model_chainA.pdb**
 
 ##### 1.1.3. Preparing working directory
 Login to one of the CC systems
@@ -92,7 +92,7 @@ $ cd ~/scratch/workshop
 Upload protein models from your computer:
 ~~~
 $ scp 6N4O_SWISS_PROT_model_chainA.pdb \
-6N4O_i-TASSER_model_chainA.pdb \
+6N4O_i-TASSER_model_chainA.pdb\
 someuser@graham.computecanada.ca:scratch/workshop
 ~~~
 {: .bash}
@@ -100,7 +100,12 @@ someuser@graham.computecanada.ca:scratch/workshop
 #### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 
-Navigate to the working directory that you created on graham. Launch VMD and in VMD prompt execute the following commands:
+Navigate to the working directory that you created on graham. Ensure that you have two files in the working directory:
+```
+6N4O_SWISS_PROT_model_chainA.pdb
+6N4O_i-TASSER_model_chainA.pdb
+```
+ Launch VMD and in VMD prompt execute the following commands:
 ~~~
 vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
 vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
@@ -114,6 +119,7 @@ vmd > $itasser_all move $RotMat
 vmd > echo rmsd after fit = [measure rmsd $itasser $swissmodel]
 vmd > set terminal [atomselect 1 "noh resid 1 to 21"]
 vmd > $terminal writepdb 6n4o_resid_1-21.pdb
+vmd > quit
 ~~~
 {: .bash}
 These commands will align the i-TASSER model  with the SWISS-MODEL. Combine the i-TASSER model of residues 1-21 and the SWISS-MODEL.
