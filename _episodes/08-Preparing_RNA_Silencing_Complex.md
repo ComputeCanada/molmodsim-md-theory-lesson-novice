@@ -333,7 +333,7 @@ write_model(mD, 'chain_D_model_B.pdb')
 Save these commands in the file make_models.py and run the program:
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
-$ source e27/bin/activate
+$ source ~/e27/bin/activate
 $ python make_models.py
 ~~~
 {: .source}
