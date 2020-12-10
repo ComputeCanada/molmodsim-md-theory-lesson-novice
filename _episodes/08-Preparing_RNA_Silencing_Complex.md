@@ -1,5 +1,5 @@
 ---
-title: "Preparing a protein-RNA complex for MD simulation"
+title: "Preparing a complex protein-RNA system for simulation"
 teaching: 30
 exercises: 5
 questions:
@@ -101,7 +101,7 @@ someuser@graham.computecanada.ca:scratch/workshop
 6N4O_i-TASSER_model_chainA.pdb                100% 1082KB   5.3MB/s   00:00
 ~~~
 {: .output}
-In this command "\\" is line continuation character. Ensure that there are no empty spaces between "\\" and the next line.
+In this command, "\\" is the line continuation character. Ensure that there is no whitespace characters after it.
 
 #### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
@@ -160,16 +160,16 @@ vmd > set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
 vmd > set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
 ~~~
 {: .bash}
-Compute the transformation matrix *RotMat*
+Compute the transformation matrix *TransMat*
 ~~~
-vmd > set RotMat [measure fit $itasser $swissmodel]
+vmd > set TransMat [measure fit $itasser $swissmodel]
 ~~~
 {: .bash}
 Select all residies of molecule 1 and apply the transformation matrix to the selection
 ~~~
 vmd > echo rmsd before fit = [measure rmsd $itasser $swissmodel]
 vmd > set itasser_all [atomselect 1 "all"]
-vmd > $itasser_all move $RotMat
+vmd > $itasser_all move $TransMat
 vmd > echo rmsd after fit = [measure rmsd $itasser $swissmodel]
 ~~~
 {: .bash}
@@ -227,13 +227,11 @@ ATOM   5165  CB  ASP A 669     -19.720  23.530 -29.053  1.00  0.97           C
 ~~~
 {: .output}
 
-
-
-#### 1.4. Adding functionally important Mg2+ ion.
-The catalytic site of hAgo2 is comprised of the three acidic amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near its catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
+#### 1.4. Adding functionally important ions.
+The catalytic site of hAgo2 is comprised of the three amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near the catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
 
 #### 1.5. Assigning Protonation States to Residues
-Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6 - "Assigning Protonation States to Residues in a Protein".
+Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6, "Assigning Protonation States to Residues in a Protein".
 
 ### 2. Adding missing segments to RNA structure files.
 
@@ -249,8 +247,8 @@ We can insert the missing residues using the freely available [ModeRNA server](h
 #### 2.3. Installing ModeRNA on CC systems.
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
-$ virtualenv e27
-$ source e27/bin/activate
+$ virtualenv ~/e27
+$ source ~/e27/bin/activate
 $ pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ~~~
 {: .bash}
@@ -521,11 +519,11 @@ source $EBROOTAMBERTOOLS/amber.sh
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
 ~~~
 {: .bash}
-Load protein and RNA. Then combine them inot one unit.
+Load protein and RNA, then combine them into one unit:
 ~~~
 rna = loadpdb chains_CD_minimized.pdb
 prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
 sys = combine {prot,rna}
 ~~~
 {: .bash}
-After this follow Episode 7 "Solvating a System, Adding Ions and Generating Input Files".
+After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
