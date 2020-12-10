@@ -255,6 +255,14 @@ $ pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ~~~
 {: .bash}
 
+Installation is required only once. When you login into your account next time you only need to activate the environment:
+
+~~~
+$ module load StdEnv/2016.4 python/2.7.14
+$ source ~/e27/bin/activate
+~~~
+{: .bash}
+
 As ModeRNA can only model a single RNA strand, we will model chains C and D separately. For this job, we will need to prepare several files.
 
 #### 2.4. Preparing structural templates for chains C and D.
@@ -271,6 +279,7 @@ Execute the following VMD commands to save chain C and chain D without residue 6
 vmd> mol new 6n4o.pdb
 vmd> set sel [atomselect top "chain C or (chain D and not resid 6)"]
 vmd> $sel writepdb 6n4o_chains_CD.pdb
+vmd> quit
 ~~~
 {: .bash}
 
@@ -278,7 +287,7 @@ We created the file 6n4o_chains_CD.pdb suitable for use as a structural template
 
 
 #### 2.5. Preparing sequence alignment files for chains C and D.
-Use a text editing program (nano or vi) to prepare two sequence alignment files for chains C and D. Each file must contain two sequences, the sequence of the model to be built and the template sequence. The contents of the files is shown below.
+Use a text editor, for example, nano or vi, to prepare two sequence alignment files for chains C and D. Each file must contain two sequences, the sequence of the model to be built and the template sequence. The contents of the files is shown below.
 
 Sequence alignment file for chain C, 6n4o_C.fasta
 ~~~
@@ -307,7 +316,7 @@ CAUUG---CACUCCAA--
 {: .output}
 
 #### 2.6. Inserting missing segments.
-Once you install modeRNA program, you will be able to use all functions. Below are commands needed to build chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
+Once you install modeRNA program, you will be able to use all its functions. Below are commands needed to build chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
 ~~~
 from moderna import *
 # Model chain C
@@ -332,7 +341,14 @@ write_model(mD, 'chain_D_model_B.pdb')
 ~~~
 {: .source}
 
-Save these commands in the file make_models.py and run the program:
+You can start python:
+~~~
+$ module load StdEnv/2016.4 python/2.7.14
+$ source ~/e27/bin/activate
+$ python
+~~~
+{: .source}
+and execute the commands interactively, or save these commands in the file make_models.py and run the program:
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ source ~/e27/bin/activate
@@ -395,7 +411,7 @@ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-You can use chains_CD_model_AB.pdb for SimRNAweb simulation. You will need to modify the PDB structure file as described in the next section for simulation with standalone SimRNA program.
+You can use chains_CD_model_AB.pdb for SimRNAweb simulation. For simulation with standalone SimRNA program you will need to modify the PDB structure file as described in the next section.
 
 #### 3.3. Preparing structure file for simulation with standalone SimRNA program.
 
@@ -403,7 +419,7 @@ Command-line SimRNA program does not need sequence and list of frozen atoms. You
 
 Begin with combining chains A and B if you have not done this yet:
 ~~~
-cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
+$ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
@@ -417,15 +433,15 @@ First, rename the phosphorylated 5' terminal nucleotide according to AMBER conve
 
 Launch Leap and load RNA force field:
 ~~~
-
 $ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
-In Leap promt execute the commands:
+In the Leap promt execute the commands:
 ~~~
 > loadoff terminal_monophosphate.lib
 > chainD = loadpdb chain_D_model_B.pdb
 > savepdb chainD chain_D5P.pdb
+> quit
 ~~~
 {: .bash}
 These commands will load libraries of phosphorylated 5' terminal nucleotides and chain D PDB file. Leap will automatically add all missing atoms based on library entries and save chainD in PDB file chain_D5P.pdb:
@@ -447,6 +463,7 @@ vmd> set sel [atomselect top "chain B and resid 6 7 8 17 18"]
 vmd> $sel set occupancy 1
 vmd> set sel [atomselect top all]
 vmd> $sel writepdb chains_CD_model_AB_5P_frozen.pdb
+vmd> quit
 ~~~
 {: .bash}
 
@@ -482,7 +499,7 @@ $ srun -A def-someuser -c10 --mem-per-cpu=1000 --time=30:0 \
 ~~~
 {: .bash}
 
-Option -E \<number of replicas> turns on replica exchange mode.
+The option -E \<number of replicas> turns on replica exchange mode.
 Replica exchange mode is parallelized with OMP.
 
 The simulation will run for about two minutes and produce trajectory file *.trafl for each replica.
