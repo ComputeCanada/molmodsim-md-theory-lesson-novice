@@ -118,6 +118,8 @@ Navigate to the working directory that you created on graham. Ensure that you ha
 ~~~
 {: .output}
 
+Ensure that both files have only protein atoms (chain A).
+
  Launch VMD.
 
  Load two pdb files, they will be loaded as molecules 0 and 1:
