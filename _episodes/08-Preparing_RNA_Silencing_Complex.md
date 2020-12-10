@@ -278,7 +278,7 @@ We created the file 6n4o_chains_CD.pdb suitable for use as a structural template
 
 
 #### 2.5. Preparing sequence alignment files for chains C and D.
-Prepare two sequence alignment files for chains C and D. Each file should contain two sequences, the sequence of the model to be built and the template sequence.
+Use a text editing program (nano or vi) to prepare two sequence alignment files for chains C and D. Each file must contain two sequences, the sequence of the model to be built and the template sequence. The contents of the files is shown below.
 
 Sequence alignment file for chain C, 6n4o_C.fasta
 ~~~
