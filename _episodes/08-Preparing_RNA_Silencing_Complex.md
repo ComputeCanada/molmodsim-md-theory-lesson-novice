@@ -407,23 +407,23 @@ List of residues not allowed to move (we don't want the program to move atoms re
 {: .bash}
 PDB file matching the sequence. All atoms must be present, and chains must be named A and B. To prepare this file combine chains A and B:
 ~~~
-cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
+$ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-You can use chains_CD_model_AB.pdb for SimRNAweb simulation. For simulation with standalone SimRNA program you will need to modify the PDB structure file as described in the next section.
+You can use chains_CD_model_AB.pdb only for SimRNAweb simulation. For simulation with standalone SimRNA program you will need to modify the PDB structure file as described in the next section.
 
 #### 3.3. Preparing structure file for simulation with standalone SimRNA program.
 
-Command-line SimRNA program does not need sequence and list of frozen atoms. You need to incorporate this information into the PDB structure file.
+Command-line SimRNA program does not take a list of frozen atoms as a separate input. Instead, you need to insert this information into the PDB structure file. But before we flag frozen atoms the missing phosphate must be added to the 5' terminal residue of chain D.
 
-Begin with combining chains A and B if you have not done this yet:
+We begin with merging chains A and B if you have not done this yet:
 ~~~
 $ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
-Next apply two modifications to this file. First, you need to add phosphate to the 5' terminal residue of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, you need to do it manually. There are several options to add phosphate.
+Next we apply two modifications to this file. First, we need to add phosphate to the 5' terminal residue of chain D. SimRNA expects all residues to have a P atom. SimRNAweb will add P automatically, but for simulation with a standalone SimRNA program, we need to do it manually. There are several options to add the phosphate.
 
 ##### 3.3.1. Renaming O5' atom to P
 The most straightforward fix is to rename O5' atom to P. if you chose to do this, save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb, and skip the next step.
