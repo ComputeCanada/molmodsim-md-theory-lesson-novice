@@ -108,8 +108,8 @@ i-TASSER procedure changes the orientation of the protein and slightly optimizes
 
 Navigate to the working directory that you created on graham. Ensure that you have two files in the working directory:
 ~~~
-[svassili@gra-login3 workshop]$ cd  ~/scratch/workshop
-[svassili@gra-login3 workshop]$ ls
+$ cd  ~/scratch/workshop
+$ ls
 ~~~
 {: .bash}
 
@@ -130,7 +130,7 @@ vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
 {: .bash}
 Missing residues are specified in the PDB file header in section "REMARK 465"
 ~~~
-[svassili@gra-login3 workshop]$ grep "REMARK 465" 6n4o.pdb
+$ grep "REMARK 465" 6n4o.pdb
 ~~~
 {: .bash}
 ~~~
@@ -291,7 +291,7 @@ Use a text editor of your choice (for example, nano or vi) to create two sequenc
 
 Sequence alignment file for chain C, 6n4o_C.fasta
 ~~~
-[svassili@gra-login3 workshop]$ cat 6n4o_C.fasta
+[user@gra-login workshop]$ cat 6n4o_C.fasta
 ~~~
 {: .bash}
 ~~~
@@ -304,7 +304,7 @@ UGGAGUGUG-CAAUGGUG-UU
 
 Sequence alignment file for chain D, 6n4o_D.fasta:
 ~~~
-[svassili@gra-login3 workshop]$ cat 6n4o_D.fasta
+[user@gra-login3 workshop]$ cat 6n4o_D.fasta
 ~~~
 {: .bash}
 ~~~
