@@ -542,16 +542,16 @@ We will use this relaxed structure for simulation. Rename it into a shorter name
 ### 4. Preparing simulation system
 Launch Leap and load protein and RNA forcefields:
 ~~~
-module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
-source $EBROOTAMBERTOOLS/amber.sh
-tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
+$ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+$ source $EBROOTAMBERTOOLS/amber.sh
+$ tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
 ~~~
 {: .bash}
-Load protein and RNA, then combine them into one unit:
+In the Leap prompt, load protein and RNA, then combine them into one unit:
 ~~~
-rna = loadpdb chains_CD_minimized.pdb
-prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
-sys = combine {prot,rna}
+> rna = loadpdb chains_CD_minimized.pdb
+> prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
+> sys = combine {prot,rna}
 ~~~
 {: .bash}
 After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
