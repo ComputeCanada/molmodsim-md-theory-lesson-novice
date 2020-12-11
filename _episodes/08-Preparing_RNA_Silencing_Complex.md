@@ -431,6 +431,13 @@ The most straightforward fix is to rename O5' atom to P. if you chose to do this
 ##### 3.3.2. Adding 5' monophosphate with AmberTools/20.
 First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'.
 
+Load the AmberTools module:
+~~~
+$ module load StdEnv/2020 gcc/9.3.0  openmpi/4.0.3 ambertools/20
+$ source $EBROOTAMBERTOOLS/amber.sh
+~~~
+{: .bash}
+
 Launch Leap and load RNA force field:
 ~~~
 $ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
