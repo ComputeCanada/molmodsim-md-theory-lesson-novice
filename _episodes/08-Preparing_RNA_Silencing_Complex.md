@@ -433,10 +433,12 @@ First, rename the phosphorylated 5' terminal nucleotide according to AMBER conve
 
 Load the AmberTools module:
 ~~~
-$ module load StdEnv/2020 gcc/9.3.0  openmpi/4.0.3 ambertools/20
+$ module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools/20
 $ source $EBROOTAMBERTOOLS/amber.sh
 ~~~
 {: .bash}
+
+Watch for the message printed on screen when the module is loaded. The message instructs how to use the module.
 
 Launch Leap and load RNA force field:
 ~~~
