@@ -291,7 +291,7 @@ Use a text editor of your choice (for example, nano or vi) to create two sequenc
 
 Sequence alignment file for chain C, 6n4o_C.fasta
 ~~~
-[user@gra-login workshop]$ cat 6n4o_C.fasta
+$ cat 6n4o_C.fasta
 ~~~
 {: .bash}
 ~~~
@@ -304,7 +304,7 @@ UGGAGUGUG-CAAUGGUG-UU
 
 Sequence alignment file for chain D, 6n4o_D.fasta:
 ~~~
-[user@gra-login3 workshop]$ cat 6n4o_D.fasta
+$ cat 6n4o_D.fasta
 ~~~
 {: .bash}
 ~~~
