@@ -316,7 +316,7 @@ CAUUG---CACUCCAA--
 {: .output}
 
 #### 2.6. Inserting missing segments.
-Once you install modeRNA program, you will be able to use all its functions. Below are commands needed to build chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
+Once you install modeRNA program, you will be able to use all its functions. Below are the commands needed to insert missing fragments in chains C and D.  Description of all commands is available [here](http://genesilico.pl/moderna/commands/).
 ~~~
 from moderna import *
 # Model chain C
@@ -341,21 +341,21 @@ write_model(mD, 'chain_D_model_B.pdb')
 ~~~
 {: .source}
 
-You can start python:
+You can start python and execute the commands interactively:
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ source ~/e27/bin/activate
 $ python
 ~~~
 {: .source}
-and execute the commands interactively, or save these commands in the file make_models.py and run the program:
+Or save these commands in the file make_models.py and run it non-iteractively:
 ~~~
 $ module load StdEnv/2016.4 python/2.7.14
 $ source ~/e27/bin/activate
 $ python make_models.py
 ~~~
 {: .source}
-The modeRNA program will run and create two model files, chain_C_model_A.pdb, and chain_D_model_B.pdb. Ensure that the program added all missing residues and did not move any residues present in the original structure file.
+The modeRNA program will create two model files, chain_C_model_A.pdb, and chain_D_model_B.pdb. Ensure that the program added all missing residues and did not move any residues present in the original structure file.
 
 > ## How will ModeRNA server do the same task?
 > Try using ModeRNA server. Compare automatically generated ModeRNA models with the original chains C and D. Did server only added missing residues without moving any other atoms?
