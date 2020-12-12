@@ -509,7 +509,7 @@ $ srun -A <desired account> -c10 --mem-per-cpu=1000 --time=30:0 \
 {: .bash}
 
 The option -E \<number of replicas> turns on replica exchange mode.
-Replica exchange mode is parallelized with OMP.
+Replica exchange mode is parallelized with OMP. Each replica simulation can run on its own CPU independently of others,  so for the optimal performance allocate the same number of cores (option -c) as the number of replicas (option -E). 
 
 The simulation will run for about two minutes and produce trajectory file *.trafl for each replica.
 
