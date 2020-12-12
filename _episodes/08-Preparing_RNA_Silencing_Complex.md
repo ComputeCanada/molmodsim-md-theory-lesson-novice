@@ -429,7 +429,7 @@ Next we apply two modifications to this file. First, we need to add phosphate to
 The most straightforward fix is to rename O5' atom to P. if you chose to do this, save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb, and skip the next step.
 
 ##### 3.3.2. Adding 5' monophosphate with AmberTools/20.
-First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file 'terminal_monophosphate.lib'.
+First, rename the phosphorylated 5' terminal nucleotide according to AMBER convention. The names of phosphorylated terminals in AMBER are A5, C5, G5, U5, DA5, DC5, DG5, and DT5. Libraries of phosphorylated 5' terminal nucleotides are in the file '$AMBERHOME/dat/leap/lib/terminal_monophosphate.lib'.
 
 Load the AmberTools module:
 ~~~
@@ -501,7 +501,7 @@ $ ln -s data ~/SimRNA_64bitIntel_Linux/data
 {: .bash}
 Then run the simulation:
 ~~~
-$ srun -A def-someuser -c10 --mem-per-cpu=1000 --time=30:0 \
+$ srun -A <desired account> -c10 --mem-per-cpu=1000 --time=30:0 \
 ~/SimRNA_64bitIntel_Linux/SimRNA \
 -P chains_CD_model_AB_5P_frozen.pdb \
 -c config -E 10
