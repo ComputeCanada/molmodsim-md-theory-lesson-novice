@@ -235,6 +235,14 @@ The catalytic site of hAgo2 is comprised of the three amino acids D597, E637, an
 #### 1.5. Assigning Protonation States to Residues
 Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6, "Assigning Protonation States to Residues in a Protein".
 
+Force fields used by H++:
+1. AMBER Lipid 2011 Force Field, lipid11.dat
+2. PARM99 + frcmod.ff99SB + frcmod.parmbsc0 + OL3 for RNA, parm10.dat + frcmod.ff14SB
+3. AMBER force-field parameters for phosphorylated amino acids, frcmod.phosaa10
+4. Ions, see Leap log for more details
+
+It does not yet supports 5' phosphorylated AA, so 5' phosphates must be removed.
+
 ### 2. Adding missing segments to RNA structure files.
 
 First, we need to create a PDB file containing all RNA atoms placed at proper positions. At this initial step, we are not particularly concerned with the quality of the 3D structure because we will refine it afterward.
@@ -509,7 +517,7 @@ $ srun -A <desired account> -c10 --mem-per-cpu=1000 --time=30:0 \
 {: .bash}
 
 The option -E \<number of replicas> turns on replica exchange mode.
-Replica exchange mode is parallelized with OMP. Each replica simulation can run on its own CPU independently of others,  so for the optimal performance allocate the same number of cores (option -c) as the number of replicas (option -E). 
+Replica exchange mode is parallelized with OMP. Each replica simulation can run on its own CPU independently of others,  so for the optimal performance allocate the same number of cores (option -c) as the number of replicas (option -E).
 
 The simulation will run for about two minutes and produce trajectory file *.trafl for each replica.
 
