@@ -105,30 +105,7 @@ In this command, "\\" is the line continuation character. Ensure that there is n
 
 #### 1.2. Aligning protein models.
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
-
-Navigate to the working directory that you created on graham. Ensure that you have two files in the working directory:
-~~~
-$ cd  ~/scratch/workshop
-$ ls
-~~~
-{: .bash}
-
-~~~
-6N4O_i-TASSER_model_chainA.pdb	6N4O_SWISS_PROT_model_chainA.pdb
-~~~
-{: .output}
-
-Ensure that both files have only protein atoms (chain A).
-
- Launch VMD.
-
- Load two pdb files, they will be loaded as molecules 0 and 1:
-~~~
-vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
-vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
-~~~
-{: .bash}
-Missing residues are specified in the PDB file header in section "REMARK 465"
+For alignment we can use only residues present in 6n4o.pdb. Missing residues are specified in the PDB file header in section "REMARK 465"
 ~~~
 $ grep "REMARK 465" 6n4o.pdb
 ~~~
@@ -151,7 +128,35 @@ REMARK 465     PRO A     7
 ~~~
 {: .output}
 
-Using this information make a list of all residues present in 6N4O.pdb and save the list in the variable *6n4o_residues*:
+Using this information we can make a list of all residues present in 6N4O.pdb:
+~~~
+"22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
+~~~
+{: .source}
+We will use it later in the alignment script.
+
+Navigate to the working directory that you created on graham, and ensure that you have two files in the working directory:
+~~~
+$ cd  ~/scratch/workshop
+$ ls
+~~~
+{: .bash}
+~~~
+6N4O_i-TASSER_model_chainA.pdb	6N4O_SWISS_PROT_model_chainA.pdb
+~~~
+{: .output}
+
+Ensure that both files have only protein atoms (chain A).
+
+Launch VMD.
+
+Load two pdb files, they will be loaded as molecules 0 and 1:
+~~~
+vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
+vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
+~~~
+{: .bash}
+Save the list of all residues present in 6N4O.pdb in the variable 6n4o_residues:
 ~~~
 vmd > set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
 ~~~
@@ -230,10 +235,35 @@ ATOM   5165  CB  ASP A 669     -19.720  23.530 -29.053  1.00  0.97           C
 {: .output}
 
 #### 1.4. Adding functionally important ions.
-The catalytic site of hAgo2 is comprised of the three amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near the catalytic site to slice mRNA. The 6N4O PDB file does not have this ion, but another hAgo2 structure, 4W5O, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
+The catalytic site of hAgo2 is comprised of the three amino acids D597, E637, and D669. It is known that hAgo2 requires a divalent metal ion near the catalytic site to slice mRNA. The 6n4o PDB file does not have this ion, but another hAgo2 structure, 4w5o, does. We can align these two structures as we did in section 3 and then copy the Mg2+ ion located near the catalytic site from 4W5O to our model.
+
+Download 4w5o.pdb
+~~~
+wget https://files.rcsb.org/download/4w5o.pdb
+~~~
+{: .bash}
+Align 4w5o with 6n4o and save MG ions.
+~~~
+mol new 6n4o.pdb
+mol new 4w5o.pdb
+set 6n4o [atomselect 0 "backbone and resid 597 637 669 807"]
+set 4w5o [atomselect 1 "backbone and resid 597 637 669 807"]
+set TransMat [measure fit $4w5o $6n4o]
+echo rmsd before fit = [measure rmsd $6n4o $4w5o]
+set 4w5o_all [atomselect 1 "all"]
+$4w5o_all move $TransMat
+echo rmsd after fit = [measure rmsd $6n4o $4w5o]
+set mg [atomselect 1 "resname MG"]
+$mg set resid [$mg get residue] 
+$mg writepdb 4w5o_MG_ions.pdb
+quit
+~~~
+Edit residue numbers.
 
 #### 1.5. Assigning Protonation States to Residues
-Use H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6, "Assigning Protonation States to Residues in a Protein".
+One of the important jobs of setting up a simulation system is assigning the protonation states and most likely tautomers of the HIS residues. TYR, LYN, CYS, and ARG are almost always in their standard ptotonation states at physiological pH. But you should decide for each GLU, ASP, and HIS which state is most likely.
+
+You can use the H++ server to calculate pKa of titratable sites and select protonation states as described in Episode 6, "Assigning Protonation States to Residues in a Protein".
 
 Force fields used by H++:
 1. AMBER Lipid 2011 Force Field, lipid11.dat
@@ -242,6 +272,20 @@ Force fields used by H++:
 4. Ions, see Leap log for more details
 
 It does not yet supports 5' phosphorylated AA, so 5' phosphates must be removed.
+TER records must be added.
+
+Still does not work with RNA:
+```
+FATAL:  Atom .R<A 869>.A<HO3' 34> does not have a
+type.
+```
+
+Does not make connection P-O3' because they are too far apart?
+Temporary pdb file is created incorrectly with O3' of some added residues protonated because they are too far apart from P.
+
+It looks like simrna does not insert fragments properly.
+To Do:
+Can RNA model be loaded in Leap?
 
 ### 2. Adding missing segments to RNA structure files.
 
@@ -548,18 +592,31 @@ We will use this relaxed structure for simulation. Rename it into a shorter name
 
 
 ### 4. Preparing simulation system
+#### 4.1
 Launch Leap and load protein and RNA forcefields:
 ~~~
 $ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 $ source $EBROOTAMBERTOOLS/amber.sh
-$ tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB
+$ tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
 In the Leap prompt, load protein and RNA, then combine them into one unit:
 ~~~
+> loadoff terminal_monophosphate.lib
 > rna = loadpdb chains_CD_minimized.pdb
 > prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
-> sys = combine {prot,rna}
+> mg = loadpdb 4w5o_MG_ions.pdb
+> sys = combine {prot,rna,mg}
+> saveamberparm sys prmtop.parm7 inpcrd.rst7
+> quit
 ~~~
 {: .bash}
+
+Initial energy minimization.
+1. Minimize inserted fragments only.
+
+
+~~~
+pmemd.cuda -O -i min.in -p prmtop.parm7 -c inpcrd.rst7 -r min.rst -o min.out -ref inpcrd.rst7
+~~~
 After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
