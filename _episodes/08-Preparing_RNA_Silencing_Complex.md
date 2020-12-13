@@ -254,7 +254,7 @@ set 4w5o_all [atomselect 1 "all"]
 $4w5o_all move $TransMat
 echo rmsd after fit = [measure rmsd $6n4o $4w5o]
 set mg [atomselect 1 "resname MG"]
-$mg set resid [$mg get residue] 
+$mg set resid [$mg get residue]
 $mg writepdb 4w5o_MG_ions.pdb
 quit
 ~~~
@@ -435,6 +435,7 @@ SimRNA features:
 #### 3.1. Installation of the SimRNA binary package:
 Simulation submitted to public SimRNAweb server may wait up to a few days in the queue, while on a local computer, you can do it in a couple of minutes. SimRNA is available as a binary distribution, so no installation is required. You only need to download and unpack the package:
 ~~~
+$ cd ~
 $ wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
 $ tar -xf SimRNA_64bitIntel_Linux.tgz
 ~~~
