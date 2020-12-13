@@ -441,7 +441,7 @@ $ tar -xf SimRNA_64bitIntel_Linux.tgz
 ~~~
 {: .bash}
 
-Then go back in the working directory.
+Then go back to the working directory.
 
 #### 3.2. Preparing input files for simulation with SimRNAweb server.
 If you will be using standalone SimRNA program you can skip this sections and proceed to the next one.
