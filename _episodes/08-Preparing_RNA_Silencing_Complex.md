@@ -684,15 +684,18 @@ tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROO
 1. Minimize only water and ions
 2. Minimize water ions and inserted fragments.
 
-Make a list of the inserted fragments.
-Residue numbers in a simulation system is counted sequentially. As there are no chains residues numbers continue to increment.
+To restrain residues present in 6n4o we need to make a list of the inserted fragments. All residues in the simulation system are counted sequentially:
 ```
-protein RNA_C    RNA_D      MG     Na+   Cl-   WAT
-1-859   1-21     1-18
-1-859   860-880  881-898
+protein RNA_C    RNA_D      MG
+1-859   1-21     1-18      1-3
+1-859   860-880  881-898  899-901
+Added RNA residues: 869 878 886 to 888 897 898"
+```
+We need to map residue numbers to the simulation system:
+"backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"
+
 
 3. Minimize everything
-```
 ### Energy minimization with AMBER
 ~~~
 sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
@@ -702,7 +705,12 @@ Minimization fails: ... LINMIN FAILURE ...
 After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
 
 ### Energy minimization with  NAMD
+~~~
+module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
+charmrun ++local +p 8 namd2 namd_min_1.in >&log&
+~~~
 ##### Minimize waters only
+Create constraints file constrain_all_solute.pdb
 ~~~
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
@@ -711,10 +719,28 @@ $sel set occupancy 999.9
 set sel [atomselect top "resname WAT"]
 $sel set occupancy 0.0
 set sel [atomselect top "all"]
-$sel writepdb constrain_nowat.pdb
+$sel writepdb constrain_all_solute.pdb
 quit
-
 ~~~
+{: .source}
+
+#### Constrain backbone of all residues in 6n40
+Create constraints file constrain_all_solute.pdb
+~~~
+mol new prmtop.parm7
+mol addfile inpcrd.rst7
+set sel [atomselect top "all"]
+$sel set occupancy 999.9
+set sel [atomselect top "not backbone"]
+$sel set occupancy 0.0
+set sel [atomselect top "resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"]
+$sel set occupancy 0.0
+set sel [atomselect top "all"]
+$sel writepdb constrain_backbone_all_6n4o_residues.pdb
+quit
+~~~
+
+
 
 ~~~
 module purge
