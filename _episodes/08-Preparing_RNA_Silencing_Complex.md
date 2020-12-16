@@ -643,27 +643,81 @@ Using this information (MW 110 KDa, charge -4.0, 75000 water molecules) as an in
 
 Finally we are ready to prepare the complete simulation system in 0.15 Molar solution:
 ~~~
-# Leap commands
+# Leap commands, file prep_system.leap
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
 prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
 mg = loadpdb 4w5o_MG_ions.pdb
 sys = combine {prot,rna,mg}
 addions sys Na+ 0
-solvatebox sys SPCBOX 15 iso
+solvatebox sys SPCBOX 13 iso
 addionsrand sys Na+ 189 Cl- 189
 saveamberparm sys prmtop.parm7 inpcrd.rst7
 quit
 ~~~
 {: .bash}
 
+
+~~~
+# File prep_system.leap
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+source $EBROOTAMBERTOOLS/amber.sh
+
+inputData=$(cat << 'EOF'
+loadoff terminal_monophosphate.lib
+rna = loadpdb chains_CD_minimized.pdb
+prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
+mg = loadpdb 4w5o_MG_ions.pdb
+sys = combine {prot,rna,mg}
+addions sys Na+ 0
+solvatebox sys SPCBOX 13 iso
+addionsrand sys Na+ 189 Cl- 189
+saveamberparm sys prmtop.parm7 inpcrd.rst7
+quit
+EOF)
+
+tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(cat <<< "$inputData")
+~~~
+{:.bash}
+
 #### 4.2 Energy minimization.
 1. Minimize only water and ions
 2. Minimize water ions and inserted fragments.
+
+Make a list of the inserted fragments.
+Residue numbers in a simulation system is counted sequentially. As there are no chains residues numbers continue to increment.
+```
+protein RNA_C    RNA_D      MG     Na+   Cl-   WAT
+1-859   1-21     1-18
+1-859   860-880  881-898
+
 3. Minimize everything
+```
+### Energy minimization with AMBER
+~~~
+sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
+~~~
+Minimization fails: ... LINMIN FAILURE ...
+
+After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
+
+### Energy minimization with  NAMD
+##### Minimize waters only
+~~~
+mol new prmtop.parm7
+mol addfile inpcrd.rst7
+set sel [atomselect top "all"]
+$sel set occupancy 999.9
+set sel [atomselect top "resname WAT"]
+$sel set occupancy 0.0
+set sel [atomselect top "all"]
+$sel writepdb constrain_nowat.pdb
+quit
 
 ~~~
-# AMBER minimization
-pmemd.cuda -O -i min.in -p prmtop.parm7 -c inpcrd.rst7 -r min.rst -o min.out -ref inpcrd.rst7
+
 ~~~
-After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
+module purge
+module load StdEnv/2020 intel/2020.1.217 namd-multicore
+charmrun ++local +p 4 namd2 namd_min.in
+~~~
