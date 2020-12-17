@@ -8,10 +8,8 @@ carpentry: "bst"
 # Overall title for pages.
 title: "Practical considerations for Molecular Dynamics"
 
-# Contact.  This *must* include the protocol: if it's an email
-# address, it must look like "mailto:lessons@software-carpentry.org",
-# or if it's a URL, "https://gitter.im/username/ProjectName".
-email: "mailto:biomolsim@computecanada.ca"
+# Email address, no mailto:
+email: "molmodsim@computecanada.ca"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
