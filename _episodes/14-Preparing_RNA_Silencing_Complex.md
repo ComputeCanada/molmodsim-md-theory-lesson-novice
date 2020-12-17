@@ -723,6 +723,7 @@ quit
 
 vmd >
 ~~~
+
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
 set sel [atomselect top "all"]
