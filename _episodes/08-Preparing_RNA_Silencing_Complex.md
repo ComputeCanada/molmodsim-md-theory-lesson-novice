@@ -596,7 +596,7 @@ We will use this relaxed structure for simulation. Rename it into a shorter name
 
 
 ### 4. Preparing simulation system and energy minimization
-#### 4.1 Preparing neutralized simulation suystem in 0.15 M salt solution.
+#### 4.1 Neutralizing simulation system and adding salt.
 ##### 4.1.1 Launch Leap and load protein and RNA forcefields:
 ~~~
 # Shell commands
@@ -605,14 +605,15 @@ source $EBROOTAMBERTOOLS/amber.sh
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
-##### 4.1.2 Estimating the number of water molecules
-To prepare the solution with the desired ionic strength using SLTCAP we need to know the molecular weight of the solute, charge of the solute, and how many water molecules is in the simulation system.
+##### 4.1.2 Estimate the number of water molecules
+To prepare solution with the desired ionic strength we will use SLTCAP server. For this calulation we need to know the molecular weight of the macromolecules, charge, and the number of water molecules in the simulation system.
 
-The MW of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
+The molecular weight of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
 
-To estimate the number of water molecules we will make a cubic box extendind 13 Angstrom from the solute:
+To determine the number of water molecules we will solvate or system in a cubic box extending 13 A from the solute.
+
+Leap commands:
 ~~~
-# Leap commands
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
 prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
@@ -623,8 +624,8 @@ charge sys
 quit
 ~~~
 {: .bash}
+Output:
 ~~~
-> solvatebox sys TIP3PBOX 13 iso
   Solute vdw bounding box:              110.730 72.051 85.804
   Total bounding box for atom centers:  136.730 136.730 136.730
       (box expansion for 'iso' is  70.5%)
@@ -638,28 +639,19 @@ quit
 ~~~
 {: .output}
 
-##### 4.1.3 Preparing the complete simulation system
 Using this information (MW 110 KDa, charge -4.0, 75000 water molecules) as an input to [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server we obtain the number of ions: 188.64 anions and 192.64 cations.
 
-Finally we are ready to prepare the complete simulation system in 0.15 Molar solution:
-~~~
-# Leap commands, file prep_system.leap
-loadoff terminal_monophosphate.lib
-rna = loadpdb chains_CD_minimized.pdb
-prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
-mg = loadpdb 4w5o_MG_ions.pdb
-sys = combine {prot,rna,mg}
-addions sys Na+ 0
-solvatebox sys SPCBOX 13 iso
-addionsrand sys Na+ 189 Cl- 189
-saveamberparm sys prmtop.parm7 inpcrd.rst7
-quit
-~~~
-{: .bash}
+##### 4.1.3 Preparing the complete simulation system
 
+Finally, we are ready to prepare the complete simulation system. We can run all the commands interactively, or save them in a file and then execute it.
 
+Leap was designed to read commands from a file (-f option). This means that we need two scripts: one with the leap commands, and another with commands to run leap itself.
+
+Taking advantage of shell flexibility we can create a multiline variable holding all commands and then feed this variable instead of file to leap.
+
+Contents of the file prep_system.leap:
 ~~~
-# File prep_system.leap
+#!/bin/bash
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 
@@ -679,6 +671,7 @@ EOF)
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(cat <<< "$inputData")
 ~~~
 {:.bash}
+
 
 #### 4.2 Energy minimization.
 1. Minimize only water and ions
@@ -709,6 +702,8 @@ After this, follow Episode 7, "Solvating a System, Adding Ions and Generating In
 module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
 charmrun ++local +p 8 namd2 namd_min_1.in >&log&
 ~~~
+
+
 ##### Minimize waters only
 Create constraints file constrain_all_solute.pdb
 ~~~
@@ -724,8 +719,9 @@ quit
 ~~~
 {: .source}
 
-#### Constrain backbone of all residues in 6n40
-Create constraints file constrain_all_solute.pdb
+#### Constrain backbone of all residues that were resolved in the x-ray structure.
+
+vmd >
 ~~~
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
@@ -733,17 +729,25 @@ set sel [atomselect top "all"]
 $sel set occupancy 999.9
 set sel [atomselect top "not backbone"]
 $sel set occupancy 0.0
-set sel [atomselect top "resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"]
+set sel [atomselect top "not resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"]
 $sel set occupancy 0.0
 set sel [atomselect top "all"]
 $sel writepdb constrain_backbone_all_6n4o_residues.pdb
 quit
 ~~~
 
-
-
+```
+working on Siku.
+Constraint force constants: constrain_backbone_all_6n4o_residues.pdb
+Constraint positions:       inpcrd.pdb
+Input file:                 namd_min.in
+Output file:                minimized.coor
+Log file:                   minimization.log
+```
+Running simulation:
 ~~~
+salloc -c8 --mem-per-cpu=4000 --time=3:0:0
 module purge
-module load StdEnv/2020 intel/2020.1.217 namd-multicore
-charmrun ++local +p 4 namd2 namd_min.in
+module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
+charmrun ++local +p 8 namd2 namd_min.in >& log&
 ~~~
