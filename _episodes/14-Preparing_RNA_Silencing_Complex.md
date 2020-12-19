@@ -129,10 +129,12 @@ REMARK 465     PRO A     7
 {: .output}
 
 Using this information we can make a list of all residues present in 6N4O.pdb:
+
 ~~~
 "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
 ~~~
-{: .source}
+{: .string}
+
 We will use it later in the alignment script.
 
 Navigate to the working directory that you created on graham, and ensure that you have two files in the working directory:
@@ -451,14 +453,14 @@ Sequence:
 ~~~
 UGGAGUGUGACAAUGGUGUUU CCAUUGUCACACUCCAAA
 ~~~
-{: .input}
+{: .string}
 The convention is that the first and the second sequences correspond to chains A and B in the PDB structure file.
 
 List of residues not allowed to move (we don't want the program to move atoms resolved in the experimental structure).
 ~~~
  A:1-9,11-18,20-21;B:1-5,9-16
 ~~~
-{: .input}
+{: .string}
 PDB file matching the sequence. All atoms must be present, and chains must be named A and B. To prepare this file combine chains A and B:
 ~~~
 cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
@@ -546,7 +548,7 @@ ANGLES_WEIGHT 1.0
 TORS_ANGLES_WEIGHT 0.0
 ETA_THETA_WEIGHT 0.40
 ~~~
-{: .input}
+{: .string}
 
 In the working directory, make a symbolic link to the 'data' directory located in SimRNA distribution. Assuming that you installed SimRNA in $HOME the link command is:
 ~~~
@@ -611,7 +613,6 @@ The molecular weight of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[
 
 To determine the number of water molecules we will solvate or system in a cubic box extending 13 A from the solute.
 
-Leap >
 ~~~
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
@@ -623,7 +624,7 @@ charge sys
 quit
 ~~~
 {: .bash}
-Output:
+
 ~~~
   Solute vdw bounding box:              110.730 72.051 85.804
   Total bounding box for atom centers:  136.730 136.730 136.730
@@ -647,14 +648,13 @@ Finally, we are ready to prepare the complete simulation system. We can run all 
 Leap was designed to read commands from a file (-f option). This means that we need two scripts: one with the leap commands, and another with commands to run leap itself.
 
 Taking advantage of shell flexibility we can create a multiline variable holding all commands and then feed this variable instead of file to leap.
-
-File **prep_system.leap**:
 ~~~
 #!/bin/bash
+# File <<< prep_system.leap >>>
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 
-inputData=$(cat << 'EOF'
+inputData=$(cat << EOF
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
 prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
@@ -669,25 +669,27 @@ EOF)
 
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(cat <<< "$inputData")
 ~~~
-{:.bash}
+{:.file-content}
 
 
 #### 4.2 Energy minimization.
-1. Minimize only water and ions
-2. Minimize water ions and inserted fragments.
 
-To restrain residues present in 6n4o we need to make a list of the inserted fragments. All residues in the simulation system are counted sequentially:
-```
-protein RNA_C    RNA_D      MG
-1-859   1-21     1-18      1-3
-1-859   860-880  881-898  899-901
-Added RNA residues: 869 878 886 to 888 897 898"
-```
-We need to map residue numbers to the simulation system:
-"backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"
+First we need to optimize positions of atoms. To restrain residues present in 6n4o we need to select all residues that have coordinates in the pdb file, but as in the simulation system resisues are renumbered we can not use the original numbers. All residues in simulation systems are counted sequentially starting from first to last.
 
+Chain       | Original | Shift | Simulation |
+------------|----------|-------|------------|
+Protein     | 1:859    |  -    | 1:859      |
+RNA chain C | 1:21     | 859   | 860:880    |
+RNA chain D | 1:18     | 898   | 881:898    |
+MG ions     |    -     |  -    | 899:901    |
 
-3. Minimize everything
+Considering this,  selection command in VMD will be:
+~~~
+atomselect 0 "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"
+~~~
+{: .vmd}
+
+2. Minimize everything
 ### Energy minimization with AMBER
 
 ~~~
@@ -705,21 +707,6 @@ charmrun ++local +p 8 namd2 namd_min_1.in >&log&
 ~~~
 {:.bash}
 
-
-##### Minimize waters only
-Create constraints file constrain_all_solute.pdb
-~~~
-mol new prmtop.parm7
-mol addfile inpcrd.rst7
-set sel [atomselect top "all"]
-$sel set occupancy 999.9
-set sel [atomselect top "resname WAT"]
-$sel set occupancy 0.0
-set sel [atomselect top "all"]
-$sel writepdb constrain_all_solute.pdb
-quit
-~~~
-{: .vmd}
 
 #### Constrain backbone of all residues that were resolved in the x-ray structure.
 
