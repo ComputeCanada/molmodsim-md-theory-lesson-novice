@@ -12,10 +12,9 @@ keypoints:
 For this workshop, we have chosen a complex of human argonaute-2 (hAgo2) protein with a micro RNA (miRNA) bound to a target messenger RNA (mRNA). miRNAs are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual proteins' expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target mRNAs encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
 
 Create working directory:
-
 ~~~
-$ mkdir ~/scratch/workshop
-$ cd ~/scratch/workshop
+mkdir ~/scratch/workshop
+cd ~/scratch/workshop
 ~~~
 {: .bash}
 
@@ -50,12 +49,12 @@ $ vmd
 
 In the VMD prompt, execute the following commands:
 ~~~
-vmd > mol new 6n4o.pdb
-vmd > set sel [atomselect top "chain A"]
-vmd > $sel writepdb 6n4o_chain_A.pdb
-vmd > quit
+mol new 6n4o.pdb
+set sel [atomselect top "chain A"]
+$sel writepdb 6n4o_chain_A.pdb
+quit
 ~~~
-{: .bash}
+{: .vmd}
 
 Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology modeling with SWISS-MODEL and i-TASSER.
 
@@ -86,13 +85,13 @@ Save the result of the i-TASSER modeling in the file **6N4O_i-TASSER_model_chain
 Login to one of the CC systems
 Create working directory and descend into it:
 ~~~
-$ mkdir ~/scratch/workshop
-$ cd ~/scratch/workshop
+mkdir ~/scratch/workshop
+cd ~/scratch/workshop
 ~~~
 {: .bash}
 Upload protein models from your computer:
 ~~~
-$ scp 6N4O_SWISS_PROT_model_chainA.pdb \
+scp 6N4O_SWISS_PROT_model_chainA.pdb \
 6N4O_i-TASSER_model_chainA.pdb \
 someuser@graham.computecanada.ca:scratch/workshop
 ~~~
@@ -108,7 +107,7 @@ In this command, "\\" is the line continuation character. Ensure that there is n
 i-TASSER procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We will keep the original atom positions and take only the terminal end from the i-TASSER model. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align these two structures.
 For alignment we can use only residues present in 6n4o.pdb. Missing residues are specified in the PDB file header in section "REMARK 465"
 ~~~
-$ grep "REMARK 465" 6n4o.pdb
+grep "REMARK 465" 6n4o.pdb
 ~~~
 {: .bash}
 ~~~
@@ -138,8 +137,8 @@ We will use it later in the alignment script.
 
 Navigate to the working directory that you created on graham, and ensure that you have two files in the working directory:
 ~~~
-$ cd  ~/scratch/workshop
-$ ls
+cd  ~/scratch/workshop
+ls
 ~~~
 {: .bash}
 ~~~
@@ -149,48 +148,46 @@ $ ls
 
 Ensure that both files have only protein atoms (chain A).
 
-Launch VMD.
-
-Load two pdb files, they will be loaded as molecules 0 and 1:
+Launch VMD and load two pdb files, they will be loaded as molecules 0 and 1:
 ~~~
-vmd > mol new 6N4O_SWISS_PROT_model_chainA.pdb
-vmd > mol new 6N4O_i-TASSER_model_chainA.pdb
+mol new 6N4O_SWISS_PROT_model_chainA.pdb
+mol new 6N4O_i-TASSER_model_chainA.pdb
 ~~~
-{: .bash}
+{: .vmd}
 Save the list of all residues present in 6N4O.pdb in the variable 6n4o_residues:
 ~~~
-vmd > set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
+set 6n4o_residues "22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
 ~~~
-{: .bash}
+{: .vmd}
 Select residues defined in the variable *6n4o_residues* from both models, and save them in the variables *swissmodel* and *itasser*
 ~~~
-vmd > set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
-vmd > set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
+set swissmodel [atomselect 0 "backbone and resid $6n4o_residues"]
+set itasser [atomselect 1 "backbone and resid $6n4o_residues"]
 ~~~
-{: .bash}
+{: .vmd}
 Compute the transformation matrix *TransMat*
 ~~~
-vmd > set TransMat [measure fit $itasser $swissmodel]
+set TransMat [measure fit $itasser $swissmodel]
 ~~~
-{: .bash}
+{: .vmd}
 Select all residies of molecule 1 and apply the transformation matrix to the selection
 ~~~
-vmd > echo rmsd before fit = [measure rmsd $itasser $swissmodel]
-vmd > set itasser_all [atomselect 1 "all"]
-vmd > $itasser_all move $TransMat
-vmd > echo rmsd after fit = [measure rmsd $itasser $swissmodel]
+echo rmsd before fit = [measure rmsd $itasser $swissmodel]
+set itasser_all [atomselect 1 "all"]
+$itasser_all move $TransMat
+echo rmsd after fit = [measure rmsd $itasser $swissmodel]
 ~~~
-{: .bash}
+{: .vmd}
 Select residues 1-21 from molecule 1 and save them in the file 6n4o_resid_1-21.pdb
 ~~~
-vmd > set terminal [atomselect 1 "noh resid 1 to 21"]
-vmd > $terminal writepdb 6n4o_resid_1-21.pdb
-vmd > quit
+set terminal [atomselect 1 "noh resid 1 to 21"]
+$terminal writepdb 6n4o_resid_1-21.pdb
+quit
 ~~~
-{: .bash}
+{: .vmd}
 Combine the i-TASSER model of residues 1-21 with the SWISS-MODEL.
 ~~~
-$ grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
+grep -h ATOM 6n4o_resid_1-21.pdb 6N4O_SWISS_PROT_model_chainA.pdb > 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
 
@@ -201,7 +198,7 @@ To accomplish this, we need to delete from ALA669 all atoms that are not present
 
 Let's begin by checking what atoms are present in residue 669:
 ~~~
-$ grep 'A 669' 6n4o_chain_A_complete.pdb
+grep 'A 669' 6n4o_chain_A_complete.pdb
 ~~~
 {: .bash}
 ~~~
@@ -216,13 +213,13 @@ ATOM   5165  CB  ALA A 669     -19.720  23.530 -29.053  1.00  0.97           C
 If you are familiar with aminoacid structures, you remember that the alanine sidechain is made of only one beta carbon atom (CB). All amino acids except glycine have beta carbon as well. So there is nothing to delete. All we need to do is to change the resName of all five ALA669 atoms to ASP.
 You can do it using stream editor:
 ~~~
-$ sed 's/ALA A 669/ASP A 669/g' 6n4o_chain_A_complete.pdb > 6n4o_chain_A_complete_A669D.pdb
+sed 's/ALA A 669/ASP A 669/g' 6n4o_chain_A_complete.pdb > 6n4o_chain_A_complete_A669D.pdb
 ~~~
 {: .bash}
 
 Verify the result:
 ~~~
-$ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
+grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 ~~~
 {: .bash}
 
@@ -243,7 +240,7 @@ Download 4w5o.pdb
 wget https://files.rcsb.org/download/4w5o.pdb
 ~~~
 {: .bash}
-Align 4w5o with 6n4o and save MG ions.
+Align 4w5o with 6n4o and save MG ions. For the alighnment we will use residues closest to the MG ions.
 ~~~
 mol new 6n4o.pdb
 mol new 4w5o.pdb
@@ -259,7 +256,8 @@ $mg set resid [$mg get residue]
 $mg writepdb 4w5o_MG_ions.pdb
 quit
 ~~~
-Edit residue numbers.
+{: .vmd}
+
 
 #### 1.5. Assigning Protonation States to Residues
 One of the important jobs of setting up a simulation system is assigning the protonation states and most likely tautomers of the HIS residues. TYR, LYN, CYS, and ARG are almost always in their standard ptotonation states at physiological pH. But you should decide for each GLU, ASP, and HIS which state is most likely.
@@ -301,18 +299,18 @@ We can insert the missing residues using the freely available [ModeRNA server](h
 
 #### 2.3. Installing ModeRNA on CC systems.
 ~~~
-$ module load StdEnv/2016.4 python/2.7.14
-$ virtualenv ~/e27
-$ source ~/e27/bin/activate
-$ pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
+module load StdEnv/2016.4 python/2.7.14
+virtualenv ~/e27
+source ~/e27/bin/activate
+pip install numpy==1.11.3 biopython==1.58 ModeRNA==1.7.1
 ~~~
 {: .bash}
 
 Installation is required only once. When you login into your account next time you only need to activate the environment:
 
 ~~~
-$ module load StdEnv/2016.4 python/2.7.14
-$ source ~/e27/bin/activate
+module load StdEnv/2016.4 python/2.7.14
+source ~/e27/bin/activate
 ~~~
 {: .bash}
 
@@ -322,19 +320,19 @@ As ModeRNA can only model a single RNA strand, we will model chains C and D sepa
 
 Download 6n4o.pdb
 ~~~
-$ wget https://files.rcsb.org/download/6n4o.pdb
+wget https://files.rcsb.org/download/6n4o.pdb
 ~~~
 {: .bash}
 Residue 6 in chain D has only phosphate atoms and thus can not be used as a template. To prevent modeRNA from using it, we need to delete residue 6. Leaving it in the PDB file will lead to unwanted results.
 
-Execute the following VMD commands to save chain C and chain D without residue 6:
+We will use VMD for this task:
 ~~~
-vmd> mol new 6n4o.pdb
-vmd> set sel [atomselect top "chain C or (chain D and not resid 6)"]
-vmd> $sel writepdb 6n4o_chains_CD.pdb
-vmd> quit
+mol new 6n4o.pdb
+set sel [atomselect top "chain C or (chain D and not resid 6)"]
+$sel writepdb 6n4o_chains_CD.pdb
+quit
 ~~~
-{: .bash}
+{: .vmd}
 
 We created the file 6n4o_chains_CD.pdb suitable for use as a structural template.
 
@@ -342,9 +340,9 @@ We created the file 6n4o_chains_CD.pdb suitable for use as a structural template
 #### 2.5. Preparing sequence alignment files for chains C and D.
 Use a text editor of your choice (for example, nano or vi) to create two sequence alignment files, 6n4o_C.fasta and 6n4o_D.fasta.  The first file is for chain C and the latter is for chain D. Each file must contain two sequences, the sequence of the model to be built and the template sequence. The contents of the files is shown below.
 
-Sequence alignment file for chain C, 6n4o_C.fasta
+Sequence alignment file for chain C:
 ~~~
-$ cat 6n4o_C.fasta
+cat 6n4o_C.fasta
 ~~~
 {: .bash}
 ~~~
@@ -355,9 +353,9 @@ UGGAGUGUG-CAAUGGUG-UU
 ~~~
 {: .output}
 
-Sequence alignment file for chain D, 6n4o_D.fasta:
+Sequence alignment file for chain D:
 ~~~
-$ cat 6n4o_D.fasta
+cat 6n4o_D.fasta
 ~~~
 {: .bash}
 ~~~
@@ -392,22 +390,22 @@ apply_missing_ends(aD, mD)
 renumber_chain(mD, '1')
 write_model(mD, 'chain_D_model_B.pdb')
 ~~~
-{: .source}
+{: .python}
 
 You can start python and execute the commands interactively:
 ~~~
-$ module load StdEnv/2016.4 python/2.7.14
-$ source ~/e27/bin/activate
-$ python
+module load StdEnv/2016.4 python/2.7.14
+source ~/e27/bin/activate
+python
 ~~~
-{: .source}
+{: .bash}
 Or save these commands in the file make_models.py and run it non-iteractively:
 ~~~
-$ module load StdEnv/2016.4 python/2.7.14
-$ source ~/e27/bin/activate
-$ python make_models.py
+module load StdEnv/2016.4 python/2.7.14
+source ~/e27/bin/activate
+python make_models.py
 ~~~
-{: .source}
+{: .bash}
 The modeRNA program will create two model files, chain_C_model_A.pdb, and chain_D_model_B.pdb. Ensure that the program added all missing residues and did not move any residues present in the original structure file.
 
 > ## How will ModeRNA server do the same task?
@@ -436,9 +434,9 @@ SimRNA features:
 #### 3.1. Installation of the SimRNA binary package:
 Simulation submitted to public SimRNAweb server may wait up to a few days in the queue, while on a local computer, you can do it in a couple of minutes. SimRNA is available as a binary distribution, so no installation is required. You only need to download and unpack the package:
 ~~~
-$ cd ~
-$ wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
-$ tar -xf SimRNA_64bitIntel_Linux.tgz
+cd ~
+wget https://ftp.users.genesilico.pl/software/simrna/version_3.20/SimRNA_64bitIntel_Linux.tgz --no-check-certificate
+tar -xf SimRNA_64bitIntel_Linux.tgz
 ~~~
 {: .bash}
 
@@ -453,17 +451,17 @@ Sequence:
 ~~~
 UGGAGUGUGACAAUGGUGUUU CCAUUGUCACACUCCAAA
 ~~~
-{: .bash}
+{: .input}
 The convention is that the first and the second sequences correspond to chains A and B in the PDB structure file.
 
 List of residues not allowed to move (we don't want the program to move atoms resolved in the experimental structure).
 ~~~
  A:1-9,11-18,20-21;B:1-5,9-16
 ~~~
-{: .bash}
+{: .input}
 PDB file matching the sequence. All atoms must be present, and chains must be named A and B. To prepare this file combine chains A and B:
 ~~~
-$ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
+cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
@@ -475,7 +473,7 @@ Command-line SimRNA program does not take a list of frozen atoms as a separate i
 
 We begin with merging chains A and B if you have not done this yet:
 ~~~
-$ cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
+cat chain_C_model_A.pdb chain_D_model_B.pdb > chains_CD_model_AB.pdb
 ~~~
 {: .bash}
 
@@ -489,8 +487,8 @@ First, rename the phosphorylated 5' terminal nucleotide according to AMBER conve
 
 Load the AmberTools module:
 ~~~
-$ module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools/20
-$ source $EBROOTAMBERTOOLS/amber.sh
+module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools/20
+source $EBROOTAMBERTOOLS/amber.sh
 ~~~
 {: .bash}
 
@@ -498,17 +496,17 @@ Watch for the message printed on screen when the module is loaded. The message i
 
 Launch Leap and load RNA force field:
 ~~~
-$ tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
+tleap -f leaprc.RNA.OL3 -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
 In the Leap promt execute the commands:
 ~~~
-> loadoff terminal_monophosphate.lib
-> chainD = loadpdb chain_D_model_B.pdb
-> savepdb chainD chain_D5P.pdb
-> quit
+loadoff terminal_monophosphate.lib
+chainD = loadpdb chain_D_model_B.pdb
+savepdb chainD chain_D5P.pdb
+quit
 ~~~
-{: .bash}
+{: .leap}
 These commands will load libraries of phosphorylated 5' terminal nucleotides and chain D PDB file. Leap will automatically add all missing atoms based on library entries and save chainD in PDB file chain_D5P.pdb:
 
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
@@ -519,18 +517,18 @@ You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes resi
 ##### 3.3.4 Define frozen atoms.
 Standalone SimRNA program accepts PDB file where frozen atoms have occupancy 0.0 and completely free have occupancy 1.0. You can change values of the occupancy with the following VMD commands:
 ~~~
-vmd> mol new chains_CD_model_AB_5P.pdb
-vmd> set sel [atomselect top all]
-vmd> $sel set occupancy 0
-vmd> set sel [atomselect top "chain A and resid 10 19"]
-vmd> $sel set occupancy 1
-vmd> set sel [atomselect top "chain B and resid 6 7 8 17 18"]
-vmd> $sel set occupancy 1
-vmd> set sel [atomselect top all]
-vmd> $sel writepdb chains_CD_model_AB_5P_frozen.pdb
-vmd> quit
+mol new chains_CD_model_AB_5P.pdb
+set sel [atomselect top all]
+$sel set occupancy 0
+set sel [atomselect top "chain A and resid 10 19"]
+$sel set occupancy 1
+set sel [atomselect top "chain B and resid 6 7 8 17 18"]
+$sel set occupancy 1
+set sel [atomselect top all]
+$sel writepdb chains_CD_model_AB_5P_frozen.pdb
+quit
 ~~~
-{: .bash}
+{: .vmd}
 
 #### 3.4. Running simulation
 SimRNA needs two files in the working directory:
@@ -548,16 +546,16 @@ ANGLES_WEIGHT 1.0
 TORS_ANGLES_WEIGHT 0.0
 ETA_THETA_WEIGHT 0.40
 ~~~
-{: .source}
+{: .input}
 
 In the working directory, make a symbolic link to the 'data' directory located in SimRNA distribution. Assuming that you installed SimRNA in $HOME the link command is:
 ~~~
-$ ln -s data ~/SimRNA_64bitIntel_Linux/data
+ln -s data ~/SimRNA_64bitIntel_Linux/data
 ~~~
 {: .bash}
 Then run the simulation:
 ~~~
-$ srun -A <desired account> -c10 --mem-per-cpu=1000 --time=30:0 \
+srun -A <desired account> -c10 --mem-per-cpu=1000 --time=30:0 \
 ~/SimRNA_64bitIntel_Linux/SimRNA \
 -P chains_CD_model_AB_5P_frozen.pdb \
 -c config -E 10
@@ -574,13 +572,13 @@ The simplest way of processing the trajectory files is obtaining the lowest ener
 
 Extract the lowest energy frame from the trajectory of the first replica
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \
+~/SimRNA_64bitIntel_Linux/trafl_extract_lowestE_frame.py \
 chains_CD_model_AB_5P_frozen.pdb_01.trafl
 ~~~
 {: .bash}
 Convert the lowest energy frame to PDB format
 ~~~
-$ ~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \
+~/SimRNA_64bitIntel_Linux/SimRNA_trafl2pdbs chains_CD_model_AB_5P.pdb \
 chains_CD_model_AB_5P_frozen.pdb_01_minE.trafl 1 AA
 ~~~
 {: .bash}
@@ -598,8 +596,9 @@ We will use this relaxed structure for simulation. Rename it into a shorter name
 ### 4. Preparing simulation system and energy minimization
 #### 4.1 Neutralizing simulation system and adding salt.
 ##### 4.1.1 Launch Leap and load protein and RNA forcefields:
+
+bash $
 ~~~
-# Shell commands
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/
@@ -612,7 +611,7 @@ The molecular weight of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[
 
 To determine the number of water molecules we will solvate or system in a cubic box extending 13 A from the solute.
 
-Leap commands:
+Leap >
 ~~~
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
@@ -649,7 +648,7 @@ Leap was designed to read commands from a file (-f option). This means that we n
 
 Taking advantage of shell flexibility we can create a multiline variable holding all commands and then feed this variable instead of file to leap.
 
-Contents of the file prep_system.leap:
+File **prep_system.leap**:
 ~~~
 #!/bin/bash
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
@@ -690,9 +689,11 @@ We need to map residue numbers to the simulation system:
 
 3. Minimize everything
 ### Energy minimization with AMBER
+
 ~~~
 sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
 ~~~
+{: .bash}
 Minimization fails: ... LINMIN FAILURE ...
 
 After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
@@ -702,6 +703,7 @@ After this, follow Episode 7, "Solvating a System, Adding Ions and Generating In
 module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
 charmrun ++local +p 8 namd2 namd_min_1.in >&log&
 ~~~
+{:.bash}
 
 
 ##### Minimize waters only
@@ -717,13 +719,11 @@ set sel [atomselect top "all"]
 $sel writepdb constrain_all_solute.pdb
 quit
 ~~~
-{: .source}
+{: .vmd}
 
 #### Constrain backbone of all residues that were resolved in the x-ray structure.
 
-vmd >
 ~~~
-
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
 set sel [atomselect top "all"]
@@ -736,6 +736,7 @@ set sel [atomselect top "all"]
 $sel writepdb constrain_backbone_all_6n4o_residues.pdb
 quit
 ~~~
+{: .vmd}
 
 ```
 working on Siku.
@@ -752,3 +753,4 @@ module purge
 module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
 charmrun ++local +p 8 namd2 namd_min.in >& log&
 ~~~
+{: .bash}
