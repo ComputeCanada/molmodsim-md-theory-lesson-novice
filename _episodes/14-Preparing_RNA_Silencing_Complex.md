@@ -56,39 +56,35 @@ quit
 ~~~
 {: .vmd}
 
-Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology modeling with SWISS-MODEL and i-TASSER.
+Download 6n4o_chain_A.pdb and 6n4o_chain_A.fasta to your computer for homology modeling with SWISS-MODEL.
 
-&nbsp;1. On your local computer navigate to [SWISS-MODEL](https://swissmodel.expasy.org)
+- In a browser on your local computer navigate to [SWISS-MODEL](https://swissmodel.expasy.org) website.
+- Click Start Modelling,
+- Click User Template,
+- Paste the full sequence of your protein or upload 6n4o_chain_A.fasta,
+- Upload your structure file 6n4o_chain_A.pdb missing residues,
+- Click Build Model,
+- Download the homology model, and rename it to 6N4O_SWISS_PROT_model_chainA.pdb.
 
-&nbsp;2. Click Start Modelling,
+> ## Inspecting the model
+> ~~~
+> Compare the model with your original structure. Were all missing residues added?
+> ~~~
+{: .challenge}
 
-&nbsp;3. Click User Template,
 
-&nbsp;4. Paste the full sequence of your protein or upload 6n4o_chain_A.fasta,
+##### 1.1.2 Adding missing residues using i-TASSER
+The limitation of SWISS-MODEL server is that it is not capable of modeling long terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of predicting folding without any structural input. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). In addition, i-TASSER optimizes, positions of all atoms, which is great, but sometimes not desirable. We can not wait for i-TASSER modeling to complete, but the result is available in the workshop data tarball.
 
-&nbsp;5. Upload your structure file 6n4o_chain_A.pdb missing residues,
-
-&nbsp;6. Click Build Model,
-
-&nbsp;7. Download the homology model, and save it in the file '6N4O_SWISS_PROT_model_chainA.pdb'.
-
-&nbsp;8. Compare the model with your original structure. Were all missing residues added?
-
-Save SWISS-MODEL in the file **6N4O_SWISS_PROT_model_chainA.pdb**
-
-##### 1.1.2 Other homology modeling servers
-SWISS-MODEL server does not add terminal fragments. Another homology modeling server [i-TASSER](https://zhanglab.ccmb.med.umich.edu/I-TASSER/) (Iterative Threading ASSEmbly Refinement) uses the advanced protocol and is capable of threading terminal fragments. The downside of i-TASSER is that the process is much longer (about 60 hours for protein like 6n4o). i-TASSER optimizes, positions of all atoms, which is not always desirable.
-
-Save the result of the i-TASSER modeling in the file **6N4O_i-TASSER_model_chainA.pdb**
-
-##### 1.1.3. Preparing working directory
-Login to one of the CC systems
-Create working directory and descend into it:
+##### 1.1.3. Preparing working directory.
+Login to one of the CC systems, download data and unpack it in ~/scratch directory:
 ~~~
-mkdir ~/scratch/workshop
-cd ~/scratch/workshop
+cd ~/scratch
+wget md_workshop_data.tar.gz
+tar -xf md_workshop_data.tar.gz
 ~~~
 {: .bash}
+
 Upload protein models from your computer:
 ~~~
 scp 6N4O_SWISS_PROT_model_chainA.pdb \
@@ -128,16 +124,16 @@ REMARK 465     PRO A     7
 ~~~
 {: .output}
 
-Using this information we can make a list of all residues present in 6N4O.pdb:
+Using this information we can select all residues present in 6N4O.pdb:
 
 ~~~
-"22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
+atomselect top "resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858"
 ~~~
-{: .string}
+{: .vmd}
 
-We will use it later in the alignment script.
+You don't need to run this command right now, will use it later for alignment of structures and constrained energy minimization.
 
-Navigate to the working directory that you created on graham, and ensure that you have two files in the working directory:
+To begin the alignment process navigate to the working directory that you created on graham, and ensure that you have two files in the working directory:
 ~~~
 cd  ~/scratch/workshop
 ls
@@ -296,8 +292,8 @@ We can insert the missing residues using the freely available [ModeRNA server](h
 
 #### 2.1. Installing ModeRNA on your computer
 
-1. Install python/2.7.14, numpy/1.11.3, biopython/1.58
-2. [Download ModerRNA](http://genesilico.pl/moderna/download/) and follow [installation instructions](http://genesilico.pl/moderna/installing/).
+- Install python/2.7.14, numpy/1.11.3, biopython/1.58
+- [Download ModerRNA](http://genesilico.pl/moderna/download/) and follow [installation instructions](http://genesilico.pl/moderna/installing/).
 
 #### 2.3. Installing ModeRNA on CC systems.
 ~~~
@@ -316,7 +312,7 @@ source ~/e27/bin/activate
 ~~~
 {: .bash}
 
-As ModeRNA can only model a single RNA strand, we will model chains C and D separately. For this job, we will need to prepare several files.
+As ModeRNA can only model a single RNA strand, we will model chains C and D separately. For this task we will need to prepare structural templates and sequence alignment files.
 
 #### 2.4. Preparing structural templates for chains C and D.
 
@@ -327,7 +323,6 @@ wget https://files.rcsb.org/download/6n4o.pdb
 {: .bash}
 Residue 6 in chain D has only phosphate atoms and thus can not be used as a template. To prevent modeRNA from using it, we need to delete residue 6. Leaving it in the PDB file will lead to unwanted results.
 
-We will use VMD for this task:
 ~~~
 mol new 6n4o.pdb
 set sel [atomselect top "chain C or (chain D and not resid 6)"]
@@ -611,7 +606,7 @@ To prepare solution with the desired ionic strength we will use SLTCAP server. F
 
 The molecular weight of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
 
-To determine the number of water molecules we will solvate or system in a cubic box extending 13 A from the solute.
+To determine the number of water molecules we will solvate the system in a cubic box extending 13 A from the solute.
 
 ~~~
 loadoff terminal_monophosphate.lib
@@ -641,25 +636,64 @@ quit
 
 Using this information (MW 110 KDa, charge -4.0, 75000 water molecules) as an input to [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server we obtain the number of ions: 188.64 anions and 192.64 cations.
 
+##### Determine protonation states of titratable sites.
+For processing with H++ server we need to merge protein, nucleic acids and ions into one PDB file.
+
+Make a new directory and copy PDB files into it:
+~~~
+mkdir H++
+cp 6n4o_chain_A_complete_A669D.pdb chains_CD_minimized.pdb 4w5o_MG_ions.pdb H++
+~~~
+{: .bash}
+
+Before merging do some minor editing of the PDB files:
+- Delete the last line (END) from 6n4o_chain_A_complete_A669D.pdb
+- Delete the title line from 4w5o_MG_ions.pdb, and add TER records between ions.
+- Add TER records to chains_CD_minimized.pdb, and delete 5' phosphate atoms.
+
+Merge files:
+~~~
+cat 6n4o_chain_A_complete_A669D.pdb chains_CD_minimized.pdb  4w5o_MG_ions.pdb > 6n4o_Hpp.pdb
+~~~
+{: .bash}
+
+Process 6n4o_Hpp.pdb with H++ server. Uncheck 'Correct orientation' in caclulation setup. When calculation completes download the list of computed pKs (0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt)
+
+Examine HIS, ASP, GLU.
+~~~
+grep ^HI 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
+grep ^AS 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
+grep ^GL 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
+~~~
+{: .bash}
+
+> ## Determine protonation states from the list of pKs.
+> What titratable sites in 6n4o are in non-standard protonation state at pH 6.5?
+>> ## Solution
+>>Histidines 77, 766, 822, and 829 are protonated (HIP)
+> {: .solution}
+{: .challenge}
+
 ##### 4.1.3 Preparing the complete simulation system
 
 Finally, we are ready to prepare the complete simulation system. We can run all the commands interactively, or save them in a file and then execute it.
 
 Leap was designed to read commands from a file (-f option). This means that we need two scripts: one with the leap commands, and another with commands to run leap itself.
 
-Taking advantage of shell flexibility we can create a multiline variable holding all commands and then feed this variable instead of file to leap.
+Taking advantage of shell flexibility we can create a multiline variable holding all commands and then pass this variable instead of file to leap.
 ~~~
 #!/bin/bash
-# File <<< prep_system.leap >>>
+# FILE <<< prep_system.leap >>>
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 
 inputData=$(cat << EOF
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
-prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
+prot = loadpdb 6n4o_chain_A_complete_A669D_Hpp.pdb
 mg = loadpdb 4w5o_MG_ions.pdb
 sys = combine {prot,rna,mg}
+set {sys.77 sys.766 sys.822 sys.829} name "HIP"
 addions sys Na+ 0
 solvatebox sys SPCBOX 13 iso
 addionsrand sys Na+ 189 Cl- 189
@@ -670,6 +704,7 @@ EOF)
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(cat <<< "$inputData")
 ~~~
 {:.file-content}
+
 
 
 #### 4.2 Energy minimization.
@@ -685,22 +720,27 @@ MG ions     |    -     |  -    | 899:901    |
 
 Considering this,  selection command in VMD will be:
 ~~~
-atomselect 0 "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"
+atomselect 0 "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"
 ~~~
 {: .vmd}
 
-2. Minimize everything
-### Energy minimization with AMBER
+##### 4.2.1 Energy minimization with AMBER
 
 ~~~
 sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
 ~~~
 {: .bash}
-Minimization fails: ... LINMIN FAILURE ...
+~~~
+...
+LINMIN FAILURE
+...
+~~~
+{: .output}
 
-After this, follow Episode 7, "Solvating a System, Adding Ions and Generating Input Files".
+Minimization fails.
 
-### Energy minimization with  NAMD
+
+##### 4.2.2 Energy minimization with  NAMD
 ~~~
 module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
 charmrun ++local +p 8 namd2 namd_min_1.in >&log&
@@ -708,22 +748,21 @@ charmrun ++local +p 8 namd2 namd_min_1.in >&log&
 {:.bash}
 
 
-#### Constrain backbone of all residues that were resolved in the x-ray structure.
+Constrain backbone of all residues with known coordinates.
 
 ~~~
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
 set sel [atomselect top "all"]
+$sel set occupancy 0.0
+set sel [atomselect top "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
 $sel set occupancy 999.9
-set sel [atomselect top "not backbone"]
-$sel set occupancy 0.0
-set sel [atomselect top "not resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 885 889 to 896"]
-$sel set occupancy 0.0
 set sel [atomselect top "all"]
 $sel writepdb constrain_backbone_all_6n4o_residues.pdb
 quit
 ~~~
 {: .vmd}
+
 
 ```
 working on Siku.
@@ -733,11 +772,14 @@ Input file:                 namd_min.in
 Output file:                minimized.coor
 Log file:                   minimization.log
 ```
-Running simulation:
+Running simulation on a single GPU node:
 ~~~
-salloc -c8 --mem-per-cpu=4000 --time=3:0:0
-module purge
+salloc -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
+~~~
+{: .bash}
+
+~~~
 module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
-charmrun ++local +p 8 namd2 namd_min.in >& log&
+charmrun ++local +p $SLURM_CPUS_PER_TASK namd2 namd_min.in >& log&
 ~~~
 {: .bash}
