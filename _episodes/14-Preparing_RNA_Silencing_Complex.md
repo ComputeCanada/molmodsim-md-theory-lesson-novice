@@ -3,7 +3,9 @@ title: "Preparing a complex protein-RNA system for simulation"
 teaching: 30
 exercises: 5
 questions:
-- "?"
+- "How to add missing segments to a protein?"
+- "How to add missing segments to a nucleic acid?"
+- "How to align molecules with VMD?"
 objectives:
 - "?"
 keypoints:
@@ -590,24 +592,24 @@ We will use this relaxed structure for simulation. Rename it into a shorter name
 3. [VMD TCL commands](https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.4/ug/node121.html)
 
 
-### 4. Preparing simulation system and energy minimization
-#### 4.1 Neutralizing simulation system and adding salt.
-##### 4.1.1 Launch Leap and load protein and RNA forcefields:
+### 4. Preparing simulation system.
 
-bash $
+#### 4.1 Determine the number of water and salt molecules needed to prepare solvated system.
+To prepare solution with the desired ionic strength we will use SLTCAP server. For this calulation we need to know the molecular weight of the macromolecules, their charge, and the number of water molecules in the simulation system.
+
+The molecular weight of hAgo2 is 97,208 Da, and the MW of our nucleic acids is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
+
+To determine the number of water molecules we will solvate the system in a cubic box extending 13 A from the solute.
+
+Launch Leap and load protein and RNA forcefields:
 ~~~
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
-##### 4.1.2 Estimate the number of water molecules
-To prepare solution with the desired ionic strength we will use SLTCAP server. For this calulation we need to know the molecular weight of the macromolecules, charge, and the number of water molecules in the simulation system.
 
-The molecular weight of hAgo2 is 97,208 Da, and the MW of our RNA is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
-
-To determine the number of water molecules we will solvate the system in a cubic box extending 13 A from the solute.
-
+Load pdb files into leap, combine them, and solvate the system
 ~~~
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
@@ -618,7 +620,7 @@ solvatebox sys TIP3PBOX 13 iso
 charge sys
 quit
 ~~~
-{: .bash}
+{: .leap}
 
 ~~~
   Solute vdw bounding box:              110.730 72.051 85.804
@@ -636,7 +638,7 @@ quit
 
 Using this information (MW 110 KDa, charge -4.0, 75000 water molecules) as an input to [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server we obtain the number of ions: 188.64 anions and 192.64 cations.
 
-##### Determine protonation states of titratable sites.
+#### 4.2 Determine protonation states of titratable sites.
 For processing with H++ server we need to merge protein, nucleic acids and ions into one PDB file.
 
 Make a new directory and copy PDB files into it:
@@ -646,6 +648,7 @@ cp 6n4o_chain_A_complete_A669D.pdb chains_CD_minimized.pdb 4w5o_MG_ions.pdb H++
 ~~~
 {: .bash}
 
+Perhaps it's better to do it with leap?
 Before merging do some minor editing of the PDB files:
 - Delete the last line (END) from 6n4o_chain_A_complete_A669D.pdb
 - Delete the title line from 4w5o_MG_ions.pdb, and add TER records between ions.
@@ -674,13 +677,16 @@ grep ^GL 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
 > {: .solution}
 {: .challenge}
 
-##### 4.1.3 Preparing the complete simulation system
+#### 4.3 Preparing the complete simulation system
 
 Finally, we are ready to prepare the complete simulation system. We can run all the commands interactively, or save them in a file and then execute it.
 
 Leap was designed to read commands from a file (-f option). This means that we need two scripts: one with the leap commands, and another with commands to run leap itself.
 
-Taking advantage of shell flexibility we can create a multiline variable holding all commands and then pass this variable instead of file to leap.
+Taking advantage of shell flexibility, we can eliminate two files' necessity by creating a multiline variable holding all commands and then passing this variable instead of file to leap.
+
+As Leap does not support input from STDIN we will use the <(echo "$inputData") syntax which provides a way to pass the output of a command (echo "$inputData") to a program that can not use pipeline.
+
 ~~~
 #!/bin/bash
 # FILE <<< prep_system.leap >>>
@@ -698,16 +704,17 @@ addions sys Na+ 0
 solvatebox sys SPCBOX 13 iso
 addionsrand sys Na+ 189 Cl- 189
 saveamberparm sys prmtop.parm7 inpcrd.rst7
+savepdb inpcrd.pdb
 quit
 EOF)
 
-tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(cat <<< "$inputData")
+tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(echo "$inputData")
 ~~~
 {:.file-content}
 
 
 
-#### 4.2 Energy minimization.
+### 5. Energy minimization.
 
 First we need to optimize positions of atoms. To restrain residues present in 6n4o we need to select all residues that have coordinates in the pdb file, but as in the simulation system resisues are renumbered we can not use the original numbers. All residues in simulation systems are counted sequentially starting from first to last.
 
@@ -724,7 +731,7 @@ atomselect 0 "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 
 ~~~
 {: .vmd}
 
-##### 4.2.1 Energy minimization with AMBER
+#### 5.1 Energy minimization with AMBER
 
 ~~~
 sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
@@ -740,7 +747,7 @@ LINMIN FAILURE
 Minimization fails.
 
 
-##### 4.2.2 Energy minimization with  NAMD
+#### 5.2 Energy minimization with  NAMD
 ~~~
 module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
 charmrun ++local +p 8 namd2 namd_min_1.in >&log&
@@ -763,23 +770,131 @@ quit
 ~~~
 {: .vmd}
 
+Sbatch file for running simulation on a single (GPU) node on Siku:
+~~~
+#!/bin/bash
+#SBATCH -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
 
-```
-working on Siku.
-Constraint force constants: constrain_backbone_all_6n4o_residues.pdb
-Constraint positions:       inpcrd.pdb
-Input file:                 namd_min.in
-Output file:                minimized.coor
-Log file:                   minimization.log
-```
-Running simulation on a single GPU node:
-~~~
-salloc -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-~~~
-{: .bash}
-
-~~~
 module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
-charmrun ++local +p $SLURM_CPUS_PER_TASK namd2 namd_min.in >& log&
+charmrun ++local +p $SLURM_CPUS_PER_TASK namd2 namd_min.in
+~~~
+{: .file-content}
+
+Sbatch file for running simulation on multiple nodes (CPU):
+
+~~~
+#!/bin/bash
+#SBATCH --ntasks=8 --mem-per-cpu=4000 --time=3:0:0
+
+module load StdEnv/2020  intel/2020.1.217 namd-ucx/2.14
+srun --mpi=pmi2 namd2 namd.in
+~~~
+{: .file-content}
+
+
+### 5. Transferring simulation to PMEMD
+VMD saves coordinates, velocity and periodic box in separate files. To restart simulation in AMBER all information is included in one text or netcdf file. We need to convert namd binary files to amber ascii restart files and then combine them. The conversion can be done with VMD. Let's convert Velocities:
+
+~~~
+# Velocities
+mol new equilibration.vel type namdbin
+set sel [atomselect top all]
+$sel writerst7 vel.rst7
+~~~
+{: .vmd}
+
+NAMD calculates pressure slightly different from AMBER, so after simulation restart pressure will be too high. It will relax on its own, but we can rescale coorrdinates and periodic box with VMD as this straightforward to do and is a good scripting exersice.
+
+~~~
+# module load intel/2018 vmd
+# Coordinates
+mol new equilibration.coor
+set all [atomselect top "all"]
+foreach coord [$all get {x y z}] {
+set new [vecscale 1.002 $coord]
+lappend newcoords $new
+}
+$all set {x y z} $newcoords
+$sel writerst7 coor.rst7
+~~~
+{: .vmd}
+
+AMBER7 restart saved by VMD:
+
+~~~
+ITLE : Created by VMD with 239182 atoms
+    239182
+  70.5760422 -50.9089012 -51.6549225  71.0061951 -50.4646530 -52.4560471
+  ...
+  24.0123978  58.0914536  10.3757582  23.5664310  56.8668785   9.6000710
+  0.0000000   0.0000000   0.0000000  90.0000000  90.0000000  90.0000000
+~~~
+{: .file-content}
+
+~~~
+# Print title line
+head -n1 coor.rst7 > restart.rst7
+# In the second line the number of atoms MUST be at the beginning of the line! Strip leading whitespace
+natoms=`head -n2  coor.rst7 | tail -n1`
+echo $natoms >> restart.rst7
+# Cooridates - remove first two lines and the last line
+tail -n+3 coor.rst7 | head -n-1 >> restart.rst7
+# Velocities - remove first two lines and the last line
+tail -n+3 vel.rst7 | head -n-1 >> restart.rst7
+# Add box from the file equilibration.xsc
+box=`tail -n+3 equilibration.xsc | cut -d ' ' -f 2,6,10`
+alpha=' 90.0'
+beta=' 90.0'
+gamma=' 90.0'
+ba=${box}${alpha}${beta}${gamma}
+echo $ba | awk '{ printf "%12.7f%12.7f%12.7f%12.7f%12.7f%12.7f\n", $1*1.002, $2*1.002, $3*1.002, $4, $5, $6}' >> restart.rst7
 ~~~
 {: .bash}
+
+~~~
+#SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
+module load nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11
+pmemd -O -i pmemd_prod.in -o prod.out -p ../../prmtop.parm7 -c restart.rst7
+~~~
+{:.bash}
+
+
+
+Periodic box in AMBER is printed in the last line of the coordinate .rst7 file
+
+[Amber file formats](https://ambermd.org/FileFormats.php#restart)
+
+NAMD velocity in the binary format needs to be multiplied by PDBVELFACTOR = 20.45482706 to get A/ps.
+
+### Sander python API
+
+### 6. Benchmarking
+PMEMD.CUDA
+2.38 ms/step   36.29 ns/day
+
+NAMD-UCX
+
+CPU |  s/step | days/ns |
+----|---------|---------|
+80  |0.0185002|0.214122 |
+160 |0.0095409|0.110427 |
+
+
+NAMD-multicore-CUDA
+
+CPU | GPU | s/step   | days/ns  |
+----|-----|----------|----------|
+ 8  | 1   | 0.0145907|0.168874  |
+16  | 2   | 0.0097680| 0.113056 |
+40  | 2   | 0.0077319| 0.0894905|
+
+NAMD-multicore
+
+CPU |  s/step | days/ns |
+----|---------|---------|
+1   |1.05841  |12.2502  |
+2   |0.54587  |6.31795  |
+4   |0.28265  |3.27141  |
+8   |0.145845 |1.68802  |
+16  |0.0752144|0.870537 |
+32  |0.0396436|0.458838 |
