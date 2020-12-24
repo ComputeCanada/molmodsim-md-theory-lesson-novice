@@ -36,15 +36,17 @@ $color-testimonial: #fc8dc1 !default;
 }
 
 div.bash            { @include cdSetup($color-source); }
+div.file-content    { @include cdSetup($color-output); }
 div.source          { @include cdSetup($color-source); }
 div.output          { @include cdSetup($color-output); }
-div.input           { @include cdSetup($color-output); }
+div.string          { @include cdSetup($color-output); }
 div.vmd             { @include cdSetup($color-source); }
 div.python          { @include cdSetup($color-source); }
 div.leap            { @include cdSetup($color-source); }
 
+div.file-content::before,
 div.leap::before,
-div.input::before,
+div.string::before,
 div.source::before,
 div.output::before,
 div.bash::before,
@@ -59,13 +61,13 @@ div.bash::before      { content: "Bash"; }
 div.source::before    { content: "Code"; }
 div.vmd::before       { content: "VMD"; }
 div.python::before    { content: "Python"; }
-div.leap::before    { content: "Leap"; }
+div.leap::before      { content: "Leap"; }
 
 div.error::before  { background-color: #ffebe6; content: "Error"; }
 div.warning:before { background-color: #f8f4e8; content:" Warning"; }
 div.output::before { background-color: #efefef; content: "Output"; }
-div.input::before  { background-color: #efefef; content: "Input"; }
-
+div.string::before  { background-color: #efefef; content: "Text"; }
+div.file-content::before  { background-color: #efefef; content: "File content"; }
 //----------------------------------------
 // Specialized blockquote environments for learning objectives, callouts, etc.
 //----------------------------------------

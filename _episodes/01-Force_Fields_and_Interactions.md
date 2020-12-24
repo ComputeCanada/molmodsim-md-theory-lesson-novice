@@ -112,7 +112,7 @@ $C_{ij}=\sqrt{(C_{ii}C_{jj})}$
 >; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
 >1               2               yes             0.5     0.8333
 > ~~~
-> {: .source}
+> {: .file-content}
 > Geometric mean is selected by using rules 1 and 3;
 >  Lorentz–Berthelot rule is selected using rule 2.
 >
@@ -127,7 +127,7 @@ $C_{ij}=\sqrt{(C_{ii}C_{jj})}$
 >~~~
 >vdwGeometricSigma yes
 >~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
 
 
@@ -201,7 +201,7 @@ Pairs of atoms connected by chemical bonds are normally excluded from computatio
 >    1     3
 >    1     4
 > ~~~
->{: .source}
+>{: .file-content}
 > In the example above non-bonded interactions between atoms that are no farther than 3 bonds are excluded (nrexcl=3). Extra exclusions may be added explicitly in the **[exclusions]** section.
 >
 > The scaling factors for 1-4 pairs, **fudgeLJ** and **fudgeQQ**, are specified in the **[defaults]** section of the **forcefield.itp** file. While **fudgeLJ** is used only when **gen-pairs** is set to 'yes', **fudgeQQ** is always used.
@@ -212,7 +212,7 @@ Pairs of atoms connected by chemical bonds are normally excluded from computatio
 >1               2               yes             0.5     0.8333
 > ~~~
 > {: .source}
-{: .callout}
+{: .file-content}
 > **NAMD**
 >
 > Which pairs of bonded atoms should be excluded is specified by the **exclude** parameter.<br/> Acceptable values: **none, 1-2, 1-3, 1-4,** or **scaled1-4**

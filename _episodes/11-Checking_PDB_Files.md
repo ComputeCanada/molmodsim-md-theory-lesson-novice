@@ -52,20 +52,20 @@ grep "^HETATM " 1ERT.pdb | wc -l
 {: .output}
 We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will limit the simulation to standard protein residues.
 
-Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". We will use he molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task. To make the program available we need to load its module:
+Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". We will use he molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task. To make the program available we need to load its module. After the module is loaded we can start using the program:
 ~~~
 module load nixpkgs/16.09 intel/2016.4 vmd/1.9.3
+vmd
 ~~~
 {: .bash}
-After the module is loaded we can start using the program:
+
 ~~~
-vmd
-vmd> mol new 1ERT.pdb
-vmd> set s [atomselect top "protein"]
-vmd> $s writepdb protein.pdb
-vmd> quit
+mol new 1ERT.pdb
+set s [atomselect top "protein"]
+$s writepdb protein.pdb
+quit
 ~~~
-{: .source}
+{: .vmd}
 
 
 > ## Selecting Protein Atoms Using Shell Commands
@@ -94,19 +94,18 @@ The output of the command tells us that residues 20, 43 and 90 have alternate co
 
 Let's select conformations A for residues 43, 90 and conformation B for resid 20 using VMD:
 ~~~
-vmd
-vmd> mol new 1ERT.pdb
-vmd> set s [atomselect top "(protein and altloc '') or (altloc A and resid 43 90) or (altloc B and resid 20)"]
-vmd> $s writepdb protein.pdb
-vmd> quit
+mol new 1ERT.pdb
+set s [atomselect top "(protein and altloc '') or (altloc A and resid 43 90) or (altloc B and resid 20)"]
+$s writepdb protein.pdb
+quit
 ~~~
-{: .bash}
+{: .vmd}
 
 
 > ## Preparing a Protein Coordinate File for Simulation
 > 1. Make PDB file containing only conformations "B" from the file 1ERT.pdb
 > 2. Make PDB file containing only conformations AHIS43, BASP20, BSER90 from the file 1ERT.pdb
-> 3. Retrieve the coordinate file for barnase (PDB code 1BNI) and check if there any alternate conformations in the file.
+> 3. Retrieve the coordinate file for barnase (PDB code 1BNI) and check if there are any alternate conformations in the file.
 > 4. Generate structure file for a single molecule (there are 3 molecules in the file). Hint: use chain identifiers to select a molecule. Chain identifiers are found in the column 22 of PDB files.
 >
 > > ## Solution
@@ -137,13 +136,12 @@ vmd> quit
 > > {: .bash}
 >> Select chain A using VMD:
 > >~~~
-> >vmd
-> >vmd> mol urlload pdb "http://files.rcsb.org/view/1BNI.pdb"
-> >vmd> set s [atomselect top "chain A"]
-> > vmd> $s writepdb barnase.pdb
-> >vmd> quit
+> >mol urlload pdb "http://files.rcsb.org/view/1BNI.pdb"
+> >set s [atomselect top "chain A"]
+> >$s writepdb barnase.pdb
+> >quit
 > >~~~
-> >  {: .bash}
+> >  {: .vmd}
 > {: .solution}
 {: .challenge}
 

@@ -63,25 +63,34 @@ Let's change ASP20 and ASP26 in the protein.pdb structure created on the previou
 ~~~
 $ module load gcc/5.4.0 openmpi/2.1.1 amber/18
 $ tleap -f leaprc.protein.ff14SB
-> s = loadpdb protein.pdb
-> set {s.20 s.26} name "ASH"
-> savepdb s protonated.pdb
-> quit
 ~~~
 {: .bash}
 
+~~~
+s = loadpdb protein.pdb
+set {s.20 s.26} name "ASH"
+savepdb s protonated.pdb
+quit
+~~~
+{: .leap}
+
 ### Selecting protonation states with *VMD*.
+
 ~~~
 $ module load nixpkgs/16.09  intel/2016.4 vmd/1.9.3
 $ vmd
-vmd> mol new protein.pdb
-vmd> set s [atomselect top "resid 20 26"]
-vmd> $s set resname ASH
-vmd> set s [atomselect top all]
-vmd> $s writepdb protonated.pdb
-vmd> quit
 ~~~
 {: .bash}
+
+~~~
+mol new protein.pdb
+set s [atomselect top "resid 20 26"]
+$s set resname ASH
+set s [atomselect top all]
+$s writepdb protonated.pdb
+quit
+~~~
+{: .vmd}
 
 
 ### Limitations of Fixed Protonation State Simulations
@@ -125,7 +134,7 @@ Molecular dynamics simulations employing constant protonation states have many d
 >>$s writepdb 1RGG_chain_A_prot.pdb
 >>quit
 >>~~~
->>{: .bash}
+>>{: .vmd}
 > Execute the script: vmd -e prep_1RGG.vmd
 > {: .solution}
 {: .challenge}

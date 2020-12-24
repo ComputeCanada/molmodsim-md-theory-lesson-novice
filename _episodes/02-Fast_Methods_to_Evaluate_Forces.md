@@ -51,7 +51,7 @@ A Verlet list stores all particles within the cutoff distance of every particle 
 >; Frequency to update the neighbour list. If set to 0 the neighbour list is constructed only once and never updated. The default value is 10.
 >
 > ~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 > When run in parallel NAMD uses a combination of spatial decomposition into grid cells (patches) and Verlet lists with extended cutoff distance.
@@ -62,7 +62,7 @@ A Verlet list stores all particles within the cutoff distance of every particle 
 >pairlistsPerCycle 2
 ># How many times per cycle to regenerate pairlists. Default value is 2.
 > ~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
 
 
@@ -118,7 +118,7 @@ Cutoff problems are especially pronounced when energy conservation is required. 
 > rvdw = 1.2
 >;  Cut-off distance
 > ~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 >Truncation of LJ potential is specified in the run parameter file **mdin**.
@@ -135,7 +135,10 @@ Cutoff problems are especially pronounced when energy conservation is required. 
 > vdwForceSwitching on
 ># Use force switching for VDW. The default value is off.
 > ~~~
-> {: .source}
+> {: .file-content}
+> **AMBER force fields**
+>
+> AMBER force fields are developed with hard truncation. Do not use switching or shifting with these force fields.
 {: .callout}
 
 ## Truncation of the Electrostatic Interactions
@@ -153,7 +156,7 @@ Electrostatic interactions occurring over long distances are known to be importa
 >; The maximum allowed error for pair interactions per particle caused by the Verlet buffer. To achieve the predefined tolerance the cutoff distance rlist is adjusted indirectly. To override this feature set the value to -1. The default value is 0.005 kJ/(mol ps).
 >
 > ~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 > When run in parallel NAMD uses a combination of spatial decomposition into grid cells (patches) and Verlet lists with extended cutoff distance.
@@ -164,5 +167,5 @@ Electrostatic interactions occurring over long distances are known to be importa
 > cutoff 12.0
 ># Local interaction distance. Same for both electrostatic and VDW interactions.
 > ~~~
-> {: .source}
+> {: .file-content}
 {: .callout}

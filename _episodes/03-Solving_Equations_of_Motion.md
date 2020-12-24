@@ -83,7 +83,7 @@ The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap
 >integrator = bd
 >; A Euler integrator for Brownian or position Langevin dynamics.
 >~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 >The only available integration method is Verlet.
@@ -115,7 +115,7 @@ To accelerate a simulation the electrostatic interactions outside of a specified
 > tinit = 0
 >; Time of the first step
 > ~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 > Time parameters are specified in the **mdin** run parameter file.
@@ -136,7 +136,7 @@ To accelerate a simulation the electrostatic interactions outside of a specified
 >fullElectFrequency 4
 ># Number of timesteps between full electrostatic evaluations
 >~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
 
 ### Constraint Algorithms
@@ -153,7 +153,7 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 > ## Specifying Constraints
 > **GROMACS**
 >
->SHAKE, LINKS and SETTLE constraint algorithms are implemented.
+>SHAKE, LINKS and SETTLE constraint algorithms are implemented. They are selected via keywords in mdp input files
 > ~~~
 >constraints = h-bonds
 >; Constrain bonds with hydrogen atoms
@@ -176,17 +176,17 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 >shake-tol = 0.0001
 >;  Relative tolerance for SHAKE, default value is 0.0001.
 > ~~~
-> {: .source}
+> {: .file-content}
 >SETTLE can be selected in the topology file:
 >~~~
 >[ settles ]
 >; OW    funct   doh     dhh
 >1       1       0.1     0.16333
 >~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
->SHAKE and SETTLE constraint algorithms are implemented.
+>SHAKE and SETTLE constraint algorithms are implemented. They are selected via keywords in simulation input file.
 > ~~~
 >rigidBonds water
 ># Use SHAKE to constrain bonds with hydrogens in water molecules.
@@ -209,5 +209,5 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 >useSettle on
 ># If rigidBonds are enabled then use the SETTLE algorithm to constrain waters. The default value is on.
 > ~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
