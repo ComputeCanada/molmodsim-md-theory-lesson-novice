@@ -641,24 +641,40 @@ Using this information (MW 110 KDa, charge -4.0, 75000 water molecules) as an in
 #### 4.2 Determine protonation states of titratable sites.
 For processing with H++ server we need to merge protein, nucleic acids and ions into one PDB file.
 
-Make a new directory and copy PDB files into it:
 ~~~
-mkdir H++
-cp 6n4o_chain_A_complete_A669D.pdb chains_CD_minimized.pdb 4w5o_MG_ions.pdb H++
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+source $EBROOTAMBERTOOLS/amber.sh
+mkdir ~/scratch/Ago-RNA_sim/HPP
+cd ~/scratch/Ago-RNA_sim/HPP
+tleap -I $EBROOTAMBERTOOLS/dat/leap/lib/
 ~~~
 {: .bash}
 
-Perhaps it's better to do it with leap?
-Before merging do some minor editing of the PDB files:
-- Delete the last line (END) from 6n4o_chain_A_complete_A669D.pdb
-- Delete the title line from 4w5o_MG_ions.pdb, and add TER records between ions.
-- Add TER records to chains_CD_minimized.pdb, and delete 5' phosphate atoms.
+H++ server does not have library entries for phosphorylated 5' terminals. To workaround we simply remove 5' phosphate atoms.
 
-Merge files:
 ~~~
-cat 6n4o_chain_A_complete_A669D.pdb chains_CD_minimized.pdb  4w5o_MG_ions.pdb > 6n4o_Hpp.pdb
+source leaprc.RNA.OL3
+source leaprc.protein.ff14SB
+source leaprc.water.tip3p
+loadoff terminal_monophosphate.lib
+rna=loadpdb ../prep_system/chains_CD_minimized.pdb
+remove rna rna.1@P
+remove rna rna.1@OP1
+remove rna rna.1@OP2
+remove rna rna.1@OP3
+remove rna rna.1@HP3
+remove rna rna.22@P
+remove rna rna.22@OP1
+remove rna rna.22@OP2
+remove rna rna.22@OP3
+remove rna rna.22@HP3
+prot=loadpdb ../prep_system/6n4o_chain_A_complete_A669D.pdb
+mg=loadpdb ../prep_system/4w5o_MG_ions.pdb
+sys=combine {prot rna mg}
+savepdb sys 6n4o_Hpp.pdb
+quit
 ~~~
-{: .bash}
+{: .leap}
 
 Process 6n4o_Hpp.pdb with H++ server. Uncheck 'Correct orientation' in caclulation setup. When calculation completes download the list of computed pKs (0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt)
 
@@ -685,6 +701,13 @@ Leap was designed to read commands from a file (-f option). This means that we n
 
 Taking advantage of shell flexibility, we can eliminate two files' necessity by creating a multiline variable holding all commands and then passing this variable instead of file to leap.
 
+Load phosphorylated aminoacids forcefield:
+frcmod.phosaa14SB
+
+OP-P -OH        90.0    108.23  from O2-P -OH ! raised to prevent simulation instabilities
+HO-OH-P         100.0   113.28  from HO-OH-P  ! raised to prevent simulation instabilities, equilibrium from G03 calculations
+
+
 As Leap does not support input from STDIN we will use the <(echo "$inputData") syntax which provides a way to pass the output of a command (echo "$inputData") to a program that can not use pipeline.
 
 ~~~
@@ -694,24 +717,24 @@ module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
 
 inputData=$(cat << EOF
+loadamberparams frcmod.monophosphate
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
-prot = loadpdb 6n4o_chain_A_complete_A669D_Hpp.pdb
+prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
 mg = loadpdb 4w5o_MG_ions.pdb
 sys = combine {prot,rna,mg}
 set {sys.77 sys.766 sys.822 sys.829} name "HIP"
 addions sys Na+ 0
-solvatebox sys SPCBOX 13 iso
+solvatebox sys TIP3PBOX 13 iso
 addionsrand sys Na+ 189 Cl- 189
 saveamberparm sys prmtop.parm7 inpcrd.rst7
-savepdb inpcrd.pdb
+savepdb sys inpcrd.pdb
 quit
 EOF)
 
 tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(echo "$inputData")
 ~~~
 {:.file-content}
-
 
 
 ### 5. Energy minimization.
@@ -748,34 +771,92 @@ Minimization fails.
 
 
 #### 5.2 Energy minimization with  NAMD
-~~~
-module load StdEnv/2020  intel/2020.1.217 namd-multicore/2.14
-charmrun ++local +p 8 namd2 namd_min_1.in >&log&
-~~~
-{:.bash}
 
-
-Constrain backbone of all residues with known coordinates.
+In the first roud of minimization we will not allow all original atoms to move. The only exception is ARG814 which is in close contact with the added RNA segment. Prepare constraints file for this run:
 
 ~~~
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
 set sel [atomselect top "all"]
 $sel set occupancy 0.0
-set sel [atomselect top "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
+set sel [atomselect top "noh resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
 $sel set occupancy 999.9
+set sel [atomselect top "resid 814"]
+$sel set occupancy 0.0
 set sel [atomselect top "all"]
-$sel writepdb constrain_backbone_all_6n4o_residues.pdb
+$sel writepdb constrain_all_6n4o_residues.pdb
 quit
 ~~~
 {: .vmd}
+
+Run 1000 steps of energy minimization:
+~~~
+module load StdEnv/2020 intel/2020.1.217 namd-multicore/2.14
+charmrun ++local +p 8 namd2 namd_min1.in >&log&
+~~~
+{:.bash}
+
+In the second round of minimization we will constrain only backbone atoms of all original residues using the minimized coordinates as reference. Prepare the reference coordinates:
+
+~~~
+module load StdEnv/2020 intel vmd
+cd ~/scratch/Ago-RNA_sim/sim_namd/1-minimization
+vmd
+~~~
+{:.bash}
+
+~~~
+mol new ../../prmtop.parm7
+mol addfile minimized.coor
+set sel [atomselect top "all"]
+$sel writepdb ../../minimized.pdb
+quit
+~~~
+{: .vmd}
+
+Prepare force constants file:
+
+~~~
+cd ~/scratch/Ago-RNA_sim
+module purge
+module load StdEnv/2020  intel vmd
+vmd
+~~~
+{: .bash}
+
+~~~
+mol new prmtop.parm7
+mol addfile inpcrd.rst7
+set sel [atomselect top "all"]
+$sel set occupancy 0.0
+set sel [atomselect top "name CA N O P C4' O3' and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
+$sel set occupancy 10.0
+set sel [atomselect top "all"]
+$sel writepdb constrain_backbone_all_6n4o_residues_f10.pdb
+quit
+~~~
+{: .vmd}
+
+Run 1000 steps of minimization.
+~~~
+module load StdEnv/2020 intel/2020.1.217 namd-multicore/2.14
+charmrun ++local +p 8 namd2 namd_min2.in >&log&
+~~~
+{:.bash}
+
+#### 5.3 Heating and equilibration.
+
+After energy minimization we have the optimized coordinates that are ready to use for MD simulation. As we don't have velocities we must generate them using the
+'temperature' keyword.
+
+
 
 Sbatch file for running simulation on a single (GPU) node on Siku:
 ~~~
 #!/bin/bash
 #SBATCH -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-
 module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
+
 charmrun ++local +p $SLURM_CPUS_PER_TASK namd2 namd_min.in
 ~~~
 {: .file-content}
@@ -791,86 +872,122 @@ srun --mpi=pmi2 namd2 namd.in
 ~~~
 {: .file-content}
 
+### 5. Transferring equilibrated system between simulation packages.
+Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another.
 
-### 5. Transferring simulation to PMEMD
-VMD saves coordinates, velocity and periodic box in separate files. To restart simulation in AMBER all information is included in one text or netcdf file. We need to convert namd binary files to amber ascii restart files and then combine them. The conversion can be done with VMD. Let's convert Velocities:
+```
+Examples:
+Constant pH witn replica exchange - Amber
+Targeted molecular dynamics - namd
+Custom forces - namd
+```
 
-~~~
-# Velocities
-mol new equilibration.vel type namdbin
-set sel [atomselect top all]
-$sel writerst7 vel.rst7
-~~~
-{: .vmd}
+#### 5.1. Moving simulation from NAMD to AMBER.
 
-NAMD calculates pressure slightly different from AMBER, so after simulation restart pressure will be too high. It will relax on its own, but we can rescale coorrdinates and periodic box with VMD as this straightforward to do and is a good scripting exersice.
+NAMD saves coordinates, velocity and periodic box in separate files. In AMBER all information required to restart simulation is in one text (.rst7) or netcdf (.ncrst) file. To prepare AMBER restart file we first convert namd binary files to amber text restart files with VMD:
+~~~
+cd ~/scratch/Ago-RNA_sim/sim_pmemd/2-production
+cp ~/scratch/Ago-RNA_sim/sim_namd/5-equilibration-unconstrained/{equilibration.coor,equilibration.vel,equilibration.xsc} .
 
-~~~
-# module load intel/2018 vmd
-# Coordinates
-mol new equilibration.coor
-set all [atomselect top "all"]
-foreach coord [$all get {x y z}] {
-set new [vecscale 1.002 $coord]
-lappend newcoords $new
-}
-$all set {x y z} $newcoords
-$sel writerst7 coor.rst7
-~~~
-{: .vmd}
-
-AMBER7 restart saved by VMD:
-
-~~~
-ITLE : Created by VMD with 239182 atoms
-    239182
-  70.5760422 -50.9089012 -51.6549225  71.0061951 -50.4646530 -52.4560471
-  ...
-  24.0123978  58.0914536  10.3757582  23.5664310  56.8668785   9.6000710
-  0.0000000   0.0000000   0.0000000  90.0000000  90.0000000  90.0000000
-~~~
-{: .file-content}
-
-~~~
-# Print title line
-head -n1 coor.rst7 > restart.rst7
-# In the second line the number of atoms MUST be at the beginning of the line! Strip leading whitespace
-natoms=`head -n2  coor.rst7 | tail -n1`
-echo $natoms >> restart.rst7
-# Cooridates - remove first two lines and the last line
-tail -n+3 coor.rst7 | head -n-1 >> restart.rst7
-# Velocities - remove first two lines and the last line
-tail -n+3 vel.rst7 | head -n-1 >> restart.rst7
-# Add box from the file equilibration.xsc
-box=`tail -n+3 equilibration.xsc | cut -d ' ' -f 2,6,10`
-alpha=' 90.0'
-beta=' 90.0'
-gamma=' 90.0'
-ba=${box}${alpha}${beta}${gamma}
-echo $ba | awk '{ printf "%12.7f%12.7f%12.7f%12.7f%12.7f%12.7f\n", $1*1.002, $2*1.002, $3*1.002, $4, $5, $6}' >> restart.rst7
 ~~~
 {: .bash}
 
 ~~~
+# Convert velocities
+mol new equilibration.vel type namdbin
+set sel [atomselect top all]
+$sel writerst7 vel.rst7
+# Convert coordinates
+mol new equilibration.coor
+set sel [atomselect top "all"]
+$sel writerst7 coor.rst7
+~~~
+{: .vmd}
+
+Now we can read these files along with the extended system (.xsc) file and prepare the complete rst7 file. We will do it with ParmEd, program for editing parameter and coordinate files.
+
+NAMD controls pressure differently from AMBER, so when we transfer simulation to AMBER pressure will be too high. It will relax on its own, but we can slightly rescale coordinates and periodic box to speed up pressure equilibration.
+
+~~~
+module load nixpkgs/16.09 gcc/7.3.0 openmpi/3.1.2 amber/18.10-18.11 scipy-stack
+~~~
+{: .bash}
+~~~
+import parmed as pmd
+import numpy as np
+
+sc=1.002
+xsc = np.loadtxt('equilibration.xsc')
+vel_rst7 = pmd.load_file('vel.rst7')
+coor_rst7 = pmd.load_file('coor.rst7')
+new_rst7 = pmd.amber.Rst7(natom=vel_rst7.natom)
+new_rst7.vels = vel_rst7.coordinates*20.455
+new_rst7.coordinates = coor_rst7.coordinates*sc
+new_rst7.box = [xsc[1]*sc, xsc[5]*sc, xsc[9]*sc, 90, 90, 90]
+new_rst7.title = "Created with ParmEd"
+new_rst7.write("restart.rst7")
+~~~
+{: .python}
+
+Now we can continue simulation with AMBER. AMBER suite includes several simulation codes: sander, sander.MPI, pmemd, pmemd.MPI, pmemd.cuda. Sander is free version, pmemd is commercial. Sander and pmemd are serial (CPU only) programs; sander.MPI and pmemd.MPI are parallel (CPU only); and pmemd.cuda is GPU version.
+
+Submitting pmemd.cuda on Siku:
+~~~
 #SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-module load nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11
-pmemd -O -i pmemd_prod.in -o prod.out -p ../../prmtop.parm7 -c restart.rst7
+module load nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11 scipy-stack
+pmemd.cuda -O -i pmemd_prod.in -o prod.out -p ../../prmtop.parm7 -c restart.rst7
 ~~~
 {:.bash}
 
+PMEMD is highly optimized to do all computations in one GPU, and it runs exceptionally fast. It CANNOT be used efficiently on more than one GPU because of the overhead from moving data between GPUs.
+
+*Note pmemd.cuda is unstable with nfft = 144, but stable with nfft = 128 or 256.
+
+#### 5.2 Moving simulation from AMBER to GROMACS.
+~~~
+import parmed as pmd
+amber = pmd.load_file('../../prmtop.parm7', 'restart.rst7')
+# Save a GROMACS topology
+amber.save('gromacs.top')
+# Read velocities
+vel_rst7 = pmd.load_file('vel.rst7')
+amber.velocities = vel_rst7.coordinates*20.455
+amber.save('gromacs.gro')
+~~~
+{: .python}
+
+~~~
+mol new ../../prmtop.parm7
+mol addfile restart.rst7
+set sel [atomselect 0 all]
+$sel writegro restart.gro
+quit
+~~~
+{: .vmd}
+
+~~~
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+gmx trjconv -f gromacs.gro -o gromacs.trr
+gmx make_ndx -f gromacs.gro
+gmx grompp -p gromacs.top  -c gromacs.gro -t gromacs.trr -f gromacs.mdp
+
+~~~
 
 
-Periodic box in AMBER is printed in the last line of the coordinate .rst7 file
-
+References:
 [Amber file formats](https://ambermd.org/FileFormats.php#restart)
 
-NAMD velocity in the binary format needs to be multiplied by PDBVELFACTOR = 20.45482706 to get A/ps.
+Increase step to 4 fs with Hydrogen mass repartitioning.
+
 
 ### Sander python API
 
+
+
 ### 6. Benchmarking
+
 PMEMD.CUDA
-2.38 ms/step   36.29 ns/day
+2.07 ms/step   41.77 ns/day
 
 NAMD-UCX
 
