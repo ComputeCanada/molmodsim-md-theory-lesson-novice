@@ -819,7 +819,7 @@ Prepare force constants file:
 ~~~
 cd ~/scratch/Ago-RNA_sim
 module purge
-module load StdEnv/2020  intel vmd
+module load StdEnv/2020 intel vmd
 vmd
 ~~~
 {: .bash}
@@ -844,14 +844,61 @@ charmrun ++local +p 8 namd2 namd_min2.in >&log&
 ~~~
 {:.bash}
 
-#### 5.3 Heating and equilibration.
+### 6. Heating and equilibration.
 
-After energy minimization we have the optimized coordinates that are ready to use for MD simulation. As we don't have velocities we must generate them using the
-'temperature' keyword.
+After energy minimization we have the optimized coordinates that are ready to use for MD simulation.
+
+#### 6.1. Heating
+
+Generate the initial velocities at 150 K
+
+~~~
+temperature 150
+~~~
+{: .file-content}
+
+Use Berendsen thermostat and barostat
+
+~~~
+tCouple on
+tCoupleTemp 300
+BerendsenPressure on
+~~~
+{: .file-content}
+
+Long pressure relaxation time to prevent box from changing too fast
+
+~~~
+BerendsenPressureRelaxationTime 4000
+~~~
+{: .file-content}
+
+Run heating for 20 ps.
+
+#### 6.2 Constrained equilibration
+
+Read velocities and box from restart Files
+
+Shorten Berendsen Pressure Relaxation Time
+
+Run for 2 ns.
+
+Download and examine energy.
+
+#### 6.3 Unconstrained equilibration
+
+Switch to Landevin dynamics
+
+Run for 2 ns.
+
+Download and examine energy.
+
+Ready for production.
 
 
 
 Sbatch file for running simulation on a single (GPU) node on Siku:
+
 ~~~
 #!/bin/bash
 #SBATCH -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
@@ -872,7 +919,7 @@ srun --mpi=pmi2 namd2 namd.in
 ~~~
 {: .file-content}
 
-### 5. Transferring equilibrated system between simulation packages.
+### 7. Transferring equilibrated system between simulation packages.
 Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another.
 
 ```
@@ -882,13 +929,15 @@ Targeted molecular dynamics - namd
 Custom forces - namd
 ```
 
-#### 5.1. Moving simulation from NAMD to AMBER.
+#### 7.1. Moving simulation from NAMD to AMBER.
 
 NAMD saves coordinates, velocity and periodic box in separate files. In AMBER all information required to restart simulation is in one text (.rst7) or netcdf (.ncrst) file. To prepare AMBER restart file we first convert namd binary files to amber text restart files with VMD:
+
 ~~~
 cd ~/scratch/Ago-RNA_sim/sim_pmemd/2-production
 cp ~/scratch/Ago-RNA_sim/sim_namd/5-equilibration-unconstrained/{equilibration.coor,equilibration.vel,equilibration.xsc} .
-
+module load intel vmd
+vmd
 ~~~
 {: .bash}
 
@@ -901,17 +950,22 @@ $sel writerst7 vel.rst7
 mol new equilibration.coor
 set sel [atomselect top "all"]
 $sel writerst7 coor.rst7
+quit
 ~~~
 {: .vmd}
 
-Now we can read these files along with the extended system (.xsc) file and prepare the complete rst7 file. We will do it with ParmEd, program for editing parameter and coordinate files.
+Now we can read these files along with the extended system (.xsc) file and prepare the complete rst7 file. We will do it with ParmEd, the program for editing AMBER parameter and coordinate files.
 
 NAMD controls pressure differently from AMBER, so when we transfer simulation to AMBER pressure will be too high. It will relax on its own, but we can slightly rescale coordinates and periodic box to speed up pressure equilibration.
 
 ~~~
-module load nixpkgs/16.09 gcc/7.3.0 openmpi/3.1.2 amber/18.10-18.11 scipy-stack
+module purge
+module load StdEnv/2020 gcc ambertools python scipy-stack
+source $EBROOTAMBERTOOLS/amber.sh
+python
 ~~~
 {: .bash}
+
 ~~~
 import parmed as pmd
 import numpy as np
@@ -926,92 +980,157 @@ new_rst7.coordinates = coor_rst7.coordinates*sc
 new_rst7.box = [xsc[1]*sc, xsc[5]*sc, xsc[9]*sc, 90, 90, 90]
 new_rst7.title = "Created with ParmEd"
 new_rst7.write("restart.rst7")
+quit()
 ~~~
 {: .python}
 
-Now we can continue simulation with AMBER. AMBER suite includes several simulation codes: sander, sander.MPI, pmemd, pmemd.MPI, pmemd.cuda. Sander is free version, pmemd is commercial. Sander and pmemd are serial (CPU only) programs; sander.MPI and pmemd.MPI are parallel (CPU only); and pmemd.cuda is GPU version.
+We converted NAMD restart files to AMBER restart and we can continue simulation with AMBER. AMBER suite includes several simulation codes: sander, sander.MPI, pmemd, pmemd.MPI, pmemd.cuda. Sander is free version, pmemd is commercial. Sander and pmemd are serial (CPU only) programs; sander.MPI and pmemd.MPI are parallel (CPU only); and pmemd.cuda is GPU version.
 
 Submitting pmemd.cuda on Siku:
+
 ~~~
 #SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-module load nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11 scipy-stack
-pmemd.cuda -O -i pmemd_prod.in -o prod.out -p ../../prmtop.parm7 -c restart.rst7
+module load StdEnv/2016.4 nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11 scipy-stack
+
+pmemd.cuda -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
 ~~~
 {:.bash}
 
 PMEMD is highly optimized to do all computations in one GPU, and it runs exceptionally fast. It CANNOT be used efficiently on more than one GPU because of the overhead from moving data between GPUs.
 
-*Note pmemd.cuda is unstable with nfft = 144, but stable with nfft = 128 or 256.
-
-#### 5.2 Moving simulation from AMBER to GROMACS.
-~~~
-import parmed as pmd
-amber = pmd.load_file('../../prmtop.parm7', 'restart.rst7')
-# Save a GROMACS topology
-amber.save('gromacs.top')
-# Read velocities
-vel_rst7 = pmd.load_file('vel.rst7')
-amber.velocities = vel_rst7.coordinates*20.455
-amber.save('gromacs.gro')
-~~~
-{: .python}
-
-~~~
-mol new ../../prmtop.parm7
-mol addfile restart.rst7
-set sel [atomselect 0 all]
-$sel writegro restart.gro
-quit
-~~~
-{: .vmd}
-
-~~~
-module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
-gmx trjconv -f gromacs.gro -o gromacs.trr
-gmx make_ndx -f gromacs.gro
-gmx grompp -p gromacs.top  -c gromacs.gro -t gromacs.trr -f gromacs.mdp
-
-~~~
-
+- Note: pmemd.cuda is unstable with nfft = 144, but stable with nfft = 128 or 256.
 
 References:
 [Amber file formats](https://ambermd.org/FileFormats.php#restart)
 
-Increase step to 4 fs with Hydrogen mass repartitioning.
 
+#### 5.2 Moving simulation from AMBER to GROMACS.
 
-### Sander python API
+To tansfer simulation to GROMACS in addition to converting restart file we need to convert topology.
 
+First convert AMBER topology to GROMACS
 
+~~~
+module purge
+module load StdEnv/2020 gcc ambertools python scipy-stack
+source $EBROOTAMBERTOOLS/amber.sh
+python
+~~~
+{: .bash}
+
+~~~
+import parmed as pmd
+amber = pmd.load_file('../prmtop.parm7', '../sim_pmemd/2-production/restart.rst7')
+amber.save('gromacs.top')
+~~~
+{: .python}
+
+Then convert velocities and coordinates:
+Velocities in text .rst7 files are in 1/ps. For restart files they need to be scaled by 20.455
+
+~~~
+vel_rst7 = pmd.load_file('../sim_pmemd/2-production/vel.rst7')
+amber.velocities = vel_rst7.coordinates*20.455
+amber.save('restart.gro')
+~~~
+{: .python}
+
+~~~
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+gmx trjconv -f restart.gro -o restart.trr
+gmx make_ndx -f restart.gro
+gmx grompp -p gromacs.top  -c restart.gro -t restart.trr -f gromacs_production.mdp
+~~~
+{: .bash}
+
+Running simulation
+~~~
+#SBATCH --mem-per-cpu=4000 --time=10:0:0 -c16
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+gmx mdrun
+~~~
+
+References:
+ [Lessons learned from comparing molecular dynamics engines on the SAMPL5 dataset](https://link.springer.com/article/10.1007%2Fs10822-016-9977-1)
 
 ### 6. Benchmarking
 
-PMEMD.CUDA
-2.07 ms/step   41.77 ns/day
+#### GROMACS
 
-NAMD-UCX
+~~~
+gmx convert-tpr -s topol.tpr -nsteps 10000 -o next.tpr
+gmx mdrun -s next.tpr -cpi state.cpt
+~~~
+{: .bash}
 
-CPU |  s/step | days/ns |
-----|---------|---------|
-80  |0.0185002|0.214122 |
-160 |0.0095409|0.110427 |
+~~~
+#SBATCH --mem-per-cpu=4000 --time=10:0:0 -c4 --ntasks=2
+module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-1}"
+srun gmx mdrun -s next.tpr -cpi state.cpi
+~~~
+{: .file-content}
 
+gmx_mpi, gromacs/2020.4, avx512, single
+CPU | Tasks | Threads | ns/day
+----|-------|---------|-------
+16  |  16   |   1     | 7.13
+32  |  32   |   1     | 10.99
+40  |  40   |   1     | 13.64
+64  |  64   |   1     | 20.76
+128 |  128  |   1     | 36.56
 
-NAMD-multicore-CUDA
+gmx_mpi, gromacs/2020.4, avx2
+CPU | Tasks | Threads | ns/day
+----|-------|---------|-------
+16  |  16   |   1     | 6.37
+32  |  32   |   1     | 10.27
+64  |  64   |   1     | 17.03
+128 | 128   |   1     | 33.32
 
-CPU | GPU | s/step   | days/ns  |
-----|-----|----------|----------|
- 8  | 1   | 0.0145907|0.168874  |
-16  | 2   | 0.0097680| 0.113056 |
-40  | 2   | 0.0077319| 0.0894905|
+#### AMBER
 
-NAMD-multicore
+pmemd.cuda
+41.77 ns/day
 
-CPU |  s/step | days/ns |
-----|---------|---------|
-1   |1.05841  |12.2502  |
-2   |0.54587  |6.31795  |
-4   |0.28265  |3.27141  |
-8   |0.145845 |1.68802  |
-16  |0.0752144|0.870537 |
-32  |0.0396436|0.458838 |
+#### NAMD
+
+namd-ucx
+CPU | ns/day |
+----|--------|
+80  |  4.67  |
+160 |  9.06  |
+
+namd-multicore-cuda
+CPU | GPU | ns/day
+----|-----|--------
+ 8  | 1   | 5.92
+16  | 2   | 8.85
+40  | 2   | 11.17
+
+namd-multicore
+CPU |  ns/day
+----|---------
+1   | 0.08163
+2   | 0.15828
+4   | 0.30568
+8   | 0.59241
+16  | 1.14872
+32  | 2.17942
+
+#### Accelerating simulation
+
+It is possible to increase time step to 4 fs.
+
+Increase step to 4 fs with Hydrogen mass repartitioning.
+
+parmed prmtop.parm7
+
+~~~
+hmassrepartition
+outparm prmtop_hmass.parm7
+quit
+~~~
+
+Reference
+[Long-Time-Step Molecular Dynamics through Hydrogen Mass Repartitioning](https://pubs.acs.org/doi/abs/10.1021/ct5010406)
