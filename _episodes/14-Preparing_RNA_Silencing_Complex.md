@@ -1072,15 +1072,17 @@ srun gmx mdrun -s next.tpr -cpi state.cpi
 {: .file-content}
 
 gmx_mpi, gromacs/2020.4, avx512, single
-CPU | Tasks | Threads | ns/day
-----|-------|---------|-------
-16  |  16   |   1     | 7.13
-32  |  32   |   1     | 10.99
-40  |  40   |   1     | 13.64
-64  |  64   |   1     | 20.76
-128 |  128  |   1     | 36.56
+
+CPU | Tasks | Threads | ns/day|
+----|-------|---------|-------|
+16  |  16   |   1     | 7.13  |
+32  |  32   |   1     | 10.99 |
+40  |  40   |   1     | 13.64 |
+64  |  64   |   1     | 20.76 |
+128 |  128  |   1     | 36.56 |
 
 gmx_mpi, gromacs/2020.4, avx2
+
 CPU | Tasks | Threads | ns/day
 ----|-------|---------|-------
 16  |  16   |   1     | 6.37
@@ -1096,12 +1098,14 @@ pmemd.cuda
 #### NAMD
 
 namd-ucx
+
 CPU | ns/day |
 ----|--------|
 80  |  4.67  |
 160 |  9.06  |
 
 namd-multicore-cuda
+
 CPU | GPU | ns/day
 ----|-----|--------
  8  | 1   | 5.92
@@ -1109,6 +1113,7 @@ CPU | GPU | ns/day
 40  | 2   | 11.17
 
 namd-multicore
+
 CPU |  ns/day
 ----|---------
 1   | 0.08163
