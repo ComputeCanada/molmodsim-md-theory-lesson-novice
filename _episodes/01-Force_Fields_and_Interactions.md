@@ -40,10 +40,34 @@ For convenience force fields can be divided into 3 general classes based on how 
 Class 1. In the class 1 force field dynamics of bond stretching and angle bending are described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement, this approximation is called quadratic. In general, bond stretching and angle bending are close to harmonic only near the equilibrium. Higher-order anharmonic energy terms are required for a more accurate description of molecular motions. In the class 1 force field force matrix is diagonal because correlations between bond stretching and angle bending are omitted.
 
 Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters.
+[MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-JCC8>3.0.CO;2-T), [UFF](https://pubs.acs.org/doi/10.1021/ja00051a040)
 
-Class 3 force fields explicitly add special effects of organic chemistry. For example stereoelectronic effects, electronegativity effect, Jahn–Teller effect, etc.
+Class 3 force fields explicitly add special effects of organic chemistry. For example stereoelectronic effects, electronegativity effect, Jahn–Teller effect, polarization, etc. Examples: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
 
 Until recently force fields for biomolecular simulations were focused on nonbonded interactions and accurate reproduction of critical torsion potentials.
+
+Evaluation of Force fields:
+
+[Polarizable and non-polarizable force fields: Protein folding, unfolding, and misfolding] https://aip.scitation.org/doi/10.1063/5.0022135
+
+How does it work?
+*Explain concept of Atom Types, Atom Names and Fragment Libraries*
+FF describes interactions between ATOM TYPES.
+More atom types - more accurate description of interations. But less interoperability. FF table may become huge.
+Atom types approach allows to reuse FF parameters for different similar compounds.
+Focus on Aminoacids, derive a minimum set of Atom types required for adequate descriptions of all proteins. parm10 60 atom types.
+Want to include cofactors? Need to extend FF, more atom types. GAFF, GLYCAM, LIPID.
+
+
+Main parameter set:
+$EBROOTAMBERTOOLS/dat/leap/parm/parm10.dat
++
+lipid17.dat, gaff2.dat ..
+
+61 atom types including ions.
+
+
+- Example FF for CH2OH
 
 ## Energy Terms of Biomolecular Force Fields
 Most force fields for biomolecular simulations are minimalistic class 1 force fields trading off rigor of the physical representation for the ability to simulate large systems for a long period of time.

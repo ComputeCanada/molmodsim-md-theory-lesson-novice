@@ -11,7 +11,9 @@ objectives:
 keypoints:
 - "?"
 ---
-For this workshop, we have chosen a complex of human argonaute-2 (hAgo2) protein with a micro RNA (miRNA) bound to a target messenger RNA (mRNA). miRNAs are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual proteins' expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target mRNAs encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
+For this lesson, we will use a complex of human argonaute-2 (hAgo2) protein with a micro RNA bound to a target messenger RNA ([PDBID:6N4O](https://www.rcsb.org/structure/6n4o)).
+
+Micro RNAs (miRNAs) are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual protein's expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target messenger RNAs (mRNAs) encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
 
 Create working directory:
 ~~~
@@ -20,10 +22,10 @@ cd ~/scratch/workshop
 ~~~
 {: .bash}
 
-### 1. Preparing protein for MD simulation
+### 1. Preparing protein for MD simulation.
 #### 1.1 Adding missing residues to protein structure files.
 
-Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model contacting all atoms.
+Almost all protein and nucleic acid crystallographic structure files have missing residues. The reason for it is that the most flexible parts of biopolymers are disordered in crystals, and therefore, the positions cannot be accurately determined. These atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model containing all atoms.
 
 ##### 1.1.1 Adding missing residues using SWISS MODEL
 
@@ -1027,8 +1029,13 @@ amber.save('gromacs.top')
 {: .python}
 
 Then convert velocities and coordinates:
-Velocities in text .rst7 files are in 1/ps. For restart files they need to be scaled by 20.455
 
+Amber operates in kcal/mol units for energy, amu for masses,
+and Angstoms for distances. For convenience when calculating KE from
+velocity, the velocities have a conversion factor built in; as a result the Amber unit of time is (1/20.455) ps.
+So to convert Amber velocities from internal units to Ang/ps multiply by 20.455. The number itself is derived from sqrt(1 / ((AMU_TO_KG * NA) / (1000 * CAL_TO_J))).
+
+[AMBER constants](https://github.com/Amber-MD/cpptraj/blob/master/src/Constants.h)
 ~~~
 vel_rst7 = pmd.load_file('../sim_pmemd/2-production/vel.rst7')
 amber.velocities = vel_rst7.coordinates*20.455
@@ -1054,7 +1061,9 @@ gmx mdrun
 References:
  [Lessons learned from comparing molecular dynamics engines on the SAMPL5 dataset](https://link.springer.com/article/10.1007%2Fs10822-016-9977-1)
 
-### 6. Benchmarking
+### 6. Comparative performance of simulation software
+
+![](../fig/MD-benchmarks.svg)
 
 #### GROMACS
 
@@ -1081,6 +1090,7 @@ CPU | Tasks | Threads | ns/day|
 40  |  40   |   1     | 13.64 |
 64  |  64   |   1     | 20.76 |
 128 |  128  |   1     | 36.56 |
+256 |  256  |   1     | 56.1  |
 
 gmx_mpi, gromacs/2020.4, avx2
 
@@ -1090,10 +1100,36 @@ CPU | Tasks | Threads | ns/day
 32  |  32   |   1     | 10.27
 64  |  64   |   1     | 17.03
 128 | 128   |   1     | 33.32
+256 | 256   |   1     | 52.1
+
+gmx_mpi, gromacs/2020.4, avx2
+
+CPU | Tasks | Threads | GPU | ns/day
+----|-------|---------|-----|------
+8   |  1    |   8     |  1  | 22.25
+16  |  2    |   8     |  2  | 12.39
+8   |  2    |   4     |  2  | 10.02
+
 
 #### AMBER
 
+pmemd.MPI
+CPU | Tasks | Threads | ns/day
+----|-------|---------|-------
+32  |  32   |   1     | 2.16
+64  |  64   |   1     | 3.62
+128 |  128  |   1     | 5.77
+256 |  256  |   1     | 8.78
+
 pmemd.cuda
+1GPU slurm directives:
+--mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
+pmemd.cuda -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
+2GPUs slurm directives:
+--mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:2 --partition=all_gpus --ntasks=2
+srun pmemd.cuda.MPI -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
+
+
 41.77 ns/day
 
 #### NAMD
