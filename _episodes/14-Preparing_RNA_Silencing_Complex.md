@@ -1102,7 +1102,7 @@ CPU | Tasks | Threads | ns/day
 128 | 128   |   1     | 33.32
 256 | 256   |   1     | 52.1
 
-gmx_mpi, gromacs/2020.4, avx2
+gmx_mpi, gromacs/2020.4, cuda
 
 CPU | Tasks | Threads | GPU | ns/day
 ----|-------|---------|-----|------
@@ -1114,6 +1114,7 @@ CPU | Tasks | Threads | GPU | ns/day
 #### AMBER
 
 pmemd.MPI
+
 CPU | Tasks | Threads | ns/day
 ----|-------|---------|-------
 32  |  32   |   1     | 2.16
@@ -1121,14 +1122,25 @@ CPU | Tasks | Threads | ns/day
 128 |  128  |   1     | 5.77
 256 |  256  |   1     | 8.78
 
-pmemd.cuda
-1GPU slurm directives:
+pmemd.cuda, 1GPU slurm directives:
+~~~
 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
 pmemd.cuda -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
-2GPUs slurm directives:
+~~~
+
+pmemd.cuda.MPI, 2GPUs slurm directives:
+~~~
 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:2 --partition=all_gpus --ntasks=2
 srun pmemd.cuda.MPI -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
+~~~
 
+See [AMBER GPU Docs](https://ambermd.org/GPUHowTo.php) section Multi-GPU:
+
+"As of AMBER 18, with modern 2018 or later GPUs, you are unlikely to see benefit beyond a single GPU"
+
+
+
+"you are very unlikely to see any speedup by using multiple GPUs for a single job if the GPUs are newer than C2050s".
 
 41.77 ns/day
 
