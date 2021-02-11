@@ -13,6 +13,18 @@ keypoints:
 - "Molecular dynamics simulates atomic positions in time using forces acting between atoms"
 - "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
+## Introduction
+Atoms and molecules, the building blocks of matter, interact with each other. They are attracted at long distances, whereas at short distances the interactions become strongly repulsive. In fact, there is no need to seek for a proof from the underlying physics to confirm that this is really the case as we can observe it indirectly on a macroscopic level with our own eyes every day. For example, due to the attraction water molecules nucleate to form drops, which in turn rain down to fill rivers. Thanks to the strong repulsion, on the other hand, one cubic meter of that very same water weighs basically always about 1000 kg, regardless of how much pressure we use in trying to compress it.
+
+Today, we carry out molecular modeling by following and analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. Similarly, the first attempts to model interacting molecules go back to van der Waals' pioneering work, "About the continuity of the gas and liquid state "1873 [1]. With a simple state equation where the molecules are approximated as spheres attracting each other, he could predict gas-liquid phase transition. We still use many of the conceptual ideas from over a century ago in modern molecular modeling and simulations.
+
+The interactions involving molecules can be explained based on quantum mechanics. Close to a contact distance between molecules, there is a complex mixture of quantum mechanical forces. Although the physical background is known, the mathematical complexity prohibits any analytical attempts to describe condensed matter. Fortunately, thanks to computers, there are now approximate but robust methods to model many-body systems based on empirical force fields.
+
+
+References:
+1. J.D. van der Waals: Over de continu ̈ıteit van den Gas – en Vloieistoftoestand. PhD thesis, University of Leiden, The Netherlands (1873)
+
+## Force Fields
 
 Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
 
@@ -26,8 +38,6 @@ $\vec{F}=-\nabla{U}(\vec{r})$
 - With the help of MD it is possible to model phenomena that cannot be studied experimentally.
 -  Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
 - Study thermodynamics properties (free energies, binding energies)
-
-## Force Fields
 
 A force field (FF) is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics (MM) potential energy function used in MD simulations is an empirical function comprised of non-bonded and bonded interactions:
 
@@ -209,6 +219,8 @@ CMAP is a grid based error correction map used in CHARMM force field to  correct
 
 ### Exclusions from Non-Bonded Interactions
 Pairs of atoms connected by chemical bonds are normally excluded from computation of non-bonded interactions because bonded energy terms replace non-bonded interactions. In biomolecular force fields all pairs of connected atoms separated by up to 2 bonds (1-2 and 1-3 pairs) are excluded from non-bonded interactions. Computation of the non-bonded interaction between 1-4 pairs depends on the specific force field. Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
+
+Now, there is one specific term in most force fields that should be given some more attention as it turns out to be an intermediate case: a pair of atoms in the outermost positions of a dihedral angle consisting of four atoms and three bonds. In many cases a compromise is made to treat this particular pair partially as a bonded and partially as a non-bonded interaction, and be called the “1–4” interaction. The reason is that steric interactions affect rotations around a bond. However, they are rather rough and in most cases lack further details of local internal conformational degrees of freedom. However, due to the short distance between the 1–4 atoms, both the Lennard–Jones and the Coulombic interactions are normally scaled down substantially. The 1–2 or 1–3 non-bonded interactions are, although somewhat arbitrarily, omitted completely. It is assumed that they are properly described with bond and angle potentials, most often within the harmonic approximation.
 
 > ## Specifying Exclusions
 > **GROMACS**

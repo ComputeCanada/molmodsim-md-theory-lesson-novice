@@ -10,7 +10,8 @@ keypoints:
 - "Degrees of Freedom in Rigid bodies."
 - "Constraints"
 ---
-Dynamical molecular systems are characterized by numerous degrees of freedom. The thermal motion of molecules can be decomposed into translational, rotational and vibrational components (degrees of freedom). Each ot these terms contrututes quadratically to the average energy. Classical equipartition principle states that every degree of freedom contributes equally to the total energy in thermal equilibrium. Each degree of freedom has an average energy of  ½kBT  and contributes  ½kB to the system's heat capacity.
+Dynamical molecular systems are characterized by numerous degrees of freedom. The thermal motion of molecules can be decomposed into translational, rotational, and vibrational components (degrees of freedom). Each of these terms contributes quadratically to the average energy. The classical equipartition principle states that every quadratic degree of freedom contributes equally to the total energy in thermal equilibrium. Each degree of freedom has an average energy of ½kBT and contributes ½kB to the system's heat capacity.
+
 
 ## Translational degrees of freedom
 An atom or a molecule can move in 3D.
