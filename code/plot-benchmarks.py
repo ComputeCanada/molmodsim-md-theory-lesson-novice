@@ -22,6 +22,7 @@ benchmark=[
         [ 'GROMACS/2020.4, AVX2\n64 tasks x 1 core',                 17.03, 'tab:blue' ],
         [ 'GROMACS/2020.4, AVX512\n64 tasks x 1 core',               20.76, 'tab:blue' ],
         [ 'GROMACS/2020.4, CUDA\n1 task x 8 cores, 1 GPU',           22.25, 'tab:blue' ],       
+        [ 'GROMACS/2020.4, AVX512\n32 task x 4 cores',               27.27, 'tab:blue' ],
         [ 'GROMACS/2020.4, AVX2\n128 tasks x 1 core',                33.32, 'tab:blue' ],
         [ 'GROMACS/2020.4, AVX512\n128 tasks x 1 core',              36.56, 'tab:blue' ],
         [ 'AMBER/18, pmemd.cuda.MPI\n2 tasks x 1 core, 2 GPUs',      36.88, 'tab:green' ],
@@ -41,7 +42,7 @@ ax.set_yticks(y_pos)
 ax.set_yticklabels(software)
 # ax.invert_yaxis() 
 ax.set_xlabel('Performance, ns/day')
-ax.set_title('NPT, 1 fs, 300,000 atoms')
+ax.set_title('NPT, 1 fs, 300,000 atoms\nCPU: Xeon Gold 6248 @ 2.50GHz, GPU: Tesla V100')
 ax.minorticks_on()
 ax.grid(which='major', linestyle='-', linewidth='0.7', alpha=0.6, axis='x')
 ax.grid(which='minor', linestyle='-', linewidth='0.5', alpha=0.2, axis='x')
