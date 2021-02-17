@@ -113,7 +113,7 @@ Robertson MJ, Tirado-Rives J, Jorgensen WL. Improved Peptide and Protein Torsion
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 
-### AMBER
+### AMBER force fields
 AMBER forcefields are developed for simulations of proteins and nucleic acids and they are focused on accurate description of structures and nonbonded energies. The VDW parameters are obtained from crystal structures and lattice energies. The atomic partial charges are fitted to QM electrostatic potential without any empirical adjustments.
 
 [ff99](http://dx.doi.org/doi:10.1002/1096-987X(200009)21:12<1049::AID-JCC3>3.0.CO;2-F) (1999) The main idea is that the use of RESP charges, should lead to the need for fewer torsional potentials than in models with an empirical charge derivation. Potential energy surface scans were performed using four different ab initio methods, HF/6‐31G$*$, MP2/6‐31G$*$, MP2/6‐311+G (2d,p), and B3LYP/6‐311+G (2d,p).
@@ -151,7 +151,6 @@ Cerutti-2014
 
 Maier, James A., Carmenza Martinez, Koushik Kasavajhala, Lauren Wickstrom, Kevin E. Hauser, and Carlos Simmerling. “Ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from Ff99SB.” Journal of Chemical Theory and Computation 11, no. 8 (August 11, 2015): 3696–3713. https://doi.org/10.1021/acs.jctc.5b00255.
 
-
 [ff15ipq](https://doi.org/10.1021/acs.jctc.6b00567) 2016 The motivation for the development was to address the salt bridge overstabilization problem of ff14ipq. However, this forcefiled is not a small correction applied to ff14ipq. It is is a complete semi-automatic rederivation of all parameters with the different water model SPC/Eb. The salt bridge overstabilization issue was addressed by increasing radius of polar hydrogens bonded to nitrogen.  The modified FF performed as well or better than the other fixed charge force fields. Polarizable CHARMM Drude-2013 and AMOEBA performed better in this respect, as expected.
 
 Problems related to protein stability persist. Even 4 μs simulations “were not sufficiently long to obtain converged estimates of secondary structure of polypeptides”. In simulation tests some proteins deviated significantly near the end of several microsecond simulations, and it is not clear whether this is a transient fluctuation or transition to a different state.
@@ -161,7 +160,7 @@ Debiec-2016
 
 [ff15FB](https://pubs.acs.org/doi/10.1021/acs.jpcb.7b02320) 2017 The goal was to reoptimize intramolecular bond, angle, and dihedral parameters to fit MP2 level QM data without modifying the nonbonded parameters. The parameter optimization was done using [ForceBalance](https://pubs.acs.org/doi/10.1021/jz500737m) package. Same peformance as the earlier versions for equilibrium properties,  improved performance for temperature dependence. For best agreement with experiment recommended to use with the TIP3P-FB water. The TIP3P-FB model was parametrized to reproduce the temperature and pressure dependence of a wide range of thermodynamic properties.
 
-
+[ff19SB]https://pubs.acs.org/doi/10.1021/acs.jctc.9b00591. 2020 Backbone dihedral parameters optimized using as reference data the entire 2D quantum mechanics (QM) energy surface. Both QM and MM calculations were done in aqueous solution. The authors concluded that "ff19SB, when combined with a more accurate water model such as OPC, should have better predictive power for modeling sequence-specific behavior, protein mutations, and also rational protein design".
 
 ### CHARMM
 
