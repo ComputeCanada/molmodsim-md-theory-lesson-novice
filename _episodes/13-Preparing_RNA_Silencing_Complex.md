@@ -1052,14 +1052,18 @@ gmx grompp -p gromacs.top  -c restart.gro -t restart.trr -f gromacs_production.m
 {: .bash}
 
 Running simulation
+
 ~~~
 #SBATCH --mem-per-cpu=4000 --time=10:0:0 -c16
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
 gmx mdrun
 ~~~
+{: .bash}
 
-References:
- [Lessons learned from comparing molecular dynamics engines on the SAMPL5 dataset](https://link.springer.com/article/10.1007%2Fs10822-016-9977-1)
+References:  
+[Lessons learned from comparing molecular dynamics engines on the SAMPL5 dataset](https://link.springer.com/article/10.1007%2Fs10822-016-9977-1)
+
+[Delivering up to 9X the Throughput with NAMD v3 and NVIDIA A100 GPU](https://developer.nvidia.com/blog/delivering-up-to-9x-throughput-with-namd-v3-and-a100-gpu/)
 
 ### 6. Comparative performance of simulation software
 
@@ -1148,7 +1152,12 @@ See [AMBER GPU Docs](https://ambermd.org/GPUHowTo.php) section Multi-GPU:
 
 41.77 ns/day
 
-#### NAMD
+#### NAMD3
+
+1 core,  1 GPU: 23.1 ns/day
+2 cores, 1 GPU: 22.8 ns/day
+
+#### NAMD2
 
 namd-ucx
 

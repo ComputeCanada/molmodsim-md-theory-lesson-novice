@@ -82,7 +82,7 @@ The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap
 >
 >integrator = bd
 >; A Euler integrator for Brownian or position Langevin dynamics.
->~~~
+> ~~~
 > {: .file-content}
 > **NAMD**
 >
