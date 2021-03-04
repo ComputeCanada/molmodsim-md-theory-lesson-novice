@@ -14,6 +14,7 @@ objectives:
 keypoints:
 - ""
 ---
+
 ### Introduction
 PYTRAJ is a Python front end to the AMBER [CPPTRAJ](https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml) package. CPPTRAJ provides a variety of high level analysis commands, and at the same time it is suitable for batch processing. With PYTRAJ/CPPTRAJ you can do many operations on the raw MD trajectories. For example, convert among trajectory formats, process groups of trajectories generated with ensemble methods, image with periodic boundary conditions, create average structures, create subsets of the system. PYTRAJ is able to handle many files at the same time, and it can handle very large trajectories.
 
@@ -256,7 +257,7 @@ plt.ylabel("RMSD, Angstrom")
 {: .python}
 
 
-### Interactive trajectory visualization
+### Interactive trajectory visualization with NGLView
 
 Open a new notebook.  
 
@@ -424,4 +425,5 @@ envbash.load_envbash(amber_vars)
 ~~~
 {: .python}
 
+I can't append to PYTHONPATH of a running kernel from a notebook?
 I have not figured out how to load modules and set up environment variables for a python kernel running in Jupyter Hub.

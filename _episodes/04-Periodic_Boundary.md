@@ -80,3 +80,19 @@ Solvated macromolecules rotate during simulations. Furthermore macromolecules ma
 >Compare the volumes of the boxes.
 >Which of the boxes will be the fastest to simulate?
 {: .challenge}
+
+Truncated octahedron (implemented in AMBER)
+V = x * y * z * sqrt(1.0 - cos(alpha)**2 - cos(beta)**2 - cos(gamma)**2 + 
+        2.0 * cos(alpha) * cos(beta) * cos(gamma)) 
+
+x, y, z are the box lengths: x = y = z = a in triclinic system. alpha, beta, 
+gamma are the box angles which equal 109.47 (angles between each sides) 
+
+Gromacs manual:
+[Periodic box types](https://manual.gromacs.org/current/reference-manual/algorithms/periodic-boundary-conditions.html?highlight=periodic%20boundary%20conditions)
+
+Truncated octahedron periodic boundary conditions are isomorphic to 
+parallelepiped boundary conditions with specific cell vectors.
+If you view the simulation in VMD, it will look like a parallelepiped and not a 
+truncated octahedron, but they have exactly the same properties, so it 
+doesn't matter. 
