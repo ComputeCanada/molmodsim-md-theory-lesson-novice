@@ -17,7 +17,7 @@ Periodic boundary conditions (PBC) are used to approximate a large system by usi
 
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
-In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
+
 
 > ## Specifying Periodic Box
 >  **GROMACS**
@@ -68,10 +68,14 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 
 ## What size/shape of a periodic box should I use?
 
+### Box size
 Solvated macromolecules rotate during simulations. Furthermore macromolecules may undergo conformational changes. Often these changes are of major interest and shoud not be restricted in any way. If the molecule is not spherical and the box dimension is not large enough rotation will result in the interaction between copies. This artefactual interaction may influence the motions of the system and affect the outcome of the simulation. To avoid these problems the minimum box dimension should be larger than the largest dimension of the macromolecule plus at least 10 <span>&#8491;</span>.
 
+### Box shape
  A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron or the truncated octahedron. These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[ref]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[ref]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
 
+ ### Cut-off radius
+ In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
 
  >## Comparing periodic boxes
