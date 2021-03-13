@@ -26,7 +26,10 @@ References:
 
 ## Force Fields
 
-Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
+
+Molecular dynamics (MD) simulations are widely used as tools to investigate structure and dynamics of proteins, nucleic acids, carbohydrates, lipids, nanoparticles and liquid/solid interfaces under a wide variety of conditions. 
+
+MD is the simulation of atomic positions in time accomplished by solving classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
 
 $ \vec{F}=\frac{d\vec{p}}{dt} $
 
@@ -38,6 +41,9 @@ $\vec{F}=-\nabla{U}(\vec{r})$
 - With the help of MD it is possible to model phenomena that cannot be studied experimentally.
 -  Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
 - Study thermodynamics properties (free energies, binding energies)
+- Biochemical reactions (enzyme catalysis, protein complex assembly, protein or RNA folding, chromatin maintenance and assembly, etc) are dynamic processes, and MD allows us to describe some of them. 
+
+To run a molecular dynamics simulation we need the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms.
 
 A force field (FF) is a set of empirical energy functions and parameters used to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics (MM) potential energy function used in MD simulations is an empirical function comprised of non-bonded and bonded interactions:
 
@@ -275,3 +281,12 @@ Now, there is one specific term in most force fields that should be given some m
 > >
 > {: .solution}
 {: .challenge}
+
+Room temperature kBT ~ 2.5 kJ/mol
+• Bond vibrations – stiff (K ~ 400‐2000 kJ mol‐1 A‐2)
+• bond angle bending – less stiff (K ~ 50‐200 J mol‐1 deg‐2)
+• Dihedral rotations – soft (K ~ 0‐10 kJ mol‐1)
+• van der Waals – ~ 2 kJ mol‐1 ~ kBT
+• Hydrogen bonds – ~2‐4 kJ mol‐1 in aqueous solution
+• (uncharged partners)
+• Salt bridges – ~5‐10 kJ mol‐1 in aqueous solution

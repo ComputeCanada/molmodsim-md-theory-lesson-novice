@@ -24,9 +24,18 @@ keypoints:
 
 Temperature is a macroscopic property and thermodynamics tells us that on the molecular level, the temperature of a system is  defined by the average kinetic energy of all the particles (atoms, molecules) that make up the system. Statistical thermodynamics tells us that a system that contains a certain amount of energy and is in equilibrium, will have all of its energy distributed in the most probable way. This distribution is called the Maxwell-Boltzmann distribution. This means that in a system of particles, these particles won’t all have the same velocity but rather the velocities will follow a distribution that depends on their mass and the temperature of the system.
 
+The speed distribution of ideal gas obeys the relationship:
+
+$ f_v(v) = \left(\frac{m}{2\pi k_B T}\right)^{3/2} \; 4\pi v^2 \; \exp({-mv^2/2k_B T}) $
+
+![Plot of velocity distributions]({{ page.root }}/fig/MB_ideal_gas.svg)
+
+The plot above shows how the Maxwell-Boltzmann distributions of ideal gas depend on temperature (left) and mass (right). The python code is in: code/thermostats/MB_dist_gas.py
+
+
 ![Plot of Maxwell-Boltzmann distributions]({{ page.root }}/fig/Maxwell_Boltzmann_distributions.svg)
 
-The plot above shows the Maxwell-Boltzmann distributions for the velocities of oxygen atoms from water molecules that have been simulated at three different temperatures (280K, 320K and 360K).
+The plot above shows the distributions for the velocities of oxygen atoms from water molecules that have been simulated at three different temperatures (280K, 320K and 360K).
 
 ## Thermodynamic ensembles
 
@@ -126,6 +135,22 @@ A modification of the Nosé-Hoover thermostat which includes not a single thermo
 | Nose-Hoover           | tcoupl = nose-hoover         |                          |               |    
 | Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |    
 
+
+#### Global and local thermostats
+Global thermostats control temperature of all atom in a system uniformly. This may lead to cold solute and hot solvent due to a slow heat transfer.
+
+With local thermostats it is possible to control temperature in  selected groups of atoms independently. This works well for large solutes, but if solue is small this approach may result in large fluctuations and hence unppysical dynamics.
+
+With namd it is possible to set coupling coefficients for each atom.
+
+langevinFile 
+langevinCol
+
+tCoupleFile
+tCoupleFCol
+
+With Gromacs temperature of a selected groups of atoms can be controlled independently 
+tc-grps groups to couple separately to temperature bath
 
 ## Conclusions
 
