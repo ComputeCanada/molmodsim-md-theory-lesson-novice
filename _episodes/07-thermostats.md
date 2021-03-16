@@ -50,8 +50,7 @@ MD simulations are usually simulate one of the following thermodynamic ensembles
 
 Simulation of *NVE* ensemble is relatively easy to achieve, as long as the MD code manages to conserve the energy of the system. The *NVT* ensemble is more practically relevant, as in the real world it is much easier to manage the temperature of a system rather than it's energy.  To achieve this in our simulation, we need to use a temperature control algorithm, which is commonly called a *thermostat*. As many experiments in the lab are carried out at constant ambient pressure, rather than in a fixed/confined volume, the *NPT* ensemble is also widely used for simulations. In addition to using a thermostat to control the temperature, we also need to use a pressure control algorithm, often called a *barostat*.
 
-The *grand canonical ensemble* however, where the chemical potential *&mu;* is kept constant, requires that the number of particles is allowed to change, which is not supported by most 
-MD packages.
+The *grand canonical ensemble* however, where the chemical potential *&mu;* is kept constant, requires that the number of particles is allowed to change, which is not supported by most MD packages.
 
 
 ## Overview of common Temperature Control Algorithms
