@@ -1,5 +1,5 @@
 ---
-title: "Trajectory analysis with PYTRAJ"
+title: "Trajectory Analysis with PYTRAJ in Jupyter Notebook"
 teaching: 25
 exercises: 0
 questions:
@@ -25,7 +25,11 @@ Other useful MD analysis software: [MDAnalysis](https://userguide.mdanalysis.org
 References:  
 1. [PTRAJ and CPPTRAJ: Software for Processing and Analysis of Molecular Dynamics Trajectory Data](https://pubs.acs.org/doi/full/10.1021/ct400341p)
 
-### Using PYTRAJ from Jupyter Notebook
+### Using PYTRAJ in Jupyter notebook
+
+The use of Jupyter notebook becomes increasingly popular for data analysis and visualization. One of the most attactive features of Jupyter is how well it combines different medium (your code, notes, and visualizations) in one solution. By keeping everything in one easy accessible place notebooks greatly simplify the management and sharing of your work.
+
+Before going into details of MD analysis with PYTRAJ we need to create a python virtual environment. A virtual environment is a framework for management of multiple isolated Python environments. We use it on CC systems for installation of python packages in user accounts.
 
 #### Installing Python Virtual Environment and Jupyter Notebook.
 In this lesson we will be using PYTRAJ with AmberTools20. To start using these tools first you need to load modules required for AmberTools. Then load python and scipy-stack modules:
@@ -34,7 +38,6 @@ In this lesson we will be using PYTRAJ with AmberTools20. To start using these t
 module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 python scipy-stack
 ~~~
 {: .bash}
-
 
 The next step is to install and activate a virtual environment. We need a virtual environment because we will be installing python modules required for this lesson and virtual environment is the best way to install and manage python modules on CC systems.
 
@@ -59,17 +62,16 @@ python -m ipykernel install --user --name=env-pytraj
 {: .bash} 
 
 Finally, install three more packages that we will be using: 
-1. NGLview, a web application for molecular visualization.
-2. Pickle is a module providing fuctions for converting a Python object into a byte stream to store it in a file and load it back into python. 
-3. Seaborn, a Python data visualization library based on matplotlib. It provides a high-level interface for drawing attractive and informative statistical graphics.
+1. NGLview, a Jupyter widjet for molecular visualization.
+2. Pickle, a module providing functions for serialization of python objects (convertion into a byte stream). Objects need to be serialized for storage on a hard disk and loading back into python. 
+3. Seaborn, a Python data visualization library extending a popular matplotlib. It provides a high-level interface for drawing, templates for attractive and informative statistical graphics.
 
 ~~~
-pip install nglview==2.7.7 pickle5 seaborn 
+pip install nglview pickle5 seaborn 
 ~~~
 {: .bash}
 
-
-NGL viewer is a Jupyter widget. For NGL viewer to work in the notebook we need to install and enable Jupyter widgets extension
+As NGL viewer is a Jupyter notebook widget, we need to install and enable Jupyter widgets extension
 
 ~~~
 jupyter nbextension install widgetsnbextension --py --sys-prefix 
@@ -77,7 +79,7 @@ jupyter-nbextension enable widgetsnbextension --py --sys-prefix
 ~~~
 {: .bash}
 
-The *nglview* python module provides NGLview Jupyter extension, but we need to enable it:
+The *nglview* python module provides NGLview Jupyter extension. We don't need to install it, but we need to enable it before it can be used:
 ~~~
 jupyter-nbextension enable nglview --py --sys-prefix
 ~~~
@@ -85,17 +87,16 @@ jupyter-nbextension enable nglview --py --sys-prefix
 
 We are now ready to start Jupyter notebook server. The new Python kernel with the name `env-pytraj` will be available for notebooks.
 
-
 #### Launching Jupyter notebook server
-This example is for launching Jupyter on Graham.
+This example is for launching Jupyter on Graham. Procedure is the same on all other systems. the only difference is the name of the login and compute nodes. 
 
-To make AmberTools available in a notebook we need to load ambertools module and activate the virtual environment before starting Jupyter server. This process involves several commands, so it is convenient to save all commands in a file that you can later reuse instead of typing them every time.
+To make AmberTools available in a notebook we need to load ambertools module and activate the virtual environment before starting Jupyter server. As launching a server involves a sequence of several commands, it is convenient to save all commands in a file. You can later simply execute commnds from this file (we call this "source file") instead of typing commands every time.
 
-Let's create Jupyter startup file for use with AmberTools module: *jupyter_launch_ambertools.sh* with the following content: 
+Let's create Jupyter startup file for use with AmberTools module, *jupyter_launch_ambertools.sh*, with the following content: 
 
 ~~~
 #!/bin/bash
-module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 python scipy-stack ambertools
+ml StdEnv/2020 gcc openmpi python scipy-stack ambertools
 source $EBROOTAMBERTOOLS/amber.sh
 source ~/env-pytraj/bin/activate
 unset XDG_RUNTIME_DIR
@@ -103,14 +104,14 @@ jupyter notebook --ip $(hostname -f) --no-browser
 ~~~
 {: .file-content}
 
-Before starting jupyter server we need to allocate CPUs and RAM for our notebook. We will request two MPI tasks because we will learns to how to analyze data in parallel. We will request an interactive allocation using the *salloc* command:
+Before starting jupyter server we need to allocate CPUs and RAM for our notebook. Let's request two MPI tasks because we will learn to how to analyze data in parallel. Submit request of an interactive resource allocation using the *salloc* command:
 
 ~~~
 salloc --mem-per-cpu=2000 --time=2:0:0 --ntasks=2
 ~~~
 {: .bash}
 
-Wait for the allocation to be complete. When it's done you will see that the command prompt changed:
+Wait for the allocation to complete. When it's done you will see that the command prompt changed:
 
 ~~~
 salloc: Pending job allocation 44825307
@@ -123,16 +124,16 @@ salloc: Nodes gra798 are ready for job
 ~~~
 {:.output}
 
-In this example salloc allocated the resources and logged you into the compute node gra798. Note the name of the node where notebook server will be running. Now we can start Jupyter server by executing commands from the file jupyter_launch_ambertools.sh
+In this example salloc allocated the resources and logged you into the compute node gra798. Note the name of the node where notebook server will be running. Now we can start Jupyter server by executing commands from the file *jupyter_launch_ambertools.sh*
 
 ~~~
 bash ./jupyter_launch_ambertools.sh
 ~~~
 {: .bash}
 
-Do not close this window, closing it will terminate the server. Note the port number (the default is 8888) and the notebook access token.
+Do not close this window, closing it will terminate the server. Note the port number (the default is 8888, but if you unintentionally start a second server, port number will be incremented). Note the notebook access token, you will need it to connect to the Jupyter notebook.
 
-#### Connecting to notebook server
+#### Connecting to Jupyter server
 
 The message in the example above informs that notebook server is listening at port 8888 of the node gra798. Compute nodes cannot be accessed directly from the Internet, but we can connect to the login node, and the login node can connect any compute node. Thus, connection to a compute node should be also possible. How do we connect to the node gra798 at port 8888? We can instruct ssh client program to map port 8888 of gra798 to our local computer. This type of connection is called "ssh tunneling" or "ssh port forwarding". Ssh tunneling allows transporting networking data between computers over an encrypted SSH connection.
 
@@ -142,11 +143,13 @@ ssh svassili@graham.computecanada.ca -L 8888:gra798:8888
 ~~~
 {: .bash}
 
+Replace the port number and the node name with the appropriate values.
+
 This SSH session created tunnel from your computer to gra798. The tunnel will be active only while the session is running. Do not close this window and do not logout, this will close the tunnel and disconnect you from the notebook.
 
-Now in the browser you can type localhost:8888, and enter the token when prompted.
+Now in the browser on your local computer you can type localhost:8888, and enter the token when prompted.
 
-In Jupyter open new notebook. Ensure that you are creating notebook with the kernel matching the activated environment (env-pytraj), or it will fail to start!
+In Jupyter open new notebook. Ensure that you are creating notebook with the python kernel matching the active environment (env-pytraj), or kernel will fail to start!
 
 > ## Uninstalling virtual environment from Jupyter:
 >
@@ -268,7 +271,8 @@ ref_crd = pt.load('../../inpcrd.pdb')
 
 data = pt.pmap_mpi(pt.rmsd, traj, mask=':1-859,@C,N,O', ref=ref_crd)
 
-# computed RMDS data is sent to the master task (rank==0), and saved in the file rmsd.dat 
+# computed RMSD data is sent to the master task (rank==0),
+# and saved in the file rmsd.dat 
 if rank == 0:
     print(data)
     with open("rmsd.dat", "wb") as fp: 
@@ -284,7 +288,7 @@ Run the script on the cluster. We will take advantage of the resources we have a
 ~~~
 {: .python}
 
-In practice you will be submitting large analysis jobs to the queue with the sbatch command from a normal submission script requesting the desider nuber of MPI tasks (ntasks).
+In practice you will be submitting large analysis jobs to the queue with the sbatch command from a normal submission script requesting the desired number of MPI tasks (ntasks).
 
 
 When the job is done we import the results saved in the file rmsd.dat into python and plot RMSD as we have done above:
@@ -304,7 +308,11 @@ plt.ylabel("RMSD, Angstrom")
 
 
 ### Interactive trajectory visualization with NGLView
-NGLViwe is a Jupyter/IPython widget to interactively view molecular structures and trajectories in Jupyter notebooks. It works in a browser and employs WebGL is to display molecules like proteins and DNA/RNA with a variety of representations. It is also availabe as a standalone [Web application](http://nglviewer.org/ngl/).
+
+Data Visualization is one of the essential skills required to conduct a successful reserch involving molecular dynamics simulations. It allows you (or other people in the team) to better understand the nature of a process you are studying, and it gives you the ability to convey the proper message to a general audience in a publication. 
+
+
+NGLViwe is a Jupyter widget for interactive viewing molecular structures and trajectories in notebooks. It runs in a browser and employs WebGL to display molecules like proteins and DNA/RNA with a variety of representations. It is also availabe as a standalone [Web application](http://nglviewer.org/ngl/).
 
 Open a new notebook. Import pytraj, nglview and make sure you are in the right directory    
 
@@ -437,18 +445,18 @@ view.display(gui=True)
 #### Useful links
 
 - AMBER/pytraj  
-  - [Atom selections](https://amber-md.github.io/pytraj/latest/atom_mask_selection.html#atom-selections)
-
+  - [Atom mask selection](https://amber-md.github.io/pytraj/latest/atom_mask_selection.html#atom-selections)
 
 - NGL viewer 
+  - [Documentation](http://nglviewer.org/nglview/latest/)
   - [Coloring schemes](https://nglviewer.org/ngl/api/manual/usage/coloring.html)
   - [Molecular representations](http://proteinformatics.charite.de/ngl/doc/#User_manual/Usage/Molecular_representations)
   - [Selection language](https://nglviewer.org/ngl/api/manual/usage/selection-language.html)
   - [Index](http://nglviewer.org/nglview/latest/genindex.html)
   - [Tutorial](https://ambermd.org/tutorials/analysis/tutorial_notebooks/nglview_notebook/index.html)
-
-[Matplotlib colormaps](https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html)
-[Seaborn colormaps](https://seaborn.pydata.org/tutorial/color_palettes.html)
+- Color maps
+  - [Matplotlib](https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html) 
+  - [Seaborn](https://seaborn.pydata.org/tutorial/color_palettes.html)
 
 
 #### References

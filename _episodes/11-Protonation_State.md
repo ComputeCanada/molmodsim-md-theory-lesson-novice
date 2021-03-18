@@ -26,7 +26,9 @@ Several free web servers and standalone programs are available for prediction of
 
 [*H++*](http://biophysics.cs.vt.edu/index.php) server. *H++* calculations are based on the classical continuum electrostatic model (solvent molecules are replaced by a continuous medium with the average properties of the solvent). *H++* uses *AmberTools* modules to preprocess a PDB file and it is capable to generate basic topology and coordinate files for MD simulations in AMBER format. *H++* is a single-conformation method and without intervention from the user it selects, the "A" conformation. For detais of the methodology see [[ref]](https://doi.org/10.1093/nar/gks375).
 
-[*PDB2PQR*](http://nbcr-222.ucsd.edu/pdb2pqr_2.1.1/) server. *PDB2PQR* calculations are based on the empirical *pKa* predicting program [*PROPKA3.0*](https://doi.org/10.1021/ct100578z).
+[*PDB2PQR*](http://nbcr-222.ucsd.edu/pdb2pqr_2.1.1/) server. *PDB2PQR* solves Poisson-Boltzmann equation using the APBS solver. 
+
+[*PROPKA3.0*](https://github.com/jensengroup/propka-3.0) is the empirical pKa prediction software. 
 
 [*MCCE*](https://sites.google.com/site/mccewiki/) program. For more rigorous calculations try *MCCE* program. *MCCE* uses the same classical continuum electrostatic approach as H++. In addition *MCCE* calculations account for protein conformational degrees of freedom giving a more accurate picture of coupled ionization and position changes. Taking into account conformational flexibility significantly improves *pKa* prediction. For detais of the methodology see [[ref]](https://doi.org/10.1002/jcc.21222).
 
@@ -40,13 +42,14 @@ None of the *pKa* prediction methods are perfect. While the average estimated *p
 >3. Repeat calculations using *PDB2PQR* server and compare the results.
 >4. Compare calculated *pKa*'s with the experimental. How accurate are the predicted *pKa* values?
 >
+>> ## Solution
+>>If pKa > pH the probability that the residue is protonated is > 50%, and we use the protonated form.  
+>>If pKa < pH the probability that the residue is protonated is < 50% and we use the deprotonated form.
+>>
+>>ASP79 has pKa 7.2 (experimental 7.37), it is protonated at pH 6 and we rename it to ASH  
+>>HIS53 has pKa 8.3 (experimental 8.27), it is also protonated at pH 6 and we rename it to HIP
+> {: .solution}
 {: .challenge}
-Solution.
-if pKa > pH the probability that the residue is protonated is > 50% and we use the protonated form.
-if pKa < pH the probability that the residue is protonated is < 50% and we use the deprotonated form.
-
-ASP79 has pKa 7.2, it is protonated at pH 6 and we rename it to ASH
-HIS53 has pKa 8.3, it is also protonated at pH 6 and we rename it to HIP
 
 ## How to select protonation state of a residue?
 
@@ -57,12 +60,16 @@ The downside of this method is that it can not be scripted. The manual selection
 
 A more consistent and convenient way to select a desired form of aminoacid is to change its name in structure file before generating topology. The neutral forms of LYS, ASP, and GLU can be chosen by renaming them to LYN, ASH, and GLH respectively.  The appropriate form of HIS can be selected by renaming HIS to HIE (proton on NE1), HID (proton on NE2) or HIP (both protons).
 
-Let's change ASP20 and ASP26 in the protein.pdb structure created on the previous step to the neutral form ASH using the *leap* module from the *AmberTools* or *VMD*.
+Let's change ASP20 and ASP26 in the protein.pdb structure created previously from the file 1ERT.pdb to the neutral form ASH.  We can either the *leap* module from the *AmberTools* or *VMD*.
 
 ### Selecting protonation states with the *AmberTools leap* module.
+
 ~~~
-$ module load gcc/5.4.0 openmpi/2.1.1 amber/18
-$ tleap -f leaprc.protein.ff14SB
+cd  ~/scratch/workshop/pdb/1RGG/1ERT
+module --force purge
+module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools
+source $EBROOTAMBERTOOLS/amber.sh
+tleap -f leaprc.protein.ff14SB
 ~~~
 {: .bash}
 
@@ -77,8 +84,9 @@ quit
 ### Selecting protonation states with *VMD*.
 
 ~~~
-$ module load nixpkgs/16.09  intel/2016.4 vmd/1.9.3
-$ vmd
+module --force purge
+module load StdEnv/2020 intel vmd
+vmd
 ~~~
 {: .bash}
 
@@ -108,6 +116,11 @@ Molecular dynamics simulations employing constant protonation states have many d
 > 6. Save the resulting structure as 1RGG_chain_A_prot.pdb
 >
 >>## Solution
+>>~~~
+>> mkdir ~/scratch/workshop/pdb/1RGG
+>> cd ~/scratch/workshop/pdb/1RGG
+>>~~~
+>>{: .bash}
 >> Save the following commands in a file,  e.g. prep_1RGG.vmd
 >> ~~~
 >># Load 1RGG.pdb into a new (top) molecule
@@ -135,6 +148,10 @@ Molecular dynamics simulations employing constant protonation states have many d
 >>quit
 >>~~~
 >>{: .vmd}
-> Execute the script: vmd -e prep_1RGG.vmd
+>> Execute the script
+>>~~~
+>> vmd -e prep_1RGG.vmd
+>>~~~
+>>{: .bash}
 > {: .solution}
 {: .challenge}

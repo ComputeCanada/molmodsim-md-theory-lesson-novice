@@ -35,19 +35,23 @@ Random placement of ions will generate a system in the completely dissociated, e
 Let's neutralize 1RGG protein using the *leap* module. We will add ions prior to solvation so that the potential from unequilibrated water will not interfere with ion placement:
 
 ~~~
-module load nixpkgs/16.09  gcc/5.4.0  openmpi/2.1.1 amber/18
+mkdir ~/scratch/workshop/pdb/1RGG/AMBER
+cd ~/scratch/workshop/pdb/1RGG/AMBER
+module --force purge
+module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools
+source $EBROOTAMBERTOOLS/amber.sh
 tleap
-> ; Load parameters for water and ions
-> source leaprc.water.spce
-> ; Load parameters for protein
-> source leaprc.protein.ff14SB
-> s = loadpdb 1RGG_chain_A_prot.pdb
-> ; Print total charge
-> charge s
-> ; Add soduim ions to compensate for the negative charge
-> addions s Na+ 0
 ~~~
 {: .bash}
+
+~~~
+source leaprc.water.spce
+source leaprc.protein.ff14SB
+s = loadpdb ../1RGG_chain_A_prot.pdb
+charge s
+addions s Na+ 0
+~~~
+{: .leap}
 
 
 ## Adding Ions to Mimic the Macroscopic Salt Concentration
@@ -59,13 +63,13 @@ The drawback of this calculation is that it does not take into account the charg
 
 As you can see from the equation above, to calculate the number of ions we need to know the number of water molecules in the simulation system. So we continue our *leap* session and solvate the simulation system. In this lesson we will create a simple cubic solvent box. As we discussed in the episode "Periodic Boundary Conditions", a properly solvated simulation system should have at least 10 <span>&#8491;</span> distance between the solute and the edge of the periodic box after equilibration. Standard practice is to tile a pre-equilibrated solvent box across the system and eliminate solvent molecules which clash with the solute.
 
-When water is added to the system in this way, some VDW voids at the macromolecule and the box interfaces are inevitable because packing is not perfect. In the process of equilibration the water molecules will move to fill the voids and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box wil become smaller. To compensate for this box shrinkage we need to start with a larger box size than the desired. The rule of thumb is that you need to add at least 2.5<span>&#8491;</span> to the box size.
+When water is added to the system in this way, some VDW voids at the macromolecule and the box interfaces are inevitable because packing is not perfect. In the process of equilibration the water molecules will move to fill the voids and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box wil become smaller. To compensate for this box shrinkage we need to start with a larger box size than the desired. The rule of thumb is that you need to add at least 2.5 <span>&#8491;</span> to the box size.
 
-We will use the *solvateBox* command to create the periodic solvent box around the macromolecule. The *solvateBox* command has many options. Let's create a cuboid water box around the 1RGG protein. We will use the pre-equilibrated box of SPCE water (SPCBOX), set the minimum distance between the solute and the edge of the box to 15<span>&#8491;</span>, and request an isometric (cubic) box:
+We will use the *solvateBox* command to create the periodic solvent box around the macromolecule. The *solvateBox* command has many options. Let's create a cuboid water box around the 1RGG protein. We will use the pre-equilibrated box of SPCE water (SPCBOX), set the minimum distance between the solute and the edge of the box to 15 <span>&#8491;</span>, and request an isometric (cubic) box:
 ~~~
-> solvatebox s SPCBOX 15 iso
+solvatebox s SPCBOX 15 iso
 ~~~
-{: .bash}
+{: .leap}
 
 ~~~
   Solute vdw bounding box:              40.514 32.235 37.352
@@ -82,37 +86,38 @@ Now that we know the number of water molecules in the simulation system, we can 
 
 > ## Preparing an Aqueous Salt Solution
 > How many Na+ and Cl- ions do we need to add to the simulation box with 1RGG protein and 10202 water molecules to prepare 0.15 M salt solution?
-> Calculate the number of ions using two methods: the formula above and the [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server.
+> Calculate the number of ions using two methods: the formula above and the [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server. For this calculation you need to know molecular weight of the protein. You can calculate it [here](https://www.bioinformatics.org/sms/prot_mw.html). 
 >
 >>## Solution
 >> 1. N_ions = 0.0187 x 0.15 x 10202 = 29. We need to add 35 Na+ and 29 Cl- ions
->> 2. *SLTCAP* calculation with the following input: (MW 11 KDa, 10202 water molecules, charge 6, 150 mM salt) yields 30 Na+ and 24 Cl- ions. You can calculate MW of a protein in kilodaltons [*here*](https://www.bioinformatics.org/sms/prot_mw.html).
+>> 2. *SLTCAP* calculation with the following input: (MW 11 KDa, 10202 water molecules, charge 6, 150 mM salt) yields 30 Na+ and 24 Cl- ions.
 >>
 > {: .solution}
 {: .challenge}
 
 We already have the neutralized and solvated simulation system, and in the exercise above we determined that we need to add 24 ion pairs to prepare 150 mM salt solution. Let's replace 48 randomly selected water molecules with 24 Na+ and 24 Cl- ions:
 ~~~
-> addionsrand s Na+ 24 Cl- 24
+addionsrand s Na+ 24 Cl- 24
 ~~~
-{: .bash}
+{: .leap}
 
 
 ## Generating Molecular Topology for Simulation with *AMBER* or *NAMD*
 Setup of our simulation is almost complete. Our protein has cross-linked cysteine residues, so the last thing to do is to make disulfide bond between Cys7 and Cys96:
 
 ~~~
-> bond s.7.SG s.96.SG
+bond s.7.SG s.96.SG
 ~~~
-{: .bash}
+{: .leap}
 
 We can now save the molecular topology (*parm7*) file and *AMBER* coordinates (*rst7*). To build *GROMACS* topology later we will also save the solvated system in PDB format:
 
 ~~~
-> saveamberparm s 1RGG_chain_A.parm7 1RGG_chain_A.rst7
-> savepdb s 1RGG_chain_A_solvated.pdb
+saveamberparm s 1RGG_chain_A.parm7 1RGG_chain_A.rst7
+savepdb s 1RGG_chain_A_solvated.pdb
+quit
 ~~~
-{: .bash}
+{: .leap}
 
 
 ### Summary: script for LEaP to prepare the topology and the coordinate files
@@ -120,24 +125,29 @@ Save the following commands in a file, e.g. solvate_1RGG.leap
 ~~~
 source leaprc.water.spce
 source leaprc.protein.ff14SB
-s = loadpdb 1RGG_chain_A_prot.pdb
+s = loadpdb ../1RGG_chain_A_prot.pdb
 addions s Na+ 0
 solvatebox s SPCBOX 15 iso
 addionsrand s Na+ 24 Cl- 24
 bond s.7.SG s.96.SG
-saveamberparm s prmtop inpcrd
+saveamberparm s 1RGG_chain_A.parm7 1RGG_chain_A.rst7
 savepdb s 1RGG_chain_A_solvated.pdb
 quit
 ~~~
+{: .leap}
+Execute the script: 
+~~~
+tleap -f solvate_1RGG.leap
+~~~
 {: .bash}
-Execute the script: tleap -f solvate_1RGG.leap
 
-## Generating Molecular Topology for Simulation with *GROMACS*.
->## What Force Fields are Available in a Loaded *GROMACS* Version?
+## Generating Input Files for Simulation with *GROMACS*.
+>## What force fields are available in the loaded *GROMACS* module?
 >When the *GROMACS* module is loaded the environment variable *EBROOTGROMACS* will be set. This variable is pointing to the GROMACS installation directory. Knowing where the *GROMACS* installation is we can find out what force fields are available:
 >~~~
->$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
->$ ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename | column -c80
+>ml --force purge
+>ml StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+>ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename | column -c80
 >~~~
 >{: .bash}
 >~~~
@@ -150,12 +160,26 @@ Execute the script: tleap -f solvate_1RGG.leap
 >{: .output}
 {: .callout}
 
-### Generate *GROMACS* Topology and Coordinate Files from the Prepared System.
-We can generate gromacs topology from the complete simulation system prepared previously and saved in the file 1RGG_chain_A_solvated.pdb. For *pdb2gmx* to work correctly we need to rename ions to NA and CL and
-rename CYX to CYS:
+### Generate *GROMACS* Topology and Coordinate Files from the Solvated System.
 
 ~~~
-cat 1RGG_chain_A_solvated.pdb |\
+mkdir ~/scratch/workshop/pdb/1RGG/GROMACS
+cd ~/scratch/workshop/pdb/1RGG/GROMACS
+~~~
+{: .bash}
+
+We can generate gromacs topology from the complete simulation system prepared previously and saved in the file 1RGG_chain_A_solvated.pdb. For *pdb2gmx* to work correctly we need to rename ions from (Na+, Cl-) to (NA, CL), and rename CYX to CYS:
+
+~~~
+ATOM   1444 Na+  Na+    97      -5.058 -11.031  -0.206  1.00  0.00
+ATOM   1450 Cl-  Cl-   103      19.451  -3.022   8.361  1.00  0.00
+~~~
+{: .file-content}
+
+We will also assign ions to chain B.  
+Do it using the global substition function of the stream editor (sed).
+~~~
+cat ../1RGG_chain_A_solvated.pdb |\
 sed s/"Cl-  Cl-  "/" CL  CL  B"/g |\
 sed s/"Na+  Na+  "/" NA  NA  B"/g |\
 sed s/CYX/CYS/g > 1RGG_chain_A_solvated_gro.pdb
@@ -164,42 +188,58 @@ sed s/CYX/CYS/g > 1RGG_chain_A_solvated_gro.pdb
 
 Let's make the topology using the *AMBER ff99SBildn* force field and the *spc/e* water model:
 ~~~
-$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
-$ gmx pdb2gmx -f 1RGG_chain_A_solvated_gro.pdb -ff amber99sb-ildn -water spce -ignh -chainsep id -ss << EOF >log
+gmx pdb2gmx -f 1RGG_chain_A_solvated_gro.pdb -ff amber99sb-ildn\
+ -water spce -ignh -chainsep id -ss << EOF >log
 y
 EOF
 ~~~
 {: .bash}
+
+|              |                          
+|-------------:|:-------------------------
+| `-ignh`      | ignore hydrogens in file  
+|`-chainsep id`| separate chains by chain ID. Since we assigned ions to chain B pbb2gmx will ignore TER records and put them in a separate chain  
+|`-ss`         | interactive S-S bridge selection. Detect potential S-S bonds, and ask for confirmation.
+
+The construct
+~~~
+<< EOF >log
+y
+EOF
+~~~
+{: .bash}
+
+at the end of the command is to automatically confirm 'y' S-S bond. 
 
 By default *pdb2gmx* program saved topology, *GROMACS* - formatted coordinates, and position restraints in the files *topol.top*, *conf.gro*, and *posre.itp*, respectively. The names of the output files can be changed by using output options *-p*, *-o* and *-i*.
 
 ### Prepare the System Using *GROMACS* Module *pdb2gmx*.
-To demonstate how to solvate protein and add ions using *gromacs* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps using *pdb2gmx*. Note that in this case the neutralizing ions will be added in randomly selected positions.
+To demonstate how to solvate protein and add ions using *pdb2gmx* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps with this GROMACS utility. Note that in this case the neutralizing ions will be added in randomly selected positions.
 
 First we generate the topology and the coordinate file using the *AMBER ff99SBildn* force field and the *spc/e* water model:
 ~~~
-$ module load gcc/7.3.0 openmpi/3.1.2 gromacs/2019.3
-$ gmx pdb2gmx -f 1RGG_chain_A_prot.pdb -ff amber99sb-ildn -water spce -ignh -chainsep id -ss << EOF >log
+gmx pdb2gmx -f 1RGG_chain_A_prot.pdb -ff amber99sb-ildn\
+ -water spce -ignh -chainsep id -ss << EOF >log
 y
 EOF
 ~~~
 {: .bash}
 
-Once the gromacs coordinate file *conf.gro* is created we can add a periodic box to it:
+Once the gromacs coordinate file *conf.gro* is created we add a periodic box to it:
 ~~~
 gmx editconf -f conf.gro -o boxed.gro -c -d 1.5 -bt cubic
 ~~~
 {: .bash}
 The option '-c' positions solute in the middle of the box, the option -d specifies the distance (in nm) between the solute and the box.
-
+Add water
 ~~~
 gmx solvate -cp boxed.gro -cs spc216.gro -o solvated.gro -p topol.top
 ~~~
 {: .bash}
- Next, we need to create the binary topology file. For this we need a MD run parameters file. An empy file will be sufficient for now. Using the empty file *'mdrun.mdp'* we can generate the binary topology *'solvated.tpr'* file:
+ Next, we need to create a binary topology file. For this we need an MD run parameters file. An empy file will be sufficient for now. Using the empty file *'mdrun.mdp'* we can generate the binary topology *'solvated.tpr'* file:
 ~~~
-$ touch mdrun.mdp
-$ gmx grompp -f mdrun.mdp -p topol.top -c solvated.gro -o solvated.tpr >& grompp.log
+touch mdrun.mdp
+gmx grompp -f mdrun.mdp -p topol.top -c solvated.gro -o solvated.tpr >& grompp.log
 ~~~
 {: .bash}
 When the grompp program runs it generates a lot of diagnostic messages and prints out the net charge. We saved the output in the file *'grompp.log'* so that we can find out what is the total charge of the system:
@@ -221,7 +261,7 @@ $ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -neutral -conc 0.15 -neut
 
 Let's inspect the last section of the updated topology file:
 ~~~
-$ tail -n 4 topol.top
+tail -n 4 topol.top
 ~~~
 {: .bash}
 ~~~
