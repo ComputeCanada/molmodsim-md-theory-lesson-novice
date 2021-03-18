@@ -12,6 +12,8 @@ $color-brand:       #2b3990 !default;
 $color-error:       #bd2c00 !default;
 $color-output:      #303030 !default;
 $color-source:      #6e5494 !default;
+$color-leap:        #b13449 !default;
+$color-vmd:         #208f61 !default;
 
 // blockquotes
 $color-callout:     #f4fd9c !default;
@@ -40,9 +42,9 @@ div.file-content    { @include cdSetup($color-output); }
 div.source          { @include cdSetup($color-source); }
 div.output          { @include cdSetup($color-output); }
 div.string          { @include cdSetup($color-output); }
-div.vmd             { @include cdSetup($color-source); }
+div.vmd             { @include cdSetup($color-vmd); }
 div.python          { @include cdSetup($color-source); }
-div.leap            { @include cdSetup($color-source); }
+div.leap            { @include cdSetup($color-leap); }
 
 div.file-content::before,
 div.leap::before,
@@ -68,6 +70,8 @@ div.warning:before { background-color: #f8f4e8; content:" Warning"; }
 div.output::before { background-color: #efefef; content: "Output"; }
 div.string::before  { background-color: #efefef; content: "Text"; }
 div.file-content::before  { background-color: #efefef; content: "File content"; }
+div.leap::before  { background-color: #f7f0f0; content: "LEaP"; }
+div.vmd::before  { background-color: #ecf0ee; content: "VMD"; }
 //----------------------------------------
 // Specialized blockquote environments for learning objectives, callouts, etc.
 //----------------------------------------
