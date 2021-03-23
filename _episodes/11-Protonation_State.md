@@ -15,8 +15,9 @@ keypoints:
 - "Conformational changes in proteins may be accompanied by changes in protonation pattern."
 ---
 
-The protonation states of titratable aminoacids (Arg, Lys, Tyr, Cys, His, Glu, Asp) depend on the local microenvironment of the residue and the pH. For example, highly polar microenvironment will stabilize the charged form, while in less polar microenvironment the neutral form will predominate.
 
+One of the important jobs of setting up a simulation system is assigning the protonation states and most likely tautomers of the HIS residues. The protonation states of titratable aminoacids (Arg, Lys, Tyr, Cys, His, Glu, Asp) depend on the local microenvironment of the residue and the pH. For example, highly polar microenvironment will stabilize the charged form, while in less polar microenvironment the neutral form will predominate. While TYR, LYS, CYS, and ARG are almost always in their standard ptotonation states at physiological pH, GLU, ASP, and HIS can be in non-standard state. You should decide for each of these residues which state is most likely.
+ 
 The protonation pattern of proteins is critical for their catalytic function and structural stabilization. In a classic MD simulation protonation states are fixed and therefore must be determined and assigned before simulation. Assigning correct protonation states is crucial for realistic MD simulations. Inappropriate charges can have drastic effects and invalidate all of the results. Numerous MD simulation studies demonstrated importance of protein protonation states [[1](http://doi.org/10.1529/biophysj.105.059329), [2](http://doi.org/10.7554/eLife.16616), [3](https://doi.org/10.1016/j.cplett.2018.12.039), [4](https://doi.org/10.1021/jacs.9b06064), [5](https://doi.org/10.1016/j.dib.2016.07.040)].
 
 

@@ -14,6 +14,7 @@ $color-output:      #303030 !default;
 $color-source:      #6e5494 !default;
 $color-leap:        #b13449 !default;
 $color-vmd:         #208f61 !default;
+$color-python:      #031ba1 !default;
 
 // blockquotes
 $color-callout:     #f4fd9c !default;
@@ -25,6 +26,7 @@ $color-objectives:  #daee84 !default;
 $color-prereq:      #9cd6dc !default;
 $color-solution:    #ded4b9 !default;
 $color-testimonial: #fc8dc1 !default;
+
 
 //----------------------------------------
 // Specialized code blocks.
@@ -45,6 +47,8 @@ div.string          { @include cdSetup($color-output); }
 div.vmd             { @include cdSetup($color-vmd); }
 div.python          { @include cdSetup($color-source); }
 div.leap            { @include cdSetup($color-leap); }
+div.python          { @include cdSetup($color-python); }
+
 
 div.file-content::before,
 div.leap::before,
@@ -72,6 +76,8 @@ div.string::before  { background-color: #efefef; content: "Text"; }
 div.file-content::before  { background-color: #efefef; content: "File content"; }
 div.leap::before  { background-color: #f7f0f0; content: "LEaP"; }
 div.vmd::before  { background-color: #ecf0ee; content: "VMD"; }
+div.python::before  { background-color: #e3e9f5; content: "Python"; }
+
 //----------------------------------------
 // Specialized blockquote environments for learning objectives, callouts, etc.
 //----------------------------------------

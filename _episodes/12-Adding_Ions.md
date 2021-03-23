@@ -236,7 +236,7 @@ Add water
 gmx solvate -cp boxed.gro -cs spc216.gro -o solvated.gro -p topol.top
 ~~~
 {: .bash}
- Next, we need to create a binary topology file. For this we need an MD run parameters file. An empy file will be sufficient for now. Using the empty file *'mdrun.mdp'* we can generate the binary topology *'solvated.tpr'* file:
+ Next, we need to create a binary topology file. For this we need a MD run parameters file. An empy file will be sufficient for now. Using the empty file *'mdrun.mdp'* we can generate the binary topology *'solvated.tpr'* file:
 ~~~
 touch mdrun.mdp
 gmx grompp -f mdrun.mdp -p topol.top -c solvated.gro -o solvated.tpr >& grompp.log
