@@ -3,12 +3,14 @@ title: "Degrees of Freedom"
 teaching: 15
 exercises: 0
 questions:
-- FIXME
+- "How is kinetic energy contained and distributed in a dynamic molecular system"
+- "Why constraints are used in MD simulations, and how they can affect dynamics"
 objectives:
 - ""
 keypoints:
 - "Degrees of Freedom in Rigid bodies."
-- "Constraints"
+- "Constraints decrease the number of degrees of freedom"
+- "Imposing constraints can affect simulation outcome"
 ---
 
 Molecular degrees of freedom refer to the number of uniques ways a molecule may move (increase its kinetic energy). Thus the molecular degrees of freedom describe how kinetic energy is contained and distributed in a molecule. Dynamical molecular systems are characterized by numerous degrees of freedom. The motion of molecules can be decomposed into translational, rotational, and vibrational components. On average, when thermal energy is added to a system, the energy is shared equally among the degrees of freedom (equipartition theorem). In other words, classical equipartition principle states that every (quadratic) degree of freedom contributes equally to the total energy in thermal equilibrium.  Each degree of freedom has an average energy of $$\frac{1}{2}k_BT$$ and contributes $$\frac{1}{2}k_B$$ to the system's heat capacity.
@@ -41,3 +43,4 @@ Each vibrational mode has two degrees of freedom for energy. One degree of freed
 
 Each vibrational degree of freedom provides $$k_BT$$ of energy. However, this is valid only when $$k_BT$$  is much bigger than spacing between vibrational states.  At low temperature this condition is not satisfied, only a few vibrational states are occupied and the equipartition principle is not typically applicable.
 
+Constraints are used in most molecular dynamics simulations, since the maximum length of the time step for integrating the equations of motion is limited by the frequency of the fastest motions in the system. Bond constraints that remove the rapid vibrational modes eliminate those degrees of freedom and make possible to use longer time steps without losing conservation of energy. Constraints including angles and dihedrals can be also applied.  Appying constraints, however, can affect the simulation by restricting the motions associated with the specified degrees of freedom. For example it was found that bond and angle constraints slow down dihedral angle transitions [1](https://aip.scitation.org/doi/10.1063/1.453488), shift the frequencies of the normal modes in biomolecules [2](https://aip.scitation.org/doi/10.1063/1.455654), and perturb the dynamics of polypeptides [3](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.52.6868)

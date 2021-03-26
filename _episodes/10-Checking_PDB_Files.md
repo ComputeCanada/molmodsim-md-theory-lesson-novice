@@ -46,7 +46,7 @@ PDB files are just text files, they contain a lot useful information such as det
 
 The lines beginning with "ATOM" present the atomic coordinates for standard amino acids and nucleotides. All other chemical compounds use the "HETATM" record type. Both of these record types use a simple fixed-column format described [here](https://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM). 
 
-Any non-protein molecules present in a PDB file would require special treatment. Let's check if the downloaded file has any non-protein atoms. We could install use some molecular visualization program for this task, but standard linux text searching utility *grep* available everywhere is sufficient. Grep searches for a given patterns in the input files and prints out each line that matches a pattern.
+Any non-protein molecules present in a PDB file would require special treatment. Let's check if the downloaded file has any non-protein atoms. We could install some molecular visualization program for this task, but standard linux text searching utility *grep* available everywhere is sufficient. Grep searches for a given patterns in the input files and prints out each line that matches a pattern.
 
 ~~~
 grep "^HETATM " 1ERT.pdb | wc -l
@@ -56,13 +56,13 @@ grep "^HETATM " 1ERT.pdb | wc -l
       46
 ~~~
 {: .output}
-We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will ignore non-polymer compounds.
+The '^' expression matches beginning of line. We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will ignore non-polymer compounds.
 
 Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". Let's  use the molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task. 
 
 To make a program available we need to load its module. After the module is loaded we can start using the program:
 ~~~
-module load StdEnv/2020 intel vmd
+module load StdEnv/2020 gcc vmd
 vmd
 ~~~
 {: .bash}
@@ -87,9 +87,7 @@ The first line created a new molecule from the file 1ERT.pdb. Then we used the *
 > {: .solution}
 {: .challenge}
 
-
 #### Checking a PDB File for Alternate Conformations.
-
 Some PDB files may contain alternate positions of residues. Only one conformation is acceptable for molecular dynamics simulation. Standard simulation preparation programs (for example pdb2gmx or pdb4amber) will automatically select the first conformation labeled "A" in the "altLoc" column (column 17). If you want to keep a different conformation, all conformations except the desired one must be removed from a PDB file.
 
 Let's check if the downloaded file has any alternate conformations:
@@ -118,12 +116,11 @@ quit
 
 You can also check for conformations using grep: 
 ~~~
-grep ^ATOM 1ERT.pdb | grep "^.\{16\}[A-Z]" 
+grep "^ATOM" 1ERT.pdb | egrep "^.{16}[A-Z]" 
 ~~~
 {: .bash}
 
-First print lines starting with "ATOM", then send these lines into the second grep command. The second grep matches any single character 16 times, then mathces a single literal A-Z. The symbol "\|" is called "pipe". In Linux you can send output of one command into another comaand chaining them together. 
-
+First print lines starting with "ATOM", then send these lines into the second grep command. The second grep matches beginning of line, then matches any single character "." 16 times, then mathces a single literal A-Z. The symbol "\|" is called "pipe". In Linux you can send output of one command into another comaand chaining them together. 
 
 > ## Preparing a Protein Coordinate File for Simulation
 > 1. Make PDB file containing only conformations "B" from the file 1ERT.pdb
@@ -141,7 +138,7 @@ First print lines starting with "ATOM", then send these lines into the second gr
 > >~~~
 > >{: .vmd}
 > >~~~
-> >grep "^.\{16\}[ B]" 1ERT.pdb | grep "^ATOM " > protein_B.pdb
+> >egrep "^.{16}[ B]" 1ERT.pdb | grep "^ATOM"
 > >~~~
 > >{: .bash}
 >  2.Make PDB file containing conformations B HIS43, A SER90, and B ASP20  from the file 1ERT.pdb. 
@@ -166,12 +163,12 @@ First print lines starting with "ATOM", then send these lines into the second gr
 > >{: .bash}
 > > Check for alternate conformations:
 > >~~~
-> >grep "^.\{16\}[A-Z]" 1BNI.pdb | grep ^ATOM
+> >egrep "^.{16}[A-Z]" 1BNI.pdb | grep ^ATOM
 > >~~~
 > >{: .bash}
 > > 4.Select chain A using shell commands:
 > >~~~
-> > grep "^.\{21\}A" 1BNI.pdb | grep "^ATOM" > barnase.pdb
+> > egrep "^.{21}A" 1BNI.pdb | grep "^ATOM" > barnase.pdb
 > >~~~
 > > {: .bash}
 >> Load molecule directly into *vmd* and select chain A:
@@ -188,6 +185,28 @@ First print lines starting with "ATOM", then send these lines into the second gr
 #### Checking a PDB File for Disulfide Bonds.
 Disulfide bonds are covalent bonds between the sulfur atoms of two cystein residues. They are very important for stabilization of protein structure.
 Disulfide bonds are fairly easy to spot in PDB files with any visualisation program. For example [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can identify disulfide bonds as well as many other problems in PDB files. *GROMACS pdb2gmx* module can add S-S bonds to the topology automatically based on the distance between sulfur atoms (option *-ss*). For MD simulations with *AMBER/NAMD* cross-linked cysteins must be renamed to "CYX" to distinguish them from normal cysteins.
+
+#### BioBB *check_structure* utility
+[check_structure](https://pypi.org/project/biobb-structure-checking/) is a command line utility from [BioBB project](https://github.com/bioexcel/biobb) performing [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) structure checking. It includes some structure manipulation options like selecting models or chains, removing components of the system, completing missing atoms, and some quality checking as residue quirality, amide orientation, or vdw clashes.
+
+Installation
+~~~
+~/scratch/workshop/scripts/install_check_structure.sh 
+~~~
+{: .bash}
+
+Usage
+~~~
+module load StdEnv/2020 python
+source ~/env-biobb/bin/activate
+
+check_structure commands
+check_structure -h
+cd ~/scratch/workshop/pdb/1ERT
+check_structure -i 1ERT.pdb checkall
+check_structure -i 1ERT.pdb -o output.pdb altloc --select A20:A,A43:B,A90:B 
+~~~
+{: .bash}
 
 #### Useful Links
 [MDWeb](http://mmb.irbbarcelona.org/MDWeb2) server can help to identify problems with PDB files and visually inspect them. It can also perform complete simulation setup, but options are limited and waiting time in the queue may be quite long.

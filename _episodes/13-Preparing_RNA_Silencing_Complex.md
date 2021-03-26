@@ -12,37 +12,6 @@ keypoints:
 - "?"
 ---
 
-~~~
-module load StdEnv/2020 python/3.7.9
-virtualenv ~/env-biobb
-source ~/env-biobb/bin/activate
-
-pip install biobb-structure-checking 
-
-mkdir ~/bin
-ln -s ~/env-biobb/lib/python3.7/site-packages/biobb_structure_checking/check_structure.py ~/bin/check_structure 
-chmod +x ~/env-biobb/lib/python3.7/site-packages/biobb_structure_checking/check_structure.py 
-python ~/env-biobb/lib/python3.7/site-packages/biobb_structure_checking/check_structure.py -i 6n4o.pdb checkall
-
-
-BioBB  wrapper to AMBERTOOLS module process_mdout.perl
-from biobb_amber.process.process_mdout import process_mdout
-
-prop = { 'terms' : ['PRES'] }
-
-process_mdout(input_log_path='production.log',
-              output_dat_path='pressure.dat',
-              properties=prop)
-
-from biobb_model.model.mutate import mutate
-prop = { 'mutation_list': 'A:Ala669Asp',
-         'use_modeller': False }
-mutate(input_pdb_path='6n4o.pdb',
-       output_pdb_path='test.pdb',
-       properties=prop)
-~~~
-
-
 For this lesson, we will use a complex of human argonaute-2 (hAgo2) protein with a micro RNA bound to a target messenger RNA ([PDBID:6N4O](https://www.rcsb.org/structure/6n4o)).
 
 Micro RNAs (miRNAs) are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual protein's expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target messenger RNAs (mRNAs) encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
@@ -57,7 +26,7 @@ cd ~/scratch/workshop/pdb/6N4O
 ## 1. Preparing a protein for molecular dynamics simulations.
 ### 1.1 Adding missing residues to protein structure files.
 #### 1.1.1 What residues are missing?
-Almost all protein and nucleic acid crystallographic structure files are missing some residues. The reason for this is that the most flexible parts of biopolymers are disordered in crystals, and if they are disordered the  electron densit will be weak and fuzzy and thus atomic coordinates cannot be accurately determined. These disordered atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model containing all atoms.
+Almost all protein and nucleic acid crystallographic structure files are missing some residues. The reason for this is that the most flexible parts of biopolymers are disordered in crystals, and if they are disordered the  electron densit will be weak and fuzzy and thus atomic coordinates cannot be accurately determined. These  disordered atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model containing all atoms.
 
 How can we find out if any residues are missing in a PDB file? Missing residues, and other useful information is available in PDB file REMARKS. There are many types of REMARKS. The REMARK 465 lists the residues that are present in the SEQRES records but are completely absent from the coordinates section. You can find information about all types of REMARKS [here](https://www.wwpdb.org/documentation/file-format-content/format32/remarks2.html).
 
@@ -109,7 +78,6 @@ Use grep manual to see the meaning of the -A option.
 
 Extract chain A from 6n4o.pdb using VMD
 ~~~
-module --force purge
 module load StdEnv/2020 intel vmd
 vmd
 ~~~
@@ -694,6 +662,7 @@ cp ~/scratch/workshop/pdb/6N4O/protein_models/6n4o_chain_A_complete_A669D.pdb .
 cp ~/scratch/workshop/pdb/6N4O/protein_models/4w5o_MG_ions.pdb .
 cp ~/scratch/workshop/pdb/6N4O/RNA_models/simRNA/chains_CD_minimized.pdb .
 ~~~
+{: .bash}
 
 Launch Leap and load protein and RNA forcefields:
 ~~~
@@ -730,88 +699,84 @@ Total perturbed charge:    -6.000000
 ~~~
 {: .output}
 
-Using this information (MW 110 KDa, charge -6.0, 75000 water molecules) as an input to [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server we obtain the number of ions: 188.64 anions and 192.64 cations.
+Using this information (MW 110 KDa, charge -6.0, 75000 water molecules) as an input to [*SLTCAP*](https://www.phys.ksu.edu/personal/schmit/SLTCAP/SLTCAP.html) server we obtain the number of ions: 188 anions and 194 cations.
 
-#### 4.2 Determine protonation states of titratable sites.
-For processing with H++ server we need to merge protein, nucleic acids and ions into one PDB file.
+>## Determine protonation states of titratable sites in the model complex.
+>Use H++ server to determine what titratable sites in the model of protein-RNA complex 6n4o are in non-standard protonation state at pH 7?
+>
+>>## Solution
+>>For processing with H++ server we need to merge models of protein, nucleic acids and MG ions into one PDB file. As H++ server does not have library entries for phosphorylated 5' terminals remove all 5' phosphate atoms.
+>>
+>>~~~
+>>module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
+>>source $EBROOTAMBERTOOLS/amber.sh
+>>mkdir -p ~/scratch/workshop/pdb/6N4O/simulation/setup/Hpp
+>>cd ~/scratch/workshop/pdb/6N4O/simulation/setup/Hpp
+>>tleap -I $EBROOTAMBERTOOLS/dat/leap/lib/
+>>~~~
+>>{: .bash}
+>>
+>>~~~
+>>source leaprc.RNA.OL3
+>>source leaprc.protein.ff14SB
+>>source leaprc.water.tip3p
+>>loadoff terminal_monophosphate.lib
+>>rna=loadpdb ../chains_CD_minimized.pdb
+>>remove rna rna.1@P
+>>remove rna rna.1@OP1
+>>remove rna rna.1@OP2
+>>remove rna rna.1@OP3
+>>remove rna rna.1@HP3
+>>remove rna rna.22@P
+>>remove rna rna.22@OP1
+>>remove rna rna.22@OP2
+>>remove rna rna.22@OP3
+>>remove rna rna.22@HP3
+>>prot=loadpdb ../6n4o_chain_A_complete_A669D.pdb
+>>mg=loadpdb ../4w5o_MG_ions.pdb
+>>sys=combine {prot rna mg}
+>>savepdb sys 6n4o_Hpp.pdb
+>>quit
+>>~~~
+>>{: .leap}
+>>
+>>Process 6n4o_Hpp.pdb with H++ server.  
+>>**Uncheck 'Correct orientation'** in the calculation setup.  
+>>When calculation completes download the list of computed pKs (0.15_80_10_pH6.5_6n4o_Hpp.pkout)
+>>
+>>Examine the pK_(1/2) column for HIS, ASP, GLU.
+>>~~~
+>>grep ^HI 0.15_80_10_pH6.5_6n4o_Hpp.pkout
+>>grep ^AS 0.15_80_10_pH6.5_6n4o_Hpp.pkout
+>>grep ^GL 0.15_80_10_pH6.5_6n4o_Hpp.pkout
+>>~~~
+>>Histidines 77, 766, 822, and 829 are protonated (HIP)
+>{: .solution}
+{: .challenge}
+
+
+#### 4.2 Preparing the complete simulation system
+
+Finally, we have all pieces, and are ready to prepare the complete simulation system:
+1. The protein model, 6n4o_chain_A_complete_A669D.pdb
+2. The nucleic model, chains_CD_minimized.pdb
+3.  Magnesium ions 4w5o_MG_ions.pdb
+4.  We need to add 188 Na+ and 188 Cl- ions
+5.  We need to protonate HIS 77, 766, 822, and 829
 
 ~~~
 module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
 source $EBROOTAMBERTOOLS/amber.sh
-mkdir ~/scratch/Ago-RNA_sim/HPP
-cd ~/scratch/Ago-RNA_sim/HPP
-tleap -I $EBROOTAMBERTOOLS/dat/leap/lib/
+cd ~/scratch/workshop/pdb/6N4O/simulation/setup
+tleap -I $EBROOTAMBERTOOLS/dat/leap/lib/ 
 ~~~
 {: .bash}
-
-H++ server does not have library entries for phosphorylated 5' terminals. To workaround we simply remove 5' phosphate atoms.
 
 ~~~
 source leaprc.RNA.OL3
 source leaprc.protein.ff14SB
 source leaprc.water.tip3p
-loadoff terminal_monophosphate.lib
-rna=loadpdb ../prep_system/chains_CD_minimized.pdb
-remove rna rna.1@P
-remove rna rna.1@OP1
-remove rna rna.1@OP2
-remove rna rna.1@OP3
-remove rna rna.1@HP3
-remove rna rna.22@P
-remove rna rna.22@OP1
-remove rna rna.22@OP2
-remove rna rna.22@OP3
-remove rna rna.22@HP3
-prot=loadpdb ../prep_system/6n4o_chain_A_complete_A669D.pdb
-mg=loadpdb ../prep_system/4w5o_MG_ions.pdb
-sys=combine {prot rna mg}
-savepdb sys 6n4o_Hpp.pdb
-quit
-~~~
-{: .leap}
-
-Process 6n4o_Hpp.pdb with H++ server. Uncheck 'Correct orientation' in caclulation setup. When calculation completes download the list of computed pKs (0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt)
-
-Examine HIS, ASP, GLU.
-~~~
-grep ^HI 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
-grep ^AS 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
-grep ^GL 0.15_80_10_pH6.5_6n4o_Hpp.pkout.txt
-~~~
-{: .bash}
-
-> ## Determine protonation states from the list of pKs.
-> What titratable sites in 6n4o are in non-standard protonation state at pH 6.5?
->> ## Solution
->>Histidines 77, 766, 822, and 829 are protonated (HIP)
-> {: .solution}
-{: .challenge}
-
-#### 4.3 Preparing the complete simulation system
-
-Finally, we are ready to prepare the complete simulation system. We can run all the commands interactively, or save them in a file and then execute it.
-
-Leap was designed to read commands from a file (-f option). This means that we need two scripts: one with the leap commands, and another with commands to run leap itself.
-
-Taking advantage of shell flexibility, we can eliminate two files' necessity by creating a multiline variable holding all commands and then passing this variable instead of file to leap.
-
-Load phosphorylated aminoacids forcefield:
-frcmod.phosaa14SB
-
-OP-P -OH        90.0    108.23  from O2-P -OH ! raised to prevent simulation instabilities
-HO-OH-P         100.0   113.28  from HO-OH-P  ! raised to prevent simulation instabilities, equilibrium from G03 calculations
-
-
-As Leap does not support input from STDIN we will use the <(echo "$inputData") syntax which provides a way to pass the output of a command (echo "$inputData") to a program that can not use pipeline.
-
-~~~
-#!/bin/bash
-# FILE <<< prep_system.leap >>>
-module load StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 ambertools/20
-source $EBROOTAMBERTOOLS/amber.sh
-
-inputData=$(cat << EOF
-loadamberparams frcmod.monophosphate
+loadamberparams frcmod.phos_nucleic14SB
 loadoff terminal_monophosphate.lib
 rna = loadpdb chains_CD_minimized.pdb
 prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
@@ -819,104 +784,254 @@ mg = loadpdb 4w5o_MG_ions.pdb
 sys = combine {prot,rna,mg}
 set {sys.77 sys.766 sys.822 sys.829} name "HIP"
 addions sys Na+ 0
+savepdb sys inpcrd_noWAT.pdb
 solvatebox sys TIP3PBOX 13 iso
-addionsrand sys Na+ 189 Cl- 189
+addionsrand sys Na+ 188 Cl- 188
 saveamberparm sys prmtop.parm7 inpcrd.rst7
 savepdb sys inpcrd.pdb
 quit
-EOF)
-
-tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p -I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(echo "$inputData")
 ~~~
-{:.file-content}
+{: .leap}
+
+The force field modification frcmod.phos_nucleic14SB is needed for simulation stability. It modifies AMBER parm10 set for 5' terminal phosphate in nucleic acids, The values are taken from frcmod.phosaa14SB 
+
+> ## Write a shell script reproducing all system preparation steps
+>We can run all leap commands interactively, but it would be convenient to have a single shell script that could reproduce all system preparation step when exetuted. How can we do it?
+>
+>Leap was designed to read commands from a file (-f option). It does not support input from STDIN, so we can not use pipeline to send commands to its input. This is inconvenient because we need two scripts to prepare a simulation: one with leap commands, and another with commands to run leap itself. Fortunately, shell is very flexible, and we can eliminate two-file workflow by using a special command allowing to use a variable instead of file as an input. 
+>
+>Inside of the script create a multi line variable containing all commands:
+> ~~~
+> var=$(cat << EOF
+> ...
+> ...
+> EOF)
+> ~~~
+> Then pass this variable to leap using the `<(echo "$var")` command instead of filename. This command will allow leap to read the output of the command `echo "$var"` instead of the input filename .
+>>## Solution
+>>~~~
+>>#!/bin/bash
+>># FILE <<< prep_system.sh >>>
+>>module load StdEnv/2020  gcc/9.3.0 openmpi/4.0.3 ambertools/20
+>>source $EBROOTAMBERTOOLS/amber.sh
+>>
+>>inputData=$(cat << EOF
+>>loadamberparams frcmod.phos_nucleic14SB
+>>loadoff terminal_monophosphate.lib
+>>rna = loadpdb chains_CD_minimized.pdb
+>>prot = loadpdb 6n4o_chain_A_complete_A669D.pdb
+>>mg = loadpdb 4w5o_MG_ions.pdb
+>>sys = combine {prot,rna,mg}
+>>set {sys.77 sys.766 sys.822 sys.829} name "HIP"
+>>addions sys Na+ 0
+>>solvatebox sys TIP3PBOX 13 iso
+>>addionsrand sys Na+ 189 Cl- 189
+>>saveamberparm sys prmtop.parm7 inpcrd.rst7
+>>savepdb sys inpcrd.pdb
+>>quit
+>>EOF)
+>>
+>>tleap -f leaprc.RNA.OL3 -f leaprc.protein.ff14SB -f leaprc.water.tip3p \
+>>-I $EBROOTAMBERTOOLS/dat/leap/lib/ -f <(echo "$inputData")
+>>~~~
+>>{:.file-content}
+>{: .solution}
+{: .challenge}
 
 
 ### 5. Energy minimization.
-
-First we need to optimize positions of atoms. To restrain residues present in 6n4o we need to select all residues that have coordinates in the pdb file, but as in the simulation system resisues are renumbered we can not use the original numbers. All residues in simulation systems are counted sequentially starting from first to last.
-
-Chain       | Original | Shift | Simulation |
-------------|----------|-------|------------|
-Protein     | 1:859    |  -    | 1:859      |
-RNA chain C | 1:21     | 859   | 860:880    |
-RNA chain D | 1:18     | 898   | 881:898    |
-MG ions     |    -     |  -    | 899:901    |
-
-Considering this,  selection command in VMD will be:
+Before simulationg molecular dynamics we need to relax the system. Any atomic clashes must be resolved, and potential energy minimized to avoid unphysically large forces that can crash simulation. 
+Let's check our model for clashes. 
 ~~~
-atomselect 0 "backbone and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"
-~~~
-{: .vmd}
-
-#### 5.1 Energy minimization with AMBER
-
-~~~
-sander -O -i min.in -p ../prmtop.parm7 -c ../inpcrd.rst7  -ref ../inpcrd.rst7
+source ~/env-biobb/bin/activate
+check_structure -i inpcrd_noWAT.pdb checkall
 ~~~
 {: .bash}
 ~~~
 ...
-LINMIN FAILURE
-...
+8 Steric severe clashes detected
+ LYS  124.CA  G    877.N2     0.747 A
+ ARG  277.NE  U    878.P      0.845 A
+ LYS  525.CE  C    888.N4     0.961 A
+ THR  556.CA  A3   898.C4'    0.614 A
+ PRO  557.C   A    897.N3     0.487 A
+ GLN  558.N   A    897.C4     0.751 A
+ THR  559.CA  A3   898.N3     0.435 A
+ HIP  822.CD2 C    888.OP1    0.786 A
+ ...
 ~~~
 {: .output}
 
-Minimization fails.
+As the RNA model was built without protein, it is expected that the added RNA residues may be placed too close to some aminoacid residues. You can inspect severe clashes between the protein and the RNA residues visually to ensure that there are no severe problems such as overlapping rings that can not be fixed automatically. 
 
+There is nothing too serious that may crash simulation, the clashes will be resolved in the process of energy minimization.  As we want to keep our initial simulation structure as close to the experimental structure as possible we first allow energy minimizer to move freely only new added residues, and restrain all original residues. So we need a list of all original atoms to restrain them. 
 
-#### 5.2 Energy minimization with  NAMD
+In the simulation system resisues are renumbered. All residues in simulation systems are numbered sequentially starting with 1, and chain identifiers do not exist. Thus, the residue number mapping between the original pdb file and the simulation is as follows:
 
-In the first roud of minimization we will not allow all original atoms to move. The only exception is ARG814 which is in close contact with the added RNA segment. Prepare constraints file for this run:
+Chain       | Original | Shift | Simulation |
+------------|----------|-------|------------|
+Protein   A | 1-859    |  -    | 1-859      |
+RNA chain C | 1-21     | 859   | 860-880    |
+RNA chain D | 1-18     | 898   | 881-898    |
+MG ions     |    -     |  -    | 899-901    |
 
+Considering this mapping, the AMBERMASK selecting all original residues is:
+~~~
+:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896
+~~~
+
+#### 5.1 Energy minimization with AMBER
+
+Minimization parameters
+
+| Flag        | Value     | Description
+|-------------|-----------|-----------
+|imin         |     1     | Turn on minimization
+|ntmin        | 0 - 4     | Flag for the method of minimization    
+|maxcyc       | integer   | The maximum number of cycles of minimization  
+|ncyc         | integer   | If NTMIN=1 switch from SD to CG after NCYC cycles  
+|ntpr         | integer n | Print energies every n steps    
+|ntr          |    1      | Use cartesian harmonic restraints   
+|restraint_wt | float     | Restraint force kcal/mol   
+|restraintmask| ambermask | Specifies restrained atoms   
+
+Methods of minimization
+
+|--|
+|0 |Steepest descent+conjugate gradient. The first 4 cycles are steepest descent at the start of the run and after every nonbonded pairlist update.
+|1 | For NCYC cycles the steepest descent method is used then conjugate gradient is switched on.
+|2 | Steepest descent only
+|3 | XMIN family methods. The default is LBFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno). It is a popular algorithm in machine learning. The method incrementally learns from previous steps, so that it can make the next step more accurate. It converges considerably faster than CG, but requires more memory.
+
+Minimization input file *min1.in*
+~~~
+Energy minimization
+&cntrl
+imin=1, ntmin=0, maxcyc=400,
+ntpr=5,
+ntr=1,
+restraint_wt=100,
+restraintmask="(:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896)",
+&end
+END
+~~~
+{: .file-content}
+
+For convenience make links in the working directory pointing to the topology and the initial coordinates.
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/1-minimization
+ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/prmtop.parm7 ./prmtop.parm7
+ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/inpcrd.rst7 ./inpcrd.rst7
+~~~
+{: .bash}
+
+Allocate resources
+~~~
+salloc --time=2:0:0 --mem-per-cpu=2000 --ntasks=8
+~~~
+{: .bash}
+Load AMBER module and run minimization
+~~~
+module load StdEnv/2020 gcc ambertools
+mpiexec sander.MPI -O -i min1.in -p prmtop.parm7 -c inpcrd.rst7  -ref inpcrd.rst7 -r minimized_1.nc&
+~~~
+{: .bash}
+
+The option -O means: overwrite the output files if present.  
+The output from the minimization goes into the file *mdout*. The total energy of the system is printed in lines beginning with "EAMBER =". If minimization is successful we expect to see large negative energies.
+
+>## Why minimization fails?
+>When you run minimization with the input file *min1.in* as described above the program crashes after 4 cycles. Try to understand why minimization is unstable, and how to fix the problem. 
+>>## Solution
+>>With ntmin=0  the minimization method is switched from SD to CG only 4 SD cycles. As initial system has very high energy, 4 SD cycles are not sufficient to relax it well enough for CG to work.   
+Try to increase the number of CG cycles to 30 (ntmin=1, ncyc=30).   
+Examine mdout. How many SD steps are needed for total energy to become negative?     
+Try using an alternative minimization method (SD only or LBFGS). What method converges faster?
+>{: .solution}
+{: .challenge}
+
+In the second round of minimization constrain only backbone atoms of all original residues. The mask for this selection will be
+~~~
+(:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896)&(@CA,N,O,P,C4',O3')
+~~~
+Continue minimization from the restart coordinates:
+~~~
+mpiexec sander.MPI -O -i min2.in -p prmtop.parm7 -c minimized_1.nc -ref inpcrd.rst7 -r minimized_2.nc&
+~~~
+
+#### 5.2 Energy minimization with NAMD
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/1-minimization
+ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/prmtop.parm7 ./prmtop.parm7
+ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/inpcrd.rst7 ./inpcrd.rst7
+~~~
+{: .bash}
+
+In NAMD constraint forces are read from a pdb file. Constraint forces can be given in either occupancy or beta columns. In the first round of minimization restrain all original atoms. Prepare constraints file for this run.
+~~~
+module load vmd
+vmd
+~~~
+{: .bash}
 ~~~
 mol new prmtop.parm7
 mol addfile inpcrd.rst7
 set sel [atomselect top "all"]
 $sel set occupancy 0.0
 set sel [atomselect top "noh resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
-$sel set occupancy 999.9
-set sel [atomselect top "resid 814"]
-$sel set occupancy 0.0
+$sel set occupancy 100.0
 set sel [atomselect top "all"]
 $sel writepdb constrain_all_6n4o_residues.pdb
 quit
 ~~~
 {: .vmd}
 
-Run 1000 steps of energy minimization:
+Minimization input file *min_1.in*
+~~~
+# Minimization, restrained backbone  
+parmfile       prmtop.parm7  
+ambercoor      inpcrd.rst7
+# Output 
+outputname          minimized_1
+numsteps 400
+# Constraints
+constraints on
+conskFile constrain_all_6n4o_residues.pdb
+conskcol O
+consref constrain_all_6n4o_residues.pdb
+# Integrator
+minimization   on
+# AMBER FF settings 
+amber on
+cutoff         9.0 
+pairlistdist   11.0 
+switching      off 
+exclude        scaled1-4 
+readexclusions yes 
+1-4scaling     0.83333333 
+scnb           2.0 
+ljcorrection   on
+# PME 
+PME                 on 
+PMEGridSizeX        128  
+PMEGridSizeY        128
+PMEGridSizeZ        128 
+# Periodic cell 
+cellBasisVector1   137  0.0 0.0 
+cellBasisVector2   0.0 137  0.0 
+cellBasisVector3   0.0 0.0  137  
+~~~
+{: .file-content}
+
+Run 500 steps of energy minimization:
 ~~~
 module load StdEnv/2020 intel/2020.1.217 namd-multicore/2.14
-charmrun ++local +p 8 namd2 namd_min1.in >&log&
+charmrun ++local +p 8 namd2 min_1.in >&log&
 ~~~
 {:.bash}
 
-In the second round of minimization we will constrain only backbone atoms of all original residues using the minimized coordinates as reference. Prepare the reference coordinates:
-
-~~~
-module load StdEnv/2020 intel vmd
-cd ~/scratch/Ago-RNA_sim/sim_namd/1-minimization
-vmd
-~~~
-{:.bash}
-
-~~~
-mol new ../../prmtop.parm7
-mol addfile minimized.coor
-set sel [atomselect top "all"]
-$sel writepdb ../../minimized.pdb
-quit
-~~~
-{: .vmd}
-
+In the second round of minimization constrain only backbone atoms of all original residues.   
 Prepare force constants file:
-
-~~~
-cd ~/scratch/Ago-RNA_sim
-module purge
-module load StdEnv/2020 intel vmd
-vmd
-~~~
-{: .bash}
 
 ~~~
 mol new prmtop.parm7
@@ -933,8 +1048,7 @@ quit
 
 Run 1000 steps of minimization.
 ~~~
-module load StdEnv/2020 intel/2020.1.217 namd-multicore/2.14
-charmrun ++local +p 8 namd2 namd_min2.in >&log&
+charmrun ++local +p 8 namd2 min_2.in >&log&
 ~~~
 {:.bash}
 
