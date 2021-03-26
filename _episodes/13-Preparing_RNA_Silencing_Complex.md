@@ -12,7 +12,7 @@ keypoints:
 - "?"
 ---
 
-For this lesson, we will use a complex of human argonaute-2 (hAgo2) protein with a micro RNA bound to a target messenger RNA ([PDBID:6N4O](https://www.rcsb.org/structure/6n4o)).
+In this lesson, we will use a complex of human argonaute-2 (hAgo2) protein with a micro RNA bound to a target messenger RNA ([PDBID:6N4O](https://www.rcsb.org/structure/6n4o)).
 
 Micro RNAs (miRNAs) are short non-coding RNAs that are critical for regulating gene expression and the defense against viruses. miRNAs regulate a wide variety of human genes. They can control the production of proteins by targeting and inhibiting mRNAs. miRNAs can specifically regulate individual protein's expression, and their selectivity is based on sequence complementarity between miRNAs and mRNAs. miRNAs that target messenger RNAs (mRNAs) encoding oncoproteins can serve as selective tumor suppressors. They can inhibit tumor cells without a negative impact on all other types of cells. The discovery of this function of miRNAs has made miRNAs attractive tools for new therapeutic approaches. However, it is challenging to identify the most efficient miRNAs that can be targeted for medicinal purposes. To regulate protein synthesis miRNAs interact with hAgo2 protein forming the RNA-induced silencing complex that recognizes and inhibits the target mRNAs by slicing them. Therefore, elucidating the structural basis of the molecular recognition between hAgo2 and mRNA is crucial for understanding miRNA functions and developing new therapeutics for diseases.
 
@@ -227,11 +227,11 @@ This works, but it is not very smart because the program simply renames ALA to A
 >>~~~
 >>{: .bash}
 >>~~~
->>ATOM   5161  N   ALA A 669     -19.332  25.617 -27.862  1.00  0.97        N
->>ATOM   5162  CA  ALA A 669     -18.951  24.227 -27.916  1.00  0.97        C
->>ATOM   5163  C   ALA A 669     -17.435  24.057 -28.043  1.00  0.97        C
->>ATOM   5164  O   ALA A 669     -16.661  25.018 -28.091  1.00  0.97        O
->>ATOM   5165  CB  ALA A 669     -19.720  23.530 -29.053  1.00  0.97        C
+>>ATOM   5161  N   ALA A 669     -19.332  25.617 -27.862  1.00  0.97       N
+>>ATOM   5162  CA  ALA A 669     -18.951  24.227 -27.916  1.00  0.97       C
+>>ATOM   5163  C   ALA A 669     -17.435  24.057 -28.043  1.00  0.97       C
+>>ATOM   5164  O   ALA A 669     -16.661  25.018 -28.091  1.00  0.97       O
+>>ATOM   5165  CB  ALA A 669     -19.720  23.530 -29.053  1.00  0.97       C
 >>~~~
 >>{: .output}
 >>
@@ -249,11 +249,11 @@ You can do it using stream editor:
 >>{: .bash}
 >>
 >>~~~
->>ATOM   5161  N   ASP A 669     -19.332  25.617 -27.862  1.00  0.97         N
->>ATOM   5162  CA  ASP A 669     -18.951  24.227 -27.916  1.00  0.97         C
->>ATOM   5163  C   ASP A 669     -17.435  24.057 -28.043  1.00  0.97         C
->>ATOM   5164  O   ASP A 669     -16.661  25.018 -28.091  1.00  0.97         O
->>ATOM   5165  CB  ASP A 669     -19.720  23.530 -29.053  1.00  0.97         C
+>>ATOM   5161  N   ASP A 669     -19.332  25.617 -27.862  1.00  0.97       N
+>>ATOM   5162  CA  ASP A 669     -18.951  24.227 -27.916  1.00  0.97       C
+>>ATOM   5163  C   ASP A 669     -17.435  24.057 -28.043  1.00  0.97       C
+>>ATOM   5164  O   ASP A 669     -16.661  25.018 -28.091  1.00  0.97       O
+>>ATOM   5165  CB  ASP A 669     -19.720  23.530 -29.053  1.00  0.97       C
 >>~~~
 >>{: .output}
 >{: .solution}
@@ -793,6 +793,10 @@ quit
 ~~~
 {: .leap}
 
+~~~
+mv inpcrd.pdb inpcrd.rst7 prmtop.parm7 ../
+~~~
+
 The force field modification frcmod.phos_nucleic14SB is needed for simulation stability. It modifies AMBER parm10 set for 5' terminal phosphate in nucleic acids, The values are taken from frcmod.phosaa14SB 
 
 > ## Write a shell script reproducing all system preparation steps
@@ -920,8 +924,8 @@ END
 For convenience make links in the working directory pointing to the topology and the initial coordinates.
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/1-minimization
-ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/prmtop.parm7 ./prmtop.parm7
-ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/inpcrd.rst7 ./inpcrd.rst7
+ln -s ../../setup/prmtop.parm7 prmtop.parm7
+ln -s ../../setup/inpcrd.rst7 inpcrd.rst7
 ~~~
 {: .bash}
 
@@ -960,14 +964,29 @@ mpiexec sander.MPI -O -i min2.in -p prmtop.parm7 -c minimized_1.nc -ref inpcrd.r
 ~~~
 
 #### 5.2 Energy minimization with NAMD
+
+There are only two minimization methods in NAMD, conjugate gradient and simple velocity quenching. All input and output related parameters are configured in input files. NAMD takes only one command line argument, the name of the input file.
+
+NAMD reads constraints from a specially prepared pdb file describing constraint force for each atom in a system. Constraint forces can be given in either occupancy or beta columns. 
+
+| Parameter        | Value     | Description
+|------------------|-----------|-----------
+| minimization     | on        | Perform conjugate gradient energy minimization
+| velocityQuenching| on        | Perform energy minimization using a simple quenching scheme. 
+| numsteps         | integer   | The number of minimization steps to be performed
+| constraints      | on        | Activate cartesian harmonic restraints   
+| conskfile        |  path     | PDB file containing force constant values
+| conskcol         | X,Y,Z,O,B | Column of the PDB file to use for the position restraint force constant
+| consref          | path      | PDB file containing restraint reference positions
+
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/1-minimization
-ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/prmtop.parm7 ./prmtop.parm7
-ln -s ~/scratch/workshop/pdb/6N4O/simulation/setup/inpcrd.rst7 ./inpcrd.rst7
+ln -s ../../setup/prmtop.parm7 prmtop.parm7
+ln -s ../../setup/inpcrd.rst7 inpcrd.rst7
 ~~~
 {: .bash}
 
-In NAMD constraint forces are read from a pdb file. Constraint forces can be given in either occupancy or beta columns. In the first round of minimization restrain all original atoms. Prepare constraints file for this run.
+As we did in the previous section, in the first round of minimization we restrain all original atoms. Let's prepare PDB file with constraint forces in the occupancy field for this run. Such files can be prepared with VMD. 
 ~~~
 module load vmd
 vmd
@@ -986,9 +1005,10 @@ quit
 ~~~
 {: .vmd}
 
-Minimization input file *min_1.in*
+Minimization input file *min_1.in*. In addition to input, output, constraints, and general minimization parameters this file describes force field and PME calculations.
 ~~~
 # Minimization, restrained backbone  
+# Input
 parmfile       prmtop.parm7  
 ambercoor      inpcrd.rst7
 # Output 
