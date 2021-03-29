@@ -25,6 +25,32 @@ Other useful MD analysis software: [MDAnalysis](https://userguide.mdanalysis.org
 References:  
 1. [PTRAJ and CPPTRAJ: Software for Processing and Analysis of Molecular Dynamics Trajectory Data](https://pubs.acs.org/doi/full/10.1021/ct400341p)
 
+
+#### Coloring by potential
+
+~~~
+module load StdEnv/2020 gcc vmd apbs
+cd ~/home/svassili/scratch/workshop/pdb/6N4O/simulation/setup
+cpptraj prmtop.parm7
+~~~
+{:.bash}
+
+~~~
+trajin inpcrd.rst7
+strip !(:860-898)
+trajout nucleic.pqr pdb dumpq
+go
+~~~
+
+VMD
+1. Load .pqr file
+2. Reperesentation QuickSurf [0.5 0.5 0.5, max quality]
+3. Extensions - Analysis - APBS - Run APBS
+4. When prompted "Load ABBS into top molecule"
+5. Select coloring method "Volume"
+6. Adjust "Color scale data range" in the "Trajectory" tab. Try [-10 10]
+
+
 ### Using PYTRAJ in Jupyter notebook
 
 The use of Jupyter notebook becomes increasingly popular for data analysis and visualization. One of the most attactive features of Jupyter is how well it combines different medium (your code, notes, and visualizations) in one solution. By keeping everything in one easy accessible place notebooks greatly simplify the management and sharing of your work.

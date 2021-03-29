@@ -37,9 +37,11 @@ The potential energy function *U* is a cornerstone of the MD simulations because
 
 $\vec{F}=-\nabla{U}(\vec{r})$
 
+To summaize, if we know how to calculate the potential energy of a sysytem then we can calculate forces and propagates a system in time.
+
 - Molecular dynamics helps to link physics, chemistry and biology
 - With the help of MD it is possible to model phenomena that cannot be studied experimentally.
--  Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
+- Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
 - Study thermodynamics properties (free energies, binding energies)
 - Biochemical reactions (enzyme catalysis, protein complex assembly, protein or RNA folding, chromatin maintenance and assembly, etc) are dynamic processes, and MD allows us to describe some of them. 
 

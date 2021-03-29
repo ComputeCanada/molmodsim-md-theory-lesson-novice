@@ -22,10 +22,11 @@ The protonation pattern of proteins is critical for their catalytic function and
 
 
 ## How to Detemine Protonation States of Residues in a Protein?
-
-Several free web servers and standalone programs are available for prediction of the *pKa* values of protein residues:
+Several free web servers and standalone programs are available for prediction of the *pKa* values of protein residues. the underlying methods used by all ofthem fall into two categories: empirical (prokka) and Poisson-Boltzmann solvers. The drawbakc of the empirical method is that it works well for a protein similar to the ones it was trained with. It is not guaranteed to give good results for all proteins. Methods implementing Poisson-Boltzmann solution have a sound physical background. Most of them however are limited to sampling only a single protein conformation, and this is the major source of inaccuracy for this method. The exception is MCCE which samples sidechain rotamers giving a more accurate picture of coupled ionization and position changes. It is also limited becaue it does not sample backbone conformations. The most rigorous method is constant pH simulations where ionization states are sampled and dynamically adjusted in a course of MD simulation. This method is computationally very expensive, but recently a very efficient GPU implementation of the constant pH molecular dynamics has been developed and [implemented in AMBER](https://pubs.acs.org/doi/10.1021/acs.jcim.9b00754).
 
 [*H++*](http://biophysics.cs.vt.edu/index.php) server. *H++* calculations are based on the classical continuum electrostatic model (solvent molecules are replaced by a continuous medium with the average properties of the solvent). *H++* uses *AmberTools* modules to preprocess a PDB file and it is capable to generate basic topology and coordinate files for MD simulations in AMBER format. *H++* is a single-conformation method and without intervention from the user it selects, the "A" conformation. For detais of the methodology see [[ref]](https://doi.org/10.1093/nar/gks375).
+
+[PlayMolecule-ProteinPrepare](https://www.playmolecule.org/proteinPrepare/) Preparation process includes the titration of the protonation states using PROPKA 3.1 and addition of missing atoms and overall optimization of the H-network using PDB2PQR 2.1. The first can be manually overriden by examining the protein in our modern 3D webGL viewer. 
 
 [*PDB2PQR*](http://nbcr-222.ucsd.edu/pdb2pqr_2.1.1/) server. *PDB2PQR* solves Poisson-Boltzmann equation using the APBS solver. 
 

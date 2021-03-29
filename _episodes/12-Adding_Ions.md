@@ -38,7 +38,7 @@ Let's neutralize 1RGG protein using the *leap* module. We will add ions prior to
 mkdir ~/scratch/workshop/pdb/1RGG/AMBER
 cd ~/scratch/workshop/pdb/1RGG/AMBER
 module --force purge
-module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 ambertools
+module load StdEnv/2020 gcc ambertools
 source $EBROOTAMBERTOOLS/amber.sh
 tleap
 ~~~
@@ -52,7 +52,6 @@ charge s
 addions s Na+ 0
 ~~~
 {: .leap}
-
 
 ## Adding Ions to Mimic the Macroscopic Salt Concentration
 To mimic the macroscopic salt concentration in the environment being studied we will need to add more cation/anion pairs to the simulation system. The number of ion pairs can be estimated using the formula:
@@ -145,8 +144,7 @@ tleap -f solvate_1RGG.leap
 >## What force fields are available in the loaded *GROMACS* module?
 >When the *GROMACS* module is loaded the environment variable *EBROOTGROMACS* will be set. This variable is pointing to the GROMACS installation directory. Knowing where the *GROMACS* installation is we can find out what force fields are available:
 >~~~
->ml --force purge
->ml StdEnv/2020  gcc/9.3.0  openmpi/4.0.3 gromacs
+>module load gromacs
 >ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename | column -c80
 >~~~
 >{: .bash}
@@ -194,12 +192,11 @@ y
 EOF
 ~~~
 {: .bash}
-
-|              |                          
-|-------------:|:-------------------------
-| `-ignh`      | ignore hydrogens in file  
-|`-chainsep id`| separate chains by chain ID. Since we assigned ions to chain B pbb2gmx will ignore TER records and put them in a separate chain  
-|`-ss`         | interactive S-S bridge selection. Detect potential S-S bonds, and ask for confirmation.
+                         
+--------------|:--|:-----------------------
+ignh          |   | Ignore hydrogens in file|  
+chainsep      |id | Separate chains by chain ID. Since we assigned ions to chain B pbb2gmx will ignore TER records and put them in a separate chain  
+ss            |   | Interactive S-S bridge selection. Detect potential S-S bonds, and ask for confirmation.
 
 The construct
 ~~~
@@ -258,7 +255,6 @@ $ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -neutral -conc 0.15 -neut
 ~~~
 {: .bash}
 
-
 Let's inspect the last section of the updated topology file:
 ~~~
 tail -n 4 topol.top
@@ -274,14 +270,18 @@ CL               33
 
 You can see that 38 sodium and 33 chloride ions were added to the system.
 
->## Find the Reason of Simulation Setup Failure
->Download the structure file 2F4K from PDB and generate the molecular topology with *pdb2gmx*:
+>## Why PDB to GROMACS conversion fails?
+>Download the structure file 2F4K from PDB and try to generate the molecular topology with *pdb2gmx*:
 >~~~
 >wget http://files.rcsb.org/view/2F4K.pdb
 >gmx pdb2gmx -f 2F4K.pdb -ff amber99sb-ildn -water spce
 >~~~
 >{: .bash}
 >Why this command fails and how to fix it?
+>> ## Solution
+>> The file contains two noncanonical norleucine aminoacids (NLE65 and 70). GROMACS does not have parameters for this aminoacid. You have two options: replace norleucine with leucine or add norleucine parameters. 
+>>
+> {: .solution}
 {: .challenge}
 
 ### Automation and Reproducibility of a Simulation Setup

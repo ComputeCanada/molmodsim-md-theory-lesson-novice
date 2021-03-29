@@ -11,10 +11,13 @@ keypoints:
 - "?"
 ---
 
-### 5. Energy minimization.
-Before simulationg molecular dynamics we need to relax the system. Any atomic clashes must be resolved, and potential energy minimized to avoid unphysically large forces that can crash simulation. 
+## 1. Running simulations with AMBER
+### 1.1 Energy minimization.
+Before simulating a system we need to relax it. Any atomic clashes must be resolved, and potential energy minimized to avoid unphysically large forces that can crash a simulation. 
+
 Let's check our model for clashes. 
 ~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/setup/
 source ~/env-biobb/bin/activate
 check_structure -i inpcrd_noWAT.pdb checkall
 ~~~
@@ -34,11 +37,11 @@ check_structure -i inpcrd_noWAT.pdb checkall
 ~~~
 {: .output}
 
-As the RNA model was built without protein, it is expected that the added RNA residues may be placed too close to some aminoacid residues. You can inspect severe clashes between the protein and the RNA residues visually to ensure that there are no severe problems such as overlapping rings that can not be fixed automatically. 
+As the RNA model was built without protein, it is expected that the added RNA residues may be placed too close to some aminoacid residues. You can inspect severe clashes between the protein and the RNA residues visually to ensure that there are no severe problems that can not be fixed automatically (such as overlapping ring structures). 
 
 There is nothing too serious that may crash simulation, the clashes will be resolved in the process of energy minimization.  As we want to keep our initial simulation structure as close to the experimental structure as possible we first allow energy minimizer to move freely only new added residues, and restrain all original residues. So we need a list of all original atoms to restrain them. 
 
-In the simulation system resisues are renumbered. All residues in simulation systems are numbered sequentially starting with 1, and chain identifiers do not exist. Thus, the residue number mapping between the original pdb file and the simulation is as follows:
+In the simulation system residues are renumbered. Chain identifiers are not used. There is a single list of all atoms where atoms and residues are numbered sequentially starting form 1 without any gaps. To make a list of restrained atoms we need to convert PDB residue numbers to simulation residue numbers. Residue number mapping between the original pdb file and the simulation is as follows:
 
 Chain       | Original | Shift | Simulation |
 ------------|----------|-------|------------|
@@ -47,19 +50,42 @@ RNA chain C | 1-21     | 859   | 860-880    |
 RNA chain D | 1-18     | 898   | 881-898    |
 MG ions     |    -     |  -    | 899-901    |
 
-Considering this mapping, the AMBERMASK selecting all original residues is:
-~~~
-:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896
-~~~
+>## Selecting atoms in a simulation system
+>1. Create AMBERMASK representing all residues in the simulation system that are given in the original pdb entry 6N4O.   
+>2. Modify the AMBERMASK that you created to narrow selection to only backbone atoms. 
+>
+>Use the following definition of backbone atoms/: CA, N, O, P for protein, and  P, C4', O3' for nucleic. Consult the [AMBER mask selection manual](https://amber-md.github.io/pytraj/latest/atom_mask_selection).
+>
+>>## Solution
+>>1. :22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896   
+>>2. (:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896)&(@CA,N,O,P,C4',O3')
+>{: .solution}
+{: .challenge}
 
-#### 5.1 Energy minimization with AMBER
+The general minimization strategy is first to restrict all solute atoms with the experimental coordinates and relax all atoms that were added. (solvent, ions and missing fragmnents). This will help to stabilize the native conformation. There are no strict rules defining how many minimizations steps are necessary. The choice will depend on the composition of a simulation system. For a big systems with a large amount of missing residues it is safer to carry out several minimization steps gradually releasung restrarints. For example, you can first relax only solvent and ions, then lipid bilayer (if this is a membrane protein), then added fragments, then the original protein sidechains. Having more steps may be unnecessary, but it will not cause any problems. 
 
-Minimization parameters
+Let's do a two a two stage minimization. In the first stage we restrain all original atoms. In the second stage we restrain only the original backbone atoms. 
+
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/1-minimization
+~~~
+{: .bash}
+
+Simulation programs can do a lot of different things, and every type of calculation has a number of parameters that allow us to control what will be done. To run a minimization we need to make an input file describing exactly what we want to do and how we want to do it:
+
+- instruct a simulation program to minimize energy  
+- choose a method of minimization  
+- specify the maximum number of cycles of minimization  
+- apply restraints to a subset of atoms (optionally)
+
+A simulation program reads simulation parameters from an input file. Simulation parameters in AMBER are called "FLAGS". The Table below lists some important minimization FLAGS.   
+
+#### AMBER minimization parameters
 
 | Flag        | Value     | Description
 |-------------|-----------|-----------
 |imin         |     1     | Turn on minimization
-|ntmin        | 0 - 4     | Flag for the method of minimization    
+|ntmin        | 0,1,2,3   | Flag for the method of minimization    
 |maxcyc       | integer   | The maximum number of cycles of minimization  
 |ncyc         | integer   | If NTMIN=1 switch from SD to CG after NCYC cycles  
 |ntpr         | integer n | Print energies every n steps    
@@ -67,7 +93,7 @@ Minimization parameters
 |restraint_wt | float     | Restraint force kcal/mol   
 |restraintmask| ambermask | Specifies restrained atoms   
 
-Methods of minimization
+#### Methods of minimization
 
 |--|
 |0 |Steepest descent+conjugate gradient. The first 4 cycles are steepest descent at the start of the run and after every nonbonded pairlist update.
@@ -75,29 +101,21 @@ Methods of minimization
 |2 | Steepest descent only
 |3 | XMIN family methods. The default is LBFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno). It is a popular algorithm in machine learning. The method incrementally learns from previous steps, so that it can make the next step more accurate. It converges considerably faster than CG, but requires more memory.
 
-Minimization input file *min1.in*
+Example minimization input file *min_1.in*
 ~~~
-Energy minimization
-&cntrl
-imin=1, ntmin=0, maxcyc=400,
-ntpr=5,
-ntr=1,
-restraint_wt=100,
+Title line. Energy minimization, stage 1.  
+&cntrl 
+imin=1, ntmin=0, maxcyc=200,    ! Minimization, method, number of cycles 
+ntpr=5,                         ! Print energies every ntpr steps
+ntr=1,                          ! Use harmonic cartesian restraints   
+restraint_wt=100.0,             ! Restraint force kcal/mol
 restraintmask="(:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896)",
 &end
 END
 ~~~
 {: .file-content}
 
-For convenience make links in the working directory pointing to the topology and the initial coordinates.
-~~~
-cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/1-minimization
-ln -s ../../setup/prmtop.parm7 prmtop.parm7
-ln -s ../../setup/inpcrd.rst7 inpcrd.rst7
-~~~
-{: .bash}
-
-Allocate resources
+Allocate resources. The workshop resources are limited, do not ask for more than 8 tasks.
 ~~~
 salloc --time=2:0:0 --mem-per-cpu=2000 --ntasks=8
 ~~~
@@ -105,12 +123,13 @@ salloc --time=2:0:0 --mem-per-cpu=2000 --ntasks=8
 Load AMBER module and run minimization
 ~~~
 module load StdEnv/2020 gcc ambertools
-mpiexec sander.MPI -O -i min1.in -p prmtop.parm7 -c inpcrd.rst7  -ref inpcrd.rst7 -r minimized_1.nc&
+source $EBROOTAMBERTOOLS/amber.sh 
+mpiexec sander.MPI -O -i min_1.in -p prmtop.parm7 -c inpcrd.rst7 -ref inpcrd.rst7 -r minimized_1.nc -o mdout_1&
 ~~~
 {: .bash}
 
 The option -O means: overwrite the output files if present.  
-The output from the minimization goes into the file *mdout*. The total energy of the system is printed in lines beginning with "EAMBER =". If minimization is successful we expect to see large negative energies.
+The output from the minimization goes into the file *mdout*. The total energy of the system is printed in the lines beginning with "EAMBER =". If minimization is successful we expect to see large negative energies.
 
 >## Why minimization fails?
 >When you run minimization with the input file *min1.in* as described above the program crashes after 4 cycles. Try to understand why minimization is unstable, and how to fix the problem. 
@@ -128,29 +147,116 @@ In the second round of minimization constrain only backbone atoms of all origina
 ~~~
 Continue minimization from the restart coordinates:
 ~~~
-mpiexec sander.MPI -O -i min2.in -p prmtop.parm7 -c minimized_1.nc -ref inpcrd.rst7 -r minimized_2.nc&
+mpiexec sander.MPI -O -i min_2.in -p prmtop.parm7 -c minimized_1.nc -ref inpcrd.rst7 -r minimized_2.nc -o mdout_2&
+~~~
+{: .bash}
+
+### 1.2 Heating
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/2-heating
+~~~
+{: .bash}
+
+Try in the allocated interactive shell: 
+~~~
+mpiexec sander.MPI -O -i heat.in -p prmtop.parm7 -c minimized_2.nc -ref inpcrd.rst7 -r heated.nc -o mdout&
+~~~
+{: .bash}
+
+Submit to the queue to run simulation with GPU accelerated pmemd.cuda.
+~~~
+#SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
+ml StdEnv/2020 gcc/8.4.0 cuda/10.2 openmpi/4.0.3 amber
+pmemd.cuda -O -O -i heat.in -p prmtop.parm7 -c minimized_2.nc -ref inpcrd.rst7 -r heated.nc -o heating.log
+~~~
+{: .bash}
+
+GPU version runs less than 1 min.
+
+ Flag        | Value  | Description
+-------------|--------|-----------
+dt           | 0.001  | Time step, ps. Default 0.001 
+ntt          | 1      | Constant temperature, using the Berendsen weak-coupling algorithm.
+tempi        | 150    | Initial temperature. The velocities are assigned from a Maxwellian distribution at TEMPI 
+temp0        | 300    | Reference temperature at which the system is to be kept
+tautp        | 1      | Time constant, in ps, for heat bath coupling, default is 1 ps. 
+ntp          | 1      | Flag for constant pressure dynamics. 1 - MD with isotropic position scaling
+barostat     | 1      | Berendsen (default)
+pres0        | 1      | Reference pressure, default 1 bar
+taup         | 4      | Pressure relaxation time (in ps), default 1 
+ntwx         | 1000   | Every ntwx steps, the coordinates will be written to the mdcrd file
+ntpr         | 100    | Print energies in the log every 100 steps, default 50 
+
+### 1.3 Equilibration
+#### Constrained equilibration
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_pmemd/3-equilibration
+~~~
+{: .bash}
+
+1. Turn on restart flag 
+2. Shorten BerendsenPressureRelaxationTime to 1000
+3. Decrease restraint force to 10 kcal/mol 
+4. Run for 2 ns
+
+Flag         | Value  | Description
+-------------|--------|-----------
+ntx          | 5      | Coordinates and velocities will be read from a restart file
+irest        | 1      | Restart simulations
+
+#### Unconstrained equilibration
+
+1. Switch to Landevin dynamics  
+2. Run for 2 ns.
+
+Download log file and examine energy.
+
+Ready for production.
+
+## 1.4 Production
+
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/4-production
+~~~
+{: .bash}
+
+Run for 10 ns
+
+~~~
+#!/bin/bash
+#SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
+ml StdEnv/2020 gcc/8.4.0 cuda/10.2 openmpi/4.0.3 amber
+
+pmemd.cuda -O -O -i md.in -p prmtop.parm7 -c equilibrated_2.nc -r rest.nc -o md.log
 ~~~
 
-#### 5.2 Energy minimization with NAMD
+### Convert output for plotting
+~~~
+cpptraj 
+
+readdata equilibration_1.log
+writedata test.dat equilibration_1.log[Etot] time 0.1
+~~~
+
+## 2. Running simulations with NAMD
+### 2.1 Energy minimization
 
 There are only two minimization methods in NAMD, conjugate gradient and simple velocity quenching. All input and output related parameters are configured in input files. NAMD takes only one command line argument, the name of the input file.
 
 NAMD reads constraints from a specially prepared pdb file describing constraint force for each atom in a system. Constraint forces can be given in either occupancy or beta columns. 
 
-| Parameter        | Value     | Description
-|------------------|-----------|-----------
-| minimization     | on        | Perform conjugate gradient energy minimization
-| velocityQuenching| on        | Perform energy minimization using a simple quenching scheme. 
-| numsteps         | integer   | The number of minimization steps to be performed
-| constraints      | on        | Activate cartesian harmonic restraints   
-| conskfile        |  path     | PDB file containing force constant values
-| conskcol         | X,Y,Z,O,B | Column of the PDB file to use for the position restraint force constant
-| consref          | path      | PDB file containing restraint reference positions
+ Parameter        | Value     | Description
+------------------|-----------|-----------
+ minimization     | on        | Perform conjugate gradient energy minimization
+ velocityQuenching| on        | Perform energy minimization using a simple quenching scheme. 
+ numsteps         | integer   | The number of minimization steps to be performed
+ constraints      | on        | Activate cartesian harmonic restraints   
+ conskfile        | path      | PDB file containing force constant values
+ conskcol         | X,Y,Z,O,B | Column of the PDB file to use for the position restraint force constant
+ consref          | path      | PDB file containing restraint reference positions
 
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/1-minimization
-ln -s ../../setup/prmtop.parm7 prmtop.parm7
-ln -s ../../setup/inpcrd.rst7 inpcrd.rst7
 ~~~
 {: .bash}
 
@@ -168,7 +274,7 @@ $sel set occupancy 0.0
 set sel [atomselect top "noh resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
 $sel set occupancy 100.0
 set sel [atomselect top "all"]
-$sel writepdb constrain_all_6n4o_residues.pdb
+$sel writepdb constrain_all.pdb
 quit
 ~~~
 {: .vmd}
@@ -184,9 +290,9 @@ outputname          minimized_1
 numsteps 400
 # Constraints
 constraints on
-conskFile constrain_all_6n4o_residues.pdb
+conskFile constrain_all.pdb
 conskcol O
-consref constrain_all_6n4o_residues.pdb
+consref constrain_all.pdb
 # Integrator
 minimization   on
 # AMBER FF settings 
@@ -229,94 +335,68 @@ $sel set occupancy 0.0
 set sel [atomselect top "name CA N O P C4' O3' and resid 22 to 120 126 to 185 190 to 246 251 to 272 276 to 295 303 to 819 838 to 858 860 to 868 870 to 877 879 to 885 889 to 896"]
 $sel set occupancy 10.0
 set sel [atomselect top "all"]
-$sel writepdb constrain_backbone_all_6n4o_residues_f10.pdb
+$sel writepdb constrain_all_backbone_f10.pdb
 quit
 ~~~
 {: .vmd}
 
-Run 1000 steps of minimization.
+Run 1000 minimization steps.
 ~~~
 charmrun ++local +p 8 namd2 min_2.in >&log&
 ~~~
 {:.bash}
 
-### 6. Heating and equilibration.
+### 2.2 Heating 
+After energy minimization we have the optimized coordinates that are ready for MD simulation.
+~~~
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/2-heating
+~~~
+{: .bash}
 
-After energy minimization we have the optimized coordinates that are ready to use for MD simulation.
+| Parameter                      | Value     | Description
+|--------------------------------|-----------|-----------
+|temperature                     | 150       | Generate the initial velocities at 150 K
+|tCouple                         | on        | Use Berendsen thermostat 
+|tCoupleTemp                     | 300       | Temperatute of the heat bath
+|BerendsenPressure               | on        | Use Berendsen barostat
+|BerendsenPressureRelaxationTime | 4000      | Use long relaxation time to slow down box rescaling  
+|numsteps                        | 20000     | The number of simulation steps
 
-#### 6.1. Heating
-
-Generate the initial velocities at 150 K
+### 2.3. Equilibration
+####  Constrained equilibration
 
 ~~~
-temperature 150
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/3-equilibration
 ~~~
-{: .file-content}
+{: .bash}
 
-Use Berendsen thermostat and barostat
+Read velocities and box from the restart files  
+Shorten BerendsenPressureRelaxationTime to 1000   
+Run for 2 ns
 
-~~~
-tCouple on
-tCoupleTemp 300
-BerendsenPressure on
-~~~
-{: .file-content}
+Download logs and examine energy.
 
-Long pressure relaxation time to prevent box from changing too fast
+#### Unconstrained equilibration
 
-~~~
-BerendsenPressureRelaxationTime 4000
-~~~
-{: .file-content}
-
-Run heating for 20 ps.
-
-#### 6.2 Constrained equilibration
-
-Read velocities and box from restart Files
-
-Shorten Berendsen Pressure Relaxation Time
-
-Run for 2 ns.
-
-Download and examine energy.
-
-#### 6.3 Unconstrained equilibration
-
-Switch to Landevin dynamics
-
+Switch to Landevin dynamics  
 Run for 2 ns.
 
 Download and examine energy.
 
 Ready for production.
 
-
-
-Sbatch file for running simulation on a single (GPU) node on Siku:
+## 2.4 Production
 
 ~~~
-#!/bin/bash
-#SBATCH -c8 --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-module load StdEnv/2020 intel/2020.1.217 cuda/11.0 namd-multicore
-
-charmrun ++local +p $SLURM_CPUS_PER_TASK namd2 namd_min.in
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/4-production
 ~~~
-{: .file-content}
+{: .bash}
 
-Sbatch file for running simulation on multiple nodes (CPU):
-
-~~~
-#!/bin/bash
-#SBATCH --ntasks=8 --mem-per-cpu=4000 --time=3:0:0
-
-module load StdEnv/2020  intel/2020.1.217 namd-ucx/2.14
-srun --mpi=pmi2 namd2 namd.in
-~~~
-{: .file-content}
-
-### 7. Transferring equilibrated system between simulation packages.
+## 3. Transferring equilibrated system between simulation packages.
 Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another.
+
+Simulated with GROMACS but realized that to get a reliable results you need to run constant pH - need to swithch to AMBER.
+Want to apply custom forces - move to NAMD.
 
 ```
 Examples:
@@ -325,7 +405,7 @@ Targeted molecular dynamics - namd
 Custom forces - namd
 ```
 
-#### 7.1. Moving simulation from NAMD to AMBER.
+#### 3.1. Moving simulation from NAMD to AMBER.
 
 NAMD saves coordinates, velocity and periodic box in separate files. In AMBER all information required to restart simulation is in one text (.rst7) or netcdf (.ncrst) file. To prepare AMBER restart file we first convert namd binary files to amber text restart files with VMD:
 
@@ -401,7 +481,7 @@ References:
 [Amber file formats](https://ambermd.org/FileFormats.php#restart)
 
 
-#### 5.2 Moving simulation from AMBER to GROMACS.
+#### 3.2 Moving simulation from AMBER to GROMACS.
 
 To tansfer simulation to GROMACS in addition to converting restart file we need to convert topology.
 

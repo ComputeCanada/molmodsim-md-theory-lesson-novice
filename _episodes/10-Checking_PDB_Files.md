@@ -13,21 +13,21 @@ keypoints:
 - "Small errors in the input structure may cause MD simulations to became unstable or give unrealistic results."
 ---
 
-In this lesson we will go through the steps of setting up a fully solvated protein system for simulation with GROMACS and AMBER/NAMD. While there are many commercial programs and interactive graphical interfaces designed to assist with the system preparation, we will describe system preparation using only free command line driven tools. The emphasis of this lesson is to explore the ways to create a reproducible molecular modeling workflow by automating preparation and simulation steps. 
+In this lesson we will go through the steps of setting up a fully solvated protein system for simulation with AMBER/NAMD and GROMACS. While there are many commercial programs and interactive graphical interfaces designed to assist with system preparation. While these tools are easy to use and don't require as much learning efforts as command line tools, they are offer only a limited functionality, and most importantly results obained with WEB/GUI tools are not reproducible and prone to human error. Therefore, we will focus on system preparation using only scriptable command line driven tools. The emphasis of this lesson is to expose you to the various methods that can be used to create a reproducible molecular modeling workflow by automating preparation and simulation steps. One of the advantages of such approach is that once a workflow script have been developed it can be easily modified for other systems or conditions (for example if an updated version of pdb file is released, you can prepare a new simulation system with a single click).
 
 ## Important Things to Check in a PDB File
 Small errors in the input structure may cause MD simulations to become unstable or give unrealistic results. The most common problems in PDB files include:
 
-- missing atoms
+- missing sidechain atoms
+- missing fragments
 - clashes between atoms
 - multiple chains
 - alternate conformations
 - non-protein molecules (crystallographic waters, ligands, modified amino acids, etc.)
 - disulfide bonds
-- missing amino acid residues
 - wrong assignment of the N and O atoms in the amide groups of ASN and GLN, and the N and C atoms in the imidazole ring of HIS
 
-Some problems can be identified and corrected automatically (e.g. missing atoms and some clashes) while other may have mutiple solutions (e.g. alternate conformations, several protein chains, non-protein molecules, missing residues) and require researcher's decision.
+Some problems can be identified and corrected automatically (e.g. missing atoms and some clashes) while other may have mutiple solutions (e.g. alternate conformations, several protein chains, non-protein molecules, missing residues) and require your decision.
 
 In this section we will learn how to identify and correct for multiple chains, alternate conformations, non-protein molecules, and disulphide bonds.  
 

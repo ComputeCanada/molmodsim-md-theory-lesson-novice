@@ -77,6 +77,18 @@ srun pmemd.cuda.MPI -O -i pmemd_prod.in -o production.log\
 ~~~
 {: .file-content}
 
+### NAMD
+#### Submission script for a GPU simulation (on Siku)
+~~~
+#!/bin/bash
+#SBATCH --time=2:0:0 --mem-per-cpu=2000 
+#SBATCH -c16 --gres=gpu:v100:2 --partition=all_gpus
+
+ml StdEnv/2020 cuda/11.0 namd-multicore/2.14
+namd2 +p${SLURM_CPUS_PER_TASK} +idlepoll heating.in
+~~~
+
+
 ### How to make your simulation run faster?
 It is possible to increase time step to 4 fs with hydrogen mass repartitioning. The idea is that hydrogen masses are increased and at the same time masses of the atoms to which these hydrogens are bonded are decreased to keep the total mass constant. Hydrogen masses can be automatically repartitioned with the *parmed* program.
 ~~~

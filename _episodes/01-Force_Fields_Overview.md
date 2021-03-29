@@ -160,7 +160,7 @@ Debiec-2016
 
 [ff15FB](https://pubs.acs.org/doi/10.1021/acs.jpcb.7b02320) 2017 The goal was to reoptimize intramolecular bond, angle, and dihedral parameters to fit MP2 level QM data without modifying the nonbonded parameters. The parameter optimization was done using [ForceBalance](https://pubs.acs.org/doi/10.1021/jz500737m) package. Same peformance as the earlier versions for equilibrium properties,  improved performance for temperature dependence. For best agreement with experiment recommended to use with the TIP3P-FB water. The TIP3P-FB model was parametrized to reproduce the temperature and pressure dependence of a wide range of thermodynamic properties.
 
-[ff19SB]https://pubs.acs.org/doi/10.1021/acs.jctc.9b00591. 2020 Backbone dihedral parameters optimized using as reference data the entire 2D quantum mechanics (QM) energy surface. Both QM and MM calculations were done in aqueous solution. The authors concluded that "ff19SB, when combined with a more accurate water model such as OPC, should have better predictive power for modeling sequence-specific behavior, protein mutations, and also rational protein design".
+[ff19SB]https://pubs.acs.org/doi/10.1021/acs.jctc.9b00591. 2020 Backbone dihedral parameters optimized using as reference data the entire 2D quantum mechanics (QM) energy surface. Both QM and MM calculations were done in aqueous solution. AMBER ff19SB uses CMAP torsional potentials. The authors concluded that "ff19SB, when combined with a more accurate water model such as OPC, should have better predictive power for modeling sequence-specific behavior, protein mutations, and also rational protein design".
 
 ### CHARMM
 
