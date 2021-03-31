@@ -3,11 +3,13 @@ title: "Electrostatic Interactions"
 teaching: 15
 exercises: 0
 questions:
-- FIXME
+- "How electrostatic interactions are calculated in periodic systems?"
 objectives:
-- ""
+- "Learn what parameters control the accuracy of electrostatic calculations"
 keypoints:
-- ""
+- "Calculation of electrostatic potentials is the most time consuming part of any MD simulation"
+- "Long-range part of electrostatic interacions is calculated by approximating Coulomb potentials on a grid" 
+- "Denser grid increases accuracy, but significantly slows down simulation"
 ---
 
 Due to the long-range behavior of Coulomb interactions, the task of computing Coulomb potentials is often the most time consuming part of any MD simulation.  Therefore, fast and efficient algorithms are required to accelerate these calculations.

@@ -3,12 +3,19 @@ title: "Water models"
 teaching: 15
 exercises: 0
 questions:
-- FIXME
+- "Why do we want to use water in out simulations?"
+- "What water models are commonly used?"
+- "How to chose a model of water for a simulation?"
 objectives:
-- ""
+- "Learn how water molecules are modeled in simulations"
+- "Understand how choice of water model can affect a simulation"
 keypoints:
-- ""
+- "Continuum models cannot reproduce the microscopic details of the protein–water interface"
+- "Water–water interactions dominate the computational cost of simulations"
+- "Good water model needs to be fast and accurate in reproduction of the bulk properties of water"
 ---
+
+### Introduction
 
 The goal of bio-molecular simulations is the accurate and predictive computer simulation of the physical properties of biological molecules in their aqueous environments. There are three main issues regarding the treatment of water in such simulations. 
 
@@ -18,8 +25,6 @@ The goal of bio-molecular simulations is the accurate and predictive computer si
 
 3. The third major issue is that proteins and nucleic acids are typically highly charged. This means that long-range Coulombic interactions need to be properly accounted for
 
-
-### Introduction
 Water models are empirical models focused on reproducing a number of properties in a particular phase. For example, some models reproduce well protein hydration energies, while others predict excellent water structure but not so good for hydration free energy. Most importantly, none of water models accurately reproduce all of the key properties of bulk water simultaneously. Inaccuracies of water models can adversely affect simulations in an unpredictable manner. 
 
 Thus, in choosing a water model for use in a molecular simulation, the desired properties of interest must be planned because it will determine which water model would be optimal for the simulation.
@@ -70,7 +75,6 @@ As we have seen before there are accuracy problems with all water models. For ex
 The last and the latest water models we will look at is the OPC (Optimal Point Charges). It belongs to the family of 3 charge, 4 point models. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
 
 ![Charge distribution of the water molecule](../fig/water_charge_densityl.gif)
-
 
 - Removing point charge positioning restrictions allowed for considerably better reproduction of the six bulk properties of water.
 

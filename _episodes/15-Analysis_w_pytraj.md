@@ -48,7 +48,7 @@ VMD
 3. Extensions - Analysis - APBS - Run APBS
 4. When prompted "Load ABBS into top molecule"
 5. Select coloring method "Volume"
-6. Adjust "Color scale data range" in the "Trajectory" tab. Try [-10 10]
+6. Adjust "Color scale data range" in the "Trajectory" tab. Try [-50 50]
 
 
 ### Using PYTRAJ in Jupyter notebook

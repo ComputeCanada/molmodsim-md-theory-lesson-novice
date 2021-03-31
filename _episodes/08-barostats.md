@@ -3,8 +3,8 @@ title: "Controlling Pressure"
 teaching: 25
 exercises: 0
 questions:
-- "Why do we want to control the temperature of our MD-simulations?"
-- "What Pressure control algorithms are commonly used?"
+- "Why do we want to control the pressure of our MD-simulations?"
+- "What pressure control algorithms are commonly used?"
 - "What are the strengths and weaknesses of these common barostats?"
 objectives:
 - ""

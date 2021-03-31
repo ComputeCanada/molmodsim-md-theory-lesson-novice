@@ -187,6 +187,31 @@ taup         | 4      | Pressure relaxation time (in ps), default 1
 ntwx         | 1000   | Every ntwx steps, the coordinates will be written to the mdcrd file
 ntpr         | 100    | Print energies in the log every 100 steps, default 50 
 
+#### Plotting energy components.
+
+Extract selected energy components from MD log and save in a table.
+~~~
+cpptraj << EOF
+readdata heating.log
+writedata energy.dat heating.log[Etot] heating.log[TEMP] heating.log[PRESS] heating.log[VOLUME] time 0.1
+EOF
+~~~
+{: .bash}
+
+Read table into pandas dataframe and plot
+~~~
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_table('energy.dat', delim_whitespace=True)
+df.columns=["Time", "Etot", "Temp", "Press", "Volume"]
+
+df.plot(subplots=True, x="Time", figsize=(6, 8))
+plt.legend(loc='best')
+plt.show()
+~~~
+{: .python}
+
 ### 1.3 Equilibration
 #### Constrained equilibration
 ~~~
@@ -213,7 +238,7 @@ Download log file and examine energy.
 
 Ready for production.
 
-## 1.4 Production
+### 1.4 Production
 
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/4-production
@@ -230,20 +255,25 @@ ml StdEnv/2020 gcc/8.4.0 cuda/10.2 openmpi/4.0.3 amber
 pmemd.cuda -O -O -i md.in -p prmtop.parm7 -c equilibrated_2.nc -r rest.nc -o md.log
 ~~~
 
-### Convert output for plotting
+#### Managing trajectories
+You can remove everything not essential for processing for example water and ions. The following command will remove everything except residues from 1 to 901 and save every second frame in the file mdcrd_nowat.nc
 ~~~
-cpptraj 
-
-readdata equilibration_1.log
-writedata test.dat equilibration_1.log[Etot] time 0.1
+cpptraj<<EOF
+parm prmtop.parm7
+trajin mdcrd.nc 1 last 2
+strip !(:1-901)
+trajout mdcrd_nowat.nc 
+parmwrite out prmtop-nowat.parm7
+run
+EOF
 ~~~
+{: .bash}
 
 ## 2. Running simulations with NAMD
 ### 2.1 Energy minimization
-
 There are only two minimization methods in NAMD, conjugate gradient and simple velocity quenching. All input and output related parameters are configured in input files. NAMD takes only one command line argument, the name of the input file.
 
-NAMD reads constraints from a specially prepared pdb file describing constraint force for each atom in a system. Constraint forces can be given in either occupancy or beta columns. 
+NAMD reads constraints from a specially prepared pdb file describing constraint force for each atom in a system. Constraint forces can be given in x,y,z, occupancy or beta columns. 
 
  Parameter        | Value     | Description
 ------------------|-----------|-----------
@@ -307,9 +337,9 @@ scnb           2.0
 ljcorrection   on
 # PME 
 PME                 on 
-PMEGridSizeX        128  
-PMEGridSizeY        128
-PMEGridSizeZ        128 
+PMEGridSizeX        140  
+PMEGridSizeY        140
+PMEGridSizeZ        140 
 # Periodic cell 
 cellBasisVector1   137  0.0 0.0 
 cellBasisVector2   0.0 137  0.0 
@@ -355,7 +385,7 @@ cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/2-heating
 
 | Parameter                      | Value     | Description
 |--------------------------------|-----------|-----------
-|temperature                     | 150       | Generate the initial velocities at 150 K
+|temperature                     | 150       | Generate velocities at 150 K
 |tCouple                         | on        | Use Berendsen thermostat 
 |tCoupleTemp                     | 300       | Temperatute of the heat bath
 |BerendsenPressure               | on        | Use Berendsen barostat
@@ -364,7 +394,6 @@ cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/2-heating
 
 ### 2.3. Equilibration
 ####  Constrained equilibration
-
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/3-equilibration
 ~~~
@@ -372,41 +401,25 @@ cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/3-equilibration
 
 Read velocities and box from the restart files  
 Shorten BerendsenPressureRelaxationTime to 1000   
-Run for 2 ns
-
-Download logs and examine energy.
+Run for 2 ns.  
 
 #### Unconstrained equilibration
-
 Switch to Landevin dynamics  
-Run for 2 ns.
-
-Download and examine energy.
-
-Ready for production.
+Run for 2 ns.  
 
 ## 2.4 Production
-
 ~~~
 cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/4-production
 ~~~
 {: .bash}
+Run for 10 ns.  
 
 ## 3. Transferring equilibrated system between simulation packages.
-Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another.
-
-Simulated with GROMACS but realized that to get a reliable results you need to run constant pH - need to swithch to AMBER.
+Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another. Imagine that you started your project with GROMACS, but later realized that you need to run a constant pH simulation. You need to swithch to AMBER. Want to study conformational transitions? Gaussian accelerated MD is not available in GROMACS. Another reason to move to AMBER/NAMD. 
 Want to apply custom forces - move to NAMD.
 
-```
-Examples:
-Constant pH witn replica exchange - Amber
-Targeted molecular dynamics - namd
-Custom forces - namd
-```
 
 #### 3.1. Moving simulation from NAMD to AMBER.
-
 NAMD saves coordinates, velocity and periodic box in separate files. In AMBER all information required to restart simulation is in one text (.rst7) or netcdf (.ncrst) file. To prepare AMBER restart file we first convert namd binary files to amber text restart files with VMD:
 
 ~~~
@@ -486,14 +499,126 @@ References:
 To tansfer simulation to GROMACS in addition to converting restart file we need to convert topology.
 
 First convert AMBER topology to GROMACS
-
 ~~~
-module --force purge
-module load StdEnv/2020 gcc ambertools python scipy-stack
+module load StdEnv/2020 gcc ambertools
 source $EBROOTAMBERTOOLS/amber.sh
+cd ~/scratch/workshop/pdb/6N4O/simulation/sim_gromacs/0-setup
 python
 ~~~
 {: .bash}
+
+~~~
+import parmed as pmd
+amber = pmd.load_file("prmtop.parm7", "inpcrd.rst7")
+amber.save('topol.top')
+amber.save('inpcrd.gro')
+~~~
+{: .python}
+
+Make index file with groups of atoms that we will want to restrain, original residues and backbone of the original residues.
+
+AMBER original residues
+~~~
+:22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896
+~~~
+AMBER backbone 
+~~~
+@CA,N,O,P,C4',O3'
+~~~
+
+Position restraints are interactions within molecules, therefore they must be included within the correct `moleculetype` block in the topolog after all atoms are defined (after the `atoms` block). 
+The end of the `moleculetype` block  is OK.
+
+The atom numbers in position restraints `.itp` files must match the atom numbers in a corresponding `moleculetype` block. Our topology file `gromacs.top`  has several molecule types. The protein is the first `system1` molecule, and nucleic is the  second `system2` molecule.
+WARNING: genrestr can generate the correctly numbered restraints file only for the first molecule. If you need to restrain the second molecule the tool will not work, and you are on your own. To generate a valid constraint file you need to shift indexes in the posre.itp file by the number of atoms in the preceding molecule(s).
+
+Thus we can restrain only protein. Let's prepare position restraint files for `system1`.
+~~~
+gmx make_ndx -f inpcrd.gro <<EOF
+del5-36
+del6-7
+r22-120|r126-185|r190-246|r251-272|r276-295|r303-819|r838-858
+name 6 Orig_prot
+6&aCA
+6&aN
+6&aO
+7|8|9
+del 7-9
+name 7 Orig_prot_backbone
+q
+EOF
+~~~
+
+Check groups:
+~~~
+gmx make_ndx  -n index.ndx 
+~~~
+{: .bash}
+
+Generate positional restraints files
+~~~
+gmx genrestr -f inpcrd.gro -fc 500.0 -n index.ndx -o orig_prot.itp<<EOF
+Orig_prot
+EOF
+gmx genrestr -f inpcrd.gro -fc 50.0 -n index.ndx -o orig_prot_backbone.itp<<EOF
+Orig_prot_backbone
+EOF
+~~~
+{: .bash}
+
+Add definitions of the position restraints in the topology "gromacs.top". Use a text editor of your choice to insert the following lines at the end of the system1 molecule block:
+
+~~~
+#ifdef ORIG_PROT_POSRES
+#include "orig_prot.itp"
+#endif
+#ifdef ORIG_PROT_BACKBONE
+#include "orig_prot_backbone.itp"
+#endif
+~~~
+{: .text}
+
+Now we can include any of thete files from the minimization input file
+~~~
+; Turn on position restraints
+define = -DORIG_PROT_POSRES
+; Run parameters
+integrator              = steep     
+nsteps                  = 400     
+; Output control
+nstxout                 = 0       
+nstvout                 = 0     
+nstfout                 = 0        
+nstenergy               = 5    
+nstlog                  = 5    
+nstxout-compressed      = 2000   
+; Bond parameters
+continuation            = no   
+constraint_algorithm    = shake    
+constraints             = h-bonds  
+; Neighborsearching
+cutoff-scheme           = Verlet   
+nstlist                 = 10  
+rcoulomb                = 0.8    
+rvdw                    = 0.8
+DispCorr                = Ener ; anaytic VDW correction 
+; Electrostatics
+coulombtype             = PME    
+pme_order               = 4        
+fourier-nx              = 140
+fourier-ny              = 140
+fourier-nz              = 140
+~~~
+{: .file-content}
+
+Make binary topology 
+~~~
+gmx grompp -f min.mdp -p gromacs.top -c inpcrd.gro -r inpcrd.gro -o input.tpr<<EOF
+q
+EOF
+~~~
+
+
 
 ~~~
 import parmed as pmd
@@ -530,7 +655,7 @@ Running simulation
 ~~~
 #SBATCH --mem-per-cpu=4000 --time=10:0:0 -c16
 module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 gromacs
-gmx mdrun
+gmx mdrun -s input.tpr
 ~~~
 {: .bash}
 

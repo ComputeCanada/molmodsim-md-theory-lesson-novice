@@ -1,13 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+#                                                    real   expected (ns/day) 
+# namd-ucx 1 CPU 2000 steps  1746.299927              0.1    0.1
+#          4                  477.444244    436.5
+#          40    20000        69.8423889    43.65 
+#         128                   
+#         160                                         9.06    16    56.6 % 
+#         256                                         13.0    25.6  50.8 %                                 
 fig, ax = plt.subplots()
 fig.subplots_adjust(left=0.26)
 fig.set_size_inches(9,11)
 # Format: software/resources, parallel speed (ns/day), color, [serial speed (ns/day)]
 benchmark=[
         [ 'AMBER/18, pmemd.MPI\n 32 tasks x 1 core',                  2.16, 'tab:green' ],        
-	[ 'NAMD-multicore/2.14\n 1 task x 32 cores',          2.18, 'tab:red' ],
+	[ 'NAMD-multicore/2.14\n 1 task x 32 cores',                  2.18, 'tab:red' ],
         [ 'AMBER/18, pmemd.MPI\n 64 tasks x 1 core',                  3.62, 'tab:green' ],
 	[ 'NAMD-UCX/2.14\n 80 tasks x 1 core',                        4.67, 'tab:red' ],
         [ 'AMBER/18, pmemd.MPI\n128 tasks x 1 core',                  5.77, 'tab:green' ], 
@@ -18,7 +24,8 @@ benchmark=[
         [ 'GROMACS/2020.4, AVX2\n32 tasks x 1 core',                 10.27, 'tab:blue' ],
         [ 'GROMACS/2020.4, AVX512\n32 tasks x 1 core',               10.99, 'tab:blue' ],
         [ 'NAMD-multicore-cuda/2.14\n1 task x 40 cores, 2 GPUs',     11.17, 'tab:red' ],
-        [ 'GROMACS/2020.4, CUDA\n2 tasks x 8 cores, 2 GPUs', 12.39, 'tab:blue' ],    
+        [ 'GROMACS/2020.4, CUDA\n2 tasks x 8 cores, 2 GPUs',         12.39, 'tab:blue' ],    
+        [ 'NAMD-UCX/2.14\n256 tasks x 1 core',                       13.00, 'tab:red' ],     
         [ 'GROMACS/2020.4, AVX2\n64 tasks x 1 core',                 17.03, 'tab:blue' ],
         [ 'GROMACS/2020.4, AVX512\n64 tasks x 1 core',               20.76, 'tab:blue' ],
         [ 'GROMACS/2020.4, CUDA\n1 task x 8 cores, 1 GPU',           22.25, 'tab:blue' ],       
@@ -36,7 +43,7 @@ software=[s[0] for s in benchmark]
 rate=[s[1] for s in benchmark]
 clr=[s[2] for s in benchmark]
 gmx_serial=0.522
-
+namd_serial=0.1
 
 y_pos = np.arange(len(rate))
 ax.barh(y_pos, rate, color=clr)
@@ -50,14 +57,17 @@ ax.grid(which='major', linestyle='-', linewidth='0.7', alpha=0.6, axis='x')
 ax.grid(which='minor', linestyle='-', linewidth='0.5', alpha=0.2, axis='x')
 ax.set_axisbelow(True)
 
-
+i=8
+ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(namd_serial*160))+"%", color="white")
 i=10
 ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(gmx_serial*32))+"%", color="white")
-i=14
+i=13
+ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(namd_serial*256))+"%", color="white")
+i=15
 ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(gmx_serial*64))+"%", color="white")
-i=19
+i=20
 ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(gmx_serial*128))+"%", color="white")
-i=23
+i=24
 ax.text(rate[i]-6, i-0.1, "{:.1f}".format(rate[i]*100/(gmx_serial*256))+"%", color="white")
 
 
