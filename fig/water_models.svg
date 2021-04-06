@@ -263,9 +263,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.38944511"
-     inkscape:cx="757.48801"
-     inkscape:cy="785.73332"
+     inkscape:zoom="1"
+     inkscape:cx="321"
+     inkscape:cy="1347"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -273,31 +273,21 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="1440"
      inkscape:window-height="822"
-     inkscape:window-x="470"
-     inkscape:window-y="74"
+     inkscape:window-x="123"
+     inkscape:window-y="56"
      inkscape:window-maximized="0"
      fit-margin-top="5"
      fit-margin-left="5"
      fit-margin-right="5"
      fit-margin-bottom="5"
      showborder="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2144"
-       spacingx="5.2916666"
-       spacingy="5.2916666"
-       dotted="false"
-       color="#3f77ff"
-       opacity="0.1254902"
-       units="px"
-       empcolor="#1d40e3"
-       empopacity="0.25098039"
-       originx="147.69308"
-       originy="384.81416" />
     <sodipodi:guide
-       position="253.5268,-169.62492"
+       position="253.52679,-169.62491"
        orientation="0,-1"
        id="guide4252" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid102" />
   </sodipodi:namedview>
   <g
      inkscape:label="Layer 1"
@@ -537,5 +527,21 @@
          style="stroke-width:0.264583"
          x="147.28587"
          y="25.236254">OPC</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -129.17281,-231.35575 H 21.639691"
+       id="path104" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 77.202191,-234.00158 H 238.59802"
+       id="path106" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 90.431357,-24.980751 H 225.36886"
+       id="path108" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -129.17281,-24.980751 H 21.639691"
+       id="path110" />
   </g>
 </svg>
