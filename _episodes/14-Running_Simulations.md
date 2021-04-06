@@ -455,7 +455,6 @@ python
 ~~~
 {: .bash}
 
-
 ~~~
 import parmed as pmd
 import numpy as np
@@ -477,10 +476,9 @@ quit()
 We converted NAMD restart files to AMBER restart and we can continue simulation with AMBER. AMBER suite includes several simulation codes: sander, sander.MPI, pmemd, pmemd.MPI, pmemd.cuda. Sander is free version, pmemd is commercial. Sander and pmemd are serial (CPU only) programs; sander.MPI and pmemd.MPI are parallel (CPU only); and pmemd.cuda is GPU version.
 
 Submitting pmemd.cuda on Siku:
-
 ~~~
 #SBATCH --mem-per-cpu=4000 --time=3:0:0 --gres=gpu:v100:1 --partition=all_gpus
-ml StdEnv/2016.4 nixpkgs/16.09  gcc/7.3.0  cuda/9.2.148  openmpi/3.1.2 amber/18.10-18.11 scipy-stack
+ml StdEnv/2020 gcc/8.4.0 cuda/10.2 openmpi/4.0.3 amber
 
 pmemd.cuda -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restart.rst7
 ~~~
@@ -488,14 +486,11 @@ pmemd.cuda -O -i pmemd_prod.in -o production.log -p ../../prmtop.parm7 -c restar
 
 PMEMD is highly optimized to do all computations in one GPU, and it runs exceptionally fast. It CANNOT be used efficiently on more than one GPU because of the overhead from moving data between GPUs.
 
-- Note: pmemd.cuda is unstable with nfft = 144, but stable with nfft = 128 or 256.
-
 References:
 [Amber file formats](https://ambermd.org/FileFormats.php#restart)
 
 
 #### 3.2 Moving simulation from AMBER to GROMACS.
-
 To tansfer simulation to GROMACS in addition to converting restart file we need to convert topology.
 
 First convert AMBER topology to GROMACS
@@ -506,7 +501,6 @@ cd ~/scratch/workshop/pdb/6N4O/simulation/sim_gromacs/0-setup
 python
 ~~~
 {: .bash}
-
 ~~~
 import parmed as pmd
 amber = pmd.load_file("prmtop.parm7", "inpcrd.rst7")
@@ -515,24 +509,20 @@ amber.save('inpcrd.gro')
 ~~~
 {: .python}
 
-Make index file with groups of atoms that we will want to restrain, original residues and backbone of the original residues.
+Make index files with groups of atoms that we want to restrain, (one for the original residues and another for backbone of the original residues).
 
-AMBER original residues
+To recap, the original residues are
 ~~~
 :22-120,126-185,190-246,251-272,276-295,303-819,838-858,860-868,870-877,879-885,889-896
 ~~~
-AMBER backbone 
-~~~
-@CA,N,O,P,C4',O3'
-~~~
 
-Position restraints are interactions within molecules, therefore they must be included within the correct `moleculetype` block in the topolog after all atoms are defined (after the `atoms` block). 
-The end of the `moleculetype` block  is OK.
+Position restraints are defined within molecule blocks, they must be included within the correct `moleculetype` block after all atoms are defined (after the `atoms` block). The end of the `moleculetype` block  is a good place.
 
-The atom numbers in position restraints `.itp` files must match the atom numbers in a corresponding `moleculetype` block. Our topology file `gromacs.top`  has several molecule types. The protein is the first `system1` molecule, and nucleic is the  second `system2` molecule.
-WARNING: genrestr can generate the correctly numbered restraints file only for the first molecule. If you need to restrain the second molecule the tool will not work, and you are on your own. To generate a valid constraint file you need to shift indexes in the posre.itp file by the number of atoms in the preceding molecule(s).
+The atom numbers in position restraints `.itp` files must match the atom numbers in a corresponding `moleculetype` block. Our topology file `gromacs.top`  includes several molecules. The protein is the first, `system1` molecule. The nucleic acids are is the second `system2` and the third `system3` molecules.
 
-Thus we can restrain only protein. Let's prepare position restraint files for `system1`.
+WARNING: the genrestr program can generate the correct restraints file only for the first molecule. If you need to restrain the second molecule this tool will not work. To generate a valid constraint file you need to shift indexes in the posre.itp file by the number of atoms in the preceding molecule(s). This can be done by generating separate topology files for each of the RNA chains.
+
+This is a long job, so for now we will restrain only protein. Let's prepare position restraint files for `system1`.
 ~~~
 gmx make_ndx -f inpcrd.gro <<EOF
 del5-36
@@ -555,7 +545,7 @@ gmx make_ndx  -n index.ndx
 ~~~
 {: .bash}
 
-Generate positional restraints files
+Generate positional restraints files, one for all original protein atoms, another for the backbone of the original protein residues.
 ~~~
 gmx genrestr -f inpcrd.gro -fc 500.0 -n index.ndx -o orig_prot.itp<<EOF
 Orig_prot
@@ -566,8 +556,7 @@ EOF
 ~~~
 {: .bash}
 
-Add definitions of the position restraints in the topology "gromacs.top". Use a text editor of your choice to insert the following lines at the end of the system1 molecule block:
-
+Add definitions of the position restraints to the topology "gromacs.top". Use a text editor of your choice to insert the following lines at the end of the system1 molecule block:
 ~~~
 #ifdef ORIG_PROT_POSRES
 #include "orig_prot.itp"
@@ -578,7 +567,7 @@ Add definitions of the position restraints in the topology "gromacs.top". Use a 
 ~~~
 {: .text}
 
-Now we can include any of thete files from the minimization input file
+Now we can include any of these two files from the minimization input file by defining a corresponding variable
 ~~~
 ; Turn on position restraints
 define = -DORIG_PROT_POSRES

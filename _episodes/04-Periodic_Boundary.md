@@ -15,31 +15,30 @@ keypoints:
 ---
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. Application of PBC to simulations allows to include the influence of bulk solvent or crystalline environments.
 
+![](../fig/periodic_boundary.png){: width="240" }
+
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
-
-
 
 > ## Specifying Periodic Box
 >  **GROMACS**
 >
-> The box specification is integrated into structure files. The box parameters can be set using the [*editconf*](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) or manually. The *editconf* program accepts the following options:
+> The box specification is integrated into structure files. The box parameters can be set using the [*editconf*](http://manual.gromacs.org/archive/5.0/programs/gmx-editconf.html) program or manually. The *editconf* program accepts the following options:
 >
-> *-bt* &emsp; Box type: *triclinic, cubic, dodecahedron, octahedron*<br>
->
-> *-box* &emsp; Box vectors lengths *a, b, c* in nm.<br>
->
-> *-angles* &emsp; Box vectors angles *bc, ac, ab* in degrees.
->
-> *-d* &emsp; Distance between the solute and the box in nm.
+>-----------------|------------------|
+> *-bt* &emsp;    | Box type            | *triclinic, cubic, dodecahedron, octahedron*
+> *-box* &emsp;   | Box vectors lengths, *a, b, c* | nm
+> *-angles* &emsp;| Box vectors angles, *bc, ac, ab* | degrees
+> *-d* &emsp;     | Distance between the solute and the box | nm
 >
 >Example:
 >~~~
+>module load StdEnv/2020 gcc gromacs
 >wget http://files.rcsb.org/view/1lyz.pdb
 >gmx pdb2gmx -f 1lyz.pdb -ff amber99sb-ildn -water spce -ignh
 >gmx editconf -f conf.gro -o conf_boxed.gro -d 1.0 -bt cubic
 >~~~
 > {: .bash}
-> in the example above the *editconf* program will append box vectors to the structure file *'conf.gro'* and save it in the file *'conf_boxed.gro'*. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the *CRYST1* record of a PDB file with the equations:
+> In the example above the *editconf* program will append box vectors to the structure file *'conf.gro'* and save it in the file *'conf_boxed.gro'*. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the *CRYST1* record of a PDB file with the equations:
 >
 >$$xx=a, yy=b\cdot\sin(\gamma), zz=\frac{v}{(a*b*\sin(\gamma))}$$
 >
@@ -51,7 +50,7 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 >
 > **NAMD**
 >
-> Periodic box is specified in the run parameter file by three unit cell vectors. the units are <span>&#8491;</span>.
+> Periodic box is specified in the run parameter file by three unit cell vectors, the units are <span>&#8491;</span>.
 >~~~
 > # cubic box
 > cellBasisVector1 100 0 0
@@ -72,31 +71,25 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 Solvated macromolecules rotate during simulations. Furthermore macromolecules may undergo conformational changes. Often these changes are of major interest and shoud not be restricted in any way. If the molecule is not spherical and the box dimension is not large enough rotation will result in the interaction between copies. This artefactual interaction may influence the motions of the system and affect the outcome of the simulation. To avoid these problems the minimum box dimension should be larger than the largest dimension of the macromolecule plus at least 10 <span>&#8491;</span>.
 
 ### Box shape
- A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron or the truncated octahedron. These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[ref]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[ref]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
+ A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron (any polyhedron with 12 faces) or the truncated octahedron (14 faces). These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[1]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[2]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
 
- ### Cut-off radius
- In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
+### Cut-off radius and box size
+In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
 
-
- >## Comparing periodic boxes
- >Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and octahedral boxes with the 15<span>&#8491;</span> distance between the solute and the box edge.
+>## Comparing periodic boxes
+>Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and truncated octahedral boxes with the 15 <span>&#8491;</span> distance between the solute and the box edge.
 >
->Compare the volumes of the boxes.
 >Which of the boxes will be the fastest to simulate?
 {: .challenge}
 
-Truncated octahedron (implemented in AMBER)
-V = x * y * z * sqrt(1.0 - cos(alpha)**2 - cos(beta)**2 - cos(gamma)**2 + 
-        2.0 * cos(alpha) * cos(beta) * cos(gamma)) 
+So what are the triclinic boxes?  There turns out that any repeating shape that fills all of space  has an equivalent triclinic box. Given a truncated octahedron, for example, there is an equivalent triclinic box with exactly the same volume that, when tiled periodically throughout space, produces exactly the same repeating pattern of atoms.  And that means that if you have triclinic boxes, you automatically have all other shapes as well.
 
-x, y, z are the box lengths: x = y = z = a in triclinic system. alpha, beta, 
-gamma are the box angles which equal 109.47 (angles between each sides) 
+Given the minimum required distance between periodic copies, the optimal triclinic cell has about 71% the volume of the optimal rectangular cell, which means your system only needs about 71% the number of atoms.  So although this isn't a huge optimization, it does allow you to use a somewhat smaller system that can be simulated somewhat faster.
 
-Gromacs manual:
-[Periodic box types](https://manual.gromacs.org/current/reference-manual/algorithms/periodic-boundary-conditions.html?highlight=periodic%20boundary%20conditions)
+Truncated octahedron periodic boundary conditions are isomorphic to parallelepiped boundary conditions with specific cell vectors. If you view an octahedral simulation in VMD, it will look like a parallelepiped and not a 
+truncated octahedron, but they have exactly the same properties, so it doesn't matter. 
 
-Truncated octahedron periodic boundary conditions are isomorphic to 
-parallelepiped boundary conditions with specific cell vectors.
-If you view the simulation in VMD, it will look like a parallelepiped and not a 
-truncated octahedron, but they have exactly the same properties, so it 
-doesn't matter. 
+References:  
+1. [Molecular dynamics simulations with constrained roto-translational motions: Theoretical basis and statistical mechanical consistency](https://aip.scitation.org/doi/10.1063/1.480557) 
+2. [The effect of box shape on the dynamic properties of proteins simulated under periodic boundary conditions](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341)
+3. [Periodic box types in Gromacs manual](https://manual.gromacs.org/current/reference-manual/algorithms/periodic-boundary-conditions.html?highlight=periodic%20boundary%20conditions)

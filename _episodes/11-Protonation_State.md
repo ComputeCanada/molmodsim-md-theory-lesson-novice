@@ -106,6 +106,11 @@ quit
 ### Limitations of Fixed Protonation State Simulations
 Molecular dynamics simulations employing constant protonation states have many drawbacks. In real systems, conformational changes are often accompanied by changes in protonation pattern. In fixed state molecular dynamics simulations, these processes are decoupled hindering understanding proton-coupled conformational dynamics. If proton-coupled dynamics is essential for your research consider using constant *pH* simulations. Constant pH MD is currently implemented in *AMBER* and *NAMD*. At the moment it is not officially implemented in *GROMACS*, but the modified *GROMACS* version is available [[6](https://pubs.acs.org/doi/10.1021/ct200061r)].
 
+References
+
+1. [Constant-pH Molecular Dynamics Simulations for Large Biomolecular Systems](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00875)
+
+2. [ GPU-Accelerated Implementation of Continuous Constant pH Molecular Dynamics in Amber: pKa Predictions with Single-pH Simulations](https://pubs.acs.org/doi/10.1021/acs.jcim.9b00754)
 
 > ## Combining all structure preparation steps in one *VMD* script
 > Combine all previous steps together and create *VMD* script to prepare MD simulation system for the hydrolaze PDB structure 1RGG. The script should perform the following steps:

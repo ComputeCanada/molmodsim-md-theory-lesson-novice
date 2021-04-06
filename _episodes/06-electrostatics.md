@@ -14,7 +14,15 @@ keypoints:
 
 Due to the long-range behavior of Coulomb interactions, the task of computing Coulomb potentials is often the most time consuming part of any MD simulation.  Therefore, fast and efficient algorithms are required to accelerate these calculations.
 
-Particle Mesh Ewald (PME) method is the most widely used method using the Ewald decomposition technique, the potential is divided into two parts; a real space part (computed in real space) and a Fourier space part (computed in Fourier space). The real space sum is short-ranged and as for the LJ potentials, it can be truncated when sufficiently decayed. The Fourier space part, on the other hand, is long-ranged but smooth and periodic. Therefore, its Fourier spectrum decays rapidly in Fourier space. This sum can then be accelerated by utilizing fast Fourier transforms (FFT).  The method requires periodic boundary conditions and charge neutrality of the molecular system in order to accurately calculate the total Coulombic interaction.
+Particle Mesh Ewald (PME) method is the most widely used method using the Ewald decomposition technique, the potential is divided into two parts; a real space part (computed in real space) and a Fourier space part (computed in Fourier space). The real space sum is short-ranged and as for the LJ potentials, it can be truncated when sufficiently decayed. It is a direct sum of contributions from all particles within a cutoff radius. It is the Particle part of PME.
+
+The Fourier space part, on the other hand, is long-ranged but smooth and periodic. This part is a slowly varying function. PME takes advantage of the fact that all periodic functions can be represented with a sum of sine or cosine components, and slowly varying functions can be accurately described by only a limited number of low frequency components (k vectors). In other words Fourier transform of the long-range Coulomb interaction decays rapidly in Fourier space, and summation converges fast.    
+
+![](../fig/PME_decomp.svg){:width="480"}
+
+The long range contribution can then be efficiently computed in Fourier space using FFT. Fourier transform calculation is discrete and requires the inpput data to be on a regular grid. It is the  Mesh part of PME. As point charges in a simulation are non-equispaced, they need to be interpolated to obtain charge values in equispaced grid cells. 
+
+![](../fig/PME.png)
 
 Parameters controlling PME calculations are listed in the Table below.
 

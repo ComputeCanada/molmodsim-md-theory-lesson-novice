@@ -16,16 +16,11 @@ keypoints:
 ---
 
 ### Introduction
+The goal of bio-molecular simulations is the accurate and predictive computer simulation of the physical properties of biological molecules in their aqueous environments. There are two approaches to solvation: a suitable amount of explicit water molecules can be added to prepare a fully solvated simulation system. Alternatively, water can be treated as a continuous medium instead of individual molecules. As continuum models do not add any non-bonded interactions to a simulation system, they are significantly faster than explicit solvation. However there a limitations of an implitic water models. They cannot reproduce the microscopic details of the protein–water interface. The conformational ensembles produced by GBSA models in other studies differ significantly from those produced by explicit solvent and do not identify the protein's native state [Free energy landscape of protein folding in water: explicit vs. implicit solvent](https://onlinelibrary.wiley.com/doi/abs/10.1002/prot.10483). In particular, salt bridges are overstabilized, and a higher-than-native alpha helix population was observed. These models are still useful for example for calculation of binding free energies or for flexible protein-protein docking. Most molecular dynamics simulations are carried out with the solute surrounded by a droplet or periodic box of explicit water molecules. 
 
-The goal of bio-molecular simulations is the accurate and predictive computer simulation of the physical properties of biological molecules in their aqueous environments. There are three main issues regarding the treatment of water in such simulations. 
+In a typical case, water molecules will account for over 80% of the particles in the simulation. Water–water interactions dominate the computational cost of such simulations, so the model used to describe the water needs to be fast as well as accurate
 
-1. The first is the accurate description of the protein–water interaction. While continuum models have shown some promise, they cannot reproduce the microscopic details of the protein–water interface. Consequently, most bio-molecular simulations are carried out with the solute surrounded by a droplet or periodic box of explicit water molecules. 
-
-2. In a typical case, water molecules will account for over 80% of the particles in the simulation. Water–water interactions dominate the computational cost of such simulations, so the model used to describe the water needs to be fast as well as accurate
-
-3. The third major issue is that proteins and nucleic acids are typically highly charged. This means that long-range Coulombic interactions need to be properly accounted for
-
-Water models are empirical models focused on reproducing a number of properties in a particular phase. For example, some models reproduce well protein hydration energies, while others predict excellent water structure but not so good for hydration free energy. Most importantly, none of water models accurately reproduce all of the key properties of bulk water simultaneously. Inaccuracies of water models can adversely affect simulations in an unpredictable manner. 
+Expliocit water models are empirical models focused on reproducing a number of bulk properties in a particular phase. For example, some models reproduce well protein hydration energies, while others predict excellent water structure but not so good for hydration free energy. Most importantly, none of water models accurately reproduce all of the key properties of bulk water simultaneously. Inaccuracies of water models can adversely affect simulations in an unpredictable manner. 
 
 Thus, in choosing a water model for use in a molecular simulation, the desired properties of interest must be planned because it will determine which water model would be optimal for the simulation.
 
@@ -60,7 +55,7 @@ Several water models with different level of complexity (the number of interacti
 ![Water Models](../fig/water_models.svg){: width="600"}
 
 #### 3-point models: TIP3P (transferable intermolecular potential) and SPC/E  (simple point-charge)
-These models have three interaction points corresponding to the atoms of the water molecule. Only oxygen atom has the Lennard-Jones parameters. While TIP3P uses a rigid geometry matching that of actual water molecules, SPC model uses more acute tetrahedral angle of 109.47°. 3-site models are commonly used because computationally they are highly efficient.
+These models have three interaction points corresponding to the atoms of the water molecule. Only oxygen atom has the Lennard-Jones parameters. While TIP3P uses a rigid geometry matching that of actual water molecules, SPC model uses more obtuse tetrahedral angle of 109.47°. The SPC/E model adds an average polarization correction to the potential energy function. The SPC/E model results in a better density and diffusion constant than the original SPC model. 3-site models are commonly used because computationally they are highly efficient.
 
 #### 4-point: TIP4P-Ew and OPC (optimal point-charge)    
 In these models the negative charge is not centered on the oxygen atom, but shifted towards hydrogen atoms. This position is represented with the fourth dummy atom (EP) located near the oxygen along the bisector of the HOH angle. 
