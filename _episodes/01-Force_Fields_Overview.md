@@ -16,7 +16,7 @@ keypoints:
 ---
 
 
-## History of Force Field Develoment
+## History of Force Field Development
 
 ### Consistent Force Field (CFF)
 CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.html#Lifson-1968) Introduced a concept of a 'consistent force field'. Introduced a methodology for deriving and validating force fields. The term 'consistent' emphasized importance of the ability to describe a wide range of compounds and physical observables (conformation, crystal structure, thermodynamic properties and vibrational spectra). After the initial derivation for hydrocarbons CFF was extended to proteins, but was very crude at that time.
@@ -25,7 +25,7 @@ CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.
 MM1, MM2 - Class 1
 MM3 - Class 2
 MM4 - Class 3
-Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level ab initio quantum chemistry computations, and the parameters were additionally adjusted.
+Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level _ab-initio_ quantum chemistry computations, and the parameters were additionally adjusted.
 
 For calculations on small and medium size organic molecules.
 
@@ -100,7 +100,7 @@ Kaminski GA, Friesner RA, Tirado-Rives J, Jorgensen WL. Evaluation and Reparamet
 
 Banks JL, Beard HS, Cao Y, Cho AE, Damm W, Farid R, et al. Integrated Modeling Program, Applied Chemical Theory (IMPACT). J Comput Chem. 2005;26: 1752–1780. doi:10.1002/jcc.20292
 
-[OPLS2.0](http://dx.doi.org/doi:10.1021/ct300203w) (2012) OPLS2 was developed to improve the accuracy of drug-like molecules. Substantially expanded data set contained QM data on more than 11,000 molecules. CM1A-BCC charges were used. The BCC terms were parametrized against the OPLS-AA charges for a core set of 112 molecules and the electrostatic potential at the HF/6-31G* level. The BCC terms were empirically adjusted to minimize the errors with regard to the ASFE using a training set of 153 molecules.
+[OPLS2.0](http://dx.doi.org/doi:10.1021/ct300203w) (2012) OPLS2 was developed to improve the accuracy of drug-like molecules. Substantially expanded data set contained QM data on more than 11,000 molecules. CM1A-BCC charges were used. The BCC terms were parameterized against the OPLS-AA charges for a core set of 112 molecules and the electrostatic potential at the HF/6-31G* level. The BCC terms were empirically adjusted to minimize the errors with regard to the ASFE using a training set of 153 molecules.
 
 Shivakumar D, Harder E, Damm W, Friesner RA, Sherman W. Improving the Prediction of Absolute Solvation Free Energies Using the Next Generation OPLS Force Field. J Chem Theory Comput. 2012;8: 2553–2558. doi:10.1021/ct300203w
 
@@ -114,7 +114,7 @@ Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field
 
 
 ### AMBER force fields
-AMBER forcefields are developed for simulations of proteins and nucleic acids and they are focused on accurate description of structures and nonbonded energies. The VDW parameters are obtained from crystal structures and lattice energies. The atomic partial charges are fitted to QM electrostatic potential without any empirical adjustments.
+AMBER forcefields are developed for simulations of proteins and nucleic acids and they are focused on accurate description of structures and non-bonded energies. The VDW parameters are obtained from crystal structures and lattice energies. The atomic partial charges are fitted to QM electrostatic potential without any empirical adjustments.
 
 [ff99](http://dx.doi.org/doi:10.1002/1096-987X(200009)21:12<1049::AID-JCC3>3.0.CO;2-F) (1999) The main idea is that the use of RESP charges, should lead to the need for fewer torsional potentials than in models with an empirical charge derivation. Potential energy surface scans were performed using four different ab initio methods, HF/6‐31G$*$, MP2/6‐31G$*$, MP2/6‐311+G (2d,p), and B3LYP/6‐311+G (2d,p).
 

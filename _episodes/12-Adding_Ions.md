@@ -7,32 +7,32 @@ questions:
 - "How to add water and ions to a simulation system?"
 - "How to choose size and shape of a solvent box?"
 objectives:
-- "Understand why it is necessary to neutlalize the simulation system."
+- "Understand why it is necessary to neutralize the simulation system."
 - "Neutralize a system."
 - "Solvate a macromolecule."
 - "Add ions to a simulation system to mimic a salt solution."
 - "Generate molecular topology for simulation with GROMACS and NAMD."
 keypoints:
-- "Simulation system must be neutralized by adding counterions to obtain the correct electrostatic energy."
+- "Simulation system must be neutralized by adding counter-ions to obtain the correct electrostatic energy."
 - "Ions are added to a simulations system to mimic composition of a local macromolecule environment."
 - "Solvent box should be large enough to allow for unrestricted conformational dynamics of a macromolecule."
 ---
 There are two main reasons to add ions to a simulation system:
 
-1. Under periodic boundary conditions and using grid-based methods to compute Coulomb energy a simulation box interacts with the infinite number of its periodic images. If simulation system is charged the electrostatic energy will essentially add to infinity. We need to neutralize the system by adding counterions to obtain the correct electrostatic energy during the simulation.
+1. Under periodic boundary conditions and using grid-based methods to compute Coulomb energy a simulation box interacts with the infinite number of its periodic images. If simulation system is charged the electrostatic energy will essentially add to infinity. We need to neutralize the system by adding counter-ions to obtain the correct electrostatic energy during the simulation.
 
 2. The conformations, dynamics and function of biological macromolecules are sensitive to salt concentration and composition of the local environment.
 
 ## Neutralizing a system
 
-Fist we will add enough counterions to neutralize the system. The neutralized system will represent a salt-free solution. Ions can be added using two approaches:
+Fist we will add enough counter-ions to neutralize the system. The neutralized system will represent a salt-free solution. Ions can be added using two approaches:
 1. Solvate the system and then replace random solvent molecules with ions.
 2. Place ions according to the electrostatic potential of the macromolecule before solvation.
 
 ### Caveats and limitations of the random ion placement
-Random placement of ions will generate a system in the completely dissociated, energetically unfavourable state. The random placement of ions is problematic if the electric charge of the macromolecule is big (for example DNA) because ions tend to form screening clouds around charged molecules rather than being distributed randomly. Random placement of ions will negatively impact the time required for the system equilibration and may affect structural stability of a macromolecule. A better approach is to place ions according to the electrostatic potential of the macromolecule. Such method is implemented in the *leap* module of the *AmberTools*. The *addions* command adds ions to simulation cells near the minima of the solute's electrostatic potential field.
+Random placement of ions will generate a system in the completely dissociated, energetically unfavorable state. The random placement of ions is problematic if the electric charge of the macromolecule is big (for example DNA) because ions tend to form screening clouds around charged molecules rather than being distributed randomly. Random placement of ions will negatively impact the time required for the system equilibration and may affect structural stability of a macromolecule. A better approach is to place ions according to the electrostatic potential of the macromolecule. Such method is implemented in the *leap* module of the *AmberTools*. The *addions* command adds ions to simulation cells near the minima of the solute's electrostatic potential field.
 
-Let's neutralize 1RGG protein using the *leap* module. We will add ions prior to solvation so that the potential from unequilibrated water will not interfere with ion placement:
+Let's neutralize 1RGG protein using the *leap* module. We will add ions prior to solvation so that the potential from un-equilibrated water will not interfere with ion placement:
 
 ~~~
 mkdir ~/scratch/workshop/pdb/1RGG/AMBER
@@ -62,7 +62,7 @@ The drawback of this calculation is that it does not take into account the charg
 
 As you can see from the equation above, to calculate the number of ions we need to know the number of water molecules in the simulation system. So we continue our *leap* session and solvate the simulation system. In this lesson we will create a simple cubic solvent box. As we discussed in the episode "Periodic Boundary Conditions", a properly solvated simulation system should have at least 10 <span>&#8491;</span> distance between the solute and the edge of the periodic box after equilibration. Standard practice is to tile a pre-equilibrated solvent box across the system and eliminate solvent molecules which clash with the solute.
 
-When water is added to the system in this way, some VDW voids at the macromolecule and the box interfaces are inevitable because packing is not perfect. In the process of equilibration the water molecules will move to fill the voids and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box wil become smaller. To compensate for this box shrinkage we need to start with a larger box size than the desired. The rule of thumb is that you need to add at least 2.5 <span>&#8491;</span> to the box size.
+When water is added to the system in this way, some VDW voids at the macromolecule and the box interfaces are inevitable because packing is not perfect. In the process of equilibration the water molecules will move to fill the voids and minimize the interaction energy. The box will shrink and the distance between the solute and the edge of the periodic box will become smaller. To compensate for this box shrinkage we need to start with a larger box size than the desired. The rule of thumb is that you need to add at least 2.5 <span>&#8491;</span> to the box size.
 
 We will use the *solvateBox* command to create the periodic solvent box around the macromolecule. The *solvateBox* command has many options. Let's create a cuboid water box around the 1RGG protein. We will use the pre-equilibrated box of SPCE water (SPCBOX), set the minimum distance between the solute and the edge of the box to 15 <span>&#8491;</span>, and request an isometric (cubic) box:
 ~~~
@@ -175,7 +175,7 @@ ATOM   1450 Cl-  Cl-   103      19.451  -3.022   8.361  1.00  0.00
 {: .file-content}
 
 We will also assign ions to chain B.  
-Do it using the global substition function of the stream editor (sed).
+Do it using the global substitution function of the stream editor (sed).
 ~~~
 cat ../1RGG_chain_A_solvated.pdb |\
 sed s/"Cl-  Cl-  "/" CL  CL  B"/g |\
@@ -211,7 +211,7 @@ at the end of the command is to automatically confirm 'y' S-S bond.
 By default *pdb2gmx* program saved topology, *GROMACS* - formatted coordinates, and position restraints in the files *topol.top*, *conf.gro*, and *posre.itp*, respectively. The names of the output files can be changed by using output options *-p*, *-o* and *-i*.
 
 ### Prepare the System Using *GROMACS* Module *pdb2gmx*.
-To demonstate how to solvate protein and add ions using *pdb2gmx* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps with this GROMACS utility. Note that in this case the neutralizing ions will be added in randomly selected positions.
+To demonstrate how to solvate protein and add ions using *pdb2gmx* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps with this GROMACS utility. Note that in this case the neutralizing ions will be added in randomly selected positions.
 
 First we generate the topology and the coordinate file using the *AMBER ff99SBildn* force field and the *spc/e* water model:
 ~~~
