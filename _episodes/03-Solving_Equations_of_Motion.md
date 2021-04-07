@@ -15,7 +15,7 @@ keypoints:
 - "The most widely used integration method is the velocity Verlet."
 - "Simulation time step must be short enough to describe the fastest motion."
 - "Time step can be increased if bonds involving hydrogens are constrained."
-- "Additional time step increase can be acheved by constraining all bonds and angles involving hydrogens."
+- "Additional time step increase can be achieved by constraining all bonds and angles involving hydrogens."
 ---
 To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step $$\delta{t}$$ during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
@@ -63,7 +63,7 @@ $\vec{r}(t+\delta t)=\vec{r}(t)+\vec{v}(t+\frac{1}{2}\delta{t}))\cdot\delta{t}$
 The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
 
-> ## Selecting Intergator
+> ## Selecting the Intergator
 > **GROMACS**
 >
 >Several integration algorithms available in GROMACS are specified in the run parameter **mdp** file.
@@ -82,8 +82,8 @@ The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap
 >
 >integrator = bd
 >; A Euler integrator for Brownian or position Langevin dynamics.
->~~~
-> {: .source}
+> ~~~
+> {: .file-content}
 > **NAMD**
 >
 >The only available integration method is Verlet.
@@ -91,7 +91,7 @@ The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap
 
 
 ## How to Choose Simulation Time Step?
-Mathematically Vertet family integrators are stable for time steps
+Mathematically Verlet family integrators are stable for time steps
 
 $$\delta{t}\leq\frac{2}{w}$$ where $$\omega$$ is angular frequency.
 
@@ -115,7 +115,7 @@ To accelerate a simulation the electrostatic interactions outside of a specified
 > tinit = 0
 >; Time of the first step
 > ~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
 > Time parameters are specified in the **mdin** run parameter file.
@@ -136,7 +136,7 @@ To accelerate a simulation the electrostatic interactions outside of a specified
 >fullElectFrequency 4
 ># Number of timesteps between full electrostatic evaluations
 >~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
 
 ### Constraint Algorithms
@@ -153,7 +153,7 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 > ## Specifying Constraints
 > **GROMACS**
 >
->SHAKE, LINKS and SETTLE constraint algorithms are implemented.
+>SHAKE, LINKS and SETTLE constraint algorithms are implemented. They are selected via keywords in mdp input files
 > ~~~
 >constraints = h-bonds
 >; Constrain bonds with hydrogen atoms
@@ -176,17 +176,17 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 >shake-tol = 0.0001
 >;  Relative tolerance for SHAKE, default value is 0.0001.
 > ~~~
-> {: .source}
+> {: .file-content}
 >SETTLE can be selected in the topology file:
 >~~~
 >[ settles ]
 >; OW    funct   doh     dhh
 >1       1       0.1     0.16333
 >~~~
-> {: .source}
+> {: .file-content}
 > **NAMD**
 >
->SHAKE and SETTLE constraint algorithms are implemented.
+>SHAKE and SETTLE constraint algorithms are implemented. They are selected via keywords in simulation input file.
 > ~~~
 >rigidBonds water
 ># Use SHAKE to constrain bonds with hydrogens in water molecules.
@@ -209,5 +209,5 @@ Because bonds in molecules are coupled satisfying all constraints is a non-linea
 >useSettle on
 ># If rigidBonds are enabled then use the SETTLE algorithm to constrain waters. The default value is on.
 > ~~~
-> {: .source}
+> {: .file-content}
 {: .callout}
