@@ -78,7 +78,7 @@ The idea is that we rescale the velocities at each step (or after a preset numbe
 ### Velocity reassignment
 Using this method, all of the velocities in the system are periodically reassigned (by assigning new randomized velocities) so that the entire system is set to the desired temperature. 
 
-Both methods do not generate the correct canonical ensemble. If the velocities are rescaled at every time step the kinetic energy will not fluctuate in time. This is inconsistenet with statistical mechanics of the canonical ensemble. These methods are not recommended for equilibrium dynamics, but they are useful for system heating or cooling. Both have advantages and downsides. If you want to heat up a system, then rescaling will make hot spots even hotter, and this is not desired. Temperature reassignment avoids this problem, but the kinetic energy of particles is no longer consistent with their potential energy, and thus needs to be redistributed. 
+Both methods do not generate the correct canonical ensemble. If the velocities are rescaled at every time step the kinetic energy will not fluctuate in time. This is inconsistent with statistical mechanics of the canonical ensemble. These methods are not recommended for equilibrium dynamics, but they are useful for system heating or cooling. Both have advantages and downsides. If you want to heat up a system, then rescaling will make hot spots even hotter, and this is not desired. Temperature reassignment avoids this problem, but the kinetic energy of particles is no longer consistent with their potential energy, and thus needs to be redistributed. 
 
 ## Weak coupling methods
 ### Berendsen thermostat
@@ -91,17 +91,17 @@ Heat flows between the simulation system and the heat bath with the rate defined
 ## Stochastic methods
 
 ### Andersen thermostat
-The Andersen thermostat controls the temperature by assigning a subset of atoms new velocities that are randomly selected from the Maxwell-Boltzmann distribution for the target temperature. The probability for a given particle to have it's velocity reassigned at each step is small and can be expressted as $$\Delta t / \tau_T$$ where $$\Delta t$$ is the time step.  This means that effectively on average every atom experiences a stochastic collision with a virtual particle every $$\Delta t$$ [[Andersen-1980][Andersen-1980]]. A variant of the Andersen thermostat in which the velocities of all atoms are randomized every $$\Delta t$$ is termed the  "massive Andersen" thermostat [[Basconi-2013][Basconi-2013]].
+The Andersen thermostat controls the temperature by assigning a subset of atoms new velocities that are randomly selected from the Maxwell-Boltzmann distribution for the target temperature. The probability for a given particle to have it's velocity reassigned at each step is small and can be expressed as $$\Delta t / \tau_T$$ where $$\Delta t$$ is the time step.  This means that effectively on average every atom experiences a stochastic collision with a virtual particle every $$\Delta t$$ [[Andersen-1980][Andersen-1980]]. A variant of the Andersen thermostat in which the velocities of all atoms are randomized every $$\Delta t$$ is termed the  "massive Andersen" thermostat [[Basconi-2013][Basconi-2013]].
 
-The Andersen thermostat correctly samples the canonic ensemble, however momentum is not conserved with this thermostat.  Due to velocity randomization it can impair some correlated motions and thus slow down the kinetics of the system. This algorithm therefore is not recommended when studying kinetics or diffusion properties of the system. This applies to all stochastic methods.
+The Andersen thermostat correctly samples the canonical ensemble, however momentum is not conserved with this thermostat.  Due to velocity randomization it can impair some correlated motions and thus slow down the kinetics of the system. This algorithm therefore is not recommended when studying kinetics or diffusion properties of the system. This applies to all stochastic methods.
 
-The number of steps between randomization of velocities to a distribution is an important parameter. Too high a collision rate (short interval beweeen randomization) will slow down the speed at which the molecules explore configuration space, whereas too low a rate (long interval beweeen randomization)  means that the canonical distribution of energies will be sampled slowly. 
+The number of steps between randomization of velocities to a distribution is an important parameter. Too high a collision rate (short interval between randomization) will slow down the speed at which the molecules explore configuration space, whereas too low a rate (long interval between randomization)  means that the canonical distribution of energies will be sampled slowly. 
 
 ### The Lowe-Andersen thermostat 
 A variant of the Andersen thermostat that conserves momentum. This method perturbs the system dynamics to a far less than the original Andersen method. This alleviates suppressed diffusion in the system. [[Koopman-2006][Koopman-2006]].
 
 ### Bussi stochastic velocity rescaling thermostat
-Extension of the Berendsen method correctred for sampling the canonical distribution. The velocities of all the particles are rescaled by a properly chosen random factor.
+Extension of the Berendsen method corrected for sampling the canonical distribution. The velocities of all the particles are rescaled by a properly chosen random factor.
 [[Bussi-2007][Bussi-2007]]
 
 ### Langevin thermostat
@@ -112,7 +112,7 @@ unnatural friction, however if the coefficient is too low, your system will fluc
 
 ## Extended system thermostats
 ### Nosé-Hoover thermostat
-The extended system method originally introduced by Nose and subsequently developed by Hoover. The idea is to consider the heat bath as an integral part of the system by addition of an artificial variable associated with a fictional "heat bath mass" to the equations of motion. An important feature of this method is that the temperature can be controlled without involving random numbers. Thus correlated motions are not impaired and this method describes kinetics and diffusion properties better. Because the time-evolution of the added variable is described by a second-order equation, heat may flow in and out of the system in an oscillatory fashion, leading to nearly periodic temperature fluctuations with the frequency proportional to the "heat bath mass". [Nose-1984][Nose-1984], [Hoover-1985][Hoover-1985]. The drawback of this thermostst is that it was shown to impart the canonical distribution as well as ergodicity  (space-filling) of the thermostatted system. 
+The extended system method originally introduced by Nose and subsequently developed by Hoover. The idea is to consider the heat bath as an integral part of the system by addition of an artificial variable associated with a fictional "heat bath mass" to the equations of motion. An important feature of this method is that the temperature can be controlled without involving random numbers. Thus correlated motions are not impaired and this method describes kinetics and diffusion properties better. Because the time-evolution of the added variable is described by a second-order equation, heat may flow in and out of the system in an oscillatory fashion, leading to nearly periodic temperature fluctuations with the frequency proportional to the "heat bath mass". [Nose-1984][Nose-1984], [Hoover-1985][Hoover-1985]. The drawback of this thermostat is that it was shown to impart the canonical distribution as well as ergodicity  (space-filling) of the thermostatted system. 
 
 The time constant parameter in this thermostat controls the period of temperature fluctuations at equilibrium. 
 
@@ -138,9 +138,9 @@ A modification of the Nosé-Hoover thermostat which includes not a single thermo
 #### Global and local thermostats
 Global thermostats control temperature of all atom in a system uniformly. This may lead to cold solute and hot solvent due to a slow heat transfer.
 
-With local thermostats it is possible to control temperature in  selected groups of atoms independently. This works well for large solutes, but if solue is small this approach may result in large fluctuations and hence unppysical dynamics.
+With local thermostats it is possible to control temperature in  selected groups of atoms independently. This works well for large solutes, but if solute is small this approach may result in large fluctuations and hence unphysical dynamics.
 
-With namd it is possible to set coupling coefficients for each atom.
+With NAMD it is possible to set coupling coefficients for each atom.
 
 langevinFile 
 langevinCol
@@ -148,8 +148,7 @@ langevinCol
 tCoupleFile
 tCoupleFCol
 
-With Gromacs temperature of a selected groups of atoms can be controlled independently 
-tc-grps groups to couple separately to temperature bath
+With GROMACS temperature of a selected groups of atoms can be controlled independently tc-grps groups to couple separately to temperature bath
 
 ## Conclusions
 

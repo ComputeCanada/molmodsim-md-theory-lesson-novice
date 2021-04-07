@@ -3,25 +3,25 @@ title: "Fast Methods to Evaluate Forces"
 teaching: 20
 exercises: 0
 questions:
-- "Why the computation of nonbonded interactions is the speed limiting factor?"
-- "How are nonbonded interactions computed efficiently?"
+- "Why the computation of non-bonded interactions is the speed limiting factor?"
+- "How are non-bonded interactions computed efficiently?"
 - "What is a cutoff distance?"
 - "How to choose the appropriate cutoff distance?"
 objectives:
-- "Understand how nonbonded interactions are truncated."
-- "Understand how a subset of particles for calculation of short-range nonbonded is selected."
+- "Understand how non-bonded interactions are truncated."
+- "Understand how a subset of particles for calculation of short-range non-bonded is selected."
 - "Learn how to choose the appropriate cutoff distance and truncation method."
 - "Learn how to select cutoff distance and truncation method in GROMACS and NAMD."
 keypoints:
-- The calculation of nonbonded forces is the most computationally demanding part of a molecular dynamics simulation.
-- Nonbonded interactions are truncated to speed up simulations.
+- The calculation of non-bonded forces is the most computationally demanding part of a molecular dynamics simulation.
+- Non-bonded interactions are truncated to speed up simulations.
 - The cutoff distance should be appropriate for the force field and the size of the periodic box.
 ---
 
-The most computationally demanding part of a molecular dynamics simulation is the calculation of the nonbonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
+The most computationally demanding part of a molecular dynamics simulation is the calculation of the non-bonded terms of the potential energy function. As non-bonded energy terms between every pair of atoms should be evaluated, the number of calculations increases as the square of the number of atoms. To speed up the computation, only the interactions between two atoms separated by a distance less than a pre-defined cutoff distance are evaluated.
 
 ## Neighbour Searching Methods
- The search for pairs of particles that are needed for calculation of the short-range nonbonded interactions is usually accelerated by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each particle (Verlet lists).
+ The search for pairs of particles that are needed for calculation of the short-range non-bonded interactions is usually accelerated by maintaining a list of all particles within a predefined cutoff distance of each other.  Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each particle (Verlet lists).
 
 ### Cell Lists
 The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighbouring cells (26 cells for 3-dimensional simulation).
@@ -78,7 +78,7 @@ We have learned that the LJ potential is always truncated at the cutoff distance
 Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
 </center>
 ### Shifted Potential
-The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden unphysical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
+The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden un-physical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
 ### Shifted Forces
 One way to address discontinuity in forces is to shift the whole force so that it vanishes at the cutoff distance (Figure 1C).  As opposed to the potential shift method the shifted forces cutoff modifies equations of motion at all distances. Nevertheless, the shifted forces method has been found to yield better results at shorter cutoff values compared to the potential shift method (Toxvaerd, 2011)
 ### Switching Function
@@ -91,11 +91,11 @@ In practice, increasing cutoff does not necessarily improve accuracy. There are 
 
 Table 1. Cutoffs Used in Development of the Common Force Fields
 
-| AMBER | CHARM  |  GROMACS  | OPLS |
+| AMBER | CHARM  |  GROMOS  | OPLS |
 |:-----:|:------:|:---------:|:----:|
 | 8 <span>&#8491;</span> | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
 
-Different molecular properties are affected differently by various cutoff approximations. Examples of properties that are very sensitive to the choice of cutoff include the surface tension [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010), the solid–liquid coexistence line [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009), the lipid bilayer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014), and the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009).
+Different molecular properties are affected differently by various cutoff approximations. Examples of properties that are very sensitive to the choice of cutoff include the surface tension [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010), the solid–liquid coexistence line [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009), the lipid bi-layer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014), and the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009).
 
 Cutoff problems are especially pronounced when energy conservation is required. The net effect could be an increase in the temperature of the system over time. The best practice is to carry out trial simulations of the system under study without temperature scaling to test it for energy leaks or sources before a production run.
 

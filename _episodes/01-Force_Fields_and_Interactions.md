@@ -22,7 +22,7 @@ Today, we carry out molecular modeling by following and analyzing dynamic struct
 
 Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
 
-One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation showed how the receptor binding domain of the spike protein hidden from atibodies by polysacharides spontaneously undergoes conformational transition that pushes it out of the glycan shield and thus enables interaction with ACE2 (angiotensin-converting enzyme) "receptors" of the host cells. The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER, the Weighted Ensemble Simulation Toolkit and AI. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
+One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation showed how the receptor binding domain of the spike protein hidden from antibodies by polysacharides spontaneously undergoes conformational transition that pushes it out of the glycan shield and thus enables interaction with ACE2 (angiotensin-converting enzyme) "receptors" of the host cells. The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER, the Weighted Ensemble Simulation Toolkit and AI. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
 
 ![](../fig/Cov2-NAMD.jpg){: width="480" }
 
@@ -35,7 +35,7 @@ In this first session will introduce the theory behind the method of MD. The obj
 ## Force Fields
 Development of the method of molecular dynamics was largely driven by the desire to understand complex biological phenomena on the molecular level. To get insights into such processes simulations of large systems for a long time windows were required.
 
-While the physical background of intermolecular interactions is known, there is a very complex mixture of quantum mechanical forces acting at a close distance. The forces between atoms and molecules arise from dynamic interactions between numerous electrons orbiting atoms. The interactions between electon clouds are so complex that they cannot be described analytically, and they can not be computed numerically fast enough for a dynamic simulation on a relevant scale. 
+While the physical background of intermolecular interactions is known, there is a very complex mixture of quantum mechanical forces acting at a close distance. The forces between atoms and molecules arise from dynamic interactions between numerous electrons orbiting atoms. The interactions between electron clouds are so complex that they cannot be described analytically, and they can not be computed numerically fast enough for a dynamic simulation on a relevant scale. 
 
 To make molecular dynamics simulations possible a way to evaluate molecular interactions very fast was needed. To achieve this goal molecular interactions in molecular dynamics are approximated with a simple empirical potential energy function.
 
@@ -47,30 +47,30 @@ Once we know forces acting on an object we can calculate how its position change
 
 $ \vec{F}=\frac{d\vec{p}}{dt} $
 
-To summarize, if we know how to calculate the potential energy of a sytem then we can calculate forces and propagate a system in time. In other words, to run a molecular dynamics simulation we need to know the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms and advance a system in time.
+To summarize, if we know how to calculate the potential energy of a system then we can calculate forces and propagate a system in time. In other words, to run a molecular dynamics simulation we need to know the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms and advance a system in time.
 
 ![](../fig/MD_process_summary.png){: width="480" }
 
 Molecular dynamics programs use force fields to run simulations. A force field (FF) is a set of empirical energy functions and parameters allowing to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics potential energy function used in MD simulations is an empirical function composed of non-bonded and bonded interactions:
 
-$U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{nonbonded}}(\vec{r})$
+$U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{non-bonded}}(\vec{r})$
 
 Typically MD simulations are limited to evaluating only interactions between pairs of atoms. In this approximation force fields are based on two-body potentials, and the energy of the whole system is described by the 2-dimensional force matrix of the pairwise interactions.
 
 For convenience force fields can be divided into 3 general classes based on how complex they are.
 ### Class 1 force fields.
 In the class 1 force field dynamics of bond stretching and angle bending are described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement, this approximation is called quadratic. In general, bond stretching and angle bending are close to harmonic only near the equilibrium. Higher-order anharmonic energy terms are required for a more accurate description of molecular motions. In the class 1 force field force matrix is diagonal because correlations between bond stretching and angle bending are omitted.
-## Class 2 force fields.
+### Class 2 force fields.
 Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters.
 [MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-JCC8>3.0.CO;2-T), [UFF](https://pubs.acs.org/doi/10.1021/ja00051a040)
-## Class 3 force fields.
+### Class 3 force fields.
 Class 3 force fields explicitly add special effects of organic chemistry. For example polarization,stereoelectronic effects, electronegativity effect, Jahn–Teller effect, etc. Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
 
 ## Energy Terms of Biomolecular Force Fields
 Most force fields for biomolecular simulations are minimalistic class 1 force fields trading off rigor of the physical representation for the ability to simulate large systems for a long period of time. As we have already learned, potential energy function is composed of non-bonded and bonded interactions. Let's have a closer look at these energy terms.
 
 ### Non-Bonded Terms
-The nonbonded potential terms describe non-elecrostatic and electrostatic interactions between all pairs of atoms. Non-elecrostatic potential energy is most commonly described with the Lennard-Jones potential.
+The non-bonded potential terms describe non-elecrostatic and electrostatic interactions between all pairs of atoms. Non-elecrostatic potential energy is most commonly described with the Lennard-Jones potential.
 #### The Lennard-Jones potential
 The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonded atoms or molecules with a simple mathematical function:
 
@@ -197,7 +197,7 @@ $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
 Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
 #### The improper torsion potential
-The improper torsion potentialis defined for a group of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
+The improper torsion potentials defined for a group of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
 
 $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
@@ -207,15 +207,15 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and jkl.
 
 
 ### Coupling Terms
-#### The Ureu-Bradley potential
-It is known that as a bond angle is decreased, the adjacent bonds stretch to reduce the interaction between the outer atoms of the bonded triplet. This means that there is a coupling between bond length and bond angle. This coupling can be decribed by the Ureu-Bradley potential. The Urey-Bradley term is defined as a (noncovalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
+#### The Urey-Bradley potential
+It is known that as a bond angle is decreased, the adjacent bonds stretch to reduce the interaction between the outer atoms of the bonded triplet. This means that there is a coupling between bond length and bond angle. This coupling can be described by the Urey-Bradley potential. The Urey-Bradley term is defined as a (non-covalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
 
 $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 
-U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Ureu-Bradley term is implemented in the CHARMM force fields.
+U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Urey-Bradley term is implemented in the CHARMM force fields.
 
 ### CHARMM CMAP potential
-CMAP is a grid based error correction map used in CHARMM force field to  correct for errors in nonbonded interactions, electrostatics, lack of coupling terms, inaccurate combination rules and other force field deficiencies. The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins), [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations), and ff19SB. 
+CMAP is a grid based error correction map used in CHARMM force field to  correct for errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination rules and other force field deficiencies. The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins), [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations), and ff19SB. 
 
 
 ### Energy scale of potential terms
@@ -279,7 +279,7 @@ Now, there is one specific term in most force fields that should be given some m
 >
 > > ## Solution
 > >
-> > Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interation ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
+> > Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interaction ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
 > >
 > {: .solution}
 {: .challenge}
@@ -292,4 +292,3 @@ With the help of MD it is possible to model phenomena that cannot be studied exp
 - Study biological processes such as (enzyme catalysis, protein complex assembly, protein or RNA folding, etc).
 
 For more examples of the types of information MD simulations can provide read the review article: [Molecular Dynamics Simulation for All](https://www.cell.com/neuron/fulltext/S0896-6273(18)30684-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627318306846%3Fshowall%3Dtrue).
-

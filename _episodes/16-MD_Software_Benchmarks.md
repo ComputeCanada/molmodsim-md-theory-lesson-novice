@@ -64,7 +64,7 @@ pmemd.cuda -O -i pmemd_prod.in -o production.log\
 {: .file-content}
 
 #### Submission script for a multiple GPU simulation (on Siku)
-Multiple GPU pmemd version is meant to be used only for AMBER methods running multiple simulations, such as replica exchange. A single simulation does not scale boyond 1 GPU.
+Multiple GPU pmemd version is meant to be used only for AMBER methods running multiple simulations, such as replica exchange. A single simulation does not scale beyond 1 GPU.
 ~~~
 #SBATCH --mem-per-cpu=4000 --time=3:0:0  --ntasks=2
 #SBATCH --gres=gpu:v100:2 --partition=all_gpus
@@ -90,7 +90,7 @@ namd2 +p${SLURM_CPUS_PER_TASK} +idlepoll heating.in
 
 
 ### How to make your simulation run faster?
-It is possible to increase time step to 4 fs with hydrogen mass repartitioning. The idea is that hydrogen masses are increased and at the same time masses of the atoms to which these hydrogens are bonded are decreased to keep the total mass constant. Hydrogen masses can be automatically repartitioned with the *parmed* program.
+It is possible to increase time step to 4 fs with hydrogen mass re-partitioning. The idea is that hydrogen masses are increased and at the same time masses of the atoms to which these hydrogens are bonded are decreased to keep the total mass constant. Hydrogen masses can be automatically re-partitioned with the *parmed* program.
 ~~~
 module --force purge
 module load StdEnv/2020 gcc ambertools python scipy-stack

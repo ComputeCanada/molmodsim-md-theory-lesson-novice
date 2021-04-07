@@ -8,7 +8,7 @@ objectives:
 - "Learn what parameters control the accuracy of electrostatic calculations"
 keypoints:
 - "Calculation of electrostatic potentials is the most time consuming part of any MD simulation"
-- "Long-range part of electrostatic interacions is calculated by approximating Coulomb potentials on a grid" 
+- "Long-range part of electrostatic interactions is calculated by approximating Coulomb potentials on a grid" 
 - "Denser grid increases accuracy, but significantly slows down simulation"
 ---
 
@@ -20,7 +20,7 @@ The Fourier space part, on the other hand, is long-ranged but smooth and periodi
 
 ![](../fig/PME_decomp.svg){:width="480"}
 
-The long range contribution can then be efficiently computed in Fourier space using FFT. Fourier transform calculation is discrete and requires the inpput data to be on a regular grid. It is the  Mesh part of PME. As point charges in a simulation are non-equispaced, they need to be interpolated to obtain charge values in equispaced grid cells. 
+The long range contribution can then be efficiently computed in Fourier space using FFT. Fourier transform calculation is discrete and requires the input data to be on a regular grid. It is the  Mesh part of PME. As point charges in a simulation are non-equispaced, they need to be interpolated to obtain charge values in equispaced grid cells. 
 
 ![](../fig/PME.png)
 
