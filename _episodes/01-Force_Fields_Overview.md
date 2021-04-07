@@ -27,11 +27,10 @@ MM3 - Class 2
 MM4 - Class 3
 Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level ab initio quantum chemistry computations, and the parameters were additionally adjusted.
 
-For calculations on small and medium size organic molecules.
+Intended for calculations on small and medium size organic molecules.
 
 ### Empirical Conformational Energy Program for Peptides (ECEPP)
 ECEPP was the first force field targeting polypeptides and proteins. Crystal data of small organic compounds and semi-empirical QM calculations were used extensively in derivation of this force field. As more experimental data became available, force field parameters have been refined and modified versions ECEPP-2, ECEPP-3 were published.
-
 
 Over the years of evaluations the problems originating from the deficiency of these FF became apparent and various approaches has been undertaken to correct them.
 
@@ -111,7 +110,6 @@ Robertson MJ, Tirado-Rives J, Jorgensen WL. Improved Peptide and Protein Torsion
 [OPLS3](http://dx.doi.org/doi:10.1021/acs.jctc.5b00864) (2016) Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone pairs. Complete refit of peptide dihedral parameters using an order of magnitude more data. Claimed 30% improvement. Still the same original VDW parameters.
 
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
-
 
 ### AMBER force fields
 AMBER forcefields are developed for simulations of proteins and nucleic acids and they are focused on accurate description of structures and nonbonded energies. The VDW parameters are obtained from crystal structures and lattice energies. The atomic partial charges are fitted to QM electrostatic potential without any empirical adjustments.
