@@ -18,7 +18,7 @@ keypoints:
 ### Introduction
 PYTRAJ is a Python front end to the AMBER [CPPTRAJ](https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml) package. CPPTRAJ provides a variety of high level analysis commands, and at the same time it is suitable for batch processing. With PYTRAJ/CPPTRAJ you can do many operations on the raw MD trajectories. For example, convert among trajectory formats, process groups of trajectories generated with ensemble methods, image with periodic boundary conditions, create average structures, create subsets of the system. PYTRAJ is able to handle many files at the same time, and it can handle very large trajectories.
 
-PYTRAJ offers more than 50 types of analyses such as RMS fitting, measuring distances, B-factors, radii of gyration, radial distribution functions, time correlations, and many more. PYTRAJ supports MPI, and usage of MPI is straighforward. You don't really need to understand deeply about MPI or write complicated code.
+PYTRAJ offers more than 50 types of analyses such as RMS fitting, measuring distances, B-factors, radii of gyration, radial distribution functions, time correlations, and many more. PYTRAJ supports MPI, and usage of MPI is straightforward. You don't really need to understand deeply about MPI or write complicated code.
 
 Other useful MD analysis software: [MDAnalysis](https://userguide.mdanalysis.org/stable/index.html), [Pteros](https://yesint.github.io/pteros/), [LOOS/PyLOOS](http://grossfieldlab.github.io/loos/index.htmland). These packages provide libraries that can be used to compose analysis programs. While this approach offers great flexibility, the learning curve is steep, and you will need to spend more time to master them.
 
@@ -53,7 +53,7 @@ VMD
 
 ### Using PYTRAJ in Jupyter notebook
 
-The use of Jupyter notebook becomes increasingly popular for data analysis and visualization. One of the most attactive features of Jupyter is how well it combines different medium (your code, notes, and visualizations) in one solution. By keeping everything in one easy accessible place notebooks greatly simplify the management and sharing of your work.
+The use of Jupyter notebook becomes increasingly popular for data analysis and visualization. One of the most attractive features of Jupyter is how well it combines different medium (your code, notes, and visualizations) in one solution. By keeping everything in one easy accessible place notebooks greatly simplify the management and sharing of your work.
 
 Before going into details of MD analysis with PYTRAJ we need to create a python virtual environment. A virtual environment is a framework for management of multiple isolated Python environments. We use it on CC systems for installation of python packages in user accounts.
 
@@ -88,8 +88,8 @@ python -m ipykernel install --user --name=env-pytraj
 {: .bash} 
 
 Finally, install three more packages that we will be using: 
-1. NGLview, a Jupyter widjet for molecular visualization.
-2. Pickle, a module providing functions for serialization of python objects (convertion into a byte stream). Objects need to be serialized for storage on a hard disk and loading back into python. 
+1. NGLview, a Jupyter widget for molecular visualization.
+2. Pickle, a module providing functions for serialization of python objects (conversion into a byte stream). Objects need to be serialized for storage on a hard disk and loading back into python. 
 3. Seaborn, a Python data visualization library extending a popular matplotlib. It provides a high-level interface for drawing, templates for attractive and informative statistical graphics.
 
 ~~~
@@ -116,7 +116,7 @@ We are now ready to start Jupyter notebook server. The new Python kernel with th
 #### Launching Jupyter notebook server
 This example is for launching Jupyter on Graham. Procedure is the same on all other systems. the only difference is the name of the login and compute nodes. 
 
-To make AmberTools available in a notebook we need to load ambertools module and activate the virtual environment before starting Jupyter server. As launching a server involves a sequence of several commands, it is convenient to save all commands in a file. You can later simply execute commnds from this file (we call this "source file") instead of typing commands every time.
+To make AmberTools available in a notebook we need to load ambertools module and activate the virtual environment before starting Jupyter server. As launching a server involves a sequence of several commands, it is convenient to save all commands in a file. You can later simply execute commands from this file (we call this "source file") instead of typing commands every time.
 
 Let's create Jupyter startup file for use with AmberTools module, *jupyter_launch_ambertools.sh*, with the following content: 
 
@@ -205,7 +205,7 @@ traj=pt.iterload('mdcrd', top = 'prmtop.parm7')
 ~~~
 {: .python}
 
-The iterload method can load multiple trajectories, supplied as a python list. You can also select slices from each of the trajectories, for example:
+The `iterload` method can load multiple trajectories, supplied as a python list. You can also select slices from each of the trajectories, for example:
 
 ~~~
 test=pt.iterload('mdcrd', top = 'prmtop.parm7', frame_slice=[(100, 110)]) 
@@ -250,7 +250,7 @@ time = np.arange(0, traj.n_frames-1)*tstep
 ~~~
 {: .python}
 
-We want to compute RMSD for protein backbone atoms. To select these atoms we need to know the index nujbers of protein residues. Protein comes first in the system, and to find the number of the last residue we can grep C-terminal oxygen:
+We want to compute RMSD for protein backbone atoms. To select these atoms we need to know the index numbers of protein residues. Protein comes first in the system, and to find the number of the last residue we can grep C-terminal oxygen:
 
 ~~~
 !grep OXT ../../inpcrd.pdb 
@@ -335,10 +335,10 @@ plt.ylabel("RMSD, Angstrom")
 
 ### Interactive trajectory visualization with NGLView
 
-Data Visualization is one of the essential skills required to conduct a successful reserch involving molecular dynamics simulations. It allows you (or other people in the team) to better understand the nature of a process you are studying, and it gives you the ability to convey the proper message to a general audience in a publication. 
+Data Visualization is one of the essential skills required to conduct a successful research involving molecular dynamics simulations. It allows you (or other people in the team) to better understand the nature of a process you are studying, and it gives you the ability to convey the proper message to a general audience in a publication. 
 
 
-NGLViwe is a Jupyter widget for interactive viewing molecular structures and trajectories in notebooks. It runs in a browser and employs WebGL to display molecules like proteins and DNA/RNA with a variety of representations. It is also availabe as a standalone [Web application](http://nglviewer.org/ngl/).
+NGLView is a Jupyter widget for interactive viewing molecular structures and trajectories in notebooks. It runs in a browser and employs WebGL to display molecules like proteins and DNA/RNA with a variety of representations. It is also available as a standalone [Web application](http://nglviewer.org/ngl/).
 
 Open a new notebook. Import pytraj, nglview and make sure you are in the right directory    
 
@@ -499,7 +499,7 @@ Nucleic backbone: :@O3',C3',C4',C5',O5',P
 
 #### Jupyter Hub challenges
 
-Bash variables can be set for a runnng python kernel from notebook:
+Bash variables can be set for a running python kernel from notebook:
 
 ~~~
 import os

@@ -26,7 +26,7 @@ cd ~/scratch/workshop/pdb/6N4O
 ## 1. Preparing a protein for molecular dynamics simulations.
 ### 1.1 Adding missing residues to protein structure files.
 #### 1.1.1 What residues are missing?
-Almost all protein and nucleic acid crystallographic structure files are missing some residues. The reason for this is that the most flexible parts of biopolymers are disordered in crystals, and if they are disordered the  electron densit will be weak and fuzzy and thus atomic coordinates cannot be accurately determined. These  disordered atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model containing all atoms.
+Almost all protein and nucleic acid crystallographic structure files are missing some residues. The reason for this is that the most flexible parts of biopolymers are disordered in crystals, and if they are disordered the  electron density will be weak and fuzzy and thus atomic coordinates cannot be accurately determined. These  disordered atoms, however, may be crucial for MD simulations (e.g., loops connecting functional domains, nucleic acid chains, incomplete amino acid side chains ... etc.). For realistic simulation, we need to build a model containing all atoms.
 
 How can we find out if any residues are missing in a PDB file? Missing residues, and other useful information is available in PDB file REMARKS. There are many types of REMARKS. The REMARK 465 lists the residues that are present in the SEQRES records but are completely absent from the coordinates section. You can find information about all types of REMARKS [here](https://www.wwpdb.org/documentation/file-format-content/format32/remarks2.html).
 
@@ -118,7 +118,7 @@ Another drawback is that i-TASSER optimizes, positions of all atoms, which is gr
 #### 1.2. Aligning protein models.
 i-TASSER modeling procedure changes the orientation of the protein and slightly optimizes the positions of all atoms. We want keep the original atom positions, and only add the model of the N-terminal end. To combine the i-TASSER model with the actual 6n4o coordinates, we need to align the i-TASSER model with the original structure.
 
-It is often very useful to align several structures for comparison. However, if a structure that you want to compare with the reference has a different number of residues or some deletions/insertions it is not straighforward to do an alignment. You will need to prepare two lists of structurally equivalent atoms.  
+It is often very useful to align several structures for comparison. However, if a structure that you want to compare with the reference has a different number of residues or some deletions/insertions it is not straightforward to do an alignment. You will need to prepare two lists of structurally equivalent atoms.  
 
 We have two models of out protein in the directory.
 
@@ -169,7 +169,7 @@ set TransMat [measure fit $itasser $swissmodel]
 {: .vmd}
 The matrix describes how to move itasser atoms so that they overlap the corresponding swissmodel atom. Once the matrix is computed all we need to do is to appy it to the whole itasser model. 
 
-Select all residies of molecule 1 and apply the transformation to the selection.
+Select all residues of molecule 1 and apply the transformation to the selection.
 ~~~
 echo rmsd before fit = [measure rmsd $itasser $swissmodel]
 set itasser_all [atomselect 1 "all"]
@@ -301,7 +301,7 @@ grep 'A 669' 6n4o_chain_A_complete_A669D.pdb
 {: .challenge}
 
 ### 2. Adding missing segments to RNA structure files.
-Inspection of the PDB file 6n4o shows that several nucleotides are missinng in both RNA chains. The RNA model must be completed, and all RNA atoms placed at the appropritate positions before we can start simulations the system.
+Inspection of the PDB file 6n4o shows that several nucleotides are missing in both RNA chains. The RNA model must be completed, and all RNA atoms placed at the appropriate positions before we can start simulations the system.
 
 First, we need to create a PDB file containing all RNA atoms. At this initial step, we are not particularly concerned with the quality of the 3D structure because we will refine it later.
 
@@ -407,7 +407,7 @@ CCAUU---ACACUCCA--
 {: .output}
 
 #### 2.5. Inserting missing segments.
-Below are the commands needed to insert missing fragments in chains C and D.  The detailed escription of all modeRNA commands is available [here](http://genesilico.pl/moderna/commands/).
+Below are the commands needed to insert missing fragments in chains C and D.  The detailed description of all modeRNA commands is available [here](http://genesilico.pl/moderna/commands/).
 
 ~~~
 from moderna import *
@@ -550,7 +550,7 @@ These commands will load libraries of phosphorylated 5' terminal nucleotides and
 
 We don't want to use the PDB file prepared with Leap for SimRNA because AMBER has different aminoacid naming conventions. So we copy phosphate atoms from chain_D5P.pdb and paste them into chains_CD_model_AB.pdb. We then edit chain ID, residue ID, and residue name. Save the edited file chains_CD_model_AB.pdb as chains_CD_model_AB_5P.pdb
 
-##### 3.2.3. Adding 5' monophosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).
+##### 3.2.3. Adding 5' mono-phosphate with [CHARMM-GUI](http://www.charmm-gui.org/?doc=input/pdbreader).
 You can also add phosphate using CHARMM-GUI. Beware that CHARMM-GUI changes residue names to the old-style RNA 3-letter names and changes chain ID to "R".
 
 ##### 3.2.4 Define frozen atoms.
@@ -651,7 +651,7 @@ cp chains_CD_model_AB_5P_frozen.pdb_01_minE-000001_AA.pdb chains_CD_minimized.pd
 ### 4. Preparing simulation system for molecular dynamics.
 
 #### 4.1 Determine the number of water and salt molecules needed to prepare solvated system.
-To prepare solution with the desired ionic strength we will use SLTCAP server. For this calulation we need to know the molecular weight of the macromolecules, their charge, and the number of water molecules in the simulation system.
+To prepare solution with the desired ionic strength we will use SLTCAP server. For this calculation we need to know the molecular weight of the macromolecules, their charge, and the number of water molecules in the simulation system.
 
 The molecular weight of hAgo2 is 97,208 Da, and the MW of our nucleic acids is 12.5 KDa [[calculate MW of the RNA]](http://www.encorbio.com/protocols/Nuc-MW.htm). Thus, the total MW is 110 KDa.
 
@@ -803,7 +803,7 @@ mv inpcrd.pdb inpcrd.rst7 prmtop.parm7 ../
 The force field modification frcmod.phos_nucleic14SB is needed for simulation stability. It modifies AMBER parm10 set for 5' terminal phosphate in nucleic acids, The values are taken from frcmod.phosaa14SB 
 
 > ## Write a shell script reproducing all system preparation steps
->We can run all leap commands interactively, but it would be convenient to have a single shell script that could reproduce all system preparation step when exetuted. How can we do it?
+>We can run all leap commands interactively, but it would be convenient to have a single shell script that could reproduce all system preparation step when executed. How can we do it?
 >
 >Leap was designed to read commands from a file (-f option). It does not support input from STDIN, so we can not use pipeline to send commands to its input. This is inconvenient because we need two scripts to prepare a simulation: one with leap commands, and another with commands to run leap itself. Fortunately, shell is very flexible, and we can eliminate two-file workflow by using a special command allowing to use a variable instead of file as an input. 
 >
@@ -845,5 +845,3 @@ The force field modification frcmod.phos_nucleic14SB is needed for simulation st
 >>{:.file-content}
 >{: .solution}
 {: .challenge}
-
-

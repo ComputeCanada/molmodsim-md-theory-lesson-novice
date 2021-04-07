@@ -41,7 +41,7 @@ As the RNA model was built without protein, it is expected that the added RNA re
 
 There is nothing too serious that may crash simulation, the clashes will be resolved in the process of energy minimization.  As we want to keep our initial simulation structure as close to the experimental structure as possible we first allow energy minimizer to move freely only new added residues, and restrain all original residues. So we need a list of all original atoms to restrain them. 
 
-In the simulation system residues are renumbered. Chain identifiers are not used. There is a single list of all atoms where atoms and residues are numbered sequentially starting form 1 without any gaps. To make a list of restrained atoms we need to convert PDB residue numbers to simulation residue numbers. Residue number mapping between the original pdb file and the simulation is as follows:
+In the simulation system residues are renumbered. Chain identifiers are not used. There is a single list of all atoms where atoms and residues are numbered sequentially starting form 1 without any gaps. To make a list of restrained atoms we need to convert PDB residue numbers to simulation residue numbers. Residue number mapping between the original PDB file and the simulation is as follows:
 
 Chain       | Original | Shift | Simulation |
 ------------|----------|-------|------------|
@@ -62,7 +62,7 @@ MG ions     |    -     |  -    | 899-901    |
 >{: .solution}
 {: .challenge}
 
-The general minimization strategy is first to restrict all solute atoms with the experimental coordinates and relax all atoms that were added. (solvent, ions and missing fragmnents). This will help to stabilize the native conformation. There are no strict rules defining how many minimizations steps are necessary. The choice will depend on the composition of a simulation system. For a big systems with a large amount of missing residues it is safer to carry out several minimization steps gradually releasung restrarints. For example, you can first relax only solvent and ions, then lipid bilayer (if this is a membrane protein), then added fragments, then the original protein sidechains. Having more steps may be unnecessary, but it will not cause any problems. 
+The general minimization strategy is first to restrict all solute atoms with the experimental coordinates and relax all atoms that were added. (solvent, ions and missing fragments). This will help to stabilize the native conformation. There are no strict rules defining how many minimization steps are necessary. The choice will depend on the composition of a simulation system. For a big systems with a large amount of missing residues it is safer to carry out several minimization steps gradually releasing restraints. For example, you can first relax only solvent and ions, then lipid bilayer (if this is a membrane protein), then added fragments, then the original protein side-chains. Having more steps may be unnecessary, but it will not cause any problems. 
 
 Let's do a two a two stage minimization. In the first stage we restrain all original atoms. In the second stage we restrain only the original backbone atoms. 
 
@@ -96,7 +96,7 @@ A simulation program reads simulation parameters from an input file. Simulation 
 #### Methods of minimization
 
 |--|
-|0 |Steepest descent+conjugate gradient. The first 4 cycles are steepest descent at the start of the run and after every nonbonded pairlist update.
+|0 |Steepest descent+conjugate gradient. The first 4 cycles are steepest descent at the start of the run and after every non-bonded pair-list update.
 |1 | For NCYC cycles the steepest descent method is used then conjugate gradient is switched on.
 |2 | Steepest descent only
 |3 | XMIN family methods. The default is LBFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno). It is a popular algorithm in machine learning. The method incrementally learns from previous steps, so that it can make the next step more accurate. It converges considerably faster than CG, but requires more memory.
@@ -415,7 +415,7 @@ cd ~/scratch/workshop/pdb/6N4O/simulation/sim_namd/4-production
 Run for 10 ns.  
 
 ## 3. Transferring equilibrated system between simulation packages.
-Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another. Imagine that you started your project with GROMACS, but later realized that you need to run a constant pH simulation. You need to swithch to AMBER. Want to study conformational transitions? Gaussian accelerated MD is not available in GROMACS. Another reason to move to AMBER/NAMD. 
+Simulation packages have different methods and performance. It is useful to be able to transfer a running simulation from one software to another. Imagine that you started your project with GROMACS, but later realized that you need to run a constant pH simulation. You need to switch to AMBER. Want to study conformational transitions? Gaussian accelerated MD is not available in GROMACS. Another reason to move to AMBER/NAMD. 
 Want to apply custom forces - move to NAMD.
 
 
@@ -491,7 +491,7 @@ References:
 
 
 #### 3.2 Moving simulation from AMBER to GROMACS.
-To tansfer simulation to GROMACS in addition to converting restart file we need to convert topology.
+To transfer simulation to GROMACS in addition to converting restart file we need to convert topology.
 
 First convert AMBER topology to GROMACS
 ~~~
@@ -585,7 +585,7 @@ nstxout-compressed      = 2000
 continuation            = no   
 constraint_algorithm    = shake    
 constraints             = h-bonds  
-; Neighborsearching
+; Neighbor-searching
 cutoff-scheme           = Verlet   
 nstlist                 = 10  
 rcoulomb                = 0.8    
@@ -647,6 +647,3 @@ module load StdEnv/2020 gcc/9.3.0 openmpi/4.0.3 gromacs
 gmx mdrun -s input.tpr
 ~~~
 {: .bash}
-
-
-

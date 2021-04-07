@@ -13,21 +13,21 @@ keypoints:
 - "Small errors in the input structure may cause MD simulations to became unstable or give unrealistic results."
 ---
 
-In this lesson we will go through the steps of setting up a fully solvated protein system for simulation with AMBER/NAMD and GROMACS. While there are many commercial programs and interactive graphical interfaces designed to assist with system preparation. While these tools are easy to use and don't require as much learning efforts as command line tools, they are offer only a limited functionality, and most importantly results obained with WEB/GUI tools are not reproducible and prone to human error. Therefore, we will focus on system preparation using only scriptable command line driven tools. The emphasis of this lesson is to expose you to the various methods that can be used to create a reproducible molecular modeling workflow by automating preparation and simulation steps. One of the advantages of such approach is that once a workflow script have been developed it can be easily modified for other systems or conditions (for example if an updated version of pdb file is released, you can prepare a new simulation system with a single click).
+In this lesson we will go through the steps of setting up a fully solvated protein system for simulation with AMBER/NAMD and GROMACS. While there are many commercial programs and interactive graphical interfaces designed to assist with system preparation. While these tools are easy to use and don't require as much learning efforts as command line tools, they are offer only a limited functionality, and most importantly results obtained with WEB/GUI tools are not reproducible and prone to human error. Therefore, we will focus on system preparation using only scriptable command line driven tools. The emphasis of this lesson is to expose you to the various methods that can be used to create a reproducible molecular modeling workflow by automating preparation and simulation steps. One of the advantages of such approach is that once a workflow script have been developed it can be easily modified for other systems or conditions (for example if an updated version of pdb file is released, you can prepare a new simulation system with a single click).
 
 ## Important Things to Check in a PDB File
 Small errors in the input structure may cause MD simulations to become unstable or give unrealistic results. The most common problems in PDB files include:
 
-- missing sidechain atoms
+- missing side-chain atoms
 - missing fragments
 - clashes between atoms
 - multiple chains
 - alternate conformations
 - non-protein molecules (crystallographic waters, ligands, modified amino acids, etc.)
-- disulfide bonds
+- di-sulfide bonds
 - wrong assignment of the N and O atoms in the amide groups of ASN and GLN, and the N and C atoms in the imidazole ring of HIS
 
-Some problems can be identified and corrected automatically (e.g. missing atoms and some clashes) while other may have mutiple solutions (e.g. alternate conformations, several protein chains, non-protein molecules, missing residues) and require your decision.
+Some problems can be identified and corrected automatically (e.g. missing atoms and some clashes) while other may have multiple solutions (e.g. alternate conformations, several protein chains, non-protein molecules, missing residues) and require your decision.
 
 In this section we will learn how to identify and correct for multiple chains, alternate conformations, non-protein molecules, and disulphide bonds.  
 
@@ -42,11 +42,11 @@ wget http://files.rcsb.org/view/1ERT.pdb
 {: .bash}
 
 #### Checking a PDB File for Presence of Non-Protein Molecules
-PDB files are just text files, they contain a lot useful information such as detatils of the crystallographic experiment, secondary structure, missing residues ... etc. To setup a MD simulation system we will only need the coordinate section, the ATOM. HETATM and TER records. 
+PDB files are just text files, they contain a lot useful information such as detaitls of the crystallographic experiment, secondary structure, missing residues ... etc. To setup a MD simulation system we will only need the coordinate section, the ATOM. HETATM and TER records. 
 
 The lines beginning with "ATOM" present the atomic coordinates for standard amino acids and nucleotides. All other chemical compounds use the "HETATM" record type. Both of these record types use a simple fixed-column format described [here](https://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM). 
 
-Any non-protein molecules present in a PDB file would require special treatment. Let's check if the downloaded file has any non-protein atoms. We could install some molecular visualization program for this task, but standard linux text searching utility *grep* available everywhere is sufficient. Grep searches for a given patterns in the input files and prints out each line that matches a pattern.
+Any non-protein molecules present in a PDB file would require special treatment. Let's check if the downloaded file has any non-protein atoms. We could install some molecular visualization program for this task, but standard Linux text searching utility *grep* available everywhere is sufficient. Grep searches for a given patterns in the input files and prints out each line that matches a pattern.
 
 ~~~
 grep "^HETATM " 1ERT.pdb | wc -l
@@ -56,7 +56,7 @@ grep "^HETATM " 1ERT.pdb | wc -l
       46
 ~~~
 {: .output}
-The '^' expression matches beginning of line. We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein cofactors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will ignore non-polymer compounds.
+The '^' expression matches beginning of line. We used the "grep" command to find all lines beginning with the word "HETATM" and then we sent these lines to the character counting command "wc". The output tells us that the downloaded PDB file contains 46 non-protein atoms. In this case, they are just oxygen atoms of the crystal water molecules. In general PDB files may contain solvents, ions, lipid molecules, protein co-factors, e.t.c. In some cases, these extra components are essential for protein function and should be included in the simulation, while in other cases they were added to facilitate crystallization and are not important. In this introductory lesson, we will ignore non-polymer compounds.
 
 Let's select only protein atoms from the downloaded PDB file and save them in the new file "protein.pdb". Let's  use the molecular visualization and analysis program [VMD](https://www.ks.uiuc.edu/Research/vmd/) to carry out this task. 
 
@@ -120,7 +120,7 @@ grep "^ATOM" 1ERT.pdb | egrep "^.{16}[A-Z]"
 ~~~
 {: .bash}
 
-First print lines starting with "ATOM", then send these lines into the second grep command. The second grep matches beginning of line, then matches any single character "." 16 times, then mathces a single literal A-Z. The symbol "\|" is called "pipe". In Linux you can send output of one command into another comaand chaining them together. 
+First print lines starting with "ATOM", then send these lines into the second grep command. The second grep matches beginning of line, then matches any single character "." 16 times, then matches a single literal A-Z. The symbol "\|" is called "pipe". In Linux you can send output of one command into another command chaining them together. 
 
 > ## Preparing a Protein Coordinate File for Simulation
 > 1. Make PDB file containing only conformations "B" from the file 1ERT.pdb
