@@ -49,7 +49,7 @@ $ \vec{F}=\frac{d\vec{p}}{dt} $
 
 To summarize, if we know how to calculate the potential energy of a system then we can calculate forces and propagate a system in time. In other words, to run a molecular dynamics simulation we need to know the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms and advance a system in time.
 
-![](../fig/MD_process_summary.png){: width="480" }
+![](../fig/Md_process_summary.png){: width="480" }
 
 Molecular dynamics programs use force fields to run simulations. A force field (FF) is a set of empirical energy functions and parameters allowing to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics potential energy function used in MD simulations is an empirical function composed of non-bonded and bonded interactions:
 
