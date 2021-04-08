@@ -50,6 +50,8 @@ Nose-Hoover method was not free of issues. It was observed that the Nose-Hoover 
 ### Langevin piston pressure control.
 Langevin piston barostat is based on Langevin thermostat. The equations of motion resemble MTTK equations, but an additional damping (friction) force and stochastic force are introduced. A suitable choice of collision frequency then eliminates the unphysical oscillation of the volume associated with the piston mass. In this way it is similar to the weak coupling Berendsen algorithm, but in contrast it yields the correct ensemble. 
 
+![](../fig/barostats_comp.png)
+
 Reference: [Constant pressure molecular dynamics simulation: The Langevin piston method](https://aip.scitation.org/doi/abs/10.1063/1.470648)
 
 MTTK and Langevin produce identical ensembles, but Langevin barostat oscillates less then MTTK and converges faster due to stochastic collisions and damping.
