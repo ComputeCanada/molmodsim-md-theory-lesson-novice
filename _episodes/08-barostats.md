@@ -1,6 +1,6 @@
 ---
 title: "Controlling Pressure"
-teaching: 25
+teaching: 10
 exercises: 0
 questions:
 - "Why do we want to control the pressure of our MD-simulations?"
