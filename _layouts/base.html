@@ -17,11 +17,11 @@
     <link rel="stylesheet" type="text/css" href="{{ relative_root_path }}/assets/css/lesson.css" />
     <link rel="stylesheet" type="text/css" href="{{ relative_root_path }}/assets/css/syntax.css" />
     <link rel="license" href="#license-info" />
-    {% if site.carpentry == "swc" | site.carpentry == "dc" | site.carpentry == "lc" | site.carpentry == "cp" %}
+    {% if site.carpentry == "swc" or site.carpentry == "dc" or site.carpentry == "lc" or site.carpentry == "cp" %}
     {% include favicons.html %}
     {% elsif site.carpentry == "an" %}
     <link rel="shortcut icon" type="image/x-icon" href="/favicon-an.ico" />
-    {% elsif site.carpentry == "cc" | site.carpentry == "bst" %}
+    {% elsif site.carpentry == "cc" or site.carpentry == "bst" %}
     <link rel="shortcut icon" type="image/png" href="/favicon-cc.png" />
     {% endif %}
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
