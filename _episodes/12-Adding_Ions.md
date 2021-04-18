@@ -35,17 +35,14 @@ Random placement of ions will generate a system in the completely dissociated, e
 Let's neutralize 1RGG protein using the *leap* module. We will add ions prior to solvation so that the potential from un-equilibrated water will not interfere with ion placement:
 
 ~~~
-mkdir ~/scratch/workshop/pdb/1RGG/AMBER
 cd ~/scratch/workshop/pdb/1RGG/AMBER
-module --force purge
-module load StdEnv/2020 gcc ambertools
-source $EBROOTAMBERTOOLS/amber.sh
+module load StdEnv/2020 gcc amber
 tleap
 ~~~
 {: .bash}
 
 ~~~
-source leaprc.water.spce
+source leaprc.water.tip3p
 source leaprc.protein.ff14SB
 s = loadpdb ../1RGG_chain_A_prot.pdb
 charge s
@@ -122,7 +119,7 @@ quit
 ### Summary: script for LEaP to prepare the topology and the coordinate files
 Save the following commands in a file, e.g. solvate_1RGG.leap
 ~~~
-source leaprc.water.spce
+source leaprc.water.tip3p
 source leaprc.protein.ff14SB
 s = loadpdb ../1RGG_chain_A_prot.pdb
 addions s Na+ 0
@@ -145,7 +142,7 @@ tleap -f solvate_1RGG.leap
 >When the *GROMACS* module is loaded the environment variable *EBROOTGROMACS* will be set. This variable is pointing to the GROMACS installation directory. Knowing where the *GROMACS* installation is we can find out what force fields are available:
 >~~~
 >module load gromacs
->ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename | column -c80
+>ls -d $EBROOTGROMACS/share/gromacs/top/*.ff | xargs -n1 basename
 >~~~
 >{: .bash}
 >~~~
@@ -161,12 +158,11 @@ tleap -f solvate_1RGG.leap
 ### Generate *GROMACS* Topology and Coordinate Files from the Solvated System.
 
 ~~~
-mkdir ~/scratch/workshop/pdb/1RGG/GROMACS
 cd ~/scratch/workshop/pdb/1RGG/GROMACS
 ~~~
 {: .bash}
 
-We can generate gromacs topology from the complete simulation system prepared previously and saved in the file 1RGG_chain_A_solvated.pdb. For *pdb2gmx* to work correctly we need to rename ions from (Na+, Cl-) to (NA, CL), and rename CYX to CYS:
+We can generate GROMACS topology from the complete simulation system prepared previously and saved in the file 1RGG_chain_A_solvated.pdb. For *pdb2gmx* to work correctly we need to rename ions from (Na+, Cl-) to (NA, CL), and rename CYX to CYS:
 
 ~~~
 ATOM   1444 Na+  Na+    97      -5.058 -11.031  -0.206  1.00  0.00
@@ -175,7 +171,27 @@ ATOM   1450 Cl-  Cl-   103      19.451  -3.022   8.361  1.00  0.00
 {: .file-content}
 
 We will also assign ions to chain B.  
-Do it using the global substitution function of the stream editor (sed).
+
+~~~
+mol new ../1RGG_chain_A_solvated.pdb 
+set s [atomselect top "resname 'Na+'"]
+$s set resname "NA"
+$s set name "NA"
+$s set chain "B"
+set s [atomselect top "resname 'Cl-'"]
+$s set resname "CL"
+$s set name "CL"
+$s set chain "B"
+set s [atomselect top "resname CYX"]
+$s set resname "CYS"
+set s [atomselect top all]
+$s writepdb 1RGG_chain_A_solvated_gro.pdb
+quit
+~~~
+{:.vmd}
+
+- Do it using the global substitution function of the stream editor (sed).
+
 ~~~
 cat ../1RGG_chain_A_solvated.pdb |\
 sed s/"Cl-  Cl-  "/" CL  CL  B"/g |\
@@ -184,23 +200,24 @@ sed s/CYX/CYS/g > 1RGG_chain_A_solvated_gro.pdb
 ~~~
 {: .bash}
 
-Let's make the topology using the *AMBER ff99SBildn* force field and the *spc/e* water model:
+
+Let's make the topology using the *AMBER ff99SBildn* force field and the *tip3* water model:
 ~~~
-gmx pdb2gmx -f 1RGG_chain_A_solvated_gro.pdb -ff amber99sb-ildn\
- -water spce -ignh -chainsep id -ss << EOF >log
+gmx pdb2gmx -f 1RGG_chain_A_solvated_gro.pdb -ff amber99sb-ildn -water tip3 -ignh -chainsep id -ss << EOF 
 y
 EOF
 ~~~
 {: .bash}
-                         
---------------|:--|:-----------------------
-ignh          |   | Ignore hydrogens in file|  
-chainsep      |id | Separate chains by chain ID. Since we assigned ions to chain B pbb2gmx will ignore TER records and put them in a separate chain  
-ss            |   | Interactive S-S bridge selection. Detect potential S-S bonds, and ask for confirmation.
+
+Option       |Value| Description                         
+--------------|:---|:-----------------------
+ignh          | -  | Ignore hydrogens in file|  
+chainsep      |id  | Separate chains by chain ID. Since we assigned ions to chain B pbb2gmx will ignore TER records and put them in a separate chain  
+ss            | -  | Interactive S-S bridge selection. Detect potential S-S bonds, and ask for confirmation.
 
 The construct
 ~~~
-<< EOF >log
+<< EOF
 y
 EOF
 ~~~
@@ -208,15 +225,22 @@ EOF
 
 at the end of the command is to automatically confirm 'y' S-S bond. 
 
-By default *pdb2gmx* program saved topology, *GROMACS* - formatted coordinates, and position restraints in the files *topol.top*, *conf.gro*, and *posre.itp*, respectively. The names of the output files can be changed by using output options *-p*, *-o* and *-i*.
+By default *pdb2gmx* program saved three output files:
+
+Type                | Filename 
+--------------------|---------- 
+topology            | topol.top
+coordinates         | conf.gro
+position restraints | posre.itp
+ 
+The names of the output files can be changed by using output options *-p*, *-o* and *-i*.
 
 ### Prepare the System Using *GROMACS* Module *pdb2gmx*.
 To demonstrate how to solvate protein and add ions using *pdb2gmx* we can go back to the protein structure file 1RGG_chain_A_prot.pdb saved before solvation and repeat all system preparation steps with this GROMACS utility. Note that in this case the neutralizing ions will be added in randomly selected positions.
 
 First we generate the topology and the coordinate file using the *AMBER ff99SBildn* force field and the *spc/e* water model:
 ~~~
-gmx pdb2gmx -f 1RGG_chain_A_prot.pdb -ff amber99sb-ildn\
- -water spce -ignh -chainsep id -ss << EOF >log
+gmx pdb2gmx -f ../1RGG_chain_A_prot.pdb -ff amber99sb-ildn -water tip3 -ignh -chainsep id -ss << EOF 
 y
 EOF
 ~~~
@@ -251,7 +275,7 @@ System has non-zero total charge: -5.000000
 
 Finally we can use the *GROMACS genion* command to replace random solvent molecules with ions. We will first add cation/anion pairs to mimic a desired salt concentration and then neutralize the system by adding sodium ions (the options *-conc* [Mol/L] and *-neutral*). By default genion uses Na+ and Cl- ions. Other ions can be chosen by selecting options *-pname* [positive ion] and *-nname* [negative ion]. We also need to select a target group of solvent molecules to be replaced with ions. We will chose the 'SOL' group which is the default name of the solvent group in *GROMACS*:
 ~~~
-$ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -neutral -conc 0.15 -neutral -o neutralized.pdb
+$ echo "SOL" | gmx genion -s solvated.tpr -p topol.top -neutral -conc 0.15 -o neutralized.pdb
 ~~~
 {: .bash}
 
