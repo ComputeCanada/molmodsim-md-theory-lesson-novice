@@ -1,6 +1,6 @@
 ---
 title: "Degrees of Freedom"
-teaching: 15
+teaching: 10
 exercises: 0
 questions:
 - "How is kinetic energy contained and distributed in a dynamic molecular system"

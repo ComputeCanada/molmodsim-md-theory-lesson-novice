@@ -142,6 +142,9 @@ Do not close this window, closing it will terminate the server. Note the port nu
 
 The message in the example above informs that notebook server is listening at port 8888 of the node gra798. Compute nodes cannot be accessed directly from the Internet, but we can connect to the login node, and the login node can connect any compute node. Thus, connection to a compute node should be also possible. How do we connect to the node gra798 at port 8888? We can instruct ssh client program to map port 8888 of gra798 to our local computer. This type of connection is called "ssh tunneling" or "ssh port forwarding". Ssh tunneling allows transporting networking data between computers over an encrypted SSH connection.
 
+
+![](../fig/ssh_tunnel.svg)
+
 Open ANOTHER terminal tab or window and run the command:
 ~~~
 ssh svassili@graham.computecanada.ca -L 8888:gra798:8888

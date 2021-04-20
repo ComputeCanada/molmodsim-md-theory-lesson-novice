@@ -1,6 +1,6 @@
 ---
 title: "Electrostatic Interactions"
-teaching: 15
+teaching: 10
 exercises: 0
 questions:
 - "How electrostatic interactions are calculated in periodic systems?"

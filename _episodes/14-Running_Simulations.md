@@ -263,7 +263,8 @@ parm prmtop.parm7
 trajin mdcrd.nc 1 last 2
 strip !(:1-901)
 trajout mdcrd_nowat.nc 
-parmwrite out prmtop-nowat.parm7
+parmstrip !(:1-901)
+parmwrite out prmtop_nowat.parm7
 run
 EOF
 ~~~
