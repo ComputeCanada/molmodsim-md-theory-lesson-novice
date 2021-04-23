@@ -3,14 +3,14 @@ title: "Trajectory Analysis with PYTRAJ in Jupyter Notebook"
 teaching: 25
 exercises: 0
 questions:
-- "How to set up and use Jupyter notebook?"
+- "What tools are available to analyze my MD-data?"
 - "How to visualize simulation in Jupyter notebook?"
-- "How to calculate and plot RMSD?"
-- "How to do Dynamic Cross Correlation Analysis?"
-- "How to perform Principal Component Analysis?"
+- "How can I use PYTRAJ to analyze MD-trajectories?"
+- "How do I calculate dynamical properties from trajectory data?"
+- "How can I characterize motions of macromolecules?"
 objectives:
-- "Learn how to set up and use Jupyter notebook in CC environment"
-- "Learn how to visualize simulation in Jupyter notebook"
+- "Learn how to set up and use Jupyter notebook in CC environment."
+- "Learn how to use NGLView to visualize MD-trajectories."
 - "Learn how to calculate and plot RMSD"
 - "Learn how to perform Dynamic Cross Correlation Analysis"
 - "Learn how to perform Principal Component Analysis"
@@ -24,7 +24,7 @@ PYTRAJ is a Python front end to the AMBER [CPPTRAJ](https://amber-md.github.io/c
 
 PYTRAJ offers more than 50 types of analyses such as RMS fitting, measuring distances, B-factors, radii of gyration, radial distribution functions, time correlations, and many more. PYTRAJ supports MPI, and usage of MPI is straightforward. You don't really need to understand deeply about MPI or write complicated code.
 
-Other useful MD analysis software: [MDAnalysis](https://userguide.mdanalysis.org/stable/index.html), [Pteros](https://yesint.github.io/pteros/), [LOOS/PyLOOS](http://grossfieldlab.github.io/loos/index.htmland). These packages provide libraries that can be used to compose analysis programs. While this approach offers great flexibility, the learning curve is steep, and you will need to spend more time to master them.
+Other useful MD analysis software: [MDAnalysis](https://userguide.mdanalysis.org/stable/index.html), [MDTraj](https://mdtraj.org/),[Pteros](https://yesint.github.io/pteros/), [LOOS/PyLOOS](http://grossfieldlab.github.io/loos/index.htmland). These packages provide libraries that can be used to compose analysis programs. While this approach offers great flexibility, the learning curve is steep, and you will need to spend more time to master them.
 
 References:  
 1. [PTRAJ and CPPTRAJ: Software for Processing and Analysis of Molecular Dynamics Trajectory Data](https://pubs.acs.org/doi/full/10.1021/ct400341p)
