@@ -18,13 +18,13 @@ Atoms and molecules, the building blocks of matter, interact with each other. Th
 
 Today, we carry out molecular modeling by following and analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. The first attempts to model interacting molecules go back to van der Waals' pioneering work, ["About the continuity of the gas and liquid state"](https://www.worldcat.org/title/over-de-continuiteit-van-den-gas-en-vloeistoftoestand/oclc/3301223) published in 1873. Using a simple state equation where the molecules were approximated as spheres attracting each other, he could predict gas-liquid phase transition. We still use many of the conceptual ideas from over a century ago in modern molecular modeling and simulations. The size and the length of MD simulations has been recently vastly improved. Longer and larger simulations allow us to tackle wider range of problems under a wide variety of conditions. 
 
-![MD-timeline: system-size vs. time]({{ root }}/fig/MD_size_timeline.png){: width="400" }
+![MD-timeline: system-size vs. time]({{ page.root }}/fig/MD_size_timeline.png){: width="400" }
 
 Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
 
 One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation showed how the receptor binding domain of the spike protein hidden from antibodies by polysaccharides spontaneously undergoes conformational transition that pushes it out of the glycan shield and thus enables interaction with ACE2 (angiotensin-converting enzyme) "receptors" of the host cells. The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER, the Weighted Ensemble Simulation Toolkit and AI. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
 
-![Image: Simulation of SARS-CoV-2 with NAMD]({{ root }}/fig/Cov2-NAMD.jpg){: width="480" }
+![Image: Simulation of SARS-CoV-2 with NAMD]({{ page.root }}/fig/Cov2-NAMD.jpg){: width="480" }
 
 Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://www.biorxiv.org/content/10.1101/2020.11.19.390187v1)
 
@@ -49,7 +49,7 @@ $ \vec{F}=\frac{d\vec{p}}{dt} $
 
 To summarize, if we know how to calculate the potential energy of a system then we can calculate forces and propagate a system in time. In other words, to run a molecular dynamics simulation we need to know the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms and advance a system in time.
 
-![Flow diagram of MD process]({{ root }}/fig/Md_process_summary.png){: width="480" }
+![Flow diagram of MD process]({{ page.root }}/fig/Md_process_summary.png){: width="480" }
 
 Molecular dynamics programs use force fields to run simulations. A force field (FF) is a set of empirical energy functions and parameters allowing to calculate the potential energy *U* of a system of atoms and/or molecules as a function of the molecular coordinates. Classical molecular mechanics potential energy function used in MD simulations is an empirical function composed of non-bonded and bonded interactions:
 
@@ -81,7 +81,7 @@ $V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 
 The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially decaying repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
 
-![graph: Lennard-Jones potential]({{ root }}/fig/lennard-jones.png){: width="360" }
+![graph: Lennard-Jones potential]({{ page.root }}/fig/lennard-jones.png){: width="360" }
 
 The LJ potential is commonly expressed in terms of the well depth $$\epsilon$$ (the measure of the strength of the interaction) and the van der Waals radius $$\sigma$$ (the distance at which the intermolecular potential between the two particles is zero).
 
@@ -164,7 +164,7 @@ $V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}r_{ij}}$
 
 where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>* and *q<sub>j</sub>* are the charges on the atoms *i* and *j*,$$\epsilon_{0}$$ is the permittivity of vacuum. and $$\epsilon_{r}$$ is the relative permittivity.
 
-![graph: electrostatic potential]({{ root }}/fig/Coulomb_interaction.png){: width="360" }
+![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="360" }
 
 > ## Short-range and Long-range Interactions
 > The interaction is termed short-range if the potential decreases faster than *r<sup>-d</sup>*, where *r* is the distance between 2 particles and *d* is dimensionality. Otherwise the interaction is long-ranged. Accordingly the Lennard-Jones interactions are short-ranged, the Coulomb interactions are long-ranged.
@@ -177,7 +177,7 @@ The bond potential is used to model the interaction of covalently bonded atoms i
 
 $V_{Bond}=k_b(r_{ij}-r_0)^2$
 
-![graph: harmonic bond potential]({{ root }}/fig/bond.png)
+![graph: harmonic bond potential]({{ page.root }}/fig/bond.png)
 
 This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
 
@@ -187,7 +187,7 @@ The angle potential describes the bond bending energy. It is defined for every t
 
 $V_{Angle}=k_\theta(\theta_{ijk}-\theta_0)^2$
 
-![graph: harmonic angle potential]({{ root }}/fig/angle.png)
+![graph: harmonic angle potential]({{ page.root }}/fig/angle.png)
 
 The force constants for angle potential are about 5 times smaller that for bond stretching.
 
@@ -195,7 +195,7 @@ The force constants for angle potential are about 5 times smaller that for bond 
 The torsion energy is defined for every 4 sequentially bonded atoms. The torsion angle $$\phi$$ is the angle of rotation about the covalent bond between the middle two atoms and the potential is given by:
 
 $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
-![graph: torsion/dihedral potential]({{ root }}/fig/dihedral.png)
+![graph: torsion/dihedral potential]({{ page.root }}/fig/dihedral.png)
 
 Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
@@ -204,7 +204,7 @@ The improper torsion potentials defined for a group of 4 bonded atoms where the 
 
 $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
-![graph: improper-dihedral potential]({{ root }}/fig/improper.png)
+![graph: improper-dihedral potential]({{ page.root }}/fig/improper.png)
 
 Where the dihedral angle $$\phi$$ is the angle between planes ijk and jkl.
 

@@ -18,11 +18,11 @@ Particle Mesh Ewald (PME) method is the most widely used method using the Ewald 
 
 The Fourier space part, on the other hand, is long-ranged but smooth and periodic. This part is a slowly varying function. PME takes advantage of the fact that all periodic functions can be represented with a sum of sine or cosine components, and slowly varying functions can be accurately described by only a limited number of low frequency components (k vectors). In other words Fourier transform of the long-range Coulomb interaction decays rapidly in Fourier space, and summation converges fast.    
 
-![Graph: PME Decomposition]({{ root }}/fig/PME_decomp.svg){:width="480"}
+![Graph: PME Decomposition]({{ page.root }}/fig/PME_decomp.svg){:width="480"}
 
 The long range contribution can then be efficiently computed in Fourier space using FFT. Fourier transform calculation is discrete and requires the input data to be on a regular grid. It is the  Mesh part of PME. As point charges in a simulation are non-equispaced, they need to be interpolated to obtain charge values in equispaced grid cells. 
 
-![Image: PME]({{ root }}/fig/PME.png)
+![Image: PME]({{ page.root }}/fig/PME.png)
 
 Parameters controlling PME calculations are listed in the Table below.
 

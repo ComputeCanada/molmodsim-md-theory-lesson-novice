@@ -26,12 +26,12 @@ The most computationally demanding part of a molecular dynamics simulation is th
 ### Cell Lists
 The cell lists method divides the simulation domain into *n* cells within edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighbouring cells (26 cells for 3-dimensional simulation).
 
-![Figure: Grid-cell lists]({{ root }}/fig/Grid_list.png){: width="240" }
+![Figure: Grid-cell lists]({{ page.root }}/fig/Grid_list.png){: width="240" }
 
 ### Verlet Lists
 A Verlet list stores all particles within the cutoff distance of every particle plus some extra buffer distance. Although all pairwise distances must be evaluated to construct the Verlet list, it can be used for several consecutive time steps until any particle has moved more than half of the buffer distance. At this point, the list is invalidated and the new list must be constructed. Verlet offers more efficient computation of pairwise interactions at the expense of relatively large memory requirement which can be a limiting factor. In practice, almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
-![Figure: Verlet lists]({{ root }}/fig/Verlet_list.png) 
+![Figure: Verlet lists]({{ page.root }}/fig/Verlet_list.png) 
 
 > ## Selecting Neighbour Searching Methods
 > **GROMACS**
@@ -73,7 +73,7 @@ A Verlet list stores all particles within the cutoff distance of every particle 
 ## Problems with Truncation of Lennard-Jones Interactions and How to Avoid Them?
 We have learned that the LJ potential is always truncated at the cutoff distance. A cutoff introduces a discontinuity in the potential energy at the cutoff value. As forces are computed by differentiating potential, a sharp difference in potential may result in nearly infinite forces at the cutoff distance (Figure 1A). There are several approaches to minimize the impact of the cutoff.
 
-![Cutoff Methods]({{ root }}/fig/Cutoff_Methods.svg)
+![Cutoff Methods]({{ page.root }}/fig/Cutoff_Methods.svg)
 <center>
 Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
 </center>

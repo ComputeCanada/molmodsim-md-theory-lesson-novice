@@ -37,7 +37,7 @@ A molecule with *N* atoms has more complicated modes of molecular vibration, wit
 
 | Angle bend                                 | Symmetric stretch                               | Asymmetric stretch                               |
 |--------------------------------------------|-------------------------------------------------|--------------------------------------------------|
-|![bend]({{root}}/fig/vibr_modes/water_1.gif)|![symmetric]({{root}}/fig/vibr_modes/water_2.gif)|![asymmetric]({{root}}/fig/vibr_modes/water_3.gif)|
+|![bend]({{ page.root }}/fig/vibr_modes/water_1.gif)|![symmetric]({{ page.root }}/fig/vibr_modes/water_2.gif)|![asymmetric]({{ page.root }}/fig/vibr_modes/water_3.gif)|
 
 Each vibrational mode has two degrees of freedom for energy. One degree of freedom involves the kinetic energy of the moving atoms, and one degree of freedom involves the potential energy of the spring-like chemical bond(s).
 
