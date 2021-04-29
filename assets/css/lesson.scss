@@ -58,6 +58,7 @@ div.output  { @include cdSetup($color-output); }
 div.vmd             { @include cdSetup($color-vmd); }
 div.leap            { @include cdSetup($color-leap); }
 div.cpptraj         { @include cdSetup($color-leap); }
+div.file-content    { @include cdSetup($color-output); }
 // end: added MolModSim
 
 div.error::before,
@@ -101,9 +102,9 @@ div.file-content::before   { background-color: #efefef; }
 div.cpptraj,
 div.cpptraj::before        { background-color: #f7f0f0; }
 div.leap,
-div.leap::before,
+div.leap::before           { background-color: #f5eded; } 
 div.vmd,
-div.vmd::before,           { background-color: #ecf0ee; }
+div.vmd::before            { background-color: #ecf0ee; }
 // end: added MolModSim
 
 // Tab panels are used on Setup pages to show instructions for different Operating Systems
