@@ -15,7 +15,7 @@ keypoints:
 ---
 Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. Application of PBC to simulations allows to include the influence of bulk solvent or crystalline environments.
 
-![](../fig/periodic_boundary.png){: width="240" }
+![Figure: Periodic Boundary Conditions]({{ root }}/fig/periodic_boundary.png){: width="240" }
 
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
@@ -37,7 +37,7 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 >gmx pdb2gmx -f 1lyz.pdb -ff amber99sb-ildn -water spce -ignh
 >gmx editconf -f conf.gro -o conf_boxed.gro -d 1.0 -bt cubic
 >~~~
-> {: .bash}
+> {: .language-bash}
 > In the example above the *editconf* program will append box vectors to the structure file *'conf.gro'* and save it in the file *'conf_boxed.gro'*. The 9 components of the three box vectors are saved in the last line of the structure file in the order: xx yy zz xy xz yx yz zx zy. Three of the values (xy, xz, and yz) are always zeros because they are duplicates of (yx, zx, and zy).  The values of the box vectors components are related to the unit cell vectors $$a,b,c,\alpha,\beta,\gamma$$ from the *CRYST1* record of a PDB file with the equations:
 >
 >$$xx=a, yy=b\cdot\sin(\gamma), zz=\frac{v}{(a*b*\sin(\gamma))}$$

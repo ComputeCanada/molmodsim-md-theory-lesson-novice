@@ -129,10 +129,10 @@ A modification of the Nosé-Hoover thermostat which includes not a single thermo
 | massive-Andersen      | tcoupl = andersen-massive    |                          | ntt = 2       |
 | Lowe-Andersen         |                              |  loweAndersen on         |               |
 | Berendsen             | tcoupl = berendsen           |  tCouple on              | ntt = 1       |
-| Langevin              |                              |  langevin on             | ntt = 3       |        
-| Bussi                 | tcoupl = V-rescale           |  stochRescale  on        |               |    
-| Nose-Hoover           | tcoupl = nose-hoover         |                          |               |    
-| Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |    
+| Langevin              |                              |  langevin on             | ntt = 3       |
+| Bussi                 | tcoupl = V-rescale           |  stochRescale  on        |               |
+| Nose-Hoover           | tcoupl = nose-hoover         |                          |               |
+| Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |
 
 
 #### Global and local thermostats

@@ -35,9 +35,9 @@ A molecule can also vibrate. A diatomic molecule has one molecular vibration mod
 
 A molecule with *N* atoms has more complicated modes of molecular vibration, with *3N − 5* vibrational modes for a linear molecule and *3N − 6* modes for a nonlinear molecule.
 
-| Angle bend                        | Symmetric stretch                 | Asymmetric stretch
-|-----------------------------------|-----------------------------------|-----------------------------------|
-|![A](../fig/vibr_modes/water_1.gif)|![A](../fig/vibr_modes/water_2.gif)|![A](../fig/vibr_modes/water_3.gif)|
+| Angle bend                                 | Symmetric stretch                               | Asymmetric stretch                               |
+|--------------------------------------------|-------------------------------------------------|--------------------------------------------------|
+|![bend]({{root}}/fig/vibr_modes/water_1.gif)|![symmetric]({{root}}/fig/vibr_modes/water_2.gif)|![asymmetric]({{root}}/fig/vibr_modes/water_3.gif)|
 
 Each vibrational mode has two degrees of freedom for energy. One degree of freedom involves the kinetic energy of the moving atoms, and one degree of freedom involves the potential energy of the spring-like chemical bond(s).
 

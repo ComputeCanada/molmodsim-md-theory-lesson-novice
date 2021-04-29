@@ -52,7 +52,7 @@ Several water models with different level of complexity (the number of interacti
 |qO   | −0.834 | −0.8476 | −1.04844 | −1.3582|
 |qH   | +0.417 | +0.4238 | +0.52422 | +0.6791|
 
-![Water Models](../fig/water_models.svg){: width="600"}
+![Water Models]({{ root }}/fig/water_models.svg){: width="600"}
 
 #### 3-point models: TIP3P (transferable intermolecular potential) and SPC/E  (simple point-charge)
 These models have three interaction points corresponding to the atoms of the water molecule. Only oxygen atom has the Lennard-Jones parameters. While TIP3P uses a rigid geometry matching that of actual water molecules, SPC model uses more obtuse tetrahedral angle of 109.47°. The SPC/E model adds an average polarization correction to the potential energy function. The SPC/E model results in a better density and diffusion constant than the original SPC model. 3-site models are commonly used because computationally they are highly efficient.
@@ -69,13 +69,13 @@ As we have seen before there are accuracy problems with all water models. For ex
 
 The last and the latest water models we will look at is the OPC (Optimal Point Charges). It belongs to the family of 3 charge, 4 point models. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
 
-![Charge distribution of the water molecule](../fig/water_charge_densityl.gif)
+![Charge distribution of the water molecule]({{ root }}/fig/water_charge_densityl.gif)
 
 - Removing point charge positioning restrictions allowed for considerably better reproduction of the six bulk properties of water.
 
 Let's have a look at the quality scores of different water models summarized in the figure below. The figure shows how quality score depends on the dipole and quadrupole moments. Interestingly the test models in which the moments were close to the QM values had low quality. And the models that scored better had moments very different from the QM values. This indicates that three point charges, even if placed optimally, are not enough to represent the complex charge distribution of real water molecule to the needed degree of accuracy. 
 
-![Quality scores of water models](../fig/Water_models_quality_scores.gif)
+![Quality scores of water models]({{ root }}/fig/Water_models_quality_scores.gif)
 
 Figures from the reference [[Building Water Models: A Different Approach](https://pubs.acs.org/doi/abs/10.1021/jz501780a)] 
 
