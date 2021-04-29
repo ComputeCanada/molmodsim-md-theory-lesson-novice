@@ -12,11 +12,14 @@ $color-brand:       #2b3990 !default;
 $color-error:       #bd2c00 !default;
 $color-warning:     #cda01d !default;
 $color-output:      #303030 !default;
-$color-source:      #6e5494 !default;
+$color-source:      #360084 !default;
+
+// begin: added MolModSim
+// define font color
 $color-leap:        #b13449 !default;
 $color-vmd:         #208f61 !default;
 $color-python:      #031ba1 !default;
-
+// end: added MolModSim
 
 // blockquotes
 $color-callout:     #f4fd9c !default;
@@ -30,7 +33,6 @@ $color-prereq:      #9cd6dc !default;
 $color-solution:    #ded4b9 !default;
 $color-testimonial: #fc8dc1 !default;
 
-
 //----------------------------------------
 // Specialized code blocks.
 //----------------------------------------
@@ -43,16 +45,6 @@ $color-testimonial: #fc8dc1 !default;
     border-radius: 4px 0 0 4px;
 }
 
-div.bash            { @include cdSetup($color-source); }
-div.file-content    { @include cdSetup($color-output); }
-div.source          { @include cdSetup($color-source); }
-div.output          { @include cdSetup($color-output); }
-div.string          { @include cdSetup($color-output); }
-div.vmd             { @include cdSetup($color-vmd); }
-div.python          { @include cdSetup($color-source); }
-div.leap            { @include cdSetup($color-leap); }
-div.python          { @include cdSetup($color-python); }
-
 // Generic setup. Has to come before .error, .warning, and .output
 div[class^='language-'] { @include cdSetup($color-source); }
 
@@ -61,18 +53,17 @@ div.error   { @include cdSetup($color-error); }
 div.warning { @include cdSetup($color-warning); }
 div.output  { @include cdSetup($color-output); }
 
-div.file-content::before,
-div.leap::before,
-div.string::before,
-div.source::before,
-div.output::before,
-div.bash::before,
-div.vmd::before,
+// begin: added by MolModSim
+// Generic setup of code boxes
+div.vmd             { @include cdSetup($color-vmd); }
+div.leap            { @include cdSetup($color-leap); }
+div.cpptraj         { @include cdSetup($color-leap); }
+// end: added MolModSim
+
 div.error::before,
 div.warning:before,
 div.output::before,
 div.source::before,
-div.python::before,
 div[class^='language-']::before {
     background-color: #f2eff6;
     display: block;
@@ -97,6 +88,23 @@ div.language-matlab::before { content: "MATLAB"; }
 div.language-python::before { content: "Python"; }
 div.language-r::before      { content: "R"; }
 div.language-sql::before    { content: "SQL"; }
+
+// begin: added MolModSim
+// set code-box-title
+div.cpptraj::before         { content: "CppTraj"; }
+div.file-content::before    { content: "File content"; }
+div.leap::before            { content: "LEaP"; }
+div.vmd::before             { content: "VMD"; }
+// set code-box-background
+div.file-content,
+div.file-content::before   { background-color: #efefef; }
+div.cpptraj,
+div.cpptraj::before        { background-color: #f7f0f0; }
+div.leap,
+div.leap::before,
+div.vmd,
+div.vmd::before,           { background-color: #ecf0ee; }
+// end: added MolModSim
 
 // Tab panels are used on Setup pages to show instructions for different Operating Systems
 .tab-pane {
@@ -142,20 +150,6 @@ a { color: #204A6F; }
     top: 0;
     width: 100%;
 }
-div.bash::before      { content: "Bash"; }
-div.source::before    { content: "Code"; }
-div.vmd::before       { content: "VMD"; }
-div.python::before    { content: "Python"; }
-div.leap::before      { content: "Leap"; }
-
-div.error::before  { background-color: #ffebe6; content: "Error"; }
-div.warning:before { background-color: #f8f4e8; content:" Warning"; }
-div.output::before { background-color: #efefef; content: "Output"; }
-div.string::before  { background-color: #efefef; content: "Text"; }
-div.file-content::before  { background-color: #efefef; content: "File content"; }
-div.leap::before  { background-color: #f7f0f0; content: "LEaP"; }
-div.vmd::before  { background-color: #ecf0ee; content: "VMD"; }
-div.python::before  { background-color: #e3e9f5; content: "Python"; }
 
 //----------------------------------------
 // Specialized blockquote environments for learning objectives, callouts, etc.
