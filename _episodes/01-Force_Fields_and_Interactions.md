@@ -14,23 +14,27 @@ keypoints:
 - "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
 ## Introduction
-Atoms and molecules, the building blocks of matter, interact with each other. They are attracted at long distances, but at short distances the interactions become strongly repulsive. In fact, there is no need to look for a proof of such interactions. We can observe results of these interactions indirectly with our own eyes every day. For example, due to the attractive forces water molecules stick together to form drops, which in turn rain down to fill rivers. Thanks to the strong repulsion, on the other hand, one liter of that very same water weighs always about 1 kg, regardless of how much pressure we use in trying to compress it.
+Atoms and molecules, the building blocks of matter, interact with each other. They are attracted at long distances, but at short distances the interactions become strongly repulsive. As a matter of fact, there is no need to look for a proof that such interactions exist. Every day, we observe indirect results of these interactions with our own eyes. For example, because of the attraction between water molecules, they stick together to form drops, which then rain down to fill rivers. On the other hand, due to the strong repulsion, one liter of the same water always weighs about 1 kg, regardless of how much pressure we use to compress it.
 
-Today, we carry out molecular modeling by following and analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. The first attempts to model interacting molecules go back to van der Waals' pioneering work, ["About the continuity of the gas and liquid state"](https://www.worldcat.org/title/over-de-continuiteit-van-den-gas-en-vloeistoftoestand/oclc/3301223) published in 1873. Using a simple state equation where the molecules were approximated as spheres attracting each other, he could predict gas-liquid phase transition. We still use many of the conceptual ideas from over a century ago in modern molecular modeling and simulations. The size and the length of MD simulations has been recently vastly improved. Longer and larger simulations allow us to tackle wider range of problems under a wide variety of conditions. 
+Nowadays, molecular modeling is done by analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. First attempts at modeling interacting molecules can be traced back to van der Waals' pioneering work ["About the continuity of the gas and liquid state"](https://www.worldcat.org/title/over-de-continuiteit-van-den-gas-en-vloeistoftoestand/oclc/3301223) published in 1873. In order to predict the transition from gas to liquid, he used a simple equation representing molecules as spheres that attract each other. We still use many of the conceptual ideas from over a century ago in modern molecular modeling and simulations. Recently, MD simulations have been vastly improved in size and length. Using longer simulations, we are able to study a broader range of problems under a wide range of conditions.  
 
 ![MD-timeline: system-size vs. time]({{ page.root }}/fig/MD_size_timeline.png){: width="400" }
 
 Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
 
-One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation showed how the receptor binding domain of the spike protein hidden from antibodies by polysaccharides spontaneously undergoes conformational transition that pushes it out of the glycan shield and thus enables interaction with ACE2 (angiotensin-converting enzyme) "receptors" of the host cells. The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER, the Weighted Ensemble Simulation Toolkit and AI. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
+One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation revealed that the receptor binding domain of the spike protein, which is hidden from antibodies by polysaccharides, undergoes conformational transitions that push it out of the glycan shield and enable it to bind to ACE2 (angiotensin-converting enzyme) "receptors" of the host cells.
+The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER. State-of-the-art methods such as the Weighted Ensemble Simulation Toolkit and ML were used. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
+
+This is one of the pioneering works examining the application of machine learning to MD studies. Machine Learning was used to identify pathways of conformational transitions between active and inactive states of spike proteins.  A machine learning algorithm was trained on thousands of MD trajectories and then used to intelligently accelerate conformational sampling. 
 
 ![Image: Simulation of SARS-CoV-2 with NAMD]({{ page.root }}/fig/Cov2-NAMD.jpg){: width="480" }
 
 Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://www.biorxiv.org/content/10.1101/2020.11.19.390187v1)
 
-The goal of this workshop is to introduce you to the method of molecular dynamics simulations and guide you to using various molecular dynamics simulation packages and utilities including NAMD, VMD, and AMBER. We will show how to use Compute Canada clusters for all steps of system preparation, MD and data analysis. The focus will be on reproducibility and automation by introducing scripting and batch mode.
+#### Goals
+In this workshop, you will learn about molecular dynamics simulations and how to use different molecular dynamics simulation packages and utilities, including NAMD, VMD, and AMBER. We will show you how to use Compute Canada clusters for all steps of preparing the system, performing MD and analyzing the data. The focus will be on reproducibility and automation through scripting and batch processing.
 
-In this first session will introduce the theory behind the method of MD. The objectives of this lesson is to give you a broad picture of the current methods of modeling the interactions between particles and simulating dynamics.
+The purpose of this first lesson is to introduce the theory underlying the MD method. In this lesson, you will gain an understanding of current methods for modelling particle interactions and simulating molecular dynamics. 
 
 ## Force Fields
 Development of the method of molecular dynamics was largely driven by the desire to understand complex biological phenomena on the molecular level. To get insights into such processes simulations of large systems for a long time windows were required.
@@ -47,7 +51,10 @@ Once we know forces acting on an object we can calculate how its position change
 
 $ \vec{F}=\frac{d\vec{p}}{dt} $
 
-To summarize, if we know how to calculate the potential energy of a system then we can calculate forces and propagate a system in time. In other words, to run a molecular dynamics simulation we need to know the interaction potential for the particles in the system, from which we can calculate the forces acting on atoms and advance a system in time.
+
+In summary, if we know how to calculate a system's potential energy, we can calculate its forces and determine its propagation in time. In other words, we need to know the interaction potential for the particles in the system to calculate forces acting on atoms and advance a simulation.
+
+Let's examine a typical workflow for simulations of molecular dynamics.
 
 ![Flow diagram of MD process]({{ page.root }}/fig/Md_process_summary.png){: width="480" }
 
@@ -59,29 +66,38 @@ Typically MD simulations are limited to evaluating only interactions between pai
 
 For convenience force fields can be divided into 3 general classes based on how complex they are.
 
+## Classification of force fields. ##
 ### Class 1 force fields.
 In the class 1 force field dynamics of bond stretching and angle bending are described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement, this approximation is called quadratic. In general, bond stretching and angle bending are close to harmonic only near the equilibrium. Higher-order anharmonic energy terms are required for a more accurate description of molecular motions. In the class 1 force field force matrix is diagonal because correlations between bond stretching and angle bending are omitted.
+- Examples: AMBER, CHARM, GROMACS, OPLS
 
 ### Class 2 force fields.
 Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters.
-[MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-JCC8>3.0.CO;2-T), [UFF](https://pubs.acs.org/doi/10.1021/ja00051a040)
+- Examples: [MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-JCC8>3.0.CO;2-T), [UFF](https://pubs.acs.org/doi/10.1021/ja00051a040)
 
 ### Class 3 force fields.
-Class 3 force fields explicitly add special effects of organic chemistry. For example polarization,stereoelectronic effects, electronegativity effect, Jahn–Teller effect, etc. Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
+Class 3 force fields explicitly add special effects of organic chemistry. For example polarization, stereoelectronic effects, electronegativity effect, Jahn–Teller effect, etc.  
+- Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
 
 ## Energy Terms of Biomolecular Force Fields
-Most force fields for biomolecular simulations are minimalistic class 1 force fields trading off rigor of the physical representation for the ability to simulate large systems for a long period of time. As we have already learned, potential energy function is composed of non-bonded and bonded interactions. Let's have a closer look at these energy terms.
+For biomolecular simulations, most force fields are minimalistic class 1 force fields that trade off physical accuracy for the ability to simulate large systems for a long time. As we have already learned, potential energy function is composed of non-bonded and bonded interactions. Let's have a closer look at these energy terms.
 
 ### Non-Bonded Terms
-The non-bonded potential terms describe non-elecrostatic and electrostatic interactions between all pairs of atoms. Non-elecrostatic potential energy is most commonly described with the Lennard-Jones potential.
+The non-bonded potential terms describe non-electrostatic and electrostatic interactions between all pairs of atoms. 
+
+![graph: Interactions]({{ page.root }}/fig/nb_matrix.svg){: width="260" }
+
+Non-electrostatic potential energy is most commonly described with the Lennard-Jones potential.
+
 #### The Lennard-Jones potential
-The Lennard-Jones (LJ) potential approximates the potential energy of non-elecrostatic interaction between a pair of non-bonded atoms or molecules with a simple mathematical function:
+The Lennard-Jones (LJ) potential approximates the potential energy of non-electrostatic interaction between a pair of non-bonded atoms or molecules with a simple mathematical function:
 
 $V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 
 The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially decaying repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
 
-![graph: Lennard-Jones potential]({{ page.root }}/fig/lennard-jones.png){: width="360" }
+![graph: Lennard-Jones potential]({{ page.root }}/fig/lj.svg){: width="360" }
+
 
 The LJ potential is commonly expressed in terms of the well depth $$\epsilon$$ (the measure of the strength of the interaction) and the van der Waals radius $$\sigma$$ (the distance at which the intermolecular potential between the two particles is zero).
 
@@ -92,7 +108,12 @@ The LJ coefficients *C* are related to the $$\sigma$$ and the $$\epsilon$$  with
  $C12=4\epsilon\sigma^{12},C6=4\epsilon\sigma^{6}$
 
 #### The Lennard-Jones Combining Rules
-To describe all *LJ* interactions in a simulations system the matrix of the pairwise interactions is constructed. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules.
+It is necessary to construct a matrix of the pairwise interactions in order to describe all *LJ* interactions in a simulation system. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules. Using combining rules helps to avoid huge number of parameters for each combination of different atom types. 
+
+![Combining rules ]({{ page.root }}/fig/combining_rules.svg){: width="380" }
+
+- The arithmetic mean (Lorentz) is motivated by collision of hard spheres
+- The geomertric mean (Berthelot) has little physical argument.
 
 **Geometric mean:**
 
@@ -117,6 +138,8 @@ This combining rule was developed specifically for simulation of noble gases.
 The Buckingham potential replaces the repulsive $$r^{-12}$$ term in Lennard-Jones potential by exponential function of distance:
 
 $V_{B}(r)=Aexp(-Br) -\frac{C}{r^{6}}$
+
+![graph: Buckingham potential]({{ page.root }}/fig/lj-buck.svg){: width="360" }
 
 Exponential function describes electron density more realistically but it is computationally more expensive to calculate. While using Buckingham potential there is a risk of "Buckingham Catastrophe", the condition when at short-range electrostatic attraction artificially overcomes the repulsive barrier and collision between atoms occurs. This can be remedied by the addition of $$r^{-12}$$ term.
 
@@ -158,7 +181,7 @@ $C_{ij}=\sqrt{(C_{ii}C_{jj})}$
 
 
 #### The electrostatic potential
-To describe the elecrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
+To describe the electrostatic interactions in MD the point charges are assigned to the positions of atomic nuclei. The atomic charges are derived using QM methods with the goal to approximate the electrostatic potential around a molecule. The electrostatic potential is described with the Coulomb's law:
 
 $V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}r_{ij}}$
 
@@ -177,7 +200,7 @@ The bond potential is used to model the interaction of covalently bonded atoms i
 
 $V_{Bond}=k_b(r_{ij}-r_0)^2$
 
-![graph: harmonic bond potential]({{ page.root }}/fig/bond.png)
+![graph: harmonic bond potential]({{ page.root }}/fig/bond.png){: width="360" }
 
 This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
 
@@ -187,7 +210,7 @@ The angle potential describes the bond bending energy. It is defined for every t
 
 $V_{Angle}=k_\theta(\theta_{ijk}-\theta_0)^2$
 
-![graph: harmonic angle potential]({{ page.root }}/fig/angle.png)
+![graph: harmonic angle potential]({{ page.root }}/fig/angle.png){: width="360" }
 
 The force constants for angle potential are about 5 times smaller that for bond stretching.
 
@@ -195,7 +218,7 @@ The force constants for angle potential are about 5 times smaller that for bond 
 The torsion energy is defined for every 4 sequentially bonded atoms. The torsion angle $$\phi$$ is the angle of rotation about the covalent bond between the middle two atoms and the potential is given by:
 
 $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
-![graph: torsion/dihedral potential]({{ page.root }}/fig/dihedral.png)
+![graph: torsion/dihedral potential]({{ page.root }}/fig/dihedral.png){: width="300" }
 
 Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
@@ -204,9 +227,9 @@ The improper torsion potentials defined for a group of 4 bonded atoms where the 
 
 $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
-![graph: improper-dihedral potential]({{ page.root }}/fig/improper.png)
+![graph: improper-dihedral potential]({{ page.root }}/fig/improper.svg){: width="200" }
 
-Where the dihedral angle $$\phi$$ is the angle between planes ijk and jkl.
+Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 
 
 ### Coupling Terms
@@ -215,10 +238,27 @@ It is known that as a bond angle is decreased, the adjacent bonds stretch to red
 
 $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 
+![graph: Urey-Bradley potential]({{ page.root }}/fig/ub.png){: width="360" }
+
 U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Urey-Bradley term is implemented in the CHARMM force fields.
 
 ### CHARMM CMAP potential
-CMAP is a grid based error correction map used in CHARMM force field to  correct for errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination rules and other force field deficiencies. The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins), [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations), and ff19SB. 
+
+A protein can be seen as a series of linked sequences of peptide units which can rotate around phi/psi angles (peptide bond N-C is rigid). These phi/psi angles define the conformation of the backbone. 
+
+![graph: Phi Psi]({{ page.root }}/fig/phipsi.png){: width="400" }
+
+phi/psi dihedral angle potentials correct for force field deficiencies such as errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination, etc. 
+
+CMAP potential was developed to improve the sampling of backbone conformations. CMAP parameter does not define a continuous function. it is a grid of energy correction factors defined for each pair of phi/psi angles typically tabulated with 15 degree increments.
+
+![graph: Phi Psi]({{ page.root }}/fig/cmap_energy.png){: width="240" }
+
+The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. 
+
+
+
+CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins), [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations), and ff19SB. 
 
 
 ### Energy scale of potential terms
@@ -233,9 +273,17 @@ CMAP is a grid based error correction map used in CHARMM force field to  correct
 | Salt bridges         | ~ 1.2 - 2.5      |$$\frac{kcal}{mol}$$ 
 
 ### Exclusions from Non-Bonded Interactions
-Pairs of atoms connected by chemical bonds are normally excluded from computation of non-bonded interactions because bonded energy terms replace non-bonded interactions. In biomolecular force fields all pairs of connected atoms separated by up to 2 bonds (1-2 and 1-3 pairs) are excluded from non-bonded interactions. Computation of the non-bonded interaction between 1-4 pairs depends on the specific force field. Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
+Pairs of atoms connected by chemical bonds are normally excluded from computation of non-bonded interactions because bonded energy terms replace non-bonded interactions. In biomolecular force fields all pairs of connected atoms separated by up to 2 bonds (1-2 and 1-3 pairs) are excluded from non-bonded interactions. 
 
-Now, there is one specific term in most force fields that should be given some more attention as it turns out to be an intermediate case: a pair of atoms in the outermost positions of a dihedral angle consisting of four atoms and three bonds. In many cases a compromise is made to treat this particular pair partially as a bonded and partially as a non-bonded interaction, and be called the “1–4” interaction. The reason is that steric interactions affect rotations around a bond. However, they are rather rough and in most cases lack further details of local internal conformational degrees of freedom. However, due to the short distance between the 1–4 atoms, both the Lennard–Jones and the Coulombic interactions are normally scaled down substantially. The 1–2 or 1–3 non-bonded interactions are, although somewhat arbitrarily, omitted completely. It is assumed that they are properly described with bond and angle potentials, most often within the harmonic approximation.
+Computation of the non-bonded interaction between 1-4 pairs depends on the specific force field. Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
+
+
+![exclusions]({{ page.root }}/fig/exclusions.svg){: width="240" }
+
+
+The 1-4 interaction turns out to be an intermediate case where both bonded and non-bonded interactions are required for a reasonable description. Due to the short distance between the 1–4 atoms full strength non-bonded interactions are too strong, and in most cases lack fine details of local internal conformational degrees of freedom. To address this problem in many cases a compromise is made to treat this particular pair partially as a bonded and partially as a non-bonded interaction.
+
+Non-bonded interactions between 1-4 pairs depends on the specific force field. Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
 
 > ## Specifying Exclusions
 > **GROMACS**

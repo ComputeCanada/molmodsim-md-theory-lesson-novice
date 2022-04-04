@@ -17,11 +17,16 @@ keypoints:
 - "Time step can be increased if bonds involving hydrogens are constrained."
 - "Additional time step increase can be achieved by constraining all bonds and angles involving hydrogens."
 ---
+## Introduction
+To simulate evolution of the system in time we need to solve Newtonian equations of motions. As the exact analytical solution for systems with thousands or millions of atoms is not feasible, the problem is solved numerically. The approach used to find a numerical approximation to the exact solution is called integration.
+
 To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step $$\delta{t}$$ during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
 
 ## Integration Algorithms
 ### The Euler Algorithm
-The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step:
+The Euler algorithm is the simplest integration method. It assumes that acceleration does not change during time step. In reality acceleration is a function of coordinates, it changes when atoms move.
+
+The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step. In practice this means use the current positions and forces to calculate the positions and the velocities at the next time step:
 
 $\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}^2$
 
@@ -29,38 +34,45 @@ $\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}a(t)\delta{t}$
 
 The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate some other than classical MD equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
-### The Verlet Algorithm
-Using the current positions and forces and the previous positions calculate the positions at the next time step:
-
-$\vec{r}(t+\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})+a(t)\delta{t}^2$
-
-The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation. While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
-
-$\vec{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
-
-The Verlet algorithm is time-reversible and energy conserving.
+> ## The original Verlet Algorithm
+>Using the current positions and forces and the previous positions calculate the positions at the next time step:  
+>$\qquad\vec{r}(t+\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})+a(t)\delta{t}^2$<br>
+>  
+>- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
+> 
+>While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
+>
+>$\qquad\vec{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
+>
+>The Verlet algorithm is time-reversible and energy conserving.
+{: .callout}
 
 ### The Velocity Verlet Algorithm
-The velocities, positions and forces are calculated at the same time according to:
+Euler integrator can be improved by introducing evaluation of the acceleration at the next time step. Recollect that acceleration is a function of atomic coordinates and is fully defined by interaction potential.
 
-$\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}$
+- The velocities, positions and forces are calculated at the same time using the following algorithm:
 
-$\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}[a(t)+a(t+\delta{t})]\delta{t}$
+1. Use $\overrightarrow{r}, \overrightarrow{v},\overrightarrow{a}$ at time $t$ to compute   $\overrightarrow{r}(t+\delta{t})$:<span style="color:gray"> $\qquad\overrightarrow{r}(t+\delta{t})=\overrightarrow{r}(t)+\overrightarrow{v}(t)\delta{t}+\frac{1}{2}\overrightarrow{a}(t)\delta{t}^2$ </span>
+2. Derive $ \overrightarrow{a}(t+\delta{t})$ from the interaction potential using new positions $\overrightarrow{r}(t+\delta{t})$ 
+3.  Use both $\overrightarrow{a}(t)$ and $\overrightarrow{a}(t+\delta{t})$ to compute $\overrightarrow{v}(t+\delta{t})$:  <span style="color:gray"> $\quad\overrightarrow{v}(t+\delta{t})=\overrightarrow{v}(t)+\frac{1}{2}(\overrightarrow{a}(t)+\overrightarrow{a}(t+\delta{t}))\delta{t} $</span>
+
+- The Verlet algorithm is time-reversible and energy conserving.
 
 The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm.
 - *Due to its simplicity and stability the Velocity Verlet has become the most widely used algorithm in the MD simulations.*
 
 
-### The Leap Frog Algorithm
- The leap frog algorithm is a modified version of the Verlet algorithm. Using accelerations of the current time step, compute the velocities at half-time step:
+#### Leap Frog Variant of Velocity Verlet
 
-$\vec{v}(t+\frac{1}{2}\delta+t)=\vec{v}(t-\frac{1}{2}\delta{t})\cdot\delta{t}+\vec{a}(t)\cdot\delta{t}$
+- The leap frog algorithm is a modified version of the Verlet algorithm.
+- The only difference is that the velocities are not calculated at the same time as positions.
+- Positions and velocities are computed at interleaved time points, staggered in such a way that they "leapfrog" over each other.
 
-Then determine positions at the next time step:
-
-$\vec{r}(t+\delta t)=\vec{r}(t)+\vec{v}(t+\frac{1}{2}\delta{t}))\cdot\delta{t}$
-
-The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other.
+1. Derive $ \overrightarrow{a}(t)$ from the interaction potential using positions $\overrightarrow{r}(t)$ 
+2. Use $\overrightarrow{v}(t-\frac{\delta{t}}{2})$ and $\overrightarrow{a}(t)$ to compute $\overrightarrow{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\overrightarrow{v}(t+\frac{\delta{t}}{2})=\overrightarrow{v}(t-\frac{\delta{t}}{2}) + \overrightarrow{a}(t)\delta{t}$
+3. Use current $\overrightarrow{r}(t)$ and $\overrightarrow{v}(t+\frac{\delta{t}}{2})$ to compute $\overrightarrow{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\overrightarrow{r}(t+\delta{t})=\overrightarrow{r}(t)+\overrightarrow{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
+ 
+The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other. The only practical difference between the velocity Verlet and the leap-frog is that restart files are different. 
 
 
 > ## Selecting the Intergator
@@ -93,13 +105,20 @@ The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap
 ## How to Choose Simulation Time Step?
 Mathematically Verlet family integrators are stable for time steps
 
-$$\delta{t}\leq\frac{2}{w}$$ where $$\omega$$ is angular frequency.
+$$\qquad\delta{t}\leq\frac{1}{\pi{f}}$$ where $$f$$ is oscillation frequency.
 
 In molecular dynamics stretching of the bonds with the lightest atom H is usually the fastest motion. The period of oscillation of a C-H bond is about 10 fs. Hence Verlet integration will be stable for time steps < 3.2 fs. In practice, the time step of 1 fs is recommended to describe this motion reliably.
 
 If the dynamics of hydrogen atoms is not essential for a simulation, bonds with hydrogens can be constrained. By replacing bond vibrations with holonomic (not changing in time) constraints the simulation step can be doubled since the next fastest motions (bond vibrations involving only heavy atoms and angles involving hydrogen atoms) have a period of about 20 fs. Further increase of the simulation step requires constraining bonds between all atoms and angles involving hydrogen atoms. Then the next fastest bond vibration will have 45 fs period allowing for another doubling of the simulation step.
 
 To accelerate a simulation the electrostatic interactions outside of a specified cutoff distance can be computed less often than the short range bonded and non-bonded interactions. It is also possible to employ an intermediate timestep for the short-range non-bonded interactions, performing only bonded interactions every timestep.
+
+#### Other ways to increase simulation speed
+
+- Compute long range electrostatic interactions less often than the short range interactions.
+- Employ an intermediate timestep for the short-range non-bonded interactions, performing only bonded interactions at each timestep.
+- Hydrogen mass repartitioning allows increasing time step to 4 fs.
+
 
 > ## Specifying Time Parameters
 > **GROMACS**

@@ -13,9 +13,12 @@ keypoints:
 - "Periodic box should not restrict molecular motions in any way."
 - "The macromolecule shape, rotation and conformational changes should be taken into account in choosing the periodic box parameters."
 ---
-Periodic boundary conditions (PBC) are used to approximate a large system by using a small part called a unit cell. The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. Application of PBC to simulations allows to include the influence of bulk solvent or crystalline environments.
+### What PBC is and why it is important?
+In most cases we want to simulate a system in realistic environment, such as solution. If one tries to simulate a protein in a droplet of water, it will simply evaporate.
 
-![Figure: Periodic Boundary Conditions]({{ page.root }}/fig/periodic_boundary.png){: width="240" }
+The boundary to contain molecules in simulation is needed to preserve thermodynamic properties like temperature, pressure and density. The use of PBC in simulations allows the inclusion of bulk solvent or crystalline environments. In other words periodic boundary conditions make it possible to approximate an infinite system by using a small part (unit cell). A unit cell in MD is usually referred to as periodic box.
+
+![Figure: Periodic Boundary Conditions]({{ page.root }}/fig/periodic_boundary-3.svg){: width="200" }
 
 To implement PBC the unit cell is surrounded by translated copies in all directions to approximate an infinitely large system. When one molecule diffuses across the boundary of the simulation box it reappears on the opposite side. So each molecule always interacts with its neighbours even though they may be on opposite sides of the simulation box. This approach replaces the surface artifacts caused by the interaction of the isolated system with a vacuum with the PBC artifacts which are in general much less severe.
 
@@ -65,16 +68,63 @@ To implement PBC the unit cell is surrounded by translated copies in all directi
 >{: .file-content}
 {: .callout}
 
-## What size/shape of a periodic box should I use?
+### Choosing periodic box size and shape.
 
-### Box size
-Solvated macromolecules rotate during simulations. Furthermore macromolecules may undergo conformational changes. Often these changes are of major interest and should not be restricted in any way. If the molecule is not spherical and the box dimension is not large enough rotation will result in the interaction between copies. This artifactual interaction may influence the motions of the system and affect the outcome of the simulation. To avoid these problems the minimum box dimension should be larger than the largest dimension of the macromolecule plus at least 10 <span>&#8491;</span>.
+
 
 ### Box shape
- A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower. Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. A common alternatives that are closer to spherical are the dodecahedron (any polyhedron with 12 faces) or the truncated octahedron (14 faces). These shapes work reasonably well for globular macromolecules, but if the solute is elongated there will be a large amount of the unnecessary water located far away from the solute. In this case you may consider constraining the rotational motion [[1]](https://aip.scitation.org/doi/10.1063/1.480557) and using a smaller rectangular box. But be aware that the box shape itself may influence conformational dynamics by restricting motions in certain directions [[2]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
+#### Cubic periodic box
+A cubic box is the most intuitive and common choice, but it is inefficient due to irrelevant water molecules in the corners. The extra water will make your simulation run slower.
+ 
+ ![]({{ page.root }}/fig/cubic_box.svg){: width="200" }
+ 
+Ideally you need a sufficiently large sphere of water surrounding the macromolecule, but that's impossible because spheres can't be packed to fill space. 
 
-### Cut-off radius and box size
-In simulations with PBC the non-bonded interaction cut-off radius should be smaller than half the shortest periodic box vector to prevent interaction of an atom with its image.
+#### Octahedral and dodecahedral periodic boxes
+A common alternatives that are closer to spherical are the dodecahedron (any polyhedron with 12 faces) or the truncated octahedron (14 faces). These shapes work reasonably well for globular macromolecules.
+
+|  | Space filling with truncated octahedrons |
+|:---:|:---|
+| ![]({{ page.root }}/fig/trunc-octa.svg){: width="64" } | ![]({{ page.root }}/fig/truncated_octahedron_group.svg){: width="140" } |
+
+
+#### Triclinic periodic boxes
+The triclinic box is the least symmetric of all types of periodic boxes. The triclinic system defines the unit cells by three basis vectors of unequal length, and the angles between these vectors must all be different from each other, and not 90 degrees.
+
+In simulation packages, however, there usually are no such restrictions for triclinic boxes, which is why they are the most generic periodic boundary conditions. Any periodic box can be converted into a triclinic box with specific box vectors and angles.
+
+![]({{ page.root }}/fig/triclinic_cell.gif){: width="200" }
+
+There are two reasons why triclinic boxes are useful: First, they can be used to simulate crystals that don't have rectangular unit cells. In addition, the best triclinic cell has about 71% the volume of an ideal rectangular cell.
+
+
+####  Box size
+A good rule of thumb is to keep the box at least 10 <span>&#8491;</span> away from the solute. Of course this assumes completely equilibrated system. If you are preparing a new system, make sure there is at least a margin of 13 <span>&#8491;</span> between the solvent and the box, since the solvent will come closer to the solute during equilibration and the box will contract.
+
+![10 nm margin]({{ page.root }}/fig/box_size-2.svg){: width="200" }
+
+In order to avoid short range interactions between a molecule and its images, the shortest periodic box vector should be at least twice as big as the cuf-off radius. 
+ 
+![Figure: Periodic Boundary Conditions]({{ page.root }}/fig/periodic_boundary-4.svg){: width="300" }
+
+The solvent molecules in simulations involving macromolecules should not "feel" both sides of a solute. In other words, there must be at least twice the cut-off distance between a macromolecule and any of its images.
+
+
+![]({{ page.root }}/fig/box_size.svg){: width="400" }
+
+
+#### Pitfalls
+
+Solvated macromolecules rotate during simulations. Furthermore macromolecules may undergo conformational changes. Often these changes are of major interest and should not be restricted in any way. 
+
+Periodic boxes for elongated molecules are also elongated when the distance between the solute and the box is used to prepare them. If the smallest box dimension is not large enough rotation will result in the interaction between the molecule and its periodic images and lead to unphysically restricted dynamics. Thus, when setting up a periodic system, you must consider rotation of elongated macromolecules as well as possible changes in conformation.
+
+Use of a cubical or dodecahedral box is one way to solve this problem. A disadvantage of such an approach is that you will need a lot of water to fill the box.
+ 
+![Figure: Periodic Boundary Conditions]({{ page.root }}/fig/PBC.svg){: width="300" }
+
+Using a narrow box together with constraining rotational motion is more efficient [[1]](https://aip.scitation.org/doi/10.1063/1.480557). Be aware, however, that the box shape itself may impact conformational dynamics by restricting motion in certain directions [[2]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
+
 
 >## Comparing periodic boxes
 >Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and truncated octahedral boxes with the 15 <span>&#8491;</span> distance between the solute and the box edge.
@@ -82,12 +132,6 @@ In simulations with PBC the non-bonded interaction cut-off radius should be smal
 >Which of the boxes will be the fastest to simulate?
 {: .challenge}
 
-So what are the triclinic boxes?  There turns out that any repeating shape that fills all of space  has an equivalent triclinic box. Given a truncated octahedron, for example, there is an equivalent triclinic box with exactly the same volume that, when tiled periodically throughout space, produces exactly the same repeating pattern of atoms.  And that means that if you have triclinic boxes, you automatically have all other shapes as well.
-
-Given the minimum required distance between periodic copies, the optimal triclinic cell has about 71% the volume of the optimal rectangular cell, which means your system only needs about 71% the number of atoms.  So although this isn't a huge optimization, it does allow you to use a somewhat smaller system that can be simulated somewhat faster.
-
-Truncated octahedron periodic boundary conditions are isomorphic to parallelepiped boundary conditions with specific cell vectors. If you view an octahedral simulation in VMD, it will look like a parallelepiped and not a 
-truncated octahedron, but they have exactly the same properties, so it doesn't matter. 
 
 References:  
 1. [Molecular dynamics simulations with constrained roto-translational motions: Theoretical basis and statistical mechanical consistency](https://aip.scitation.org/doi/10.1063/1.480557) 

@@ -16,19 +16,22 @@ keypoints:
 ---
 
 ### Introduction
-The goal of bio-molecular simulations is the accurate and predictive computer simulation of the physical properties of biological molecules in their aqueous environments. There are two approaches to solvation: a suitable amount of explicit water molecules can be added to prepare a fully solvated simulation system. Alternatively, water can be treated as a continuous medium instead of individual molecules. As continuum models do not add any non-bonded interactions to a simulation system, they are significantly faster than explicit solvation. However there a limitations of an implicit water models. They cannot reproduce the microscopic details of the protein–water interface. The conformational ensembles produced by GBSA models in other studies differ significantly from those produced by explicit solvent and do not identify the protein's native state [Free energy landscape of protein folding in water: explicit vs. implicit solvent](https://onlinelibrary.wiley.com/doi/abs/10.1002/prot.10483). In particular, salt bridges are over-stabilized, and a higher-than-native alpha helix population was observed. These models are still useful for example for calculation of binding free energies or for flexible protein-protein docking. Most molecular dynamics simulations are carried out with the solute surrounded by a droplet or periodic box of explicit water molecules. 
-
-In a typical case, water molecules will account for over 80% of the particles in the simulation. Water–water interactions dominate the computational cost of such simulations, so the model used to describe the water needs to be fast as well as accurate
+The goal of bio-molecular simulations is the accurate and predictive computer simulation of the physical properties of biological molecules in their aqueous environments. There are two approaches to solvation: a suitable amount of explicit water molecules can be added to prepare a fully solvated simulation system. Alternatively, water can be treated as a continuous medium instead of individual molecules. 
+#### Continuum models
+As continuum models do not add any non-bonded interactions to a simulation system, they are significantly faster than explicit solvation. However there a limitations of an implicit water models. They cannot reproduce the microscopic details of the protein–water interface. The conformational ensembles produced by GBSA models in other studies differ significantly from those produced by explicit solvent and do not identify the protein's native state [Free energy landscape of protein folding in water: explicit vs. implicit solvent](https://onlinelibrary.wiley.com/doi/abs/10.1002/prot.10483). In particular, salt bridges are over-stabilized, and a higher-than-native alpha helix population was observed. These models are still useful for example for calculation of binding free energies or for flexible protein-protein docking. 
+#### Explicit models
+Most molecular dynamics simulations are carried out with the solute surrounded by a droplet or periodic box of explicit water molecules. In a typical case, water molecules will account for over 80% of the particles in the simulation. Water–water interactions dominate the computational cost of such simulations, so the model used to describe the water needs to be fast as well as accurate
 
 Explicit water models are empirical models focused on reproducing a number of bulk properties in a particular phase. For example, some models reproduce well protein hydration energies, while others predict excellent water structure but not so good for hydration free energy. Most importantly, none of water models accurately reproduce all of the key properties of bulk water simultaneously. Inaccuracies of water models can adversely affect simulations in an unpredictable manner. 
 
 Thus, in choosing a water model for use in a molecular simulation, the desired properties of interest must be planned because it will determine which water model would be optimal for the simulation.
 
+#### An early water model.
 Water molecules have OH distance of 0.9572 $$ \unicode{x212B} $$ and HOH angle of 104.52°. Early water models used a rigid geometry closely matching that of actual water molecules. To achieve this O-H and H-H distances are constrained with harmonic potential. 
 
 Point charges in classical water models replace electron density distribution. They are meant to reproduce the electrostatic potential of a molecule. Therefore, they are usually derived by fitting to the electrostatic potential around a water molecule. There are some downsides for this approach, which we will discuss later. 
 
-#### How to assess quality of a water model?
+#### How are water models derived?
 A good water model must faithfully reproduce six bulk properties of water:
 - Static dielectric constant, $$ \epsilon_{0} $$
 - Self diffusion coefficient, $$ \vec{D} $$
@@ -39,7 +42,58 @@ A good water model must faithfully reproduce six bulk properties of water:
 
 Several water models with different level of complexity (the number of interaction points) have been developed. We will discuss only the models most widely used in simulations, and refer you to the excellent [article in Wikipedia](https://en.wikipedia.org/wiki/Water_model) for an overview of all water models.
 
-#### Force Field Parameters of the common Water Models
+#### 3-charge 3-point models.
+These models have three interaction points corresponding to the atoms of the water molecule. Only oxygen atom has the Lennard-Jones parameters. 
+
+|||
+|:-|:-:|
+|**TIP3P (transferable intermolecular potential)**  <br><br>$\circ$  Rigid geometry closely matching actual water molecule.  | ![Water Models]({{ page.root }}/fig/tip3p.svg){: width="150"}|
+|**SPC/E (simple point charge)**  <br><br>$\circ$  More obtuse tetrahedral angle of 109.47°.<br>$\circ$  Adds an average polarization correction to the potential energy function.<br>$\circ$  Reproduces density and diffusion constant better than the original SPC model. | ![Water Models]({{ page.root }}/fig/spce.svg){: width="150"}|
+
+Models with three sites are commonly used because they are computationally efficient. The interactions between two molecules can be computed using only nine distances.
+
+#### 3-charge 4-point models.
+In these models the negative charge is not centered on the oxygen atom, but shifted towards hydrogen atoms. This position is represented with the fourth dummy atom (EP) located near the oxygen along the bisector of the HOH angle. The idea is to improve representation of electrostatic potential without changing its geometric properties. The idea is to improve electrostatic potential representation without changing the geometric properties of the molecule.
+
+|||
+|:-|:-:|
+|**TIP4P-Ew**<br><br>$\circ$  Improves association/dissociation balance compared to 3-point models. | ![Water Models]({{ page.root }}/fig/tip4p.svg){: width="150"}|
+
+#### Water models have their limitations.
+It is important to understand the limitations of water models. Models are unable to reproduce quantitatively all characteristics of real water. When chosen appropriately for the problem, however, they can provide useful insight into water's behavior.
+
+- Early water models were developed with cut-off of electrostatic interactions. Using these models with full electrostatic method results in stronger electrostatic interactions and consequently higher density.
+- Most of the more complex new water models attempt to reproduce specific properties of a specific phase, but this comes at the expense of other properties.
+- TIP3P model predicts hydration free energies of small neutral molecules more accurately than the TIP4PEw model.
+- 4-charge 5-point model TIP5P predicts excellent water structure, but poor hydration energies. 
+
+#### Challenges in developing water models.
+A key challenge in developing water models is to find an accurate yet simplified description of the charge distribution of the water molecule that can adequately account for the hydrogen bonding in the liquid phase.
+
+|:-|:-:|
+|<br>Traditional approach is to place point charges on or near the nuclei. Afterwards, however, it was discovered that 3 point charges reproduce the electrostatic potential of water molecules significantly more accurately when they form tight clusters.|![Charge distribution of the water molecule]({{ page.root }}/fig/water_charge_densityl.gif){: width="600"}|
+
+#### Optimal Point Charges (OPC)
+The last and the latest water models we will look at is the OPC (Optimal Point Charges). It belongs to the family of 3 charge, 4 point models. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
+
+|:-|:-:|
+|<br>$\circ$ Considerably better reproduces the six bulk properties of water. <br>$\circ$ Removing point charge positioning restrictions allowed for considerably better reproduction of the six bulk properties of water. | ![Water Models]({{ page.root }}/fig/opc.svg){: width="220"}|
+
+#### Quality of different water models 
+Let's have a look at the quality scores of different water models summarized in the figure below. The figure shows how quality score depends on the dipole and quadrupole moments. Interestingly the test models in which the moments were close to the QM values had low quality. And the models that scored better had moments very different from the QM values. This indicates that three point charges, even if placed optimally, are not enough to represent the complex charge distribution of real water molecule to the needed degree of accuracy. 
+
+![Quality scores of water models]({{ page.root }}/fig/Water_models_quality_scores.gif){: width="350"}
+
+The distribution of quality scores for different water models in the space of dipole (μ) and quadruple (QT) moments. Figures from [2].
+
+
+#### Performance Considerations
+The time to compute interactions between a pair of water molecules is approximately proportional to the number of distances between each pair of interaction points. For the 3-point model, 9 distances are required for each pair of water molecules. For the 4-site model, 10 distances are required (every charged site with every charged site, plus the VDW O–O interaction).
+
+#### Other things to consider
+Water models in common use in bio-molecular simulation have traditionally only been parameterized for a single temperature of 298K (SPC/E, TIP3P)
+ 
+### Force Field Parameters of the common Water Models
 
 |     | TIP3P  | SPC/E   | TIP4P-Ew | OPC    |
 |---  |--------|---------|----------|--------|
@@ -52,39 +106,6 @@ Several water models with different level of complexity (the number of interacti
 |qO   | −0.834 | −0.8476 | −1.04844 | −1.3582|
 |qH   | +0.417 | +0.4238 | +0.52422 | +0.6791|
 
-![Water Models]({{ page.root }}/fig/water_models.svg){: width="600"}
-
-#### 3-point models: TIP3P (transferable intermolecular potential) and SPC/E  (simple point-charge)
-These models have three interaction points corresponding to the atoms of the water molecule. Only oxygen atom has the Lennard-Jones parameters. While TIP3P uses a rigid geometry matching that of actual water molecules, SPC model uses more obtuse tetrahedral angle of 109.47°. The SPC/E model adds an average polarization correction to the potential energy function. The SPC/E model results in a better density and diffusion constant than the original SPC model. 3-site models are commonly used because computationally they are highly efficient.
-
-#### 4-point: TIP4P-Ew and OPC (optimal point-charge)    
-In these models the negative charge is not centered on the oxygen atom, but shifted towards hydrogen atoms. This position is represented with the fourth dummy atom (EP) located near the oxygen along the bisector of the HOH angle. 
-
-A key challenge in developing water models is to find an accurate yet simplified description of the charge distribution of the water molecule that can adequately account for the hydrogen bonding in the liquid phase.
-
-As we have seen before there are accuracy problems with all water models. For example,
-- TIP5P predicts excellent water structure, but poor hydration energies. 
-- TIP3P model predicts hydration free energies of small neutral molecules more accurately than the TIP4PEw model.
-- Early water models were developed with cut-off of electrostatic interactions. Using these models with full electrostatic method results in stronger electrostatic interactions and consequently higher density.
-
-The last and the latest water models we will look at is the OPC (Optimal Point Charges). It belongs to the family of 3 charge, 4 point models. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
-
-![Charge distribution of the water molecule]({{ page.root }}/fig/water_charge_densityl.gif)
-
-- Removing point charge positioning restrictions allowed for considerably better reproduction of the six bulk properties of water.
-
-Let's have a look at the quality scores of different water models summarized in the figure below. The figure shows how quality score depends on the dipole and quadrupole moments. Interestingly the test models in which the moments were close to the QM values had low quality. And the models that scored better had moments very different from the QM values. This indicates that three point charges, even if placed optimally, are not enough to represent the complex charge distribution of real water molecule to the needed degree of accuracy. 
-
-![Quality scores of water models]({{ page.root }}/fig/Water_models_quality_scores.gif)
-
-Figures from the reference [[Building Water Models: A Different Approach](https://pubs.acs.org/doi/abs/10.1021/jz501780a)] 
-
-#### Performance Considerations
-The time to compute interactions between a pair of water molecules is approximately proportional to the number of distances between each pair of interaction points. For the 3-point model, 9 distances are required for each pair of water molecules. For the 4-site model, 10 distances are required (every charged site with every charged site, plus the VDW O–O interaction).
-
-#### Other things to consider
-Water models in common use in bio-molecular simulation have traditionally only been parameterized for a single temperature of 298K (SPC/E, TIP3P)
- 
-
 1. [Structure and Dynamics of the TIP3P, SPC, and SPC/E Water Models at 298 K](https://pubs.acs.org/doi/full/10.1021/jp003020w)
 2. [Building Water Models: A Different Approach](https://pubs.acs.org/doi/abs/10.1021/jz501780a)
+3. [Effect of the Water Model in Simulations of Protein–Protein Recognition and Association](https://doi.org/10.3390/polym13020176) 

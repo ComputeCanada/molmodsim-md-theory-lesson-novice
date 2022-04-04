@@ -11,18 +11,18 @@ objectives:
 keypoints:
 - ""
 ---
-## Introduction
+## Pressure at the molecular level. 
 The role of pressure control algorithms is to keep pressure in the simulation system constant or to apply an external stress to the simulated system. 
 
 How is pressure kept constant in a simulation? Pressure is kept on its target value by adjusting the volume of a periodic simulation system. What defines pressure is a simulation system, how can we measure pressure in a simulation? From the physical point of view pressure is a force exerted by collision of particles with the walls of a closed container. The virial equation is commonly used to obtain the pressure from a molecular dynamics simulation. According to this equation pressure in a simulation has two components:
 
-$P=\frac{NK_{B}T}{V}+\frac{1}{3V}\langle\sum\{r_{ij}F_{ij}}\rangle$
+${P}=\frac{NK_{B}T}{V}+\frac{1}{3V}\langle\sum\{r_{ij}F_{ij}}\rangle$
 
 The first term in this equation describes pressure of an ideal gas (meaning no interaction between molecules). The second contribution comes from internal forces acting on each atom. The virial equation is well suited for MD since forces are evaluated at each simulation step anyway, and they are readily available.
 
 As with temperature control, there are different algorithms of pressure control for MD simulation. 
 
-## Common Pressure Control Algorithms
+## Pressure Control Algorithms
  Barostats regulate pressure by adjusting the volume of the simulated system. In practice this done by scaling coordinates of each atom is a system by a small factor, so that the size of the system changes. The methods of maintaining pressure fall into categories similar to categories of temperature regulation.
 
 ### Weak coupling methods
@@ -50,9 +50,11 @@ Nose-Hoover method was not free of issues. It was observed that the Nose-Hoover 
 ### Langevin piston pressure control.
 Langevin piston barostat is based on Langevin thermostat. The equations of motion resemble MTTK equations, but an additional damping (friction) force and stochastic force are introduced. A suitable choice of collision frequency then eliminates the unphysical oscillation of the volume associated with the piston mass. In this way it is similar to the weak coupling Berendsen algorithm, but in contrast it yields the correct ensemble. 
 
-![Comparison of Barostats]({{ page.root }}/fig/barostats_comp.png)
-
 Reference: [Constant pressure molecular dynamics simulation: The Langevin piston method](https://aip.scitation.org/doi/abs/10.1063/1.470648)
+
+### A Comparison of Barostats.
+
+![Comparison of Barostats]({{ page.root }}/fig/barostats_comp.png)
 
 MTTK and Langevin produce identical ensembles, but Langevin barostat oscillates less then MTTK and converges faster due to stochastic collisions and damping.
 
@@ -60,7 +62,7 @@ MTTK and Langevin produce identical ensembles, but Langevin barostat oscillates 
 
 
 ### Monte-Carlo pressure control. 
-Recently several efficient Monte Carlo methods have been introduced. Monte Carlo pressure control samples volume fluctuations at a predefined number of steps at a given constant external pressure. It involves generation of a random volume change from a uniform distribution followed by evaluation of the potential energy of the trial system. The volume move is then accepted with the standard Monte-Carlo probability.  
+Recently several efficient Monte Carlo methods have been introduced. Monte Carlo pressure control samples volume fluctuations at a predefined number of steps at a given constant external pressure. It involves generation of a random volume change from a uniform distribution followed by evaluation of the potential energy of the trial system. The volume move is then accepted with the standard Monte-Carlo probability. Virial is not computed by Monte-Carlo methods, so pressure is not available at runtime, and it is also not printed in energy files.
 
 References: 
 
