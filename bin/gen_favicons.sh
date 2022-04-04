@@ -30,4 +30,4 @@ convert $INPUTFILE -resize  70x70    favicons/mstile-70x70.png
 convert $INPUTFILE -resize 144x144   favicons/mstile-144x144.png
 convert $INPUTFILE -resize 150x150   favicons/mstile-150x150.png
 convert $INPUTFILE -resize 310x310   favicons/mstile-310x310.png
-convert mstile-310x310.png -gravity Center -crop 310x150+0+0 +repage  mstile-310x150.png
+convert favicons/mstile-310x310.png -gravity Center -crop 310x150+0+0 +repage  favicons/mstile-310x150.png

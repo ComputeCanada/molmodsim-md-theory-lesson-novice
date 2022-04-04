@@ -9,7 +9,7 @@ This material is derived from a framework created by the Software Carpentry
 and Data Carpentry projects under the [Creative Commons Attribution
 license][cc-by-human].
 
-The Compute Canada instructional material is
+The Digital Research Alliance of Canada instructional material is
 made available under the [Creative Commons Attribution
 license][cc-by-human]. The following is a human-readable summary of
 (and not a substitute for) the [full legal text of the CC BY 4.0
@@ -28,9 +28,9 @@ license terms.
 Under the following terms:
 
 * **Attribution**---You must give appropriate credit (mentioning that
-  your work is derived from work that is Copyright © Compute Canada, 
-  and Copyright © Software Carpentry and, where practical, 
-  linking to http://https://www.computecanada.ca/ and, 
+  your work is derived from work that is Copyright © Digital Research Alliance of Canada 
+  (the Alliance), and Copyright © Software Carpentry and, where practical, 
+  linking to https://alliancecan.ca/ and, 
   http://software-carpentry.org/), provide a [link to the license][cc-by-human],
   and indicate if changes were made. You may do
   so in any reasonable manner, but not in any way that suggests the
@@ -53,7 +53,8 @@ Notices:
 ## Software
 
 Except where otherwise noted, the example programs and other software
-provided by Compute Canada are made available under the
+provided by the Digital Research Alliance of Canada (the Alliance) are made 
+available under the
 [OSI][osi]-approved
 [MIT license][mit-license].
 

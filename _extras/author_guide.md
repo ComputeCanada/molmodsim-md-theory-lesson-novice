@@ -23,7 +23,8 @@ keypoints:
 # Preface
 
 [This style]({{ site.cc_style_repo }}) is based on based on The Carpentries style and has some 
-modifications for use by [Compute Canada]({{ site.cc_site }}) and [ACENET]({{ site.an_site }}). 
+modifications for use by the [Digital Research Alliance of Canada]({{ site.alliance_site }}) 
+(the Alliance) and [ACENET]({{ site.an_site }}). 
 Creating and editing lessons from such styles is explained in the 
 [Carpentries Lesson Example]({{ site.example_site}}).
 
@@ -47,8 +48,8 @@ $ git push -u  origin  gh-pages
 ## Configuring the Lesson
 
 Edit the file `_config.yml` to set these values:
-* `carpentry`:  This changes the branding of the lesson, e.g. `carpentry: "cc"`
-   for Compute Canada.
+* `carpentry`:  This changes the branding of the lesson, e.g. `carpentry: "alliance"`
+   for the Alliance.
 * `title`: Sets the lesson title.
 * `life_cycle`: This indicates how far along the development of the lesson has come.
 * `email`: The email address of the primary contact (probably an email list).

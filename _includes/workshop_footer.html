@@ -3,8 +3,13 @@
 {% endcomment %}
 <footer>
   <div class="row">
-    <div class="col-md-6" align="left">
-      <h4>
+	<div class="col-md-6" align="left">
+	  <h4>
+	{% if site.carpentry == "alliance" %}
+	Copyright &copy; 2016–2022 <a href="{{ site.cc_site }}">Compute Canada</a><br>
+	Copyright &copy; 2022–{{ 'now' | date: "%Y" }}
+	<a href="{{ site.alliance_site }}">Digital Research Alliance of Canada</a>
+	{% else %}
 	Copyright &copy; 2016–{{ 'now' | date: "%Y" }}
 	{% if site.carpentry == "swc" %}
 	<a href="{{ site.swc_site }}">Software Carpentry</a>
@@ -19,17 +24,18 @@
 	{% elsif site.carpentry == "cc" %}
 	<a href="{{ site.cc_site }}">Compute Canada</a>
 	{% elsif site.carpentry == "molmodsim" or site.carpentry == "bst" %}
-	<a href="{{ site.bst_site }}">Compute Canada Molecular Modelling &amp; Simulation Team</a>
+	<a href="{{ site.bst_site }}">Molecular Modelling &amp; Simulation Team (Digital Research Alliance of Canada)</a>
 	{% endif %}
 	{% if site.carpentry != "swc" and site.carpentry != "dc" and site.carpentry != "lc" and site.carpentry != "cp"  %}
 	&dash; Derived from <a href="https://software-carpentry.org/">Software Carpentry</a>
 	{% endif %}
-      </h4>
-    </div>
-    <div class="col-md-6" align="right">
-      <h4>
+	{% endif %}
+	  </h4>
+	</div>
+	<div class="col-md-6" align="right">
+	  <h4>
 	<a href="mailto:{{ site.email }}">Contact The Carpentries</a>
-      </h4>
-    </div>
+	  </h4>
+	</div>
   </div>
 </footer>

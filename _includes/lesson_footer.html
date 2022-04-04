@@ -6,18 +6,18 @@
 
 <footer>
   <div class="row">
-    <div class="col-md-6 license" id="license-info" align="left">
+	<div class="col-md-6 license" id="license-info" align="left">
 	{% if site.carpentry == "swc" %}
 	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2018–{{ 'now' | date: "%Y" }}
 	by <a href="{{ site.carpentries_site }}">The Carpentries</a>
-        <br>
-        Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2016–2018
+		<br>
+		Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2016–2018
 	by <a href="{{ site.swc_site }}">Software Carpentry Foundation</a>
 	{% elsif site.carpentry == "dc" %}
 	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2018–{{ 'now' | date: "%Y" }}
 	by <a href="{{ site.carpentries_site }}">The Carpentries</a>
-        <br>
-        Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2016–2018
+		<br>
+		Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2016–2018
 	by <a href="{{ site.dc_site }}">Data Carpentry</a>
 	{% elsif site.carpentry == "lc" %}
 	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2016–{{ 'now' | date: "%Y" }}
@@ -31,12 +31,18 @@
 	{% elsif site.carpentry == "cc" %}
 	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2018–{{ 'now' | date: "%Y" }}
 	by <a href="{{ site.cc_site }}">Compute Canada</a>
+	{% elsif site.carpentry == "alliance" %}
+	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2018–2022
+	by <a href="{{ site.cc_site }}">Compute Canada</a>
+		<br>
+		Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2022–{{ 'now' | date: "%Y" }}
+		by <a href="{{ site.alliance_site }}">Digital Research Alliance of Canada</a>
 	{% elsif site.carpentry == "molmodsim" or site.carpentry == "bst" %}
 	Licensed under <a href="{{ site.cc_by_human }}">CC-BY 4.0</a> 2018–{{ 'now' | date: "%Y" }}
-	by <a href="{{ site.bst_site }}">Compute Canada Molecular Modelling &amp; Simulation Team</a>
+	by <a href="{{ site.bst_site }}">Molecular Modelling &amp; Simulation Team</a>
 	{% endif %}
-    </div>
-    <div class="col-md-6 help-links" align="right">
+	</div>
+	<div class="col-md-6 help-links" align="right">
 	{% if page.source %}
 	{% if page.source == "Rmd" %}
 	<a href="{{repo_url}}/edit/{{ default_branch }}/{{page.path|replace: "_episodes", "_episodes_rmd" | replace: ".md", ".Rmd"}}" data-checker-ignore>Edit on GitHub</a>
@@ -52,12 +58,12 @@
 	<a href="{{ repo_url }}/blob/{{ source_branch }}/CITATION" data-checker-ignore>Cite</a>
 	/
 	<a href="mailto:{{ site.email }}">Contact</a>
-    </div>
+	</div>
   </div>
   <div class="row">
-    <div class="col-md-12" align="center">
-      This style was derived from <a href="https://github.com/carpentries/styles/">The Carpentries style</a>
-      version <a href="https://github.com/carpentries/styles/releases/tag/v9.5.3">9.5.3</a>.
-    </div>
+	<div class="col-md-12" align="center">
+	  This style was derived from <a href="https://github.com/carpentries/styles/">The Carpentries style</a>
+	  version <a href="https://github.com/carpentries/styles/releases/tag/v9.5.3">9.5.3</a>.
+	</div>
   </div>
 </footer>

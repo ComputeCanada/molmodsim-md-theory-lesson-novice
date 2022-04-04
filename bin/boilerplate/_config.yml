@@ -11,6 +11,7 @@
 #
 # an: ACENET
 # cc: Compute Canada
+# alliance: Digital Research Alliance of Canada
 # molmodsim: Compute Canada Molecular Simulation Team 
 # bst: (compatibility) same as `molmodsim`
 carpentry: "swc"
@@ -56,10 +57,11 @@ workshop_repo: "https://github.com/carpentries/workshop-template"
 workshop_site: "https://carpentries.github.io/workshop-template"
 cc_by_human: "https://creativecommons.org/licenses/by/4.0/"
 
-# Compute Canada customizations
+# Alliance/Compute Canada customizations
 an_site: "https://www.ace-net.ca"
 bst_site: "https://docs.computecanada.ca/wiki/Biomolecular_simulation"
 cc_site: "https://www.computecanada.ca"
+alliance_site: "https://alliancecan.ca"
 cc_style_repo: "https://github.com/acenet-arc/cc-carpentries-styles"
 
 # Surveys.
