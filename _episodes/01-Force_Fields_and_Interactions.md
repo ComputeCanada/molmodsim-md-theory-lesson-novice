@@ -37,7 +37,7 @@ In this workshop, you will learn about molecular dynamics simulations and how to
 The purpose of this first lesson is to introduce the theory underlying the MD method. In this lesson, you will gain an understanding of current methods for modelling particle interactions and simulating molecular dynamics. 
 
 ## Force Fields
-Development of the method of molecular dynamics was largely driven by the desire to understand complex biological phenomena on the molecular level. To get insights into such processes simulations of large systems for a long time windows were required.
+The development of molecular dynamics was largely motivated by the desire to understand complex biological phenomena at the molecular level. Simulations of large systems over long time windows were required to gain insight into such processes.
 
 While the physical background of intermolecular interactions is known, there is a very complex mixture of quantum mechanical forces acting at a close distance. The forces between atoms and molecules arise from dynamic interactions between numerous electrons orbiting atoms. The interactions between electron clouds are so complex that they cannot be described analytically, and they can not be computed numerically fast enough for a dynamic simulation on a relevant scale. 
 
