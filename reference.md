@@ -50,9 +50,9 @@ Here is a selection of textbooks that cover molecular dynamics.
     Cambridge University Press; 2004. ISBN: 9780521825689  
     [doi:10.1017/CBO9780511816581](https://doi.org/10.1017/CBO9780511816581)
 
-*   Thijs J.H. Vlugt, Jan P.J.M. van der Eerden, Marjolein Dijkstra, Berend Smit, Daan Frenkel
-    *Introduction to Molecular Simulation and Statistical Thermodynamics*
-    Delft, The Netherlands, 2008. ISBN: 978-90-9024432-7
+*   Thijs J.H. Vlugt, Jan P.J.M. van der Eerden, Marjolein Dijkstra, Berend Smit, Daan Frenkel  
+    *Introduction to Molecular Simulation and Statistical Thermodynamics*  
+    Delft, The Netherlands, 2008. ISBN: 978-90-9024432-7  
     Free PDF available from: [http://homepage.tudelft.nl/v9k6y/imsst/](http://homepage.tudelft.nl/v9k6y/imsst/)
 
 
