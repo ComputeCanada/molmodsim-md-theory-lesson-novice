@@ -39,13 +39,15 @@ A molecule with *N* atoms has more complicated modes of molecular vibration, wit
 
 | Angle bend                                 | Symmetric stretch                               | Asymmetric stretch                               |
 |--------------------------------------------|-------------------------------------------------|--------------------------------------------------|
-|![bend]({{ page.root }}/fig/vibr_modes/water_1.gif)|![symmetric]({{ page.root }}/fig/vibr_modes/water_2.gif)|![asymmetric]({{ page.root }}/fig/vibr_modes/water_3.gif)|
+|![bend]({{ page.root }}/fig/vibr_modes/water_1.gif){: width="100"}v|![symmetric]({{ page.root }}/fig/vibr_modes/water_2.gif){: width="100"}|![asymmetric]({{ page.root }}/fig/vibr_modes/water_3.gif){: width="100"}|
 
-Each vibrational mode has two degrees of freedom for energy. One degree of freedom involves the kinetic energy of the moving atoms, and one degree of freedom involves the potential energy of the spring-like chemical bond(s).
+Each vibrational mode has two degrees of freedom for energy. The kinetic energy of moving atoms is one degree of freedom, and the potential energy of spring-like chemical bonds is another.
 
 Each vibrational degree of freedom provides $$k_BT$$ of energy. However, this is valid only when $$k_BT$$  is much bigger than spacing between vibrational states.  At low temperature this condition is not satisfied, only a few vibrational states are occupied and the equipartition principle is not typically applicable.
 
 #### Increasing efficiency of thermodynamic sampling.  
+To compute thermodynamic quantities with a molecular simulation, we sample a configuration space with the dimensionality determined by the number of degrees of freedom. Thus, by reducing the number of degrees of freedom (of course when physically justifiable) we can increase thermodynamic sampling efficiency. 
+
 Constraints are used in most molecular dynamics simulations, since the maximum length of the time step for integrating the equations of motion is limited by the frequency of the fastest motions in the system. Bond constraints that remove the rapid vibrational modes eliminate those degrees of freedom and make possible to use longer time steps without losing conservation of energy. Constraints including angles and dihedrals can be also applied.  
 
 #### Reduction of the number of degrees of freedom may lead to artifacts. 

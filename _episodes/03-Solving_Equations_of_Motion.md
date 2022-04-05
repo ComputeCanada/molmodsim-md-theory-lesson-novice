@@ -26,54 +26,52 @@ To simulate evolution of the system in time the integration algorithm advances p
 ### The Euler Algorithm
 The Euler algorithm is the simplest integration method. It assumes that acceleration does not change during time step. In reality acceleration is a function of coordinates, it changes when atoms move.
 
-The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step. In practice this means use the current positions and forces to calculate the positions and the velocities at the next time step:
+The Euler algorithm uses the second order Taylor expansion to estimate position and velocity at the next time step.
+Essentially this means: using the current positions and forces calculate the velocities and positions at the next time step.
 
-$\vec{r}(t+\delta{t})=\vec{r}(t)+\vec{v}(t)\delta{t}+\frac{1}{2}a(t)\delta{t}^2$
+$\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t)\delta{t}+\frac{1}{2}\boldsymbol{a}(t)\delta{t}^2$
 
-$\vec{v}(t+\delta{t})=\vec{v}(t)+\frac{1}{2}a(t)\delta{t}$
+$\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\frac{1}{2}\boldsymbol{a}(t)\delta{t}$
 
-The Euler algorithm is neither time-reversible nor energy conserving and hence rather unfavourable. Nevertheless, the Euler scheme can be used to integrate some other than classical MD equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
+Euler's algorithm is neither time-reversible nor energy-conserving, and as such is rather unfavorable. Nevertheless, the Euler scheme can be used to integrate some other than classical MD equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
 > ## The original Verlet Algorithm
 >Using the current positions and forces and the previous positions calculate the positions at the next time step:  
->$\qquad\vec{r}(t+\delta{t})=2\vec{r}(t)-\vec{r}(t-\delta{t})+a(t)\delta{t}^2$<br>
+>$\qquad\boldsymbol{r}(t+\delta{t})=2\boldsymbol{r}(t)-\boldsymbol{r}(t-\delta{t})+\boldsymbol{a}(t)\delta{t}^2$<br>
 >  
 >- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
 > 
 >While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 >
->$\qquad\vec{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
+>$\qquad\boldsymbol{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
 >
 >The Verlet algorithm is time-reversible and energy conserving.
 {: .callout}
 
 ### The Velocity Verlet Algorithm
-Euler integrator can be improved by introducing evaluation of the acceleration at the next time step. Recollect that acceleration is a function of atomic coordinates and is fully defined by interaction potential.
+Euler integrator can be improved by introducing evaluation of the acceleration at the next time step. You may recall that acceleration is a function of atomic coordinates and is determined completely by interaction potential. 
 
-- The velocities, positions and forces are calculated at the same time using the following algorithm:
+At each time step, the following algorithm is used to calculate velocity, position, and forces:
 
-1. Use $\overrightarrow{r}, \overrightarrow{v},\overrightarrow{a}$ at time $t$ to compute   $\overrightarrow{r}(t+\delta{t})$:<span style="color:gray"> $\qquad\overrightarrow{r}(t+\delta{t})=\overrightarrow{r}(t)+\overrightarrow{v}(t)\delta{t}+\frac{1}{2}\overrightarrow{a}(t)\delta{t}^2$ </span>
-2. Derive $ \overrightarrow{a}(t+\delta{t})$ from the interaction potential using new positions $\overrightarrow{r}(t+\delta{t})$ 
-3.  Use both $\overrightarrow{a}(t)$ and $\overrightarrow{a}(t+\delta{t})$ to compute $\overrightarrow{v}(t+\delta{t})$:  <span style="color:gray"> $\quad\overrightarrow{v}(t+\delta{t})=\overrightarrow{v}(t)+\frac{1}{2}(\overrightarrow{a}(t)+\overrightarrow{a}(t+\delta{t}))\delta{t} $</span>
+1. Use $\boldsymbol{r}, \boldsymbol{v},\boldsymbol{a}$ at time $t$ to compute   $\boldsymbol{r}(t+\delta{t})$:<span style="color:gray"> $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t)\delta{t}+\frac{1}{2}\boldsymbol{a}(t)\delta{t}^2$ </span>
+2. Derive $ \boldsymbol{a}(t+\delta{t})$ from the interaction potential using new positions $\boldsymbol{r}(t+\delta{t})$ 
+3.  Use both $\boldsymbol{a}(t)$ and $\boldsymbol{a}(t+\delta{t})$ to compute $\boldsymbol{v}(t+\delta{t})$:  <span style="color:gray"> $\quad\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\frac{1}{2}(\boldsymbol{a}(t)+\boldsymbol{a}(t+\delta{t}))\delta{t} $</span>
 
 - The Verlet algorithm is time-reversible and energy conserving.
 
-The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm.
-- *Due to its simplicity and stability the Velocity Verlet has become the most widely used algorithm in the MD simulations.*
+Mathematically, Velocity Verlet is equivalent to the original Verlet algorithm. Unlike the basic Verlet algorithm, this algorithm explicitly incorporates velocity, eliminating the issue of the first time step. 
+
+- *The Velocity Verlet algorithm is the most widely used algorithm in MD simulations because of its simplicity and stability*
 
 
 #### Leap Frog Variant of Velocity Verlet
 
-- The leap frog algorithm is a modified version of the Verlet algorithm.
-- The only difference is that the velocities are not calculated at the same time as positions.
-- Positions and velocities are computed at interleaved time points, staggered in such a way that they "leapfrog" over each other.
-
-1. Derive $ \overrightarrow{a}(t)$ from the interaction potential using positions $\overrightarrow{r}(t)$ 
-2. Use $\overrightarrow{v}(t-\frac{\delta{t}}{2})$ and $\overrightarrow{a}(t)$ to compute $\overrightarrow{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\overrightarrow{v}(t+\frac{\delta{t}}{2})=\overrightarrow{v}(t-\frac{\delta{t}}{2}) + \overrightarrow{a}(t)\delta{t}$
-3. Use current $\overrightarrow{r}(t)$ and $\overrightarrow{v}(t+\frac{\delta{t}}{2})$ to compute $\overrightarrow{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\overrightarrow{r}(t+\delta{t})=\overrightarrow{r}(t)+\overrightarrow{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
- 
 The Leap Frog algorithm is essentially the same as the Velocity Verlet. The Leap Frog and the Velocity Verlet integrators give equivalent trajectories. The only difference is that the velocities are not calculated at the same time as positions. Leapfrog integration is equivalent to updating positions and velocities at interleaved time points, staggered in such a way that they "leapfrog" over each other. The only practical difference between the velocity Verlet and the leap-frog is that restart files are different. 
 
+Velocity, position, and forces are calculated using the following algorithm:
+1. Derive $ \boldsymbol{a}(t)$ from the interaction potential using positions $\boldsymbol{r}(t)$ 
+2. Use $\boldsymbol{v}(t-\frac{\delta{t}}{2})$ and $\boldsymbol{a}(t)$ to compute $\boldsymbol{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\boldsymbol{v}(t+\frac{\delta{t}}{2})=\boldsymbol{v}(t-\frac{\delta{t}}{2}) + \boldsymbol{a}(t)\delta{t}$
+3. Use current $\boldsymbol{r}(t)$ and $\boldsymbol{v}(t+\frac{\delta{t}}{2})$ to compute $\boldsymbol{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
 
 > ## Selecting the Intergator
 > **GROMACS**
@@ -159,9 +157,9 @@ To accelerate a simulation the electrostatic interactions outside of a specified
 {: .callout}
 
 ### Constraint Algorithms
-To constrain bond length in a simulation the equations of motion must be modified. This is often accomplished by the application of constraint forces acting along a bond in opposite directions. The total energy of the simulation system is not affected in this case because the total work done by constraint forces is zero. In constrained simulation first the unconstrained step is done, then corrections are applied to satisfy constraints.
+To constrain bond length in a simulation the equations of motion must be modified. Constraint forces acting in opposite directions along a bond are usually applied to accomplish this. The total energy of the simulation system is not affected in this case because the total work done by constraint forces is zero. In constrained simulation, the unconstrained step is performed first, then corrections are applied to satisfy constraints.
 
-Because bonds in molecules are coupled satisfying all constraints is a non-linear problem. Is it fairly easy to solve it for a small molecule like water but as the number of coupled bonds increases, the problem becomes more difficult. Several algorithms have been developed for use specifically with small or large molecules.
+Since bonds in molecules are coupled, satisfying all constraints is a complex nonlinear problem. Is it fairly easy to solve it for a small molecule like water but as the number of coupled bonds increases, the problem becomes more difficult. Several algorithms have been developed for use specifically with small or large molecules.
 
 **SETTLE** is very fast analytical solution for small molecules. It is widely used to constrain bonds in water molecules.
 

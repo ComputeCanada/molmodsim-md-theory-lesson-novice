@@ -17,7 +17,7 @@ keypoints:
 - Non-bonded interactions are truncated to speed up simulations.
 - The cutoff distance should be appropriate for the force field and the size of the periodic box.
 ---
-
+## Challenges in calculation of non bonded interactions. 
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the non-bonded terms of the potential energy function. Since the non-bonded energy terms between every pair of atoms must be evaluated, the number of calculations increases as the square of the number of atoms. In order to speed up the computation, only interactions between atoms separated by less than a preset cutoff distance are considered. 
 
 
@@ -42,6 +42,47 @@ In practice, almost all simulations are run in parallel and use a combination of
 
 ![Figure: Verlet lists]({{ page.root }}/fig/Verlet_list.png) 
 
+
+
+
+## Problems with Truncation of Lennard-Jones Interactions and How to Avoid Them?
+We have learned that the LJ potential is always truncated at the cutoff distance. A cutoff introduces a discontinuity in the potential energy at the cutoff value. As forces are computed by differentiating potential, a sharp difference in potential may result in nearly infinite forces at the cutoff distance (Figure 1A). There are several approaches to minimize the impact of the cutoff.
+
+![Cutoff Methods]({{ page.root }}/fig/Cutoff_Methods.svg)
+<center>
+Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
+</center>
+
+### Shifted Potential
+The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden un-physical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
+### Shifted Force
+One way to address discontinuity in forces is to shift the whole force so that it vanishes at the cutoff distance (Figure 1C).  As opposed to the potential shift method the shifted forces cutoff modifies equations of motion at all distances. Nevertheless, the shifted forces method has been found to yield better results at shorter cutoff values compared to the potential shift method (Toxvaerd, 2011)
+### Switching Function
+Another solution is to modify the shape of the potential function near the cutoff boundary to truncate the non-bonded interaction smoothly at the cutoff distance. This can be achieved by the application of a switching function, for example, polynomial function of the distance. If the switching function is applied the switching parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance. The advantage is that the forces are modified only near the cutoff boundary and they approach zero smoothly.
+
+### How to Choose the Appropriate Cutoff Distance?
+A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$, and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
+
+In practice, increasing cutoff does not necessarily improve accuracy. There are documented cases showing opposite tendency [(Yonetani, 2006)]({{ page.root }}/reference.html#Yonetani-2006).  Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
+
+Table 1. Cutoffs Used in Development of the Common Force Fields
+
+| AMBER | CHARM  |  GROMOS  | OPLS |
+|:-----:|:------:|:---------:|:----:|
+| 8 <span>&#8491;</span> | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
+
+
+#### Properties that are very sensitive to the choice of cutoff
+Different molecular properties are affected differently by various cutoff approximations. Examples of properties that are very sensitive to the choice of cutoff include the surface tension [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010), the solid–liquid coexistence line [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009), the lipid bi-layer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014), and the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009).
+
+#### Effect of cutoff on energy conservation
+Cutoff problems are especially pronounced when energy conservation is required. The net effect could be an increase in the temperature of the system over time. The best practice is to carry out trial simulations of the system under study without temperature control to test it for energy leaks or sources before a production run.
+
+
+## Truncation of the Electrostatic Interactions
+Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated on the grid in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
+
+<br><br>
 > ## Selecting Neighbour Searching Methods
 > **GROMACS**
 >
@@ -78,39 +119,6 @@ In practice, almost all simulations are run in parallel and use a combination of
 > {: .file-content}
 {: .callout}
 
-
-## Problems with Truncation of Lennard-Jones Interactions and How to Avoid Them?
-We have learned that the LJ potential is always truncated at the cutoff distance. A cutoff introduces a discontinuity in the potential energy at the cutoff value. As forces are computed by differentiating potential, a sharp difference in potential may result in nearly infinite forces at the cutoff distance (Figure 1A). There are several approaches to minimize the impact of the cutoff.
-
-![Cutoff Methods]({{ page.root }}/fig/Cutoff_Methods.svg)
-<center>
-Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
-</center>
-
-### Shifted Potential
-The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden un-physical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
-### Shifted Force
-One way to address discontinuity in forces is to shift the whole force so that it vanishes at the cutoff distance (Figure 1C).  As opposed to the potential shift method the shifted forces cutoff modifies equations of motion at all distances. Nevertheless, the shifted forces method has been found to yield better results at shorter cutoff values compared to the potential shift method (Toxvaerd, 2011)
-### Switching Function
-Another solution is to modify the shape of the potential function near the cutoff boundary to truncate the non-bonded interaction smoothly at the cutoff distance. This can be achieved by the application of a switching function, for example, polynomial function of the distance. If the switching function is applied the switching parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance. The advantage is that the forces are modified only near the cutoff boundary and they approach zero smoothly.
-
-### How to Choose the Appropriate Cutoff Distance?
-A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$, and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
-
-In practice, increasing cutoff does not necessarily improve accuracy. There are documented cases showing opposite tendency [(Yonetani, 2006)]({{ page.root }}/reference.html#Yonetani-2006).  Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
-
-Table 1. Cutoffs Used in Development of the Common Force Fields
-
-| AMBER | CHARM  |  GROMOS  | OPLS |
-|:-----:|:------:|:---------:|:----:|
-| 8 <span>&#8491;</span> | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
-
-
-#### Properties that are very sensitive to the choice of cutoff
-Different molecular properties are affected differently by various cutoff approximations. Examples of properties that are very sensitive to the choice of cutoff include the surface tension [(Ahmed, 2010)]({{ page.root }}/reference.html#Ahmed-2010), the solid–liquid coexistence line [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009), the lipid bi-layer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014), and the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012). For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#Grosfils-2009).
-
-#### Effect of cutoff on energy conservation
-Cutoff problems are especially pronounced when energy conservation is required. The net effect could be an increase in the temperature of the system over time. The best practice is to carry out trial simulations of the system under study without temperature control to test it for energy leaks or sources before a production run.
 
 > ## Selecting LJ Potential Truncation Method
 > **GROMACS**
@@ -158,8 +166,6 @@ Cutoff problems are especially pronounced when energy conservation is required. 
 > AMBER force fields are developed with hard truncation. Do not use switching or shifting with these force fields.
 {: .callout}
 
-## Truncation of the Electrostatic Interactions
-Electrostatic interactions occurring over long distances are known to be important for biological molecules. Electrostatic interactions decay slowly and simple increase of the cutoff distance to account for long-range interactions can dramatically raise the computational cost. In periodic simulation systems, the most commonly used method for calculation of long-range electrostatic interactions is particle-mesh Ewald.  In this method, the electrostatic interaction is divided into two parts: a short-range contribution, and a long-range contribution. The short-range contribution is calculated by exact summation of all pairwise interactions of atoms separated by a distance that is less than cutoff in real space. The forces beyond the cutoff radius are approximated on the grid in Fourier space commonly by the Particle-Mesh Ewald (PME) method.
 
 > ## Selecting Cutoff Distance
 > **GROMACS**

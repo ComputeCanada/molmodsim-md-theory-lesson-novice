@@ -112,8 +112,7 @@ It is necessary to construct a matrix of the pairwise interactions in order to d
 
 ![Combining rules ]({{ page.root }}/fig/combining_rules.svg){: width="380" }
 
-- The arithmetic mean (Lorentz) is motivated by collision of hard spheres
-- The geomertric mean (Berthelot) has little physical argument.
+Combination rules vary depending on the force field. Arithmetic and geometric means are the two most frequently used combination rules. There is little physical argument behind the geometric mean (Berthelot), while the arithmetic mean (Lorentz) is based on collisions between hard spheres.
 
 **Geometric mean:**
 
@@ -125,14 +124,15 @@ $$\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}},\epsilon_{ij}=\sqrt{\epsilon_{
 
 $$\sigma_{ij}=\frac{\sigma_{ii}+\sigma_{jj}}{2},\epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}$$ (CHARM, AMBER). This combining rule is  a combination of the arithmetic mean for $$\sigma$$ and the geometric mean for $$\epsilon$$. It is known to overestimate the well depth
 
-**Waldman–Hagler:**
-
-$$\sigma_{ij}=\left(\frac{\sigma_{ii}^{6}+\sigma_{jj}^{6}}{2}\right)^{\frac{1}{6}}$$ , $$ \epsilon_{ij}=\sqrt{\epsilon_{ij}\epsilon_{jj}}\times\frac{2\sigma_{ii}^3\sigma_{jj}^3}{\sigma_{ii}^6+\sigma_{jj}^6}$$
-
-This combining rule was developed specifically for simulation of noble gases.
-
-**Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements). Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
-
+>## Less common combining rules.
+>**Waldman–Hagler:**
+>
+>$$\sigma_{ij}=\left(\frac{\sigma_{ii}^{6}+\sigma_{jj}^{6}}{2}\right)^{\frac{1}{6}}$$ , $$ \epsilon_{ij}=\sqrt{\epsilon_{ij}\epsilon_{jj}}\times\frac{2\sigma_{ii}^3\sigma_{jj}^3}{\sigma_{ii}^6+\sigma_{jj}^6}$$
+>
+>This combining rule was developed specifically for simulation of noble gases.
+>
+>**Hybrid** (the Lorentz–Berthelot for H and the Waldman–Hagler for other elements). Implemented in the [AMBER-ii](https://pubs.acs.org/doi/abs/10.1021/acs.jpcb.5b07233) force field for perfluoroalkanes, noble gases, and their mixtures with alkanes.
+{: .callout}
 
 #### The Buckingham potential
 The Buckingham potential replaces the repulsive $$r^{-12}$$ term in Lennard-Jones potential by exponential function of distance:
@@ -189,11 +189,11 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 
 ![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="360" }
 
-> ## Short-range and Long-range Interactions
-> The interaction is termed short-range if the potential decreases faster than *r<sup>-d</sup>*, where *r* is the distance between 2 particles and *d* is dimensionality. Otherwise the interaction is long-ranged. Accordingly the Lennard-Jones interactions are short-ranged, the Coulomb interactions are long-ranged.
-{: .callout}
+## Short-range and Long-range Interactions
+Interactions can be classified as short-range and long-range. In a short-range interaction, the potential decreases faster than *r<sup>-d</sup>*, where r is the distance between the particles and d is the dimension. Otherwise the interaction is long-ranged. In accordance with this, the Lennard-Jones interactions are short ranged, while the Coulomb interactions are long ranged.
 
 ### Bonded Terms
+Bonded terms describe interactions between atoms within molecules. Bonded terms include several types of interactions, such as bond stretching terms, angle bending terms, dihedral or torsional terms, improper dihedrals,and coupling terms.
 
 #### The bond potential
 The bond potential is used to model the interaction of covalently bonded atoms in a molecule. Bond stretch is approximated by a simple harmonic function describing oscillation about an equilibrium bond length *r<sub>0</sub>* with bond constant *k<sub>b</sub>*:
@@ -231,7 +231,6 @@ $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
 Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 
-
 ### Coupling Terms
 #### The Urey-Bradley potential
 It is known that as a bond angle is decreased, the adjacent bonds stretch to reduce the interaction between the outer atoms of the bonded triplet. This means that there is a coupling between bond length and bond angle. This coupling can be described by the Urey-Bradley potential. The Urey-Bradley term is defined as a (non-covalent) spring between the outer *i* and *k* atoms of a bonded triplet *ijk*. It is approximated by a harmonic function describing oscillation about an equilibrium distance *r<sub>ub</sub>* with force constant *k<sub>ub</sub>*:
@@ -242,7 +241,7 @@ $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 
 U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Urey-Bradley term is implemented in the CHARMM force fields.
 
-### CHARMM CMAP potential
+### CHARMM CMAP correction potential
 
 A protein can be seen as a series of linked sequences of peptide units which can rotate around phi/psi angles (peptide bond N-C is rigid). These phi/psi angles define the conformation of the backbone. 
 
@@ -250,13 +249,11 @@ A protein can be seen as a series of linked sequences of peptide units which can
 
 phi/psi dihedral angle potentials correct for force field deficiencies such as errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination, etc. 
 
-CMAP potential was developed to improve the sampling of backbone conformations. CMAP parameter does not define a continuous function. it is a grid of energy correction factors defined for each pair of phi/psi angles typically tabulated with 15 degree increments.
+CMAP potential is a correction map to the backbone dihedral energy. It was developed to improve the sampling of backbone conformations. CMAP parameter does not define a continuous function. it is a grid of energy correction factors defined for each pair of phi/psi angles typically tabulated with 15 degree increments.
 
 ![graph: Phi Psi]({{ page.root }}/fig/cmap_energy.png){: width="240" }
 
 The grid of energy correction factors is constructed using QM data for every combination of $$\phi/\psi$$ dihedral angles of the peptide backbone and further optimized using empirical data. 
-
-
 
 CMAP potential was initially applied to improve CHARMM22 force field. CMAP corrections were later implemented in AMBER force fields [ff99IDPs](https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00043) (force field for intrinsically disordered proteins), [ff12SB-cMAP](https://pubs.acs.org/doi/10.1021/acs.jctc.5b00662) (force field for implicit-solvent simulations), and ff19SB. 
 
@@ -284,6 +281,16 @@ Computation of the non-bonded interaction between 1-4 pairs depends on the speci
 The 1-4 interaction turns out to be an intermediate case where both bonded and non-bonded interactions are required for a reasonable description. Due to the short distance between the 1–4 atoms full strength non-bonded interactions are too strong, and in most cases lack fine details of local internal conformational degrees of freedom. To address this problem in many cases a compromise is made to treat this particular pair partially as a bonded and partially as a non-bonded interaction.
 
 Non-bonded interactions between 1-4 pairs depends on the specific force field. Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
+
+### What Information Can MD Simulations Provide?
+
+With the help of MD it is possible to model phenomena that cannot be studied experimentally. For example 
+- Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
+- Study thermodynamics properties (free energies, binding energies)
+- Study biological processes such as (enzyme catalysis, protein complex assembly, protein or RNA folding, etc).
+
+For more examples of the types of information MD simulations can provide read the review article: [Molecular Dynamics Simulation for All](https://www.cell.com/neuron/fulltext/S0896-6273(18)30684-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627318306846%3Fshowall%3Dtrue).
+
 
 > ## Specifying Exclusions
 > **GROMACS**
@@ -335,11 +342,3 @@ Non-bonded interactions between 1-4 pairs depends on the specific force field. S
 > {: .solution}
 {: .challenge}
 
-### What Information Can MD Simulations Provide?
-
-With the help of MD it is possible to model phenomena that cannot be studied experimentally. For example 
-- Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
-- Study thermodynamics properties (free energies, binding energies)
-- Study biological processes such as (enzyme catalysis, protein complex assembly, protein or RNA folding, etc).
-
-For more examples of the types of information MD simulations can provide read the review article: [Molecular Dynamics Simulation for All](https://www.cell.com/neuron/fulltext/S0896-6273(18)30684-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627318306846%3Fshowall%3Dtrue).
