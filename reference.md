@@ -31,6 +31,30 @@ thermostat
     as thermostats and are needed to study isothermal systems.  Thermostats work by altering the
     velocities of particles.
 
+## MD Textbooks
+
+
+
+*   Michael P. Allen and Dominic J. Tildesley.  
+    *Computer Simulation of Liquids. Second Edition*  
+    Oxford University Press; 2017. ISBN: 9780198803195  
+    [doi:10.1093/oso/9780198803195.001.0001](https://doi.org/10.1093/oso/9780198803195.001.0001)
+
+*   Daan Frenkel and Berend Smit.  
+    *Understanding Molecular Simulation: From Algorithms to Applications*  
+    Academic Press; 2nd edition; 2001. ISBN hardcover: 9780122673511 ISBN eBook: 9780080519982  
+    [doi:10.1016/B978-0-12-267351-1.X5000-7](https://doi.org/10.1016/B978-0-12-267351-1.X5000-7)
+
+*   Dennis C. Rapaport.  
+    *The Art of Molecular Dynamics Simulation 2nd Edition*  
+    Cambridge University Press; 2004. ISBN: 9780521825689  
+    [doi:10.1017/CBO9780511816581](https://doi.org/10.1017/CBO9780511816581)
+
+*   Thijs J.H. Vlugt, Jan P.J.M. van der Eerden, Marjolein Dijkstra, Berend Smit, Daan Frenkel
+    *Introduction to Molecular Simulation and Statistical Thermodynamics*
+    Delft, The Netherlands, 2008. ISBN: 978-90-9024432-7
+    Free PDF available from: [http://homepage.tudelft.nl/v9k6y/imsst/](http://homepage.tudelft.nl/v9k6y/imsst/)
+
 
 ## Bibliography
 
@@ -123,8 +147,8 @@ Huang-2014
 
 Koopman-2006
 :   Koopman EA, Lowe CP.  
-*Advantages of a Lowe-Andersen thermostat in molecular dynamics simulations.*  
-J Chem Phys. 2006;124: 1–6. [doi:10.1063/1.2198824](https://doi.org/10.1063/1.2198824)
+    *Advantages of a Lowe-Andersen thermostat in molecular dynamics simulations.*  
+    J Chem Phys. 2006;124: 1–6. [doi:10.1063/1.2198824](https://doi.org/10.1063/1.2198824)
 
 Larsson-2011
 :   Larsson P, Hess B, Lindahl E.  
