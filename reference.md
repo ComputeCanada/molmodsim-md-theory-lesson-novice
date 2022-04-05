@@ -31,9 +31,9 @@ thermostat
     as thermostats and are needed to study isothermal systems.  Thermostats work by altering the
     velocities of particles.
 
-## MD Textbooks
+## Molecular Dynamics Textbooks
 
-
+Here is a selection of textbooks that cover molecular dynamics.
 
 *   Michael P. Allen and Dominic J. Tildesley.  
     *Computer Simulation of Liquids. Second Edition*  
