@@ -34,23 +34,22 @@ ECEPP was the first force field targeting polypeptides and proteins. Crystal dat
 
 Over the years of evaluations the problems originating from the deficiency of these FF became apparent and various approaches has been undertaken to correct them.
 
-Force Fields with development focused on application to proteins:
-
-AMBER
-CHARM
+### Force Fields with development focused on application to proteins:
+* AMBER
+* CHARMM
+* GROMOS
+* OPLS
 
 GROMOS and OPLS are focused on fitting to thermodynamic properties such as the heats of vaporization, liquid densities, and the solvation properties of small molecules.
 
 
-
 Most relevant processes require very long simulations. Large systems create computational restraints. The goal is to develop a "minimalistic" force field to expand simulation time window as much as possible.
 
-Force fields with development focused on improving representation of molecular interactions
-
-CVFF
-CFF93
-CFF95
-MM1 - MM4
+### Force fields with development focused on improving representation of molecular interactions
+* CVFF
+* CFF93
+* CFF95
+* MM1 - MM4
 
 Development Phase I
 
@@ -58,12 +57,12 @@ Refinement after the initial introduction.
 -Converted back to AA, except GROMOS
 
 CHARMM22
-AMBER ff99, GAFF
+AMBER, ff99, GAFF
 OPLS-AA, OPLS-AA/L
 
 Used large datasets for training. Training datasets were different for different FF.
 
-Large deviations in different observables. Inability to pedict conformations of peptides and proteins.
+Large deviations in different observables. Inability to predict conformations of peptides and proteins.
 Simple 12‑6‑1 quadratic diagonal FFs (as used
 in standard biomolecular FFs) are not adequate
 to achieve quantitative accuracy. A major problem with all widely used protein force fields is the functional form of the potential energy.
@@ -82,10 +81,10 @@ AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple 
 
 
 ### COMPASS
-COMPASS and COMPASS II forcefields are developed for simulations of organic molecules, inorganic small molecules, and polymers. The VDW parameters are obtained by fitting enthalpy of vaporizations and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account.
+COMPASS and COMPASS II forcefields are developed for simulations of organic molecules, inorganic small molecules, and polymers. The VDW parameters are obtained by fitting enthalpies of vaporization and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account.
 
 ### OPLS
-OPLS family force fields are created for liquid simulations containing organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpy of vaporizations and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties.
+OPLS family force fields are created for liquid simulations containing organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpies of vaporization and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties.
 
 [OPLS-AA](https://pubs.acs.org/doi/10.1021/ja9621760) (1996) This is the first all-atom OPLS force field. Bond stretching and angle bending parameters are taken from the AMBER force field. The torsional parameters were fit to the RHF/6-31G* calculations of about 50 organic molecules and ions. The charges are empirical and have been obtained from fitting to reproduce properties of organic liquids.
 
