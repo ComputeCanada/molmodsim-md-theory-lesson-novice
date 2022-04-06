@@ -3,6 +3,46 @@ layout: reference
 root: .
 ---
 
+## Text Books and Additional Resources
+
+Here is a selection of textbooks and other resources that cover molecular dynamics.
+
+While the following resources are listed in no particular order, special consideration should
+be given to the *Living Journal of Computational Molecular Science*, which publishes peer-reviewed
+articles in categories like "Best Practices", "Tutorials", "Lessons Learned" as *Open Access* and 
+aims to updating regularly. 
+Topics range from general [Best Practices in Molecular Simulations](#braun-2019) 
+to more specialized topics like [Best Practices for Computing Transport Properties](#maginn-2020),
+[Best Practices for Quantification of Sampling Quality in Molecular Simulations](#grossfield-2019),
+[Simulation Best Practices for Lipid Membranes](#smith-2019), and
+[Lessons Learned from the Calculation of One-Dimensional Potentials of Mean Force](#markthaler-2019).
+
+*   David L. Mobley, Michael R. Shirts, Daniel M. Zuckerman (Managing Editors).  
+    *Living Journal of Computational Molecular Science (LiveCoMS)*  
+    (Peer-reviewed manuscripts which share best practices in molecular modeling and simulation.)  
+    Open Access articles available at: [https://livecomsjournal.org/](https://livecomsjournal.org/)
+
+*   Michael P. Allen and Dominic J. Tildesley.  
+    *Computer Simulation of Liquids. Second Edition*  
+    Oxford University Press; 2017. ISBN: 9780198803195  
+    [doi:10.1093/oso/9780198803195.001.0001](https://doi.org/10.1093/oso/9780198803195.001.0001)
+
+*   Daan Frenkel and Berend Smit.  
+    *Understanding Molecular Simulation: From Algorithms to Applications*  
+    Academic Press; 2nd edition; 2001. ISBN hardcover: 9780122673511 ISBN eBook: 9780080519982  
+    [doi:10.1016/B978-0-12-267351-1.X5000-7](https://doi.org/10.1016/B978-0-12-267351-1.X5000-7)
+
+*   Dennis C. Rapaport.  
+    *The Art of Molecular Dynamics Simulation 2nd Edition*  
+    Cambridge University Press; 2004. ISBN: 9780521825689  
+    [doi:10.1017/CBO9780511816581](https://doi.org/10.1017/CBO9780511816581)
+
+*   Thijs J.H. Vlugt, Jan P.J.M. van der Eerden, Marjolein Dijkstra, Berend Smit, Daan Frenkel  
+    *Introduction to Molecular Simulation and Statistical Thermodynamics*  
+    Delft, The Netherlands, 2008. ISBN: 978-90-9024432-7  
+    Free PDF available from: [http://homepage.tudelft.nl/v9k6y/imsst/](http://homepage.tudelft.nl/v9k6y/imsst/)
+
+
 ## Glossary
 
 FIXME
@@ -31,30 +71,6 @@ thermostat
     as thermostats and are needed to study isothermal systems.  Thermostats work by altering the
     velocities of particles.
 
-## Molecular Dynamics Textbooks
-
-Here is a selection of textbooks that cover molecular dynamics.
-
-*   Michael P. Allen and Dominic J. Tildesley.  
-    *Computer Simulation of Liquids. Second Edition*  
-    Oxford University Press; 2017. ISBN: 9780198803195  
-    [doi:10.1093/oso/9780198803195.001.0001](https://doi.org/10.1093/oso/9780198803195.001.0001)
-
-*   Daan Frenkel and Berend Smit.  
-    *Understanding Molecular Simulation: From Algorithms to Applications*  
-    Academic Press; 2nd edition; 2001. ISBN hardcover: 9780122673511 ISBN eBook: 9780080519982  
-    [doi:10.1016/B978-0-12-267351-1.X5000-7](https://doi.org/10.1016/B978-0-12-267351-1.X5000-7)
-
-*   Dennis C. Rapaport.  
-    *The Art of Molecular Dynamics Simulation 2nd Edition*  
-    Cambridge University Press; 2004. ISBN: 9780521825689  
-    [doi:10.1017/CBO9780511816581](https://doi.org/10.1017/CBO9780511816581)
-
-*   Thijs J.H. Vlugt, Jan P.J.M. van der Eerden, Marjolein Dijkstra, Berend Smit, Daan Frenkel  
-    *Introduction to Molecular Simulation and Statistical Thermodynamics*  
-    Delft, The Netherlands, 2008. ISBN: 978-90-9024432-7  
-    Free PDF available from: [http://homepage.tudelft.nl/v9k6y/imsst/](http://homepage.tudelft.nl/v9k6y/imsst/)
-
 
 ## Bibliography
 
@@ -79,7 +95,7 @@ Refname-YYYY
 
 You can add links to this entry by using on any page:
 
-[RefnameYYYY]({{ page.root }}/reference.html#Refname-YYYY)
+[RefnameYYYY]({{ page.root }}/reference.html#refname-YYYY)
 
 {% endcomment %}
 
@@ -130,6 +146,11 @@ Grosfils-2009
     *Dependence of the liquid-vapor surface tension on the range of interaction: a test of the law of corresponding states.*  
     J Chem Phys. 2009;130: 054703. [doi:10.1063/1.3072156](https://doi.org/doi:10.1063/1.3072156)
 
+Grossfield-2019
+:   Grossfield A, Patrone PN, Roe DR, Schultz AJ, Siderius D, Zuckerman DM.  
+    *Best Practices for Quantification of Uncertainty and Sampling Quality in Molecular Simulations [Article v1.0].*  
+    Living J Comput Mol Sci. 2019;1: 1–24. [doi:10.33011/livecoms.1.1.5067](https://doi.org/10.33011/livecoms.1.1.5067)
+
 Hagler-2019
 :   Hagler AT.  
     *Force field development phase II: Relaxation of physics-based criteria… or inclusion of more rigorous physics into the representation of molecular energetics.*  
@@ -155,10 +176,25 @@ Larsson-2011
     *Algorithm improvements for molecular dynamics simulations.*  
     Wiley Interdiscip Rev Comput Mol Sci. 2011;1: 93–108. [doi:10.1002/wcms.3](https://doi.org/doi:10.1002/wcms.3)
 
+Lemkul-2019
+:   Lemkul J.  
+    *From Proteins to Perturbed Hamiltonians: A Suite of Tutorials for the GROMACS-2018 Molecular Simulation Package [Article v1.0].*  
+    Living J Comput Mol Sci. 2019;1: 1–53. [doi:10.33011/livecoms.1.1.5068](https://doi.org/10.33011/livecoms.1.1.5068)
+
 Lifson-1968
 :   Lifson S, Warshel A.  
     *Consistent Force Field for Calculations of Conformations, Vibrational Spectra, and Enthalpies of Cycloalkane and n‐Alkane Molecules.*  
     J Chem Phys. 1968;49: 5116–5129. [doi:10.1063/1.1670007](https://doi.org/doi:10.1063/1.1670007)
+
+Maginn-2020
+:   Maginn EJ, Messerly RA, Carlson DJ, Roe DR, Elliot JR.  
+    *Best Practices for Computing Transport Properties 1. Self-Diffusivity and Viscosity from Equilibrium Molecular Dynamics [Article v1.0].*  
+    Living J Comput Mol Sci. 2020;2: 1–20. [doi:10.33011/livecoms.1.1.6324](https://doi.org/10.33011/livecoms.1.1.6324)
+
+Markthaler-2019
+:   Markthaler D, Jakobtorweihen S, Hansen N.  
+    *Lessons Learned from the Calculation of One-Dimensional Potentials of Mean Force [Article v1.0].*  
+    Living J Comput Mol Sci. 2019;1: 1–25. [doi:10.33011/livecoms.1.2.11073](https://doi.org/10.33011/livecoms.1.2.11073)
 
 Martyna-1992
 :   Martyna GJ, Klein ML, Tuckerman M.  
@@ -179,6 +215,11 @@ Shirts-2013
 :   Shirts MR.  
     *Simple Quantitative Tests to Validate Sampling from Thermodynamic Ensembles.*  
     J Chem Theory Comput. 2013;9: 909–926. [doi:10.1021/ct300688p](https://doi.org/10.1021/ct300688p)
+
+Smith-2019
+:   Smith DJ, Klauda JB, Sodt AJ.  
+    *Simulation Best Practices for Lipid Membranes [Article v1.0].*  
+    Living J Comput Mol Sci. 2019;1: 1–31. [doi:10.33011/livecoms.1.1.5966](https://doi.org/10.33011/livecoms.1.1.5966)
 
 Verlet-1967
 :   Verlet L. Computer “Experiments” on Classical Fluids. I.  
