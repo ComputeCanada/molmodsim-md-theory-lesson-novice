@@ -145,8 +145,8 @@ guidance on choosing good parameters for MD-Simulations.
     * Flying ice cube -> resetting COM-movement
     * Hot-Solvent/Cold-Solute -> tcoupl groups
     * Literature:
-        * [Basconi2013]({{ page.root }}/reference.html#Basconi-2013)
-        * [Wong-ekkabut2016]({{ page.root }}/reference.html#Wong-ekkabut-2016)
+        * [Basconi2013]({{ page.root }}/reference.html#basconi-2013)
+        * [Wong-ekkabut2016]({{ page.root }}/reference.html#wong-ekkabut-2016)
 
 * Parallelization/Performance
     * Particle decomposition vs. Domain Decomposition
@@ -154,7 +154,7 @@ guidance on choosing good parameters for MD-Simulations.
     * PME nodes /  shifting of real-space/PME cutoff
     * Load balancing
     * Literature:
-        * [Larsson2011]({{ page.root }}/reference.html#Larsson-2011)
+        * [Larsson2011]({{ page.root }}/reference.html#larsson-2011)
 
 ### Questions
 

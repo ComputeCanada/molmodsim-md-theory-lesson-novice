@@ -39,7 +39,7 @@ Euler's algorithm is neither time-reversible nor energy-conserving, and as such 
 >Using the current positions and forces and the previous positions calculate the positions at the next time step:  
 >$\qquad\boldsymbol{r}(t+\delta{t})=2\boldsymbol{r}(t)-\boldsymbol{r}(t-\delta{t})+\boldsymbol{a}(t)\delta{t}^2$<br>
 >  
->- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
+>- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
 > 
 >While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 >
