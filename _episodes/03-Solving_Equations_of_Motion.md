@@ -73,6 +73,21 @@ Velocity, position, and forces are calculated using the following algorithm:
 2. Use $\boldsymbol{v}(t-\frac{\delta{t}}{2})$ and $\boldsymbol{a}(t)$ to compute $\boldsymbol{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\boldsymbol{v}(t+\frac{\delta{t}}{2})=\boldsymbol{v}(t-\frac{\delta{t}}{2}) + \boldsymbol{a}(t)\delta{t}$
 3. Use current $\boldsymbol{r}(t)$ and $\boldsymbol{v}(t+\frac{\delta{t}}{2})$ to compute $\boldsymbol{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
 
+> ## Changing the MD-Integrator Causes Discontinuous Simulations
+> 
+> It is not possible to change the integrator between Velocity-Verlet and Leap-Frog 
+> within a simulation, as the velocities stored with the coordinates of a simulation
+> step are interpreted different between these integrators. 
+> 
+> | Integrator      | pairs of coordinates ($r$) and velocities ($v$) used                        |
+> |-----------------|-----------------------------------------------------------------------------|
+> | Velocity-Verlet | $[r_{t=0}, v_{t=0}],   [r_{t=1}, v_{t=1}],   [r_{t=2}, v_{t=2}],   \ldots $ |
+> | Leap-Frog       | $[r_{t=0}, v_{t=0.5}], [r_{t=1}, v_{t=1.5}], [r_{t=2}, v_{t=2.5}], \ldots $ |
+>
+> Changing the integrator anyway, not only causes an discontinuity, but also invalidates any 
+> previous equilibration and has a similar effect as assigning new velocities to the system.
+{: .checklist }
+
 > ## Selecting the Intergator
 > **GROMACS**
 >
