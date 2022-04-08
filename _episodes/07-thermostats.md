@@ -1,6 +1,6 @@
 ---
 title: "Controlling Temperature"
-teaching: 30
+teaching: 20
 exercises: 0
 questions:
 - "What is temperature on the molecular level?"

@@ -231,8 +231,8 @@ Winger-2009
     *On using a too large integration time step in molecular dynamics simulations of coarse-grained molecular models.*  
     Phys Chem Chem Phys. 2009;11: 1934–1941. [doi:10.1039/b818713d](https://doi.org/doi:10.1039/b818713d)
 
-Wong-ekkabut-2016
-:   Wong-ekkabut J, Karttunen M.  
+Wong-Ekkabut-2016
+:   Wong-Ekkabut J, Karttunen M.  
     *The good, the bad and the user in soft matter simulations.*  
     Biochim Biophys Acta - Biomembr. Elsevier B.V.; 2016;1858: 2529–2538. [doi:10.1016/j.bbamem.2016.02.004](https://doi.org/10.1016/j.bbamem.2016.02.004)
 

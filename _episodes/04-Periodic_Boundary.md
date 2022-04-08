@@ -1,6 +1,6 @@
 ---
 title: "Periodic Boundary Conditions"
-teaching: 15
+teaching: 20
 exercises: 0
 questions:
 - "How to simulate a bulk (gas, liquid or solid) system by using only a small part?"

@@ -1,6 +1,6 @@
 ---
 title: "Advancing Simulation in Time"
-teaching: 20
+teaching: 30
 exercises: 0
 questions:
 - "How is simulation time advanced in a molecular dynamics simulation?"

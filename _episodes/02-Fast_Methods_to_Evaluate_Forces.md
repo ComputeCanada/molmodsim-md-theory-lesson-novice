@@ -1,6 +1,6 @@
 ---
 title: "Fast Methods to Evaluate Forces"
-teaching: 20
+teaching: 30
 exercises: 0
 questions:
 - "Why the computation of non-bonded interactions is the speed limiting factor?"
@@ -51,14 +51,20 @@ We have learned that the LJ potential is always truncated at the cutoff distance
 ![Cutoff Methods]({{ page.root }}/fig/Cutoff_Methods.svg)
 <center>
 Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
-</center>
+</center><br>
 
-### Shifted Potential
-The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden un-physical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes.
-### Shifted Force
-One way to address discontinuity in forces is to shift the whole force so that it vanishes at the cutoff distance (Figure 1C).  As opposed to the potential shift method the shifted forces cutoff modifies equations of motion at all distances. Nevertheless, the shifted forces method has been found to yield better results at shorter cutoff values compared to the potential shift method (Toxvaerd, 2011)
-### Switching Function
-Another solution is to modify the shape of the potential function near the cutoff boundary to truncate the non-bonded interaction smoothly at the cutoff distance. This can be achieved by the application of a switching function, for example, polynomial function of the distance. If the switching function is applied the switching parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance. The advantage is that the forces are modified only near the cutoff boundary and they approach zero smoothly.
+|Shifted potential|  |
+|:---|:---:|
+|<br>The standard solution is to shift the whole potential uniformly by adding a constant at values below cutoff (shifted potential method, Figure 1B). This ensures continuity of the potential at the cutoff distance and avoids infinite forces. The addition of a constant term does not change forces at the distances below cutoff because it disappears when the potential is differentiated. However, it introduces a discontinuity in the force at the cutoff distance. Particles will experience sudden un-physical acceleration when other particles cross their respective cutoff distance. Another drawback is that when potential is shifted the total potential energy changes. | ![]({{ page.root }}/fig/Shifted_potential.png){: width="1080" } |
+
+|Shifted Force ||
+|:---|:---:|
+|<br>One way to address discontinuity in forces is to shift the whole force so that it vanishes at the cutoff distance (Figure 1C).  As opposed to the potential shift method the shifted forces cutoff modifies equations of motion at all distances. Nevertheless, the shifted forces method has been found to yield better results at shorter cutoff values compared to the potential shift method [(Toxvaerd, 2011)](https://doi.org/10.1063/1.3558787). | ![]({{ page.root }}/fig/Shifted_force.png){: width="680" } |
+
+|Switching Function||
+|:---|:---:|
+|<br>Another solution is to modify the shape of the potential function near the cutoff boundary to truncate the non-bonded interaction smoothly at the cutoff distance. This can be achieved by the application of a switching function, for example, polynomial function of the distance. If the switching function is applied the switching parameter specifies the distance at which the switching function starts to modify the LJ potential to bring it to zero at the cutoff distance. The advantage is that the forces are modified only near the cutoff boundary and they approach zero smoothly.|![]({{ page.root }}/fig/Switching_function.png){: width="950" }  |
+
 
 ### How to Choose the Appropriate Cutoff Distance?
 A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$, and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
