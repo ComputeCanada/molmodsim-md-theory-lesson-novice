@@ -39,7 +39,7 @@ Euler's algorithm is neither time-reversible nor energy-conserving, and as such 
 >Using the current positions and forces and the previous positions calculate the positions at the next time step:  
 >$\qquad\boldsymbol{r}(t+\delta{t})=2\boldsymbol{r}(t)-\boldsymbol{r}(t-\delta{t})+\boldsymbol{a}(t)\delta{t}^2$<br>
 >  
->- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#Verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
+>- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
 > 
 >While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 >
@@ -72,6 +72,21 @@ Velocity, position, and forces are calculated using the following algorithm:
 1. Derive $ \boldsymbol{a}(t)$ from the interaction potential using positions $\boldsymbol{r}(t)$ 
 2. Use $\boldsymbol{v}(t-\frac{\delta{t}}{2})$ and $\boldsymbol{a}(t)$ to compute $\boldsymbol{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\boldsymbol{v}(t+\frac{\delta{t}}{2})=\boldsymbol{v}(t-\frac{\delta{t}}{2}) + \boldsymbol{a}(t)\delta{t}$
 3. Use current $\boldsymbol{r}(t)$ and $\boldsymbol{v}(t+\frac{\delta{t}}{2})$ to compute $\boldsymbol{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
+
+> ## Changing the MD-Integrator Causes Discontinuous Simulations
+> 
+> It is not possible to change the integrator between Velocity-Verlet and Leap-Frog 
+> within a simulation, as the velocities stored with the coordinates of a simulation
+> step are interpreted different between these integrators. 
+> 
+> | Integrator      | pairs of coordinates ($r$) and velocities ($v$) used                        |
+> |-----------------|-----------------------------------------------------------------------------|
+> | Velocity-Verlet | $[r_{t=0}, v_{t=0}],   [r_{t=1}, v_{t=1}],   [r_{t=2}, v_{t=2}],   \ldots $ |
+> | Leap-Frog       | $[r_{t=0}, v_{t=0.5}], [r_{t=1}, v_{t=1.5}], [r_{t=2}, v_{t=2.5}], \ldots $ |
+>
+> Changing the integrator anyway, not only causes an discontinuity, but also invalidates any 
+> previous equilibration and has a similar effect as assigning new velocities to the system.
+{: .checklist }
 
 > ## Selecting the Intergator
 > **GROMACS**

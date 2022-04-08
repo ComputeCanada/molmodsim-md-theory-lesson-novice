@@ -13,9 +13,9 @@ permalink: /design/
 > and comments on specific exercises, ordering, and timings) are greatly appreciated.**
 {: .callout}
 
-## Motivation for the BST-Workshop series
+## Motivation for the MolModSim-Workshop series
 
-The motivation behind this 3-part workshop/tutorial series is to give new grad 
+The motivation behind this 3/4-part workshop/tutorial series is to give new grad 
 students an introduction into preparing, running and analyzing MD simulations.
 The series is not meant to be a replacement for university courses in thermodynamics 
 and statistical thermodynamics.  Instead this series takes an applied approach
@@ -31,7 +31,7 @@ implemented as exercises for the learner - the correct answer can be hidden in
 an answer box.  
 Theory should be skipped over as much as possible and should be covered in the 
 second module.  
-This lesson could be adapted for other MD-codes (e.g. NAMD) as well.
+This lesson could be adapted for other MD-codes (e.g. NAMD, Amber) as well.
 
 
 The **second lesson** is a small theory review to remind the learners of important 
@@ -51,6 +51,7 @@ tools out-of-the-box, users often limit themselves to those tools and the option
 and variations that they offer.  The above frameworks make it very easy to read 
 MD-trajectories in different formats and get access to the coordinates and come 
 up with fully customized analysis methods.
+
 
 
 The mentioned lessons *one* and *three* are currently put on hold and are subject
@@ -145,8 +146,8 @@ guidance on choosing good parameters for MD-Simulations.
     * Flying ice cube -> resetting COM-movement
     * Hot-Solvent/Cold-Solute -> tcoupl groups
     * Literature:
-        * [Basconi2013]({{ page.root }}/reference.html#Basconi-2013)
-        * [Wong-ekkabut2016]({{ page.root }}/reference.html#Wong-ekkabut-2016)
+        * [Basconi2013]({{ page.root }}/reference.html#basconi-2013)
+        * [Wong-ekkabut2016]({{ page.root }}/reference.html#wong-ekkabut-2016)
 
 * Parallelization/Performance
     * Particle decomposition vs. Domain Decomposition
@@ -154,7 +155,7 @@ guidance on choosing good parameters for MD-Simulations.
     * PME nodes /  shifting of real-space/PME cutoff
     * Load balancing
     * Literature:
-        * [Larsson2011]({{ page.root }}/reference.html#Larsson-2011)
+        * [Larsson2011]({{ page.root }}/reference.html#larsson-2011)
 
 ### Questions
 

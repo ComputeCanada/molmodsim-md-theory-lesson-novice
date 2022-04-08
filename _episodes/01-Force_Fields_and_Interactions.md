@@ -69,7 +69,7 @@ For convenience force fields can be divided into 3 general classes based on how 
 ## Classification of force fields. ##
 ### Class 1 force fields.
 In the class 1 force field dynamics of bond stretching and angle bending are described by simple harmonic motion, i.e. the magnitude of restoring force is assumed to be proportional to the displacement from the equilibrium position. As the energy of a harmonic oscillator is proportional to the square of the displacement, this approximation is called quadratic. In general, bond stretching and angle bending are close to harmonic only near the equilibrium. Higher-order anharmonic energy terms are required for a more accurate description of molecular motions. In the class 1 force field force matrix is diagonal because correlations between bond stretching and angle bending are omitted.
-- Examples: AMBER, CHARM, GROMACS, OPLS
+- Examples: AMBER, CHARMM, GROMOS, OPLS
 
 ### Class 2 force fields.
 Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters.
@@ -341,4 +341,3 @@ For more examples of the types of information MD simulations can provide read th
 > >
 > {: .solution}
 {: .challenge}
-
