@@ -100,6 +100,7 @@ A variant of the Andersen thermostat that conserves momentum. This method pertur
 
 #### Bussi stochastic velocity rescaling thermostat
 Extension of the Berendsen method corrected for sampling the canonical distribution. The velocities of all the particles are rescaled by a properly chosen random factor.
+This thermostat produces a correct velocity distribution for the canonical ensemble, while retaining advantage of the Berendsen method that the temperature deviations from the target will fall via a first order exponential decay and is therefore avoiding oscillations that can be observed with extended system thermostats, like Nosé-Hoover.  For most temperature-controlled MD-simulation, this thermostat is an excellent choice.
 [[Bussi-2007][Bussi-2007]]
 
 #### Langevin thermostat
@@ -150,7 +151,14 @@ With local thermostats it is possible to control temperature in  selected groups
 | Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |
 
 
-## References
+{% comment %}
+### References
+Below here we resolve reference-style links so that 
+[Refname-YYYY] points to the anchor #Refname-YYYY on the {{ page.root }}/reference.html page.
+
+Example:
+[Refname-YYYY]: {{ page.root }}/reference.html#Refname-YYYY
+{% endcomment %}
 
 [Andersen-1980]: {{ page.root }}/reference.html#andersen-1980
 [Basconi-2013]: {{ page.root }}/reference.html#basconi-2013

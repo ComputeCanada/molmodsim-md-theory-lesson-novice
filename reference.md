@@ -77,7 +77,7 @@ thermostat
 {% comment %}
 
 Add items to the Bibliography using the following template and add it in the right
-location sorted by RefnameYYYY.
+location sorted by Refname-YYYY.
 
 The Style is PLOS ONE with separate lines for:
 - list of Authors, (line ends with two spaces)
@@ -100,6 +100,8 @@ You can add links to this entry by using on any page:
 {% endcomment %}
 
 {:auto_ids}
+
+
 
 Ahmed-2010
 :   Ahmed A, Sadus RJ.  
@@ -125,7 +127,12 @@ Berendsen-1984
 :   Berendsen HJC, Postma JPM, van Gunsteren WF, DiNola A, Haak JR.  
     *Molecular dynamics with coupling to an external bath.*  
     J Chem Phys. $abstract.copyright_name.value; 1984;81: 3684–90. [doi:10.1063/1.448118](https://doi.org/10.1063/1.448118)
-    
+
+Bernetti-2020
+:   Bernetti M, Bussi G  
+    *Pressure control using stochastic cell rescaling.*  
+    J Chem Phys. 2020;153:114107  [doi:10.1063/5.0020514](https://doi.org/10.1063/5.0020514)
+
 Braun-2019
 :   Braun E, Gilmer J, Mayes HB, Mobley DL, Monroe JI, Prasad S, et al.  
     *Best Practices for Foundations in Molecular Simulations [Article v1.0].*  
@@ -206,10 +213,25 @@ Nose-1984
     *A molecular dynamics method for simulations in the canonical ensemble.*  
     Mol Phys. 1984;52: 255–268. [doi:10.1080/00268978400101201](https://doi.org/10.1080/00268978400101201)
 
+Parrinello-1980
+:   Parrinello, M, Rahman, A  
+    *Crystal Structure and Pair Potentials: A Molecular-Dynamics Study*  
+    Phys. Rev. Lett. 1980; 45, 1196. [doi:10.1103/PhysRevLett.45.1196](https://doi.org/10.1103/PhysRevLett.45.1196)
+
+Parrinello-1981
+:   Parrinello, M, Rahman, A  
+    *Polymorphic transitions in single crystals: A new molecular dynamics method.*  
+    J Appl Phys. 1981; 52(12):7182. [doi:10.1063/1.328693](https://doi.org/10.1063/1.328693)
+
 Piana-2012
 :   Piana S, Lindorff-Larsen K, Dirks RM, Salmon JK, Dror RO, Shaw DE.  
     *Evaluating the Effects of Cutoffs and Treatment of Long-range Electrostatics in Protein Folding Simulations.*  
     PLOS ONE. 2012;7: e39918. [doi:10.1371/journal.pone.0039918](https://doi.org/doi:10.1371/journal.pone.0039918)
+
+Rogge-2015
+:   Rogge SMJ, Vanduyfhuys L, Ghysels A, Waroquier M, Verstraelen T, Maurin G, Van Speybroeck V.  
+    *A Comparison of Barostats for the Mechanical Characterization of Metal–Organic Frameworks*  
+    J Chem Theory Comput. 2015;11: 5583-97. [doi:10.1021/acs.jctc.5b00748](https://doi.org/10.1021/acs.jctc.5b00748)
 
 Shirts-2013
 :   Shirts MR.  
