@@ -30,8 +30,8 @@ episode_order:
     - '07-thermostats'
     - '08-barostats'
     - '09-water_models'
-    # - 'end_of_workshop'
-    # - 'S01-Force_Fields_Overview'
+    - 'end_of_workshop'
+    - 'S01-Force_Fields_Overview'
 
 
 extras_order:
