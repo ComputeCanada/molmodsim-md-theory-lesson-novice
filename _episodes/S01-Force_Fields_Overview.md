@@ -3,15 +3,11 @@ title: "Supplemental: Overview of common Force Fields"
 teaching: 0
 exercises: 0
 questions:
-- "What is Molecular Dynamics and how can I benefit from using it?"
-- "What is a force field?"
-- "What energy terms are used in biomolecular force fields mathematical?"
+- "What are the categories of molecular dynamics force fields?"
 objectives:
-- "Understand strengths and weaknesses of MD simulations"
-- "Understand how the interactions between particles in a molecular dynamics simulation are modeled"
+- "Be able to recognize the strengths and weaknesses of different types of force fields"
 keypoints:
-- "Molecular dynamics simulates atomic positions in time using forces acting between atoms"
-- "The forces in molecular dynamics are approximated by simple empirical functions"
+- "Using more accurate and diverse target data allows MD force fields to be improved."
 ---
 
 #### Table of Contents
@@ -45,7 +41,6 @@ Over the years of evaluations the problems originating from the deficiency of th
 
 GROMOS and OPLS are focused on fitting to thermodynamic properties such as the heats of vaporization, liquid densities, and the solvation properties of small molecules.
 
-
 Most relevant processes require very long simulations. Large systems create computational restraints. The goal is to develop a "minimalistic" force field to expand simulation time window as much as possible.
 
 ### Force fields with development focused on improving representation of molecular interactions
@@ -77,8 +72,6 @@ to achieve quantitative accuracy. A major problem with all widely used protein f
 
 Unaccounted physics:
 -atomic charges depend on the geometry (charge flux)
-
-
 
 AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function
 
