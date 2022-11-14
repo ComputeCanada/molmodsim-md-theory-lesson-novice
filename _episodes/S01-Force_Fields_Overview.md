@@ -21,15 +21,16 @@ keypoints:
 CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.html#lifson-1968) Introduced a concept of a 'consistent force field'. Introduced a methodology for deriving and validating force fields. The term 'consistent' emphasized importance of the ability to describe a wide range of compounds and physical observables (conformation, crystal structure, thermodynamic properties and vibrational spectra). After the initial derivation for hydrocarbons CFF was extended to proteins, but was very crude at that time.
 
 ### Allinger force fields: MM1, MM2, MM3, MM4.
-MM1, MM2 - Class 1
-MM3 - Class 2
-MM4 - Class 3
+- MM1, MM2 - Class 1
+- MM3 - Class 2
+- MM4 - Class 3
+
 Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level _ab-initio_ quantum chemistry computations, and the parameters were additionally adjusted.
 
-Intended for calculations on small and medium size organic molecules.
+- Intended for calculations on small and medium size organic molecules.
 
 ### Empirical Conformational Energy Program for Peptides (ECEPP)
-ECEPP was the first force field targeting polypeptides and proteins. Crystal data of small organic compounds and semi-empirical QM calculations were used extensively in derivation of this force field. As more experimental data became available, force field parameters have been refined and modified versions ECEPP-2, ECEPP-3 were published.
+ECEPP [(F. A. Momany, et al., 1975)](https://pubs.acs.org/doi/10.1021/j100589a006#) was the first force field targeting polypeptides and proteins. Crystal data of small organic compounds and semi-empirical QM calculations were used extensively in derivation of this force field. As more experimental data became available, force field parameters have been refined and modified versions ECEPP-02 [(G. Nemethy et al, 1983)](https://pubs.acs.org/doi/10.1021/j100234a011), ECEPP-03 [(G. Nemethy et al, 1992)](https://pubs.acs.org/doi/10.1021/j100194a068) and ECEPP-05 [(Y. A. Arnautova et al., 2006)](https://pubs.acs.org/doi/full/10.1021/jp054994x) were published.
 
 Over the years of evaluations the problems originating from the deficiency of these FF became apparent and various approaches has been undertaken to correct them.
 
