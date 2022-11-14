@@ -21,9 +21,9 @@ keypoints:
 CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.html#lifson-1968) Introduced a concept of a 'consistent force field'. Introduced a methodology for deriving and validating force fields. The term 'consistent' emphasized importance of the ability to describe a wide range of compounds and physical observables (conformation, crystal structure, thermodynamic properties and vibrational spectra). After the initial derivation for hydrocarbons CFF was extended to proteins, but was very crude at that time.
 
 ### Allinger force fields: MM1, MM2, MM3, MM4.
-- MM1, MM2 - Class 1
-- MM3 - Class 2
-- MM4 - Class 3
+- MM1 [(N.L. Allinger, 1976)](https://www.sciencedirect.com/science/article/abs/pii/S0065316008602129), MM2 [(N.L. Allinger, 1977)](https://pubs.acs.org/doi/10.1021/ja00467a001) - Class 1
+- MM3 [N.L.Allinger et al., 1989](https://pubs.acs.org/doi/10.1021/ja00205a001) - Class 2
+- MM4 [(N.L.Allinger et al., 1996)](https://doi.org/10.1002/(SICI)1096-987X(199604)17:5/6<642::AID-JCC6>3.0.CO;2-U) - Class 3
 
 Target data included electron diffraction, vibrational spectra, heats of formation, and crystal structures. The calculation results were verified via comparison with high-level _ab-initio_ quantum chemistry computations, and the parameters were additionally adjusted.
 
