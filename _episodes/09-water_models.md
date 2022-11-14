@@ -73,11 +73,26 @@ A key challenge in developing water models is to find an accurate yet simplified
 |:-|:-:|
 |<br>Traditional approach is to place point charges on or near the nuclei. Afterwards, however, it was discovered that 3 point charges reproduce the electrostatic potential of water molecules significantly more accurately when they form tight clusters.|![Charge distribution of the water molecule]({{ page.root }}/fig/water_charge_densityl.gif){: width="600"}|
 
-#### Optimal Point Charges (OPC)
-The last and the latest water models we will look at is the OPC (Optimal Point Charges). It belongs to the family of 3 charge, 4 point models. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
+#### Optimal Point Charges (OPC and OPC3)
+The last and the latest water models we will look at is the OPC (Optimal Point Charges). OPC [2] belongs to the family of 3 charge, 4 point models while OPC3 is 3 charge, 3 point version [4]. The key difference from the previous models is that it was designed without geometrical restraints. This design approach is based on the observation that QM electrostatic potential of water molecule is reproduced considerably more accurately with 3 point charges when they form tight cluster of the point charges away from the nuclei than the more traditional distribution with point charges placed on or near the nuclei.
 
 |:-|:-:|
 |<br>$\circ$ Considerably better reproduces the six bulk properties of water. <br>$\circ$ Removing point charge positioning restrictions allowed for considerably better reproduction of the six bulk properties of water. | ![Water Models]({{ page.root }}/fig/opc.svg){: width="220"}|
+
+#### Polarizable water model OPC3-pol
+
+Rigid models with fixed charges are far from perfect since they do not account for many of the physical effects of real water. Among these physical effects are many subtle quantum effects, water flexibility, and, most importantly, electronic polarizability. In the absence of polarizability, a model cannot respond to changes in polarity in its micro-environment, which is very relevant in many types of simulations. As an example, the dipole moment of a real water molecule changes by almost 40% when it crosses the water-vapor interface, whereas with a fixed charge model, the dipole moment does not change.
+
+The process of polarization is usually accomplished by adding model oscillators, referred to as Drude particles. The Drude particle is a massless virtual site with a partial electric charge attached to an atom by means of a harmonic spring. Simulations of classical Drude oscillator involve repositioning the Drude particle via a computationally expensive self-consistent procedure. 
+
+This cost can be reduced by assigning a small mass to each Drude particle, and evolving the simulation using the extended Lagrangian dynamics. Simulations using polarizable water models such as (iAMOEBA and SWM4-NDP) still take at least four times as long as those using rigid non-polarizable water. Additionally, Drude water models have the drawback of requiring matching, polarizable force fields for biomolecules. 
+
+OPC3-pol performs almost as well as nonpolarizable water models and requires no specialized force fields for proteins or nucleic acids.
+For high computational efficiency, the OPC3-pol model treats the Drude particle as an "ordinary" atom in the molecular dynamics system: the water oxygen mass is split equally between the oxygen atom and the Drude particle.
+
+The critical benefit of the approach is that OPC3-pol water model can run as fast as classical non-polarizable water models with the existing biomolecular force fields.
+
+![Quality scores of water models]({{ page.root }}/fig/water_models_errors.png){: width="350"}
 
 #### Quality of different water models 
 Let's have a look at the quality scores of different water models summarized in the figure below. The figure shows how quality score depends on the dipole and quadrupole moments. Interestingly the test models in which the moments were close to the QM values had low quality. And the models that scored better had moments very different from the QM values. This indicates that three point charges, even if placed optimally, are not enough to represent the complex charge distribution of real water molecule to the needed degree of accuracy. 
@@ -90,22 +105,28 @@ The distribution of quality scores for different water models in the space of di
 #### Performance Considerations
 The time to compute interactions between a pair of water molecules is approximately proportional to the number of distances between each pair of interaction points. For the 3-point model, 9 distances are required for each pair of water molecules. For the 4-site model, 10 distances are required (every charged site with every charged site, plus the VDW O–O interaction).
 
+
 #### Other things to consider
 Water models in common use in bio-molecular simulation have traditionally only been parameterized for a single temperature of 298K (SPC/E, TIP3P)
  
 ### Force Field Parameters of the common Water Models
 
-|     | TIP3P  | SPC/E   | TIP4P-Ew | OPC    |
-|---  |--------|---------|----------|--------|
-|OH   | 0.9572 | 1.0     | 0.9572   | 0.8724 |
-|HH   | 1.5136 | 1.63    | 1.5136   | 1.3712 | 
-|HOH  | 104.52 | 109.47  | 104.52   | 103.6  |
-|OM   | -      |  -      | 0.125    | 0.1594 |
-|A(12)| 582.0  |629.4    | 656.1    | 865.1  |
-|B(6) | 595.0  |625.5    | 653.5    | 858.1  |
-|qO   | −0.834 | −0.8476 | −1.04844 | −1.3582|
-|qH   | +0.417 | +0.4238 | +0.52422 | +0.6791|
+|     | TIP3P  | SPC/E   | TIP4P-Ew | OPC    | OPC3    |
+|---  |--------|---------|----------|--------|---------|
+|OH   | 0.9572 | 1.0     | 0.9572   | 0.8724 | 0.9789  |
+|HH   | 1.5136 | 1.63    | 1.5136   | 1.3712 | 1.5985  | 
+|HOH  | 104.52 | 109.47  | 104.52   | 103.6  | 109.47  |
+|OM   | -      |  -      | 0.125    | 0.1594 |  -      |
+|A(12)| 582.0  |629.4    | 656.1    | 865.1  |  667.9  | 
+|B(6) | 595.0  |625.5    | 653.5    | 858.1  |         |
+|qO   | −0.834 | −0.8476 | −1.04844 | −1.3582| -0.8952 |
+|qH   | +0.417 | +0.4238 | +0.52422 | +0.6791| +0.4476 |
+
+Nonbonded OPC3: sigma=1.7814990,  epsilon=0.163406 pending convert to A, B 
 
 1. [Structure and Dynamics of the TIP3P, SPC, and SPC/E Water Models at 298 K](https://pubs.acs.org/doi/full/10.1021/jp003020w)
 2. [Building Water Models: A Different Approach](https://pubs.acs.org/doi/abs/10.1021/jz501780a)
 3. [Effect of the Water Model in Simulations of Protein–Protein Recognition and Association](https://doi.org/10.3390/polym13020176) 
+4. [Accuracy limit of rigid 3-point water models](https://doi.org/10.1063/1.4960175) 
+5. [A fast polarizable water model for atomistic simulations](https://doi.org/10.26434/chemrxiv-2022-v80r5) 
+

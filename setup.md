@@ -3,4 +3,4 @@ layout: page
 title: Setup
 root: .
 ---
-FIXME
+No setup required
