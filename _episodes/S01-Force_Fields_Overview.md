@@ -1,8 +1,7 @@
-
 ---
-title: "Force Fields: an Overview"
-teaching: 30
-exercises: 10
+title: "Supplemental: Overview of common Force Fields"
+teaching: 0
+exercises: 0
 questions:
 - "What is Molecular Dynamics and how can I benefit from using it?"
 - "What is a force field?"
@@ -15,6 +14,10 @@ keypoints:
 - "The forces in molecular dynamics are approximated by simple empirical functions"
 ---
 
+#### Table of Contents
+
+* Table of Contents
+{:toc}
 
 ## History of Force Field Development
 

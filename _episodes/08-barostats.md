@@ -33,6 +33,21 @@ The time constant for pressure bath coupling is the main parameter of the Berend
 
 Reference: [Molecular dynamics with coupling to an external bath](https://aip.scitation.org/doi/10.1063/1.448118)
 
+### Stochastic methods
+#### Stochastic Cell Rescaling
+
+The stochastic cell rescaling algorithm was developed by [Bernetti and Bussi (2020)][Bernetti-2020]
+as an improved version of the Berendsen pressure bath that samples correct volume fluctuations.
+It adds a stochastic term to the calculation of the rescaling matrix that causes the local pressure
+fluctuations to be correct for the canonical (NPT) statistical ensemble while retaining the fast
+first order decay of the pressure deviations from the target pressure.
+
+Therefore stochastic cell rescaling can be applied during both equilibration, while the pressure 
+is still far from the target, which would lead to undesired oscillations when using extended system
+methods like Parrinello-Rahman or MTTK, as well as during production-md (data collection), where
+it is important to sample from a correct statistical ensemble.
+
+
 ### Extended system methods
 In the classical work Andersen proposed a pressure control method with an extended system variable. It is based on including an additional degree of freedom corresponding to the volume of a simulation cell which adjusts itself to equalize the internal and external pressure. In this method an additional degree of freedom serves as a piston, and is given a fictitious "mass". The choice of piston "mass" determines the decay time of the volume fluctuations. The Parrinello-Rahman barostat, the Nose-Hoover barostat, and the Martyna-Tuckerman-Tobias-Klein (MTTK) are all based on the [Andersen barostat](https://aip.scitation.org/doi/abs/10.1063/1.439486).
 
@@ -58,8 +73,10 @@ Reference: [Constant pressure molecular dynamics simulation: The Langevin piston
 
 MTTK and Langevin produce identical ensembles, but Langevin barostat oscillates less then MTTK and converges faster due to stochastic collisions and damping.
 
-[A Comparison of Barostats for the Mechanical Characterization of Metal−Organic Frameworks](https://pubs.acs.org/doi/pdf/10.1021/acs.jctc.5b00748)
-
+Reprinted with permission from [Rogge et al. 2015]({{ page.root }}/reference.html#Rogge-2015), *A Comparison of Barostats for the Mechanical Characterization of Metal−Organic Frameworks*, J Chem Theory Comput. 2015;11: 5583-97. [doi:10.1021/acs.jctc.5b00748](https://doi.org/10.1021/acs.jctc.5b00748). Copyright 2015 American Chemical Society.
+{% comment %}
+See "fig/barostats_comp -  Copyright Clearance Center.pdf"
+{% endcomment %}
 
 ### Monte-Carlo pressure control. 
 Recently several efficient Monte Carlo methods have been introduced. Monte Carlo pressure control samples volume fluctuations at a predefined number of steps at a given constant external pressure. It involves generation of a random volume change from a uniform distribution followed by evaluation of the potential energy of the trial system. The volume move is then accepted with the standard Monte-Carlo probability. Virial is not computed by Monte-Carlo methods, so pressure is not available at runtime, and it is also not printed in energy files.
@@ -74,13 +91,29 @@ References:
 | Thermostat\MD package | GROMACS                      |  NAMD                    | AMBER         |
 |-----------------------|------------------------------|--------------------------|---------------|
 | Berendsen             | pcoupl = Berendsen           |  BerendsenPressure on    | barostat = 1  |
-| Langevin              |                              |  LangevinPiston on       |               |   
-| Monte-Carlo           |                              |                          | barostat = 2  |   
-| Parrinello-Rahman     | pcoupl = Parrinello-Rahman   |                          |               |   
-| MTTK                  | pcoupl = MTTK                |                          |               | 
+| Stoch. cell rescaling | pcoupl = C-rescale           |                          |               |
+| Langevin              |                              |  LangevinPiston on       |               |
+| Monte-Carlo           |                              |                          | barostat = 2  |
+| Parrinello-Rahman     | pcoupl = Parrinello-Rahman   |                          |               |
+| MTTK                  | pcoupl = MTTK                |                          |               |
 
 ### Pitfalls
 To ensure stability of a simulation volume must be adjusted very slowly with a small increments at each simulations step. Rapid change of the system size may lead to simulation crash. This can occur, for example when pressure coupling is turned on when you begin simulation from a cold start and turn pressure coupling too early in the heating process. In this case, the difference between the target and the real pressure will be large, the program will try to adjust the density too quickly, and bad things (such as SHAKE failures) are likely to happen.
 
+
+
 #### Conclusion
 Each barostat or thermostat technique has its own limitations and it is your responsibility to choose the most appropriate method or their combination for the problem of interest.
+
+
+{% comment %}
+### References
+Below here we resolve reference-style links so that 
+[Refname-YYYY] points to the anchor #Refname-YYYY on the {{ page.root }}/reference.html page.
+
+Example:
+[Refname-YYYY]: {{ page.root }}/reference.html#Refname-YYYY
+{% endcomment %}
+
+[Bernetti-2020]:   {{ page.root }}/reference.html#Bernetti-2020
+[Parrinello-1981]: {{ page.root }}/reference.html#Parrinello-1981

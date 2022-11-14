@@ -7,14 +7,17 @@ questions:
 - "How do I update the style of my lesson?"
 - "How can we add mathematical equations into our lessons?"
 - "How can we add Flow diagrams as code within the lessons?"
+- "How can I hide blocks of text and instead show a summary during a workshop?"
 objectives:
 - "Give a quick overview on how this style is used."
 - "Demonstrate the use of MathJax equations inside a lesson."
 - "Demonstrate the use of Mermaid charts inside a lesson."
+- "Demonstrate _Instructor View_."
 keypoints:
 - "Use `$$ LaTeX math $$` within a text."
 - "Use `$ LaTeX math $` followed by `{: .math-center}` or `{: .math-left}` for math-blocks."
 - 'Use a `<div class="mermaid"></div>` to add the code for a graph.'
+- "Mark paragraphs or blocks with `{: .self_study_text :}` or  `{: .instructor_notes :}`."
 ---
 
 * Table of Contents
@@ -157,7 +160,9 @@ $k_{n+1} = n^2 + k_n^2 - k_{n-1}$
 to write various graphs and flow-charts within Markdown and render them on a website. 
 This template has Mermaid support enabled and can be used as shown below.
 
-### Flow Chart
+### Flowchart
+
+[Documentation for Mermaid Flowchart](https://mermaid-js.github.io/mermaid/#/flowchart)
 
 ```
 <div class="mermaid">
@@ -179,42 +184,96 @@ graph LR
 
 ### Git Graph
 
+[Documentation for Mermaid gitGraph](https://mermaid-js.github.io/mermaid/#/gitgraph)
+
 ```
 <div class="mermaid">
-gitGraph:
-options
-{
-    "nodeSpacing": 100,
-    "nodeRadius": 10
-}
-end
-commit
-branch newbranch
-checkout newbranch
-commit
-commit
-checkout master
-commit
-commit
-merge newbranch
+gitGraph
+   commit id: "C1"
+   commit id: "C2"
+   branch develop
+   checkout develop
+   commit id: "C3"
+   commit id: "C4"
+   checkout main
+   merge develop
+   commit id: "C5"
+   commit id: "C6"
 </div>
 ```
 
 <div class="mermaid">
-gitGraph:
-options
-{
-    "nodeSpacing": 100,
-    "nodeRadius": 10
-}
-end
-commit
-branch newbranch
-checkout newbranch
-commit
-commit
-checkout master
-commit
-commit
-merge newbranch
+gitGraph
+   commit id: "C1"
+   commit id: "C2"
+   branch develop
+   checkout develop
+   commit id: "C3"
+   commit id: "C4"
+   checkout main
+   merge develop
+   commit id: "C5"
+   commit id: "C6"
 </div>
+
+## Instructor View
+
+Some lessons are rather complex and require a lot of information, which can result in long blocks
+of text that are needed for self-study as well as new instructors that need to familiarize
+themselves with the material.  
+In a workshop or presentation setting however it's difficult to pick out the talking points and
+having key information in bullet-points would be much better.
+
+A solution to this is to introduce an "Instructor View" that will hide paragraphs that have been 
+marked as `{: .self_study_text :}` and instead show paragraphs marked as `{: .instructor_notes :}`,
+which are otherwise hidden.  
+
+If any of those markers a present on a particular page (and only on those), the following toggle
+switch will appear in the Navigation bar at the top to turn the _instructor view_ on or off:
+
+<div class="toggle_instructor_view" title="Toggle between self-study text and instructor notes" data-toggle="tooltip">
+  <span class="glyphicon glyphicon-education" aria-hidden="true"></span>&nbsp;<label class="switch">
+    <input type="checkbox">
+    <span class="slider round"></span>
+  </label>
+</div>
+
+The state of the toggle is persistent for some time (by default 7 days) by setting a cookie, 
+however this duration can be customized by a variable in `_config.yml`:
+
+```yaml
+instructor_view_cookie_lifetime: 3
+```
+
+
+**Example**:
+
+```
+This is a long text that describes a complex topic in detail. 
+This contains information that the instructor explains in detail.   
+_Lorem ipsum dolor sit amet,[...] sunt in culpa qui officia deserunt mollit anim id est laborum._
+{: .self_study_text :}
+
+* talking points for instructor
+* easier to read during the workshop
+{: .instructor_notes :}
+```
+
+This is a long text that describes a complex topic in detail. 
+This contains information that the instructor explains verbally in detail.   
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+{: .self_study_text :}
+
+* talking points for instructor
+* easier to read during the workshop
+{: .instructor_notes :}
+
