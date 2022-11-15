@@ -78,7 +78,8 @@ AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple 
 
 
 ### COMPASS
-COMPASS and COMPASS II forcefields are developed for simulations of organic molecules, inorganic small molecules, and polymers. The VDW parameters are obtained by fitting enthalpies of vaporization and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account.
+COMPASS [(H. Sun, 1998)](https://pubs.acs.org/doi/10.1021/jp980939v) forcefield was developed for simulations of organic molecules, inorganic small molecules, and polymers. COMPASS II [(H. Sun et al., 2016)](https://link.springer.com/article/10.1007/s00894-016-2909-0) extended the coverage to polymer and drug-like molecules found in popular databases. The VDW parameters are obtained by fitting enthalpies of vaporization and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account.
+
 
 ### OPLS
 OPLS family force fields are created for liquid simulations containing organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpies of vaporization and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties.
