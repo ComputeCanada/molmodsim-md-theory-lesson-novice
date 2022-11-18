@@ -107,6 +107,8 @@ The LJ coefficients *C* are related to the $$\sigma$$ and the $$\epsilon$$  with
 
  $C12=4\epsilon\sigma^{12},C6=4\epsilon\sigma^{6}$
 
+Often, this potential is referred to as LJ-12-6. One of its drawbacks is that its 12th power repulsive part makes atoms too hard. Some forcefields, such as COMPASS, implement LJ-9-6 potential in order to address this problem. Atoms become softer by using repulsive terms of the 9th power, but they also become too sticky.
+
 #### The Lennard-Jones Combining Rules
 It is necessary to construct a matrix of the pairwise interactions in order to describe all *LJ* interactions in a simulation system. The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. Different force fields use different combining rules. Using combining rules helps to avoid huge number of parameters for each combination of different atom types. 
 
