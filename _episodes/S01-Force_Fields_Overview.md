@@ -43,18 +43,19 @@ After years of evaluations, the deficiencies of the first generation force field
 Development Phase I
 
 United atoms force fields. United atom models represent nonpolar carbons and their bonded hydrogens as a single particle. They can significantly reduce the size of most problems, since roughly half of the atoms in biological or other organic macromolecules are hydrogens. Additional advantage is the efficiency gain in conformational sampling. The first united atoms force field was UNICEPP
-[(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014). After this initial success all major developers of protein force fields implemented united atoms models. 
+[(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014).
 
-According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules. It became apparent, however, that there were some limitations:
+According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules.  After this initial success all major developers of protein force fields implemented united atoms models. 
+
+It became apparent, however, that there were some limitations:
 - In the absence of explicit hydrogens, hydrogen bonds cannot be accurately treated;  
 - π-stacking cannot be represented without explicitly including hydrogens in aromatic groups; 
 - when hydrogens were combined with polar heavy atoms, dipole and quadrupole moments were found to be inaccurate.
  
- 
- New approaches were found to overcome the limitations of united-atom force fields. For example, only aliphatic hydrogens, which are not significantly charged and do not participate in hydrogen bonds, are represented as united atoms while other hydrogens are represented explicitly. In this way, the limitations of the united-atom force field are partially mitigated while preserving most of the benefits of the united-atom force field.
+New approaches were found to overcome the limitations of united-atom force fields. For example, only aliphatic hydrogens, which are not significantly charged and do not participate in hydrogen bonds, are represented as united atoms while other hydrogens are represented explicitly. In this way, the limitations of the united-atom force field are partially mitigated while preserving most of the benefits of the united-atom force field.
 
 Refinement after the initial introduction.
-- Converted back to AA, except GROMOS
+- ALL FF Converted back to AA, except GROMOS
 
 CHARMM22
 AMBER, ff99, GAFF
