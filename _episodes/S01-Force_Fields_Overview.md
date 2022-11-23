@@ -1,5 +1,5 @@
 ---
-title: "Supplemental: a Brief Overview of the Common Force Fields"
+title: "Supplemental Overview of the Common Force Fields"
 teaching: 0
 exercises: 0
 questions:
@@ -18,7 +18,7 @@ keypoints:
 #### CFF (Consistent Force Field) (1968)
 CFF was the first modern force field [(Lifson, 1968)]({{ page.root }}/reference.html#lifson-1968) Introduced a concept of a 'consistent force field'. Introduced a methodology for deriving and validating force fields. The term 'consistent' emphasized importance of the ability to describe a wide range of compounds and physical observables (conformation, crystal structure, thermodynamic properties and vibrational spectra). After the initial derivation for hydrocarbons CFF was extended to proteins, but was very crude at that time.
 
-#### Allinger Force Fields MM1 - MM4 (1976-1996)
+#### Allinger Force Fields (MM1 - MM4) (1976-1996)
 - MM1 [(N.L. Allinger, 1976)](https://www.sciencedirect.com/science/article/abs/pii/S0065316008602129) - Class 1
 - MM2 [(N.L. Allinger, 1977)](https://pubs.acs.org/doi/10.1021/ja00467a001) - Class 1
 - MM3 [N.L.Allinger et al., 1989](https://pubs.acs.org/doi/10.1021/ja00205a001) - Class 2
@@ -29,20 +29,19 @@ Target data included electron diffraction, vibrational spectra, heats of formati
 #### ECEPP (Empirical Conformational Energy Program for Peptides) (1975)
 ECEPP was the first force field targeting polypeptides and proteins. Crystal data of small organic compounds and semi-empirical QM calculations were used extensively in derivation of this force field. As more experimental data became available, force field parameters have been refined and modified versions were published.
 - ECEPP [(F. A. Momany, et al., 1975)](https://pubs.acs.org/doi/10.1021/j100589a006#) 
-- UNICEPP [(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014) The united atoms version for the conformational analysis of large molecules
+- UNICEPP [(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014) The united atoms version of ECEPP, developed for the conformational analysis of large molecules
 - ECEPP-02 [(G. Nemethy et al, 1983)](https://pubs.acs.org/doi/10.1021/j100234a011)
 - ECEPP-03 [(G. Nemethy et al, 1992)](https://pubs.acs.org/doi/10.1021/j100194a068)
 - ECEPP-05 [(Y. A. Arnautova et al., 2006)](https://pubs.acs.org/doi/full/10.1021/jp054994x)
 
 
-
 ## Evolution of Force Fields
 
-After years of evaluations, the deficiencies of the first generation force fields became evident, and various approaches were undertaken to rectify them.
+### Early force field advances
+Early force field advances focused on developing mathematical forms for MM energy function and methods of deriving parameters. Researchers investigated various forms of potential energy functions, and experimented with hydrogen bonding potential, combination rules, and out of plane angle potentials during this period.
 
-Development Phase I
-
-United atoms force fields. United atom models represent nonpolar carbons and their bonded hydrogens as a single particle. They can significantly reduce the size of most problems, since roughly half of the atoms in biological or other organic macromolecules are hydrogens. Additional advantage is the efficiency gain in conformational sampling. The first united atoms force field was UNICEPP
+#### United atoms force fields. 
+United Atoms Model was developed to speed up large-scale simulations. It represents nonpolar carbons and their bonded hydrogens as a single particle. United Atoms force fields can significantly reduce the size of most simulations, since roughly half of the atoms in biological or other organic macromolecules are hydrogens. Additional advantage is the efficiency gain in conformational sampling. The first united atoms force field was UNICEPP
 [(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014).
 
 According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules.  After this initial success all major developers of protein force fields implemented united atoms models. 
@@ -54,16 +53,17 @@ It became apparent, however, that there were some limitations:
  
 New approaches were found to overcome the limitations of united-atom force fields. For example, only aliphatic hydrogens, which are not significantly charged and do not participate in hydrogen bonds, are represented as united atoms while other hydrogens are represented explicitly. In this way, the limitations of the united-atom force field are partially mitigated while preserving most of the benefits of the united-atom force field.
 
-Refinement after the initial introduction.
-- ALL FF Converted back to AA, except GROMOS
 
-CHARMM22
-AMBER, ff99, GAFF
-OPLS-AA, OPLS-AA/L
+### Refinement after the initial introduction.
 
-Used large datasets for training. Training datasets were different for different FF.
+Statistical errors caused by relatively short simulation lengths and systematic errors caused by inaccurate force fields limit the predictive power of MD simulations. Deficiencies of the force fields remained undetected when  statistical errors caused  by insufficient sampling prevailed. Increase of the computing power over last two decades allowed for much longer simulations and lead to a significant reduction of statistical errors. This led to the detection of force field deficiencies such as large deviations in different observables and inability to predict conformations of proteins and peptides. Various approaches were undertaken to improve force fields.
 
-Large deviations in different observables. Inability to predict conformations of peptides and proteins.
+- Most force fields (CHARMM22, ff99 and GAFF, OPLS-AA, OPLS-AA/L) converted back to all atom, except GROMOS.
+
+- Used large datasets for training. Training datasets were different for different FF.
+
+
+
 Simple 12‑6‑1 quadratic diagonal FFs (as used in standard biomolecular FFs) are not adequate to achieve quantitative accuracy. A major problem with all widely used protein force fields is the functional form of the potential energy.
 
 2 paths:
@@ -77,7 +77,7 @@ Unaccounted physics:
 AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function. 
 
 
-### Force Fields Aimed at Improving Quality of Molecular Interactions
+## Force Fields Aimed at Improving Quality of Molecular Interactions
 #### CVFF (Consistent Valence Force Field) [(Maple & Hagler, 1988)](https://www.pnas.org/doi/epdf/10.1073/pnas.85.15.5350)
 #### CFF93 (An ab initio all-atom force field for polycarbonates) [(Sun et al., 1994)](https://pubs.acs.org/doi/10.1021/ja00086a030)
 #### CFF, formerly CFF95 [(Jonsdottir & Rasmussen, 2000)](https://doi.org/10.1039/A909475J)
@@ -91,7 +91,7 @@ AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple 
 Extended the coverage to polymer and drug-like molecules found in popular databases. The VDW parameters are obtained by fitting enthalpies of vaporization and densities, to experimental data. The atomic partial charges are derived using QM and empirically adjusted to take hydrogen bonding effects into account. The COMPASS energy function offers six types of cross-terms: bond-bond, bond-angle, angle-angle, bond-torsion, angle-torsion, and angle-torsion-angle.
 
 
-### Biomolecular Force Fields for Large and Long Simulations.
+## Biomolecular Force Fields for Large-Scale Simulations.
 
 Long simulations of large systems are required to study biologically relevant processes. It takes a lot of computer power to run such simulations. Due to this, the main objective is to develop a minimal force field that allows simulation sizes and time periods to be extended as much as possible while still keeping chemical structures, interaction energies, and thermodynamic properties within an acceptable range.
 
@@ -208,7 +208,7 @@ CHARMM22/CMAP (CHARMM27)
 CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
 
 
-### Polarizable Force fields
+## Polarizable Force fields
 #### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 #### AMOEBA (Atomic Multipole Optimized Energetics for Biomolecular Applications) 
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
@@ -216,7 +216,7 @@ CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral
 
 AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) at each atom and explicitly treats polarization effects under various chemical and physical conditions.
 
-### Additional Reading
+## Additional Reading
 The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#dauber-osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#hagler-2019).
 
 
