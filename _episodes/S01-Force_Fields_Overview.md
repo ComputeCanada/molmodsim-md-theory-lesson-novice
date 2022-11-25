@@ -1,5 +1,5 @@
 ---
-title: "Supplemental Overview of the Common Force Fields"
+title: "Supplemental: Overview of the Common Force Fields"
 teaching: 0
 exercises: 0
 questions:
@@ -38,13 +38,21 @@ ECEPP was the first force field targeting polypeptides and proteins. Crystal dat
 ## Evolution of Force Fields
 
 ### Early force field advances
-Early force field advances focused on developing mathematical forms for MM energy function and methods of deriving parameters. Researchers investigated various forms of potential energy functions, and experimented with hydrogen bonding potential, combination rules, and out of plane angle potentials during this period.
+Early force field development focused on developing mathematical forms for MM energy function and methods of deriving parameters. Researchers investigated various forms of potential energy functions, and experimented with hydrogen bonding potential, combination rules, and out of plane angle potentials during this period.
 
 #### United atoms force fields. 
 United Atoms Model was developed to speed up large-scale simulations. It represents nonpolar carbons and their bonded hydrogens as a single particle. United Atoms force fields can significantly reduce the size of most simulations, since roughly half of the atoms in biological or other organic macromolecules are hydrogens. Additional advantage is the efficiency gain in conformational sampling. The first united atoms force field was UNICEPP
 [(L.G. Dunfield, 1978)](https://pubs.acs.org/doi/10.1021/j100513a014).
 
-According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules.  After this initial success all major developers of protein force fields implemented united atoms models. 
+According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules.  
+
+After this initial success all major developers of protein force fields implemented united atoms models. 
+
+ CHARMM, GROMOS
+
+[AMBER-UA](https://pubs.acs.org/doi/10.1021/ja00315a051) (1984)
+
+[OPLS-UA](https://pubs.acs.org/doi/10.1021/ja00214a001) (1988)
 
 It became apparent, however, that there were some limitations:
 - In the absence of explicit hydrogens, hydrogen bonds cannot be accurately treated;  
@@ -56,26 +64,34 @@ New approaches were found to overcome the limitations of united-atom force field
 
 ### Refinement after the initial introduction.
 
-Statistical errors caused by relatively short simulation lengths and systematic errors caused by inaccurate force fields limit the predictive power of MD simulations. Deficiencies of the force fields remained undetected when  statistical errors caused  by insufficient sampling prevailed. Increase of the computing power over last two decades allowed for much longer simulations and lead to a significant reduction of statistical errors. This led to the detection of force field deficiencies such as large deviations in different observables and inability to predict conformations of proteins and peptides. Various approaches were undertaken to improve force fields.
+Statistical errors caused by relatively short simulation lengths and systematic errors caused by inaccurate force fields limit the predictive power of MD simulations. Deficiencies of the force fields remained undetected when  statistical errors caused  by insufficient sampling prevailed. Increase of the computing power over last two decades allowed for much longer simulations and resulted in a significant reduction of statistical errors. This led to the detection of force field deficiencies such as large deviations in different observables and inability to predict conformations of proteins and peptides. Various approaches were undertaken to improve force fields.
 
-- Most force fields (CHARMM22, ff99 and GAFF, OPLS-AA, OPLS-AA/L) converted back to all atom, except GROMOS.
+Most force fields (CHARMM22, AMBER ff99 and GAFF, OPLS-AA, OPLS-AA/L) converted back to all atom, except GROMOS.
 
-- Used large datasets for training. Training datasets were different for different FF.
+Because each force field was derived with a different training set of atomic configurations, it was biased in one way or another. By using large atomic reference sets and careful selection of the atomic configurations, bias problems were reduced and accuracy was improved.
 
 
+employ fixed atomic charges to model the electrostatic interactions via pairwise additive Coulombic interactions. While they have been widely used in complex systems due to their efficiency in simulations, there has been increasing effort to improve the underlying physics, particularly the many-body polarization that can vary significantly depending on chemical and physical environments.
 
 Simple 12‑6‑1 quadratic diagonal FFs (as used in standard biomolecular FFs) are not adequate to achieve quantitative accuracy. A major problem with all widely used protein force fields is the functional form of the potential energy.
 
-2 paths:
+There are two ways to deal with this problem, and both of them have been tried:
 
 1. Expand and improve the rigor of the representation of the underlying physics.
 2. Develop empirical corrections to compensate for deficiency of physical representation
 
 Unaccounted physics:
-- atomic charges depend on the geometry (charge flux)
+
+- atomic charges depend on the atomic configuration (geometry-dependent charge flux)
+
+- At short distances where the electron clouds overlap, the ESPs of atoms deviate from the pure Coulomb form (1/r) due to electron shielding. This is known as the charge penetration (CP) effect. 
+
+-  Induction effects arise from the distortion of a particular molecule in response to the electric field of its neighbors. Induction is often separated in concept into charge transfer (CT) and polarization. In contrast to CP, the definition of the CT effect has been far from clear. Separation of CT and polarization is intrinsically problematic because it highly depends on the method used.
 
 AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function. 
 
+
+[Implementation of Geometry-Dependent Charge Flux into the Polarizable AMOEBA+ Potential](https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.9b03489)
 
 ## Force Fields Aimed at Improving Quality of Molecular Interactions
 #### CVFF (Consistent Valence Force Field) [(Maple & Hagler, 1988)](https://www.pnas.org/doi/epdf/10.1073/pnas.85.15.5350)
@@ -199,14 +215,15 @@ Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone 
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 
-#### CHARMM
+#### CHARMM (Section is currently under developmemnt)
+
+##### [CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1996)
 
 CHARMM22
 
 CHARMM22/CMAP (CHARMM27)
 
 CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
-
 
 ## Polarizable Force fields
 #### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
@@ -215,6 +232,10 @@ CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
 
 AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) at each atom and explicitly treats polarization effects under various chemical and physical conditions.
+
+##### AMOEBA+ [(C. Liu et al., 2019)](https://pubs.acs.org/doi/10.1021/acs.jctc.9b00261)
+
+
 
 ## Additional Reading
 The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#dauber-osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#hagler-2019).
