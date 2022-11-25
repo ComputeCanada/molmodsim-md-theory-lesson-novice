@@ -215,18 +215,38 @@ Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone 
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 
-#### CHARMM (Section is currently under developmemnt)
+#### CHARMM 
 
 ##### [CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1996)
+United-atom model, originally released in 1985. 
 
-CHARMM22
+##### [CHARMM22](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077) (1998)
+All-atom model.
 
-CHARMM22/CMAP (CHARMM27)
+##### <a href="https://doi.org/10.1002/(SICI)1096-987X(20000130)21:2%3C105::AID-JCC3%3E3.0.CO;2-P">CHARMM27</a> (2000)
+Update to the CHARMM22 featuring the optimization of nucleic acid and lipid parameters, as well as the introduction of a number of new ions.
 
-CHARMM36 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
+##### [CHARMM22/CMAP](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1367299/#bib1) (2004)
+This forcefield introduces a tabulated correction for the φ-, ψ-angular dependence of the potential energy. As a result of the application of CMAP correction, the dynamical and structural properties of proteins were significantly improved in molecular dynamics simulations.
+
+##### [CHARMM27r](https://pubs.acs.org/doi/10.1021/jp0468096) (2005)
+Improved lipid parameter set.
+
+##### CHARMM35 (2008)
+Carbohydrate parameter set.
+
+##### [CGenFF](https://onlinelibrary.wiley.com/doi/10.1002/jcc.21367) (2009)
+
+##### CHARMM36 (2012)
+refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
+
+[Review of CHARMM force fields](https://doi.org/10.1016/j.bbagen.2014.08.004)
+
+[CHARMM Force Field Files](http://mackerell.umaryland.edu/charmm_ff.shtml)
 
 ## Polarizable Force fields
 #### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
+#### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
 #### AMOEBA (Atomic Multipole Optimized Energetics for Biomolecular Applications) 
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
