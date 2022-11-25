@@ -240,9 +240,9 @@ Carbohydrate parameter set.
 ##### CHARMM36 (2012)
 refined backbone CMAP potentials and introduced new side-chain dihedral parameters. The updated CMAP corrected the C22/CMAP FF bias towards alpha-helical conformations.
 
-[Review of CHARMM force fields](https://doi.org/10.1016/j.bbagen.2014.08.004)
+##### [Review](https://doi.org/10.1016/j.bbagen.2014.08.004)
 
-[CHARMM Force Field Files](http://mackerell.umaryland.edu/charmm_ff.shtml)
+##### [CHARMM Force Field Files](http://mackerell.umaryland.edu/charmm_ff.shtml)
 
 ## Polarizable Force fields
 #### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
@@ -254,6 +254,8 @@ refined backbone CMAP potentials and introduced new side-chain dihedral paramete
 AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) at each atom and explicitly treats polarization effects under various chemical and physical conditions.
 
 ##### AMOEBA+ [(C. Liu et al., 2019)](https://pubs.acs.org/doi/10.1021/acs.jctc.9b00261)
+
+##### AMOEBA+(CF) [(C. Liu et al., 2020)](https://pubs.acs.org/doi/full/10.1021/acs.jpclett.9b03489)
 
 
 
