@@ -48,7 +48,9 @@ According to early comparisons between all-atom and united-atom simulations, uni
 
 After this initial success all major developers of protein force fields implemented united atoms models. 
 
- CHARMM, GROMOS
+[CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1985) 
+ 
+GROMOS
 
 [AMBER-UA](https://pubs.acs.org/doi/10.1021/ja00315a051) (1984)
 
@@ -244,9 +246,17 @@ refined backbone CMAP potentials and introduced new side-chain dihedral paramete
 
 ##### [CHARMM Force Field Files](http://mackerell.umaryland.edu/charmm_ff.shtml)
 
+#### GROMOS
+
+##### 53A5, 53A6 [(Oostenbrink et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20090)
+
+##### 54A7, 54B7 [(N.Schmid et al., 2011)](https://link.springer.com/article/10.1007/s00249-011-0700-9)
+
+##### 54A8 [(M.M.Reif et al., 2012)](https://pubs.acs.org/doi/10.1021/ct300156h)
+
 ## Polarizable Force fields
-#### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 #### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
+#### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 #### AMOEBA (Atomic Multipole Optimized Energetics for Biomolecular Applications) 
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
@@ -261,5 +271,4 @@ AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) a
 
 ## Additional Reading
 The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#dauber-osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#hagler-2019).
-
 
