@@ -4,9 +4,14 @@ teaching: 0
 exercises: 0
 questions:
 - "What are the categories of molecular dynamics force fields?"
+- "What force fields are available?" 
+- "What systems they work best with?"
 objectives:
-- "Be able to recognize the strengths and weaknesses of different types of force fields"
+- "Be able to recognize the strengths and weaknesses of different types of force fields."
+- "Find out which force fields are available and which systems they are most suitable for."
 keypoints:
+- "There are different types of force fields designed for different types of simulations."
+- "Induction effects are not accounted for by fixed-charge force fields."
 - "Using more accurate and diverse target data allows MD force fields to be improved."
 ---
 
@@ -183,40 +188,6 @@ The goal was to reoptimize intramolecular bond, angle, and dihedral parameters t
 ##### [ff19SB](https://pubs.acs.org/doi/10.1021/acs.jctc.9b00591) (2020)
 Backbone dihedral parameters optimized using as reference data the entire 2D quantum mechanics (QM) energy surface. Both QM and MM calculations were done in aqueous solution. AMBER ff19SB uses CMAP torsional potentials. The authors concluded that "ff19SB, when combined with a more accurate water model such as OPC, should have better predictive power for modeling sequence-specific behavior, protein mutations, and also rational protein design".
 
-#### OPLS
-Force fields of the OPLS family are designed for simulating liquids that contain organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpies of vaporization and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties. An important part of the OPLS philosophy is balancing solvent-solvent and solute-solvent interactions. 
-
-##### [OPLS-AA](https://pubs.acs.org/doi/10.1021/ja9621760) (1996) 
-This is the first all-atom OPLS force field. Bond stretching and angle bending parameters are taken from the AMBER force field. The torsional parameters were fit to the RHF/6-31G* calculations of about 50 organic molecules and ions. The charges are empirical and have been obtained from fitting to reproduce properties of organic liquids.
-
-Jorgensen W, Maxwell D, Tirado-Rives J. Development and testing of the OPLS all-atom force field on conformational energetics and properties of organic liquids. J Am Chem Soc. 1996;118: 11225–11236.
-
-##### [OPLS-AA/L](https://pubs.acs.org/doi/10.1021/jp003919d) (2001) 
-Large data set, more than 2000 data points of energies for the 20 amino acids based on geometry optimization at the HF/6-31G** level followed by single-point LMP2/cc-pVTZ(-f) calculations. This level of theory is accurate within 0.25 kcal/mol.
-
-Kaminski GA, Friesner RA, Tirado-Rives J, Jorgensen WL. Evaluation and Reparametrization of the OPLS-AA Force Field for Proteins via Comparison with Accurate Quantum Chemical Calculations on Peptides. J Phys Chem B. 2001;105: 6474–6487. doi:10.1021/jp003919d
-
-##### [OPLS_2005](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20292) (2005) 
-Main goal - to broaden the coverage of OPLS_2001 and refine torsion parameters using a larger dataset. The new Data set included torsion profiles from 637 compounds.
-
-Banks JL, Beard HS, Cao Y, Cho AE, Damm W, Farid R, et al. Integrated Modeling Program, Applied Chemical Theory (IMPACT). J Comput Chem. 2005;26: 1752–1780. doi:10.1002/jcc.20292
-
-##### [OPLS2.0](http://dx.doi.org/doi:10.1021/ct300203w) (2012) 
-OPLS2 was developed to improve the accuracy of drug-like molecules. Substantially expanded data set contained QM data on more than 11,000 molecules. CM1A-BCC charges were used. The BCC terms were parameterized against the OPLS-AA charges for a core set of 112 molecules and the electrostatic potential at the HF/6-31G* level. The BCC terms were empirically adjusted to minimize the errors with regard to the ASFE using a training set of 153 molecules.
-
-Shivakumar D, Harder E, Damm W, Friesner RA, Sherman W. Improving the Prediction of Absolute Solvation Free Energies Using the Next Generation OPLS Force Field. J Chem Theory Comput. 2012;8: 2553–2558. doi:10.1021/ct300203w
-
-##### [OPLS-AA/M](http://dx.doi.org/doi:10.1021/acs.jctc.5b00356) (2015) 
-New torsion parameters using higher level ωB97X-D(23)/6-311++G(d,p) and  B2PLYP-D3BJ/aug-cc-pVTZ(26) QM calculations.
-
-Robertson MJ, Tirado-Rives J, Jorgensen WL. Improved Peptide and Protein Torsional Energetics with the OPLS-AA Force Field. J Chem Theory Comput. 2015;11: 3499–3509. doi:10.1021/acs.jctc.5b00356
-
-##### [OPLS3](http://dx.doi.org/doi:10.1021/acs.jctc.5b00864) (2016) 
-Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone pairs. Complete refit of peptide dihedral parameters using an order of magnitude more data. Claimed 30% improvement. Still the same original VDW parameters.
-
-Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
-
-
 #### CHARMM 
 
 ##### [CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1996)
@@ -253,6 +224,46 @@ refined backbone CMAP potentials and introduced new side-chain dihedral paramete
 ##### 54A7, 54B7 [(N.Schmid et al., 2011)](https://link.springer.com/article/10.1007/s00249-011-0700-9)
 
 ##### 54A8 [(M.M.Reif et al., 2012)](https://pubs.acs.org/doi/10.1021/ct300156h)
+
+Parameter sets for GROMOS force fields are specified in accordance with the following format: 
+
+- The number of atom types
+- A letter code that describes for what conditions the parameters are optimized (e.g. A - solution, B - vacuum).
+- The version number 
+
+
+#### OPLS
+Force fields of the OPLS family are designed for simulating liquids that contain organic molecules and proteins. The VDW parameters are optimized using experimental liquid properties, mainly enthalpies of vaporization and densities. The atomic partial charges are derived using QM and experimental condensed-phase properties. An important part of the OPLS philosophy is balancing solvent-solvent and solute-solvent interactions. 
+
+##### [OPLS-AA](https://pubs.acs.org/doi/10.1021/ja9621760) (1996) 
+This is the first all-atom OPLS force field. Bond stretching and angle bending parameters are taken from the AMBER force field. The torsional parameters were fit to the RHF/6-31G* calculations of about 50 organic molecules and ions. The charges are empirical and have been obtained from fitting to reproduce properties of organic liquids.
+
+Jorgensen W, Maxwell D, Tirado-Rives J. Development and testing of the OPLS all-atom force field on conformational energetics and properties of organic liquids. J Am Chem Soc. 1996;118: 11225–11236.
+
+##### [OPLS-AA/L](https://pubs.acs.org/doi/10.1021/jp003919d) (2001) 
+Large data set, more than 2000 data points of energies for the 20 amino acids based on geometry optimization at the HF/6-31G** level followed by single-point LMP2/cc-pVTZ(-f) calculations. This level of theory is accurate within 0.25 kcal/mol.
+
+Kaminski GA, Friesner RA, Tirado-Rives J, Jorgensen WL. Evaluation and Reparametrization of the OPLS-AA Force Field for Proteins via Comparison with Accurate Quantum Chemical Calculations on Peptides. J Phys Chem B. 2001;105: 6474–6487. doi:10.1021/jp003919d
+
+##### [OPLS_2005](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20292) (2005) 
+Main goal - to broaden the coverage of OPLS_2001 and refine torsion parameters using a larger dataset. The new Data set included torsion profiles from 637 compounds.
+
+Banks JL, Beard HS, Cao Y, Cho AE, Damm W, Farid R, et al. Integrated Modeling Program, Applied Chemical Theory (IMPACT). J Comput Chem. 2005;26: 1752–1780. doi:10.1002/jcc.20292
+
+##### [OPLS2.0](http://dx.doi.org/doi:10.1021/ct300203w) (2012) 
+OPLS2 was developed to improve the accuracy of drug-like molecules. Substantially expanded data set contained QM data on more than 11,000 molecules. CM1A-BCC charges were used. The BCC terms were parameterized against the OPLS-AA charges for a core set of 112 molecules and the electrostatic potential at the HF/6-31G* level. The BCC terms were empirically adjusted to minimize the errors with regard to the ASFE using a training set of 153 molecules.
+
+Shivakumar D, Harder E, Damm W, Friesner RA, Sherman W. Improving the Prediction of Absolute Solvation Free Energies Using the Next Generation OPLS Force Field. J Chem Theory Comput. 2012;8: 2553–2558. doi:10.1021/ct300203w
+
+##### [OPLS-AA/M](http://dx.doi.org/doi:10.1021/acs.jctc.5b00356) (2015) 
+New torsion parameters using higher level ωB97X-D(23)/6-311++G(d,p) and  B2PLYP-D3BJ/aug-cc-pVTZ(26) QM calculations.
+
+Robertson MJ, Tirado-Rives J, Jorgensen WL. Improved Peptide and Protein Torsional Energetics with the OPLS-AA Force Field. J Chem Theory Comput. 2015;11: 3499–3509. doi:10.1021/acs.jctc.5b00356
+
+##### [OPLS3](http://dx.doi.org/doi:10.1021/acs.jctc.5b00864) (2016) 
+Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone pairs. Complete refit of peptide dihedral parameters using an order of magnitude more data. Claimed 30% improvement. Still the same original VDW parameters.
+
+Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 ## Polarizable Force fields
 #### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
