@@ -9,6 +9,7 @@ questions:
 objectives:
 - "Be able to recognize the strengths and weaknesses of different types of force fields."
 - "Find out which force fields are available and which systems they are most suitable for."
+- "Identify the original papers that introduced force fields."
 keypoints:
 - "There are different types of force fields designed for different types of simulations."
 - "Induction effects are not accounted for by fixed-charge force fields."
@@ -71,31 +72,38 @@ New approaches were found to overcome the limitations of united-atom force field
 
 ### Refinement after the initial introduction.
 
-Statistical errors caused by relatively short simulation lengths and systematic errors caused by inaccurate force fields limit the predictive power of MD simulations. Deficiencies of the force fields remained undetected when  statistical errors caused  by insufficient sampling prevailed. Increase of the computing power over last two decades allowed for much longer simulations and resulted in a significant reduction of statistical errors. This led to the detection of force field deficiencies such as large deviations in different observables and inability to predict conformations of proteins and peptides. Various approaches were undertaken to improve force fields.
+Statistical errors caused by relatively short simulation lengths and systematic errors caused by inaccurate force fields limit the predictive power of MD simulations. Deficiencies of the force fields remained undetected when  statistical errors caused  by insufficient sampling prevailed. Increase of the computing power over last two decades allowed for much longer simulations and resulted in a significant reduction of statistical errors. This led to the detection of force field deficiencies such as large deviations in different observables and inability to predict conformations of proteins and peptides. Various approaches were undertaken to improve force fields such as:
 
-Most force fields (CHARMM22, AMBER ff99 and GAFF, OPLS-AA, OPLS-AA/L) converted back to all atom, except GROMOS.
+- **Use an all-atom model to increase accuracy.** Most force fields (CHARMM22, AMBER ff99 and GAFF, OPLS-AA, OPLS-AA/L) converted back to all-atom model.
 
-Because each force field was derived with a different training set of atomic configurations, it was biased in one way or another. By using large atomic reference sets and careful selection of the atomic configurations, bias problems were reduced and accuracy was improved.
+- **Increase the size of the target data.** Because each force field was derived with a different training set of atomic configurations, it was biased in one way or another. By using large atomic reference sets and careful selection of the atomic configurations, bias problems were reduced and accuracy was improved.
 
+- **Include polarization effects.** Early force fields employed fixed atomic charges to model the electrostatic interactions. Fixed-charge electrostatics does not account for the many-body polarization that can vary significantly depending on chemical and physical environments. Consequently, non-polarizable force fields fail to capture the conformational dependence of electrostatic properties. Polarizable force-fields where the charges can be calculated from the energy equilibration have been developed ot address this problem ([Review](https://www.annualreviews.org/doi/10.1146/annurev-biophys-070317-033349)). A drawback of including polarization is that simulations take longer to run due to the high computational cost. 
 
-employ fixed atomic charges to model the electrostatic interactions via pairwise additive Coulombic interactions. While they have been widely used in complex systems due to their efficiency in simulations, there has been increasing effort to improve the underlying physics, particularly the many-body polarization that can vary significantly depending on chemical and physical environments.
+### Recent developments in force fields and future prospects
+Despite extensive attempts to improve force files, they have often failed to achieve quantitative accuracy. There was a realization that the functional form of potential energy was the major problem with all widely used protein force fields.
 
-Simple 12‑6‑1 quadratic diagonal FFs (as used in standard biomolecular FFs) are not adequate to achieve quantitative accuracy. A major problem with all widely used protein force fields is the functional form of the potential energy.
-
-There are two ways to deal with this problem, and both of them have been tried:
+Two strategies can be used to address this problem:
 
 1. Expand and improve the rigor of the representation of the underlying physics.
 2. Develop empirical corrections to compensate for deficiency of physical representation
 
+AMBER, CHARMM, and OPLS focused their efforts on empirical correction of the simple potential function.  AMOEBA and COMPASS worked on improving the functional form.
+
+
 Unaccounted physics:
+
+It is well understood that charge distributions are affected by both chemical environments and local geometry changes. The former is explicitly treated in polarizable force field models.  The latter is ignored by almost all classical FFs even though it is well-known that it causes issues.
+
+
+
+amoeba+ incorporated charge penetration and intermolecular charge transfer.
 
 - atomic charges depend on the atomic configuration (geometry-dependent charge flux)
 
 - At short distances where the electron clouds overlap, the ESPs of atoms deviate from the pure Coulomb form (1/r) due to electron shielding. This is known as the charge penetration (CP) effect. 
 
 -  Induction effects arise from the distortion of a particular molecule in response to the electric field of its neighbors. Induction is often separated in concept into charge transfer (CT) and polarization. In contrast to CP, the definition of the CT effect has been far from clear. Separation of CT and polarization is intrinsically problematic because it highly depends on the method used.
-
-AMBER, CHARMM, OPLS focused their efforts on empirical correction of the simple potential function. 
 
 
 [Implementation of Geometry-Dependent Charge Flux into the Polarizable AMOEBA+ Potential](https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.9b03489)
@@ -266,8 +274,10 @@ Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone 
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
 ## Polarizable Force fields
-#### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
-#### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
+#### AMBER
+##### ff02pol [(P. Cieplak et al., 2001)](https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.1065)
+##### ff12pol [(J. Wang et al., 2011)](https://pubs.acs.org/doi/10.1021/jp112133g)
+
 #### AMOEBA (Atomic Multipole Optimized Energetics for Biomolecular Applications) 
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
@@ -278,7 +288,9 @@ AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) a
 
 ##### AMOEBA+(CF) [(C. Liu et al., 2020)](https://pubs.acs.org/doi/full/10.1021/acs.jpclett.9b03489)
 
-
+#### CHARMM 
+##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
+##### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 
 ## Additional Reading
 The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#dauber-osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#hagler-2019).
