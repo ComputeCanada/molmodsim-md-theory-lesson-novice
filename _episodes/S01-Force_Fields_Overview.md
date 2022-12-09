@@ -282,16 +282,25 @@ Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
 
-AMOEBA-2013 uses permanent electrostatic multipole moments (up to quanrupoles) at each atom and explicitly treats polarization effects under various chemical and physical conditions.
+AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) moments at each atom and explicitly treats polarization effects under various chemical and physical conditions.
 
 ##### AMOEBA+ [(C. Liu et al., 2019)](https://pubs.acs.org/doi/10.1021/acs.jctc.9b00261)
 
 ##### AMOEBA+(CF) [(C. Liu et al., 2020)](https://pubs.acs.org/doi/full/10.1021/acs.jpclett.9b03489)
+
+##### Q-AMOEBA [(N.Mauger et al., 2022)](https://pubs.acs.org/doi/10.1021/acs.jpcb.2c04454)
+
+Force field for water with polarization capabilities. Intended for simulations that explicitly take nuclear quantum effects into account.
 
 #### CHARMM 
 ##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
 ##### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 
 ## Additional Reading
-The origins of FF based calculations, theory and methodology of FF development have been recently reviewed in [(Dauber-Osguthorpe, 2019)]({{ page.root }}/reference.html#dauber-osguthorpe-2019), and the latest developments in improvement of FF accuracy and robustness are discussed in [(Hagler, 2019)]({{ page.root }}/reference.html#hagler-2019).
+
+1. [(Dauber-Osguthorpe, 2019)](https://link.springer.com/article/10.1007/s10822-018-0111-4) Biomolecular force fields: where have we been, where are we now, where do we need to go and how do we get there? - Review of the origins of FF based calculations, theory and methodology of FF development.
+
+2. [(Hagler, 2019)](https://doi.org/doi:10.1007/s10822-018-0134-x) Force field development phase II: Relaxation of physics-based criteria… or inclusion of more rigorous physics into the representation of molecular energetics. - The latest developments in improvement of FF accuracy and robustness are discussed.
+
+3. [Tinker-HP](https://tinker-hp.org) is a multi-CPUs and multi-GPUs/multi-precision, MPI massively parallel package dedicated to long molecular dynamics simulations with classical and polarizable force fields, neural networks and advanced QM/MM.
 
