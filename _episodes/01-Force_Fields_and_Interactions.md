@@ -33,7 +33,7 @@ This is one of the first works to explore how machine learning can be applied to
 Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://www.biorxiv.org/content/10.1101/2020.11.19.390187v1)
 
 #### Goals
-In this workshop, you will learn about molecular dynamics simulations and how to use different molecular dynamics simulation packages and utilities, such as NAMD, VMD, and AMBER. We will show you how to use Compute Canada clusters for all steps of preparing the system, performing MD and analyzing the data. The emphasis will be on reproducibility and automation through scripting and batch processing.
+In this workshop, you will learn about molecular dynamics simulations and how to use different molecular dynamics simulation packages and utilities, such as NAMD, VMD, and AMBER. We will show you how to use *Digital Resarch Alliance of Canada* (Alliance) clusters for all steps of preparing the system, performing MD and analyzing the data. The emphasis will be on reproducibility and automation through scripting and batch processing.
 
 The goal of this first lesson is to provide an overview of the theoretical foundation of molecular dynamics. As a result of this lesson, you will gain a deeper understanding of how particle interactions are modeled and how molecular dynamics are simulated.
 
