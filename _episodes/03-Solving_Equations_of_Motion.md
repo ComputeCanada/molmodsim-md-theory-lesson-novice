@@ -20,7 +20,7 @@ keypoints:
 ## Introduction
 To simulate evolution of the system in time we need to solve Newtonian equations of motions. As the exact analytical solution for systems with thousands or millions of atoms is not feasible, the problem is solved numerically. The approach used to find a numerical approximation to the exact solution is called integration.
 
-To simulate evolution of the system in time the integration algorithm advances positions of all atomistic by a small step $$\delta{t}$$ during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm for MD should be time-reversible and energy conserving.
+To simulate evolution of the system in time the integration algorithm advances positions of all atoms by a small step $$\delta{t}$$ during which the forces are considered constant. If the time step is small enough the trajectory will be reasonably accurate. A good integration algorithm must be energy conserving. Energy conservation is important for calculation of correct thermodynamic properties. It energy is not conserved simulation may even become unstable in severe cases due to energy going to infinity. Time reversibility is important because it guarantees conservation of energy, angular momentum and any other conserved quantity. Thus good integrator for MD should be time-reversible and energy conserving.
 
 ## Integration Algorithms
 ### The Euler Algorithm
@@ -35,8 +35,10 @@ $\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\frac{1}{2}\boldsymbol{a}(t)\delt
 
 Euler's algorithm is neither time-reversible nor energy-conserving, and as such is rather unfavorable. Nevertheless, the Euler scheme can be used to integrate some other than classical MD equations of motion. For example, GROMACS offers a Euler integrator for Brownian or position Langevin dynamics.
 
+
+
 > ## The original Verlet Algorithm
->Using the current positions and forces and the previous positions calculate the positions at the next time step:  
+>Verlet improved the Euler integration by using positions at two successive time steps. Using positions from two time steps ensured that acceleration changes were taken into account. Essentially, this algorithm is as follows: calculate the next positions using the current positions, forces, and previous positions:  
 >$\qquad\boldsymbol{r}(t+\delta{t})=2\boldsymbol{r}(t)-\boldsymbol{r}(t-\delta{t})+\boldsymbol{a}(t)\delta{t}^2$<br>
 >  
 >- The Verlet algorithm  [(Verlet, 1967)]({{ page.root }}/reference.html#verlet-1967) requires positions at two time steps. It is inconvenient when starting a simulation when only current positions are available.  
@@ -73,19 +75,15 @@ Velocity, position, and forces are calculated using the following algorithm:
 2. Use $\boldsymbol{v}(t-\frac{\delta{t}}{2})$ and $\boldsymbol{a}(t)$ to compute $\boldsymbol{v}(t+\frac{\delta{t}}{2})$:<span style="color:gray"> $\qquad\boldsymbol{v}(t+\frac{\delta{t}}{2})=\boldsymbol{v}(t-\frac{\delta{t}}{2}) + \boldsymbol{a}(t)\delta{t}$
 3. Use current $\boldsymbol{r}(t)$ and $\boldsymbol{v}(t+\frac{\delta{t}}{2})$ to compute $\boldsymbol{r}(t+\delta{t})$ : <span style="color:gray"> $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t+\frac{\delta{t}}{2})\delta{t}$ </span>
 
-> ## Changing the MD-Integrator Causes Discontinuous Simulations
+> ## Discontinuities in simulations occur when the integrator is changed
+>Since velocities in Leap-frog restart files are shifted by half a time step from coordinates, changing the integrator to Verlet will introduce some discontinuity.
 > 
-> It is not possible to change the integrator between Velocity-Verlet and Leap-Frog 
-> within a simulation, as the velocities stored with the coordinates of a simulation
-> step are interpreted different between these integrators. 
-> 
-> | Integrator      | pairs of coordinates ($r$) and velocities ($v$) used                        |
+> | Integrator      | pairs of coordinates ($r$) and velocities ($v$)                      |
 > |-----------------|-----------------------------------------------------------------------------|
 > | Velocity-Verlet | $[r_{t=0}, v_{t=0}],   [r_{t=1}, v_{t=1}],   [r_{t=2}, v_{t=2}],   \ldots $ |
 > | Leap-Frog       | $[r_{t=0}, v_{t=0.5}], [r_{t=1}, v_{t=1.5}], [r_{t=2}, v_{t=2.5}], \ldots $ |
 >
-> Changing the integrator anyway, not only causes an discontinuity, but also invalidates any 
-> previous equilibration and has a similar effect as assigning new velocities to the system.
+> A simulation system will experience an instantaneous change in kinetic energy. That makes it impossible to transition seamlessly between integrators. 
 {: .checklist }
 
 > ## Selecting the Intergator

@@ -16,43 +16,43 @@ keypoints:
 ## Introduction
 Atoms and molecules, the building blocks of matter, interact with each other. They are attracted at long distances, but at short distances the interactions become strongly repulsive. As a matter of fact, there is no need to look for a proof that such interactions exist. Every day, we observe indirect results of these interactions with our own eyes. For example, because of the attraction between water molecules, they stick together to form drops, which then rain down to fill rivers. On the other hand, due to the strong repulsion, one liter of the same water always weighs about 1 kg, regardless of how much pressure we use to compress it.
 
-Nowadays, molecular modeling is done by analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. First attempts at modeling interacting molecules can be traced back to van der Waals' pioneering work ["About the continuity of the gas and liquid state"](https://www.worldcat.org/title/over-de-continuiteit-van-den-gas-en-vloeistoftoestand/oclc/3301223) published in 1873. In order to predict the transition from gas to liquid, he used a simple equation representing molecules as spheres that attract each other. We still use many of the conceptual ideas from over a century ago in modern molecular modeling and simulations. Recently, MD simulations have been vastly improved in size and length. Using longer simulations, we are able to study a broader range of problems under a wide range of conditions.  
+Nowadays, molecular modeling is done by analyzing dynamic structural models in computers. Historically, the modeling of molecules started long before the invention of computers. In the mid-1800's structural models were suggested for molecules to explain their chemical and physical properties. First attempts at modeling interacting molecules were made by van der Waals in his pioneering work ["About the continuity of the gas and liquid state"](https://www.worldcat.org/title/over-de-continuiteit-van-den-gas-en-vloeistoftoestand/oclc/3301223) published in 1873. A simple equation representing molecules as spheres that are attracted to each other enabled him to predict the transition from gas to liquid. Modern molecular modeling and simulation still rely on many of the concepts developed over a century ago. Recently, MD simulations have been vastly improved in size and length. With longer simulations, we are able to study a broader range of problems under a wider range of conditions.
 
 ![MD-timeline: system-size vs. time]({{ page.root }}/fig/MD_size_timeline.png){: width="400" }
 
 Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
 
-One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. The MD simulations revealed conformational transitions of the spike protein, and its interactions with ACE2 receptors. The simulation revealed that the receptor binding domain of the spike protein, which is hidden from antibodies by polysaccharides, undergoes conformational transitions that push it out of the glycan shield and enable it to bind to ACE2 (angiotensin-converting enzyme) "receptors" of the host cells.
+One of the recent examples is simulation of the whole SARS-CoV-2 virion. The goal of this work was to understand how this virus infects cells. As a result of MD simulations, conformational transitions of the spike protein as well as its interactions with ACE2 receptors were identified. According to the simulation, the receptor binding domain of the spike protein, which is concealed from antibodies by polysaccharides, undergoes conformational transitions that allow it to emerge from the glycan shield and bind to the angiotensin-converting enzyme (ACE2) receptor in host cells.  
+
 The virion model included 305 million atoms, it had a lipid envelope of 75 nm in diameter with a full virion diameter of 120 nm. The multiscale simulations were performed using a combination of NAMD, VMD, AMBER. State-of-the-art methods such as the Weighted Ensemble Simulation Toolkit and ML were used. The whole system was simulated on the Summit supercomputer at Oak Ridge National Laboratory for a total time of 84 ns using NAMD. In addition a weighted ensemble of a smaller spike protein systems was simulated using GPU accelerated AMBER software. 
 
-This is one of the pioneering works examining the application of machine learning to MD studies. Machine Learning was used to identify pathways of conformational transitions between active and inactive states of spike proteins.  A machine learning algorithm was trained on thousands of MD trajectories and then used to intelligently accelerate conformational sampling. 
+This is one of the first works to explore how machine learning can be applied to MD studies. Using a machine learning algorithm trained on thousands of MD trajectory examples, conformational sampling was intelligently accelerated. As a result of applying machine learning techniques, it was possible to identify pathways of conformational transitions between active and inactive states of spike proteins.
 
 ![Image: Simulation of SARS-CoV-2 with NAMD]({{ page.root }}/fig/Cov2-NAMD.jpg){: width="480" }
 
 Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://www.biorxiv.org/content/10.1101/2020.11.19.390187v1)
 
 #### Goals
-In this workshop, you will learn about molecular dynamics simulations and how to use different molecular dynamics simulation packages and utilities, including NAMD, VMD, and AMBER. We will show you how to use Compute Canada clusters for all steps of preparing the system, performing MD and analyzing the data. The focus will be on reproducibility and automation through scripting and batch processing.
+In this workshop, you will learn about molecular dynamics simulations and how to use different molecular dynamics simulation packages and utilities, such as NAMD, VMD, and AMBER. We will show you how to use Compute Canada clusters for all steps of preparing the system, performing MD and analyzing the data. The emphasis will be on reproducibility and automation through scripting and batch processing.
 
-The purpose of this first lesson is to introduce the theory underlying the MD method. In this lesson, you will gain an understanding of current methods for modelling particle interactions and simulating molecular dynamics. 
+The goal of this first lesson is to provide an overview of the theoretical foundation of molecular dynamics. As a result of this lesson, you will gain a deeper understanding of how particle interactions are modeled and how molecular dynamics are simulated.
 
 ## Force Fields
-The development of molecular dynamics was largely motivated by the desire to understand complex biological phenomena at the molecular level. Simulations of large systems over long time windows were required to gain insight into such processes.
+The development of molecular dynamics was largely motivated by the desire to understand complex biological phenomena at the molecular level. To gain a deeper understanding of such processes, it was necessary to simulate large systems over a long period of time.
 
-While the physical background of intermolecular interactions is known, there is a very complex mixture of quantum mechanical forces acting at a close distance. The forces between atoms and molecules arise from dynamic interactions between numerous electrons orbiting atoms. The interactions between electron clouds are so complex that they cannot be described analytically, and they can not be computed numerically fast enough for a dynamic simulation on a relevant scale. 
+While the physical background of intermolecular interactions is known, there is a very complex mixture of quantum mechanical forces acting at a close distance. The forces between atoms and molecules arise from dynamic interactions between numerous electrons orbiting atoms. Since the interactions between electron clouds are so complex, they cannot be described analytically, nor can they be calculated numerically fast enough to enable a dynamic simulation on a relevant scale.
 
-To make molecular dynamics simulations possible a way to evaluate molecular interactions very fast was needed. To achieve this goal molecular interactions in molecular dynamics are approximated with a simple empirical potential energy function.
+In order for molecular dynamics simulations to be feasible, it was necessary to be able to evaluate molecular interactions very quickly. To achieve this goal molecular interactions in molecular dynamics are approximated with a simple empirical potential energy function.
 
-The potential energy function *U* is a cornerstone of the MD simulations because it allows calculating forces. The force on an object is the negative of the derivative of the potential energy function:
+The potential energy function *U* is a cornerstone of the MD simulations because it allows calculating forces. A force on an object is equal to the negative of the derivative of the potential energy function:
 
 $\vec{F}=-\nabla{U}(\vec{r})$
 
-Once we know forces acting on an object we can calculate how its position changes in time. To propagate a simulation in time molecular dynamics applies classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
+Once we know forces acting on an object we can calculate how its position changes in time. To advance a simulation in time molecular dynamics applies classical Newton's equation of motion stating that the rate of change of momentum $$ \vec{p} $$ of an object equals the force $$ \vec{F} $$ acting on it:
 
 $ \vec{F}=\frac{d\vec{p}}{dt} $
 
-
-In summary, if we know how to calculate a system's potential energy, we can calculate its forces and determine its propagation in time. In other words, we need to know the interaction potential for the particles in the system to calculate forces acting on atoms and advance a simulation.
+To summarize, if we are able to determine a system's potential energy, we can also determine the forces acting between the particles as well as how their positions change over time. In other words, we need to know the interaction potential for the particles in the system to calculate forces acting on atoms and advance a simulation.
 
 Let's examine a typical workflow for simulations of molecular dynamics.
 
@@ -72,7 +72,7 @@ In the class 1 force field dynamics of bond stretching and angle bending are des
 - Examples: AMBER, CHARMM, GROMOS, OPLS
 
 ### Class 2 force fields.
-Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However much more target data is needed for the determination of these additional parameters.
+Class 2 force fields add anharmonic cubic and/or quartic terms to the potential energy for bonds and angles. Besides, they contain cross-terms describing the coupling between adjacent bonds, angles and dihedrals. Higher-order terms and cross terms allow for a better description of interactions resulting in a more accurate reproduction of bond and angle vibrations. However, much more target data is needed for the determination of these additional parameters.
 - Examples: [MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-JCC8>3.0.CO;2-T), [UFF](https://pubs.acs.org/doi/10.1021/ja00051a040)
 
 ### Class 3 force fields.
@@ -80,7 +80,7 @@ Class 3 force fields explicitly add special effects of organic chemistry. For ex
 - Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
 
 ## Energy Terms of Biomolecular Force Fields
-For biomolecular simulations, most force fields are minimalistic class 1 force fields that trade off physical accuracy for the ability to simulate large systems for a long time. As we have already learned, potential energy function is composed of non-bonded and bonded interactions. Let's have a closer look at these energy terms.
+What types of energy terms are used in Biomolecular Force Fields? For biomolecular simulations, most force fields are minimalistic class 1 force fields that trade off physical accuracy for the ability to simulate large systems for a long time. As we have already learned, potential energy function is composed of non-bonded and bonded interactions. Let's have a closer look at these energy terms.
 
 ### Non-Bonded Terms
 The non-bonded potential terms describe non-electrostatic and electrostatic interactions between all pairs of atoms. 
@@ -94,7 +94,7 @@ The Lennard-Jones (LJ) potential approximates the potential energy of non-electr
 
 $V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 
-The $$r^{-12}$$ term approximates the strong Pauli repulsion originating from overlap of electron orbitals, while the $$r^{-6}$$ term describes weaker attractive forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially decaying repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
+The $$r^{-12}$$ is used to approximate the strong Pauli repulsion that results from electron orbitals overlapping, while the $$r^{-6}$$ term describes weaker attractive forces acting between local dynamically induced dipoles in the valence orbitals. While the attractive term is physically realistic (London dispersive forces have $$r^{-6}$$ distance dependence), the repulsive term is a crude approximation of exponentially decaying repulsive interaction. The too steep repulsive part often leads to an overestimation of the pressure in the system.
 
 ![graph: Lennard-Jones potential]({{ page.root }}/fig/lj.svg){: width="360" }
 
@@ -192,20 +192,21 @@ where *r<sub>ij</sub>* is the distance between the pair of atoms, *q<sub>i</sub>
 ![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="360" }
 
 ## Short-range and Long-range Interactions
-Interactions can be classified as short-range and long-range. In a short-range interaction, the potential decreases faster than *r<sup>-d</sup>*, where r is the distance between the particles and d is the dimension. Otherwise the interaction is long-ranged. In accordance with this, the Lennard-Jones interactions are short ranged, while the Coulomb interactions are long ranged.
+Interactions can be classified as short-range and long-range. In a short-range interaction, the potential decreases faster than *r<sup>-d</sup>*, where r is the distance between the particles and d is the dimension. Otherwise the interaction is long-ranged. Accordingly, the Lennard-Jones interaction is short-ranged, while the Coulomb interaction is long-ranged.
 
 ### Bonded Terms
-Bonded terms describe interactions between atoms within molecules. Bonded terms include several types of interactions, such as bond stretching terms, angle bending terms, dihedral or torsional terms, improper dihedrals,and coupling terms.
+Bonded terms describe interactions between atoms within molecules. Bonded terms include several types of interactions, such as bond stretching terms, angle bending terms, dihedral or torsional terms, improper dihedrals, and coupling terms.
 
 #### The bond potential
 The bond potential is used to model the interaction of covalently bonded atoms in a molecule. Bond stretch is approximated by a simple harmonic function describing oscillation about an equilibrium bond length *r<sub>0</sub>* with bond constant *k<sub>b</sub>*:
 
 $V_{Bond}=k_b(r_{ij}-r_0)^2$
 
+In a bond, energy oscillates between the kinetic energy of the mass of the atoms and the potential energy stored in the spring connecting them.
+
 ![graph: harmonic bond potential]({{ page.root }}/fig/bond.png){: width="360" }
 
-This is a fairly poor approximation at extreme stretching, but bonds are so stiff that it works for well moderate temperatures. A Morse potential is more accurate, but more expensive to calculate.
-
+This is a fairly poor approximation at extreme bond stretching, but bonds are so stiff that it works well for moderate temperatures. Morse potentials are more accurate, but more expensive to calculate because they involve exponentiation. They are widely used in spectroscopic applications. 
 
 #### The angle potential
 The angle potential describes the bond bending energy. It is defined for every triplet of bonded atoms. It is also approximated by a harmonic function describing oscillation about an equilibrium angle  $$\theta_{0}$$  with force constant $$k_\theta$$ :
@@ -225,7 +226,7 @@ $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
 Where the non-negative integer constant *n* defines periodicity and  $$\delta$$ is the phase shift angle.
 
 #### The improper torsion potential
-The improper torsion potentials defined for a group of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
+Improper torsion potentials are defined for groups of 4 bonded atoms where the central atom i is connected to the 3 peripheral atoms j,k, and l. Such group can be seen as a pyramid and the improper torsion potential is related to the distance of the central atom from the base of the pyramid. This potential is used mainly to keep molecular structures planar. As there is only one energy minimum the improper torsion term can be given by a harmonic function:
 
 $V_{Improper}=k_\phi(\phi-\phi_0)^2$
 
@@ -244,7 +245,6 @@ $V_{UB}=k_{ub}(r_{ik}-r_{ub})^2$
 U-B terms are used to improve agreement with vibrational spectra when a harmonic bending term alone would not adequately fit. These phenomena are largely inconsequential for the overall conformational sampling in a typical biomolecular/organic simulation. The Urey-Bradley term is implemented in the CHARMM force fields.
 
 ### CHARMM CMAP correction potential
-
 A protein can be seen as a series of linked sequences of peptide units which can rotate around phi/psi angles (peptide bond N-C is rigid). These phi/psi angles define the conformation of the backbone. 
 
 ![graph: Phi Psi]({{ page.root }}/fig/phipsi.png){: width="400" }
@@ -333,7 +333,7 @@ For more examples of the types of information MD simulations can provide read th
 > If **scaled1-4** is set, the electrostatic interactions for 1-4 pairs are multiplied by a constant factor specified by the **1-4scaling** parameter. The LJ interactions for 1-4 pairs are divided by **scnb**.
 {: .callout}
 
-> ## Counting Non-Bonded Interactions
+> ## Counting Non-Bonded Interactions (poll #1)
 >
 > How many non-bonded interactions are in the system with ten Argon atoms?
 >

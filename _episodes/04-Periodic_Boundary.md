@@ -61,6 +61,7 @@ In order to avoid short range interactions between a molecule and its images, th
 
 The solvent molecules in simulations involving macromolecules should not "feel" both sides of a solute. In other words, there must be at least twice the cut-off distance between a macromolecule and any of its images.
 
+When your simulation system is small make sure you do not set the cutoff too high!
 
 ![]({{ page.root }}/fig/box_size.svg){: width="400" }
 
@@ -77,12 +78,6 @@ Use of a cubical or dodecahedral box is one way to solve this problem. A disadva
 
 Using a narrow box together with constraining rotational motion is more efficient [[1]](https://aip.scitation.org/doi/10.1063/1.480557). Be aware, however, that the box shape itself may impact conformational dynamics by restricting motion in certain directions [[2]](https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.20341). This effect may be significant when the amount of solvent is minimal.
 
-
->## Comparing periodic boxes
->Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and truncated octahedral boxes with the 15 <span>&#8491;</span> distance between the solute and the box edge.
->
->Which of the boxes will be the fastest to simulate?
-{: .challenge}
 
 > ## Specifying Periodic Box
 >  **GROMACS**
@@ -130,6 +125,11 @@ Using a narrow box together with constraining rotational motion is more efficien
 >{: .file-content}
 {: .callout}
 
+>## Comparing periodic boxes
+>Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and truncated octahedral boxes with the 15 <span>&#8491;</span> distance between the solute and the box edge.
+>
+>Which of the boxes will be the fastest to simulate?
+{: .challenge}
 
 References:  
 1. [Molecular dynamics simulations with constrained roto-translational motions: Theoretical basis and statistical mechanical consistency](https://aip.scitation.org/doi/10.1063/1.480557) 

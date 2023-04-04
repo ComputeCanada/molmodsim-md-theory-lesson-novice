@@ -52,15 +52,11 @@ United Atoms Model was developed to speed up large-scale simulations. It represe
 
 According to early comparisons between all-atom and united-atom simulations, united-atom force fields adequately represent molecular vibrations and bulk properties of small molecules.  
 
-After this initial success all major developers of protein force fields implemented united atoms models. 
-
-[CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1985) 
- 
-GROMOS
-
-[AMBER-UA](https://pubs.acs.org/doi/10.1021/ja00315a051) (1984)
-
-[OPLS-UA](https://pubs.acs.org/doi/10.1021/ja00214a001) (1988)
+After this initial success all major developers of protein force fields implemented united atoms models:
+- [CHARMM19](https://aip.scitation.org/doi/pdf/10.1063/1.472061) (1985) 
+- GROMOS
+- [AMBER-UA](https://pubs.acs.org/doi/10.1021/ja00315a051) (1984)
+- [OPLS-UA](https://pubs.acs.org/doi/10.1021/ja00214a001) (1988)
 
 It became apparent, however, that there were some limitations:
 - In the absence of explicit hydrogens, hydrogen bonds cannot be accurately treated;  
@@ -78,7 +74,19 @@ Statistical errors caused by relatively short simulation lengths and systematic 
 
 - **Increase the size of the target data.** Because each force field was derived with a different training set of atomic configurations, it was biased in one way or another. By using large atomic reference sets and careful selection of the atomic configurations, bias problems were reduced and accuracy was improved.
 
-- **Include polarization effects.** Early force fields employed fixed atomic charges to model the electrostatic interactions. Fixed-charge electrostatics does not account for the many-body polarization that can vary significantly depending on chemical and physical environments. Consequently, non-polarizable force fields fail to capture the conformational dependence of electrostatic properties. Polarizable force-fields where the charges can be calculated from the energy equilibration have been developed ot address this problem ([Review](https://www.annualreviews.org/doi/10.1146/annurev-biophys-070317-033349)). A drawback of including polarization is that simulations take longer to run due to the high computational cost. 
+- **Improve representation of static electrostatic potential.** The atom-centered point charge model has two shortcomings: 
+    - It is unable to describe the anisotropy of the charge distribution;
+    - It does not account for the charge penetration effect (deviation of electrostatic interaction from the Coulomb form due to electron shielding when atomic electron clouds overlap).
+
+    In molecular complexes, these effects determine equilibrium geometry and energy. Examples of anisotropic charge distribution are σ-holes, lone pairs, and aromatic systems.
+
+    In covalent bonding an atom's side opposite its bond usually has a lower electron density region known as σ-hole. Through a positive electrostatic potential associated with a sigma-hole, an atom can interact attractively with negative sites.
+
+    A simple solution to the σ-hole model is to attach an off-centered positive charge to the halogen atom (
+   [W. Jorgensen & P. Schyman, 2012](https://pubs.acs.org/doi/10.1021/ct300180w), [F.Lin, A. MacKerell, 2018](https://sci-hub.se/10.1021/acs.jctc.7b01086)). An atomic multipole method provides a more thorough way of describing anisotropic charge distribution ([J.Ponder et al., 2010](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2918242/)).
+
+- **Include polarization effects.** Early force fields employed fixed atomic charges to model the electrostatic interactions. Fixed-charge electrostatics does not account for the many-body polarization that can vary significantly depending on chemical and physical environments. Consequently, non-polarizable force fields fail to capture the conformational dependence of electrostatic properties. Polarizable force fields where the charges can be calculated from the energy equilibration have been developed ot address this problem ([see a recent review](https://www.annualreviews.org/doi/10.1146/annurev-biophys-070317-033349)). A drawback of including polarization is that simulations take longer to run due to the high computational cost. 
+
 
 ### Recent developments in force fields and future prospects
 Despite extensive attempts to improve force files, they have often failed to achieve quantitative accuracy. There was a realization that the functional form of potential energy was the major problem with all widely used protein force fields.
@@ -90,21 +98,17 @@ Two strategies can be used to address this problem:
 
 AMBER, CHARMM, and OPLS focused their efforts on empirical correction of the simple potential function.  AMOEBA and COMPASS worked on improving the functional form.
 
+It is well understood that charge distributions are affected by both chemical environments and local geometry changes. As we discussed above, the former is explicitly treated in polarizable force field models. AMOEBA+ (2019) improved representation of electrostatic interactions by incorporating charge penetration and intermolecular charge transfer.
 
-Unaccounted physics:
+Dependence of atomic charges on the local molecular geometry is ignored by almost all classical force fields even though it is well known that it causes issues. 
 
-It is well understood that charge distributions are affected by both chemical environments and local geometry changes. The former is explicitly treated in polarizable force field models.  The latter is ignored by almost all classical FFs even though it is well-known that it causes issues.
+One of the few force fields that consider CF contributions is SDFF:
 
+https://eurekamag.com/research/011/176/011176666.php
 
+Palmo, K.; Mannfors, B.; Mirkin, N. G.; Krimm, S. Inclusion of charge and polarizability fluxes provides needed physical accuracy in molecular mechanics force fields. Chem. Phys. Lett. 2006, 429 (4), 628.
 
-amoeba+ incorporated charge penetration and intermolecular charge transfer.
-
-- atomic charges depend on the atomic configuration (geometry-dependent charge flux)
-
-- At short distances where the electron clouds overlap, the ESPs of atoms deviate from the pure Coulomb form (1/r) due to electron shielding. This is known as the charge penetration (CP) effect. 
-
--  Induction effects arise from the distortion of a particular molecule in response to the electric field of its neighbors. Induction is often separated in concept into charge transfer (CT) and polarization. In contrast to CP, the definition of the CT effect has been far from clear. Separation of CT and polarization is intrinsically problematic because it highly depends on the method used.
-
+ Recently Geometry-Dependent Charge Flux (GDCF) model considering charge flux contributions along bond and angle was introduced in AMOEBA+(CF) force field. 
 
 [Implementation of Geometry-Dependent Charge Flux into the Polarizable AMOEBA+ Potential](https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.9b03489)
 
@@ -258,6 +262,10 @@ Main goal - to broaden the coverage of OPLS_2001 and refine torsion parameters u
 
 Banks JL, Beard HS, Cao Y, Cho AE, Damm W, Farid R, et al. Integrated Modeling Program, Applied Chemical Theory (IMPACT). J Comput Chem. 2005;26: 1752–1780. doi:10.1002/jcc.20292
 
+##### [OPLS-AAx & OPLS/CM1Ax](https://pubs.acs.org/doi/10.1021/ct300180w) (2012) 
+The representation of chlorine, bromine, and iodine in aryl halides has been modified in the OPLS-AA and OPLS/CM1A force fields in order to incorporate halogen bonding. It was accomplished by adding a partial positive charge in the region of the σ-hole.
+
+
 ##### [OPLS2.0](http://dx.doi.org/doi:10.1021/ct300203w) (2012) 
 OPLS2 was developed to improve the accuracy of drug-like molecules. Substantially expanded data set contained QM data on more than 11,000 molecules. CM1A-BCC charges were used. The BCC terms were parameterized against the OPLS-AA charges for a core set of 112 molecules and the electrostatic potential at the HF/6-31G* level. The BCC terms were empirically adjusted to minimize the errors with regard to the ASFE using a training set of 153 molecules.
 
@@ -290,11 +298,20 @@ AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) momen
 
 ##### Q-AMOEBA [(N.Mauger et al., 2022)](https://pubs.acs.org/doi/10.1021/acs.jpcb.2c04454)
 
+#### OPLS
+##### OPLS/PFF https://onlinelibrary.wiley.com/doi/10.1002/jcc.10125
+
 Force field for water with polarization capabilities. Intended for simulations that explicitly take nuclear quantum effects into account.
 
 #### CHARMM 
 ##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
 ##### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
+
+## Force Fields for Small Molecules
+##### GAFF
+##### CGenFF 
+
+1. [(F.-U.Lin &  AD. MacKerell, 2020)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6733265/) Force Fields for Small Molecules
 
 ## Additional Reading
 
@@ -303,4 +320,5 @@ Force field for water with polarization capabilities. Intended for simulations t
 2. [(Hagler, 2019)](https://doi.org/doi:10.1007/s10822-018-0134-x) Force field development phase II: Relaxation of physics-based criteria… or inclusion of more rigorous physics into the representation of molecular energetics. - The latest developments in improvement of FF accuracy and robustness are discussed.
 
 3. [Tinker-HP](https://tinker-hp.org) is a multi-CPUs and multi-GPUs/multi-precision, MPI massively parallel package dedicated to long molecular dynamics simulations with classical and polarizable force fields, neural networks and advanced QM/MM.
+
 

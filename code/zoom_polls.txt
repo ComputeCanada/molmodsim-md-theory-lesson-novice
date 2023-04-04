@@ -1,0 +1,14 @@
+Poll 1:
+What is the number of non-bonded interactions in the system with ten Argon atoms?
+Answers:
+1. 10
+2. 45
+3. 90
+4. 100
+
+Poll 2:
+At which of the points on the graph will two interacting particles experience the greatest force of attraction?
+1. A
+2. B
+3. C
+4. D

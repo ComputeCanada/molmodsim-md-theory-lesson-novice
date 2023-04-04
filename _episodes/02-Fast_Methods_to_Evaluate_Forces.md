@@ -20,8 +20,7 @@ keypoints:
 ## Challenges in calculation of non bonded interactions. 
 The most computationally demanding part of a molecular dynamics simulation is the calculation of the non-bonded terms of the potential energy function. Since the non-bonded energy terms between every pair of atoms must be evaluated, the number of calculations increases as the square of the number of atoms. In order to speed up the computation, only interactions between atoms separated by less than a preset cutoff distance are considered. 
 
-
-In order to accelerate force computation, one needs an efficient method for excluding pairs of atoms separated by a long distance. Such methods are known as "neighbour searching methods".
+It is essential to use an efficient way of excluding pairs of atoms separated by a long distance in order to accelerate force computation. Such methods are known as "neighbour searching methods".
 
 ## Neighbour Searching Methods
 The search for pairs of particles that are needed for calculation of the short-range non-bonded interactions is usually accelerated by maintaining a list of all particles within a predefined cutoff distance of each other.  
@@ -29,7 +28,7 @@ The search for pairs of particles that are needed for calculation of the short-r
 Particle neighbours are determined either by dividing the simulation system into grid cells (cell lists) or by constructing a neighbour list for each particle (Verlet lists).
 
 ### Cell Lists
-The cell lists method divides the simulation domain into *n* cells with edge length greater or equal to the cutoff radius of the interaction to be computed.  The interaction potential for each particle is then computed as the sum of the pairwise interactions between the particle and all other particles in the same cell and all other particles in the neighbouring cells (26 cells for 3-dimensional simulation).
+The cell lists method divides the simulation domain into *n* cells with edge length greater or equal to the cutoff radius of the interaction to be computed. With this cell size, all particles within the cutoff will be considered. The interaction potential for each particle is then computed as the sum of the pairwise interactions between the current particle and all other particles in the same cell plus all particles in the neighbouring cells (26 cells for 3-dimensional simulation).
 
 ![Figure: Grid-cell lists]({{ page.root }}/fig/Grid_list.png){: width="240" }
 
@@ -41,8 +40,6 @@ Verlet offers more efficient computation of pairwise interactions at the expense
 In practice, almost all simulations are run in parallel and use a combination of spatial decomposition and Verlet lists.
 
 ![Figure: Verlet lists]({{ page.root }}/fig/Verlet_list.png) 
-
-
 
 
 ## Problems with Truncation of Lennard-Jones Interactions and How to Avoid Them?
@@ -69,13 +66,13 @@ Figure 1. The Distance Dependence of Potential and Force for Different Truncatio
 ### How to Choose the Appropriate Cutoff Distance?
 A common practice is to truncate at 2.5 $$\sigma$$ and this practice has become a minimum standard for truncation.  At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$, and it is assumed that errors arising from this truncation are small enough. The dependence of the cutoff on $$\sigma$$ means that the choice of the cutoff distance depends on the force field and atom types used in the simulation. For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
 
-In practice, increasing cutoff does not necessarily improve accuracy. There are documented cases showing opposite tendency [(Yonetani, 2006)]({{ page.root }}/reference.html#yonetani-2006).  Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot say that you used this forcefield. Thus to ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field.
+In practice, increasing cutoff does not necessarily improve accuracy. There are documented cases showing opposite tendency [(Yonetani, 2006)]({{ page.root }}/reference.html#yonetani-2006).  Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters. If you use cutoff 14 for the force field developed with the cutoff 9, then you cannot claim that you used this original forcefield. To ensure consistency and reproducibility of simulations, you should choose a cutoff that is appropriate for the force field.
 
 Table 1. Cutoffs Used in Development of the Common Force Fields
 
 | AMBER | CHARM  |  GROMOS  | OPLS |
 |:-----:|:------:|:---------:|:----:|
-| 8 <span>&#8491;</span> | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
+| 8 <span>&#8491;</span>, 10 <span>&#8491;</span> (ff19SB) | 12 <span>&#8491;</span> | 14 <span>&#8491;</span> | 11-15 <span>&#8491;</span> (depending on a molecule size)
 
 
 #### Properties that are very sensitive to the choice of cutoff

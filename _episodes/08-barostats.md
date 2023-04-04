@@ -27,7 +27,7 @@ As with temperature control, there are different algorithms of pressure control 
 
 ### Weak coupling methods
 #### Berendsen pressure bath coupling. 
-Berendsen barostat is conceptually similar to Berendsen thermostat. This thermostat is available in all simulation packages. To regulate pressure this algorithm changes the volume by an increment proportional to the difference between the internal pressure and pressure in a weakly coupled bath. Berendsen thermostat is very efficient in equilibrating the system. However, it does not sample the exact NPT statistical ensemble. Often pressure fluctuations with this barostat are smaller then they should be. It is also known that this algorithm induces artifacts into simulations of in-homogeneous systems such as aqueous biopolymers or liquid/liquid interfaces.
+Berendsen barostat is conceptually similar to Berendsen thermostat. This thermostat is available in all simulation packages. To regulate pressure this algorithm changes the volume by an increment proportional to the difference between the internal pressure and pressure in a weakly coupled bath. Berendsen thermostat is very efficient in equilibrating the system. However, it does not sample the exact NPT statistical ensemble. Often pressure fluctuations with this barostat are smaller then they should be. It is also known that this algorithm induces artifacts into simulations of inhomogeneous systems such as aqueous biopolymers or liquid/liquid interfaces.
 
 The time constant for pressure bath coupling is the main parameter of the Berendsen thermostat. The pressure of the system is corrected such that the deviation exponentially decays with a lifetime defined by this constant. 
 

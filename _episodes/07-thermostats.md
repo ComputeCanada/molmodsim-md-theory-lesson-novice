@@ -116,7 +116,8 @@ The extended system method originally introduced by Nose and subsequently develo
 The time constant parameter in this thermostat controls the period of temperature fluctuations at equilibrium. 
 
 #### Nosé-Hoover-chains
-A modification of the Nosé-Hoover thermostat which includes not a single thermostat variable but a chain of variables.  [Martyna-1992][Martyna-1992]. Nose-Hoover thermostat with one variable does not guarantee ergodicity, especially for small or stiff systems. Chaining variables behaves better for small or stiff cases, however an infinite chain is required to completely correct these issues. 
+A modification of the Nosé-Hoover thermostat which includes not a single thermostat variable but a chain of variables.  [Martyna-1992][Martyna-1992]. Nose-Hoover thermostat with one variable does not guarantee ergodicity, especially for small or stiff systems.(In an ergodic moving system any point, will eventually visit all parts of the space it moves in, in a uniform and random manner).
+Chaining variables behaves better for small or stiff cases, however an infinite chain is required to completely correct these issues. 
 
 ### Global and local thermostats
 Global thermostats control temperature of all atom in a system uniformly. This may lead to cold solute and hot solvent due to a slow heat transfer.
