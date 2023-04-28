@@ -1,0 +1,19 @@
+# Custom Dictionary Words
+ACENET
+callout
+Carpentries
+datacarpentry
+endcomment
+endfor
+endunless
+forloop
+glyphicon
+htitle
+keypoint
+keypoints
+librarycarpentry
+mathjax
+molmodsim
+prereq
+swcarpentry
+Zenodo

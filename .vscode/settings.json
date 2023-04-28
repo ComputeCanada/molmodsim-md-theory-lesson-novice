@@ -1,0 +1,10 @@
+{
+    "cSpell.customDictionaries": {
+        "custom-dictionary-folder-cc-carpentries-styles": {
+            "name": "custom-dictionary-folder",
+            "path": "${workspaceFolder}/.cspell/custom-dictionary-folder-cc-carpentries-styles.txt",
+            "addWords": true,
+            "scope": "folder"
+        }
+    }
+}
