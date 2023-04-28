@@ -277,3 +277,62 @@ _proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
 * easier to read during the workshop
 {: .instructor_notes :}
 
+
+# Advanced formatting
+This section contains tips on enhanced formatting techniques that should also work with
+the unmodified Carpentries Style.
+
+## Centered Paragraph
+
+```
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+{: .text-center :}
+```
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+{: .text-center :}
+
+## Set Image Width
+
+The width of an image can be specified by appending `{: width="150" }` to the image link.
+e.g.:
+```
+![Alliance logo]({{ page.root }}/assets/img/alliance-icon-color.svg){: width="150" }
+```
+![Alliance logo]({{ page.root }}/assets/img/alliance-icon-color.svg){: width="150" }
+
+As `![alt text]({{ page.root }}/fig/img.svg){: width="150" }` translates to:
+`<img src="{{ page.root }}/fig/img.svg" alt="alt text" width="150" />`, the width can
+also be specified in percent.
+
+## Image in flow text.
+
+Sometimes a small-ish image is associated with a paragraph of text.
+By adding `{: align="right" }` after the image-link it is aligned on the right and the
+text flows around. To reset the flow, a break can be added `<br clear="all" />`, e.g.
+to make sure that the image doesn't flow into a paragraph that it is not related to.
+
+```
+![Alliance logo]({{ page.root }}/assets/img/alliance-icon-color.svg){: width="150" align="right" }
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+<br clear="all" />
+```
+![Alliance logo]({{ page.root }}/assets/img/alliance-icon-color.svg){: width="150" align="right" }
+_Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut_
+_labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris_
+_nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate_
+_velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non_
+_proident, sunt in culpa qui officia deserunt mollit anim id est laborum._
+<br clear="all" />
+
