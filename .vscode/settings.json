@@ -1,14 +1,14 @@
 {
     "cSpell.customDictionaries": {
-        "custom-dictionary-folder-template": {
-            "name": "custom-dictionary-folder",
-            "path": "${workspaceFolder}/.cspell/custom-dictionary-folder-cc-carpentries-styles.txt",
+        "custom-dictionary-template": {
+            "name": "custom-dictionary-template",
+            "path": "${workspaceFolder}/.cspell/custom-dictionary-template.txt",
             "addWords": false,
             "scope": "folder"
         },
-        "custom-dictionary-folder-lesson": {
-            "name": "custom-dictionary-folder",
-            "path": "${workspaceFolder}/.cspell/custom-dictionary-folder-lesson.txt",
+        "custom-dictionary-lesson": {
+            "name": "custom-dictionary-lesson",
+            "path": "${workspaceFolder}/.cspell/custom-dictionary-lesson.txt",
             "addWords": true,
             "scope": "folder"
         }
