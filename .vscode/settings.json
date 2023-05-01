@@ -1,8 +1,14 @@
 {
     "cSpell.customDictionaries": {
-        "custom-dictionary-folder-cc-carpentries-styles": {
+        "custom-dictionary-folder-template": {
             "name": "custom-dictionary-folder",
             "path": "${workspaceFolder}/.cspell/custom-dictionary-folder-cc-carpentries-styles.txt",
+            "addWords": false,
+            "scope": "folder"
+        },
+        "custom-dictionary-folder-lesson": {
+            "name": "custom-dictionary-folder",
+            "path": "${workspaceFolder}/.cspell/custom-dictionary-folder-lesson.txt",
             "addWords": true,
             "scope": "folder"
         }
