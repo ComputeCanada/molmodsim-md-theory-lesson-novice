@@ -498,3 +498,14 @@ kbd {
       padding-bottom: 10px;
       line-height: 20px;
     }
+
+
+//------------------------------------------
+// Show solution while printing (Ctrl + P)
+// -----------------------------------------
+
+@media print {
+  blockquote.solution > * {
+    display: unset !important;
+  }
+}
