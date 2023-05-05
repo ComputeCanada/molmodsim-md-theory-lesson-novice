@@ -208,6 +208,11 @@ Martyna-1992
     *Nosé–Hoover chains: The canonical ensemble via continuous dynamics.*  
     J Chem Phys. 1992;97: 2635–2643. [doi:10.1063/1.463940](https://doi.org/10.1063/1.463940)
 
+Martyna-1996
+:   Martyna GJ, Tuckerman ME, Tobias DJ, Klein ML  
+    *Explicit reversible integrators for extended systems dynamics.*  
+    Mol Phys. 1996;87(5): 1117-1157. [doi:10.1080/00268979600100761](https://doi.org/10.1080/00268979600100761)
+
 Nose-1984
 :   Nosé S.  
     *A molecular dynamics method for simulations in the canonical ensemble.*  
