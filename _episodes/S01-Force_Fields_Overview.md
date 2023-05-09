@@ -307,8 +307,8 @@ Force field for water with polarization capabilities. Intended for simulations t
 ##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
 ##### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
 ##### CHARMM Drude-19 [F.-Y. Lin, 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00057)
-##### [Drude parameters for DPPC](https://pubmed.ncbi.nlm.nih.gov/23841725/)
-##### [Drude parameters for DOPC and POPE](https://www.tandfonline.com/doi/abs/10.1080/00268976.2018.1436201)
+##### Drude parameters for DPPC [J. Chowdhary, 2013](https://pubmed.ncbi.nlm.nih.gov/23841725/)
+##### Drude parameters for DOPC and POPE [H. Chu, 2017](https://www.tandfonline.com/doi/abs/10.1080/00268976.2018.1436201)
 
 ## Force Fields for Small Molecules
 ##### GAFF
