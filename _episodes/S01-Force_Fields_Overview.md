@@ -306,6 +306,7 @@ Force field for water with polarization capabilities. Intended for simulations t
 #### CHARMM 
 ##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
 ##### CHARMM Drude model [(P.E.M. Lopez, 2013)](https://pubs.acs.org/doi/10.1021/ct400781b)
+##### CHARMM Drude-19 [F.-Y. Lin, 2020](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00057)
 
 ## Force Fields for Small Molecules
 ##### GAFF
@@ -320,5 +321,7 @@ Force field for water with polarization capabilities. Intended for simulations t
 2. [(Hagler, 2019)](https://doi.org/doi:10.1007/s10822-018-0134-x) Force field development phase II: Relaxation of physics-based criteria… or inclusion of more rigorous physics into the representation of molecular energetics. - The latest developments in improvement of FF accuracy and robustness are discussed.
 
 3. [Tinker-HP](https://tinker-hp.org) is a multi-CPUs and multi-GPUs/multi-precision, MPI massively parallel package dedicated to long molecular dynamics simulations with classical and polarizable force fields, neural networks and advanced QM/MM.
+
+4. [K. Vanommeslaeghe, A.D. MacKerell Jr., 2015](https://www.sciencedirect.com/science/article/abs/pii/S0304416514002736?via%3Dihub). Review of additive and polarizable CHARMM force fields for biophysics and computer-aided drug design.
 
 
