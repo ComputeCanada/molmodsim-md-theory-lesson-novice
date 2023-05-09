@@ -1,6 +1,6 @@
-# Contributing - Compute Canada Molecular Modelling and Simulation Team
+# Contributing - Digital Research Alliance of Canada's Molecular Modelling and Simulation Team
 
-**This lesson is currently under active development by the Compute Canada Molecular Modelling and Simulation Team.**
+**This lesson is currently under active development by the Alliance's  Molecular Modelling and Simulation Team.**
 
 Although this is intended to be an open lesson that follows the general 
 Software and Data Carpentry contribution guidelines,
