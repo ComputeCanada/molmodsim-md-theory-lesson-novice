@@ -125,7 +125,7 @@ keypoints:
 > extendedSystem restart.xsc
 >~~~
 >{: .file-content}
-{: .callout .self_study_text }
+{: .callout}
 
 >## Comparing periodic boxes
 >Using the structure file *'conf.gro'* from the example above generate triclinic, cubic, dodecahedral and truncated octahedral boxes with the 15 <span>&#8491;</span> distance between the solute and the box edge.

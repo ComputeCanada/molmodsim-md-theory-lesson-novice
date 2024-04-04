@@ -14,7 +14,6 @@ objectives:
 - "Learn where thermostats that don't produce correct thermodynamic ensembles can still be very useful."
 keypoints:
 - "On the molecular level, temperature manifests itself as a number of particles having a certain average kinetic energy."
-- "Thermodynamic ensembles are ... FIXME"
 - "Some temperature control algorithms (e.g. the Berendsen thermostat) fail to produce kinetic energy distributions that represent a correct thermodynamic ensemble."
 - "Other thermostats, like Nosé-Hoover, produce correct thermodynamic ensembles but can take long to converge."
 - "Even though the the Berendsen thermostat fails to produce correct thermodynamic ensembles, it can be useful for system relaxation as it is robust and converges fast."
@@ -43,10 +42,6 @@ Velocity distributions obtained from MD simulations of water at different temper
 ## Thermodynamic ensembles
 MD simulations are usually simulate one of the following thermodynamic ensembles:
 
-1. The *microcanonical* or constant **NVE** ensemble, where the number of particles (*N*), the system's Volume (*V*) and the energy (*E*) are kept constant during the simulation.
-2. The *canonical* or constant **NVT** ensemble, where the number of particles, the Volume and the temperature (*T*) are kept constant.
-3. The *isothermal-isobaric* or **NPT** ensemble, where number of particles, the system's pressure (*P*) and temperature are kept constant.
-{: .self_study_text :}
 1. The *microcanonical* or constant *NVE* ensemble.
 2. The *canonical* or constant *NVT* ensemble.
 3. The *isothermal-isobaric* or constant *NPT* ensemble.
@@ -65,7 +60,6 @@ MD simulations are usually simulate one of the following thermodynamic ensembles
 2. Weak coupling methods
 3. Stochastic methods
 4. Extended system dynamics
-{: .instructor_notes :}
 
 ### 1. Strong coupling methods
 #### Velocity rescaling 

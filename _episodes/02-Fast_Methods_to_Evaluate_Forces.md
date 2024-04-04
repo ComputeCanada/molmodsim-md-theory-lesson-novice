@@ -92,7 +92,7 @@ Table 1. Cutoffs Used in Development of the Common Force Fields
 - the lipid bi-layer properties [(Huang, 2014)]({{ page.root }}/reference.html#Huang-2014),
 - the structural properties of proteins [(Piana, 2012)]({{ page.root }}/reference.html#Piana-2012).
 
-For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff must be larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#grosfils-2009).
+For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, and in some cases the cutoff larger than 6 $$ \sigma $$ was required for reliable simulations [(Grosfils, 2009)]({{ page.root }}/reference.html#grosfils-2009).
 
 #### Effect of cutoff on energy conservation
 - Short cutoff may lead to an increase in the temperature of the system over time. 

@@ -27,7 +27,7 @@ $ \qquad {P}=\frac{NK_{B}T}{V}+\frac{1}{3V}\langle\sum\{r_{ij}F_{ij}}\rangle$
 ## Pressure Control Algorithms
 - Regulate pressure by adjusting the volume 
 - In practice barostats do that by scaling coordinates of each atom by a small factor. 
-- The methods of maintaining temperature fall into four categories:
+- The methods of maintaining pressure fall into four categories:
 
 1. Weak coupling methods
 2. Extended system methods
