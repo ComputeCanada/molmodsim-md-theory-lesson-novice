@@ -96,7 +96,7 @@ Examples: [MMFF94](https://doi.org/10.1002/(SICI)1096-987X(199905)20:7<730::AID-
 
 Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/24163642/), [DRUDE](https://pubs.acs.org/doi/10.1021/acs.jctc.7b00262)
 
-### Energy Terms of Biomolecular Force Fields
+## Energy Terms of Biomolecular Force Fields
 ### Non-Bonded Terms
 - Describe non-elecrostatic and electrostatic interactions between all pairs of atoms. 
 
@@ -216,7 +216,7 @@ $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}
 
 ![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="360" }
 
-## Short-range and Long-range Interactions
+#### Short-range and Long-range Interactions
 - Interaction is short-range if the potential decreases faster than *r<sup>-3</sup>*
 - The Lennard-Jones interactions are short-ranged, *r<sup>-6</sup>*.
 - The Coulomb interactions are long-ranged, *r<sup>-1</sup>*. 
@@ -294,17 +294,18 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 ![graph: Phi Psi]({{ page.root }}/fig/cmap_energy.png){: width="240" }
 
 
-### Energy scale of potential terms
-
-|----------------------|:------------------|:
-| $$k_BT$$ at 298 K    | ~ 0.593          |$$\frac{kcal}{mol}$$ 
-| Bond vibrations      | ~ 100 ‐ 500      |$$\frac{kcal}{mol \cdot \unicode{x212B}^2}$$
-| Bond angle bending   | ~ 10 - 50        |$$\frac{kcal}{mol \cdot deg^2}$$
-| Dihedral rotations   | ~ 0 - 2.5        |$$\frac{kcal}{mol \cdot deg^2}$$
-| van der Waals        | ~ 0.5            |$$\frac{kcal}{mol}$$ 
-| Hydrogen bonds       | ~ 0.5 - 1.0      |$$\frac{kcal}{mol}$$ 
-| Salt bridges         | ~ 1.2 - 2.5      |$$\frac{kcal}{mol}$$ 
-
+>## Energy scale of potential terms
+>
+>|----------------------|:------------------|:
+>| $$k_BT$$ at 298 K    | ~ 0.593          |$$\frac{kcal}{mol}$$ 
+>| Bond vibrations      | ~ 100 ‐ 500      |$$\frac{kcal}{mol \cdot \unicode{x212B}^2}$$
+>| Bond angle bending   | ~ 10 - 50        |$$\frac{kcal}{mol \cdot deg^2}$$
+>| Dihedral rotations   | ~ 0 - 2.5        |$$\frac{kcal}{mol \cdot deg^2}$$
+>| van der Waals        | ~ 0.5            |$$\frac{kcal}{mol}$$ 
+>| Hydrogen bonds       | ~ 0.5 - 1.0      |$$\frac{kcal}{mol}$$ 
+>| Salt bridges         | ~ 1.2 - 2.5      |$$\frac{kcal}{mol}$$ 
+>
+{: .callout}
 
 ### Exclusions from Non-Bonded Interactions
 - In pairs of atoms connected by chemical bonds bonded energy terms replace non-bonded interactions. 
