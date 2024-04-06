@@ -146,20 +146,22 @@ The distribution of quality scores for different water models in the space of di
 ### Other things to consider
 - Water models have traditionally only been parameterized for a single temperature of 298K (SPC/E, TIP3P, etc.)
  
-### Force Field Parameters of the common Water Models
-
-|     | TIP3P  | SPC/E   | TIP4P-Ew | OPC    | OPC3    |
-|---  |--------|---------|----------|--------|---------|
-|OH   | 0.9572 | 1.0     | 0.9572   | 0.8724 | 0.9789  |
-|HH   | 1.5136 | 1.63    | 1.5136   | 1.3712 | 1.5985  | 
-|HOH  | 104.52 | 109.47  | 104.52   | 103.6  | 109.47  |
-|OM   | -      |  -      | 0.125    | 0.1594 |  -      |
-|A(12)| 582.0  |629.4    | 656.1    | 865.1  |  667.9  | 
-|B(6) | 595.0  |625.5    | 653.5    | 858.1  |         |
-|qO   | −0.834 | −0.8476 | −1.04844 | −1.3582| -0.8952 |
-|qH   | +0.417 | +0.4238 | +0.52422 | +0.6791| +0.4476 |
-
-Nonbonded OPC3: sigma=1.7814990, epsilon=0.163406 
+>## Force Field Parameters of the common Water Models
+>
+>|     | TIP3P  | SPC/E   | TIP4P-Ew | OPC    | OPC3    |
+>|---  |--------|---------|----------|--------|---------|
+>|OH   | 0.9572 | 1.0     | 0.9572   | 0.8724 | 0.9789  |
+>|HH   | 1.5136 | 1.63    | 1.5136   | 1.3712 | 1.5985  | 
+>|HOH  | 104.52 | 109.47  | 104.52   | 103.6  | 109.47  |
+>|OM   | -      |  -      | 0.125    | 0.1594 |  -      |
+>|A(12)| 582.0  |629.4    | 656.1    | 865.1  |  667.9  | 
+>|B(6) | 595.0  |625.5    | 653.5    | 858.1  |         |
+>|qO   | −0.834 | −0.8476 | −1.04844 | −1.3582| -0.8952 |
+>|qH   | +0.417 | +0.4238 | +0.52422 | +0.6791| +0.4476 |
+>
+> Nonbonded OPC3: sigma=1.7814990, epsilon=0.163406 
+>
+{: .callout}
 
 ### References
 1. [Structure and Dynamics of the TIP3P, SPC, and SPC/E Water Models at 298 K](https://pubs.acs.org/doi/full/10.1021/jp003020w)
