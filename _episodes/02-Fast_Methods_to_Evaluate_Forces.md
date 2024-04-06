@@ -103,7 +103,21 @@ For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, 
 - The short-range contribution is calculated by exact summation. 
 - The forces beyond the cutoff radius are approximated using Particle-Mesh Ewald (PME) method.
 
-<br><br>
+<br>
+
+> ## Challenge: Truncation of VDW Interactions
+>
+> Which truncation method modifies VDW interactions only near the cut-off distance?
+>
+> > ## Solution
+> >
+> > Switching functions
+> >
+> {: .solution}
+{: .challenge}
+
+<br>
+
 > ## Selecting Neighbour Searching Methods
 > **GROMACS**
 >
@@ -139,18 +153,6 @@ For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, 
 > ~~~
 > {: .file-content}
 {: .callout}
-
-
-> ## Truncation of VDW Interactions
->
-> Which truncation method modifies VDW interactions only near the cut-off distance?
->
-> > ## Solution
-> >
-> > Switching functions
-> >
-> {: .solution}
-{: .challenge}
 
 
 > ## Selecting LJ Potential Truncation Method

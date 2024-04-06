@@ -145,8 +145,9 @@ The time constant parameter in this thermostat controls the period of temperatur
 - Local thermostats work well for large solutes.
 - Temperature of small solutes this approach may significantly fluctuate leading to unrealistic dynamics.
 
+<br>
 
-> ## Thermodynamic ensembles
+> ## Challenge: Thermodynamic ensembles
 >
 > What thermodynamic ensemble describes an isolated system?
 > 1. Canonical
@@ -161,8 +162,9 @@ The time constant parameter in this thermostat controls the period of temperatur
 > {: .solution}
 {: .challenge}
 
+<br>
 
-> ## Thermostats
+> ## Challenge: Thermostats
 >
 > Which of the following statements is incorrect? 
 > 1. Stochastic temperature control methods impair conformational transitions
@@ -187,23 +189,24 @@ The time constant parameter in this thermostat controls the period of temperatur
 >tCoupleFCol
 >
 >In GROMACS temperature of a selected groups of atoms can be controlled independently using *tc-grps*.  Temperature coupling groups are coupled separately to temperature bath.
-{: .callout .self_study_text }
+{: .callout}
 
-### Selecting thermostats in molecular dynamics packages
-
-| Thermostat/MD package | GROMACS                      |  NAMD                    | AMBER         |
-|-----------------------|------------------------------|--------------------------|---------------|
-| velocity rescaling    |                              |  reascaleFreq (steps)    |               |
-| velocity reassignment |                              |  reassignFreq (steps)    |               |
-| Andersen              | tcoupl = andersen            |                          |               |
-| massive-Andersen      | tcoupl = andersen-massive    |                          | ntt = 2       |
-| Lowe-Andersen         |                              |  loweAndersen on         |               |
-| Berendsen             | tcoupl = berendsen           |  tCouple on              | ntt = 1       |
-| Langevin              |                              |  langevin on             | ntt = 3       |
-| Bussi                 | tcoupl = V-rescale           |  stochRescale  on        |               |
-| Nose-Hoover           | tcoupl = nose-hoover         |                          |               |
-| Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |
-
+>## Selecting thermostats in molecular dynamics packages
+>
+>| Thermostat/MD package | GROMACS                      |  NAMD                    | AMBER         |
+>|-----------------------|------------------------------|--------------------------|---------------|
+>| velocity rescaling    |                              |  reascaleFreq (steps)    |               |
+>| velocity reassignment |                              |  reassignFreq (steps)    |               |
+>| Andersen              | tcoupl = andersen            |                          |               |
+>| massive-Andersen      | tcoupl = andersen-massive    |                          | ntt = 2       |
+>| Lowe-Andersen         |                              |  loweAndersen on         |               |
+>| Berendsen             | tcoupl = berendsen           |  tCouple on              | ntt = 1       |
+>| Langevin              |                              |  langevin on             | ntt = 3       |
+>| Bussi                 | tcoupl = V-rescale           |  stochRescale  on        |               |
+>| Nose-Hoover           | tcoupl = nose-hoover         |                          |               |
+>| Nose-Hoover-chains    | nh-chain-length (default 10) |                          |               |
+>
+{: .callout}
 
 {% comment %}
 ### References

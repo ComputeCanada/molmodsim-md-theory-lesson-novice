@@ -7,9 +7,9 @@ questions:
 - "What pressure control algorithms are commonly used?"
 - "What are the strengths and weaknesses of these common barostats?"
 objectives:
-- ""
+- "Identify the appropriate method for controlling pressure"
 keypoints:
-- ""
+- "Each barostat or thermostat technique has its own limitations and it is your responsibility to choose the most appropriate method or their combination for the problem of interest."
 ---
 ## Introduction 
 The role of pressure control algorithms is to keep pressure in the simulation system constant or to apply an external stress to the simulated system. 
@@ -56,7 +56,6 @@ Reference: [Molecular dynamics with coupling to an external bath](https://aip.sc
 - Volume adjusts itself to equalize the internal and external pressure. 
 - Volume serves as a piston, and is given a fictitious "mass" controlling the decay time of pressure fluctuations.
 - Extended system methods are time-reversible. They can be used to integrate backwards, for example, for transition path sampling.
-{: .instructor_notes :}
 
 #### Parrinello-Rahman barostat
 - Extension of the Andersen method allowing changes in the shape of the simulation cell [[Parrinello and Rahman, 1980]](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.45.1196).
@@ -118,29 +117,24 @@ References:
 
 
 ## Pitfalls
-To ensure stability of a simulation volume must be adjusted very slowly with a small increments at each simulations step. Rapid change of the system size may lead to simulation crash. This can occur, for example when pressure coupling is turned on when you begin simulation from a cold start and turn pressure coupling too early in the heating process. In this case, the difference between the target and the real pressure will be large, the program will try to adjust the density too quickly, and bad things (such as SHAKE failures) are likely to happen.
-{: .self_study_text :}
 - If the difference between the target and the real pressure is large, the program will try to adjust the density too quickly.
 - Rapid change of the system size may lead to simulation crash.
 - To ensure stability of a simulation volume must be adjusted very slowly with a small likely 
-{: .instructor_notes :}
 
+<br>
 
-## Conclusion
-Each barostat or thermostat technique has its own limitations and it is your responsibility to choose the most appropriate method or their combination for the problem of interest.
-
-
-### Selecting barostats in molecular dynamics packages
-
-| Thermostat\MD package | GROMACS                      |  NAMD                    | AMBER         |
-|-----------------------|------------------------------|--------------------------|---------------|
-| Berendsen             | pcoupl = Berendsen           |  BerendsenPressure on    | barostat = 1  |
-| Stoch. cell rescaling | pcoupl = C-rescale           |                          |               |
-| Langevin              |                              |  LangevinPiston on       |               |
-| Monte-Carlo           |                              |                          | barostat = 2  |
-| Parrinello-Rahman     | pcoupl = Parrinello-Rahman   |                          |               |
-| MTTK                  | pcoupl = MTTK                |                          |               |
-
+>## Selecting barostats in molecular dynamics packages
+>
+>| Thermostat\MD package | GROMACS                      |  NAMD                    | AMBER         |
+>|-----------------------|------------------------------|--------------------------|---------------|
+>| Berendsen             | pcoupl = Berendsen           |  BerendsenPressure on    | barostat = 1  |
+>| Stoch. cell rescaling | pcoupl = C-rescale           |                          |               |
+>| Langevin              |                              |  LangevinPiston on       |               |
+>| Monte-Carlo           |                              |                          | barostat = 2  |
+>| Parrinello-Rahman     | pcoupl = Parrinello-Rahman   |                          |               |
+>| MTTK                  | pcoupl = MTTK                |                          |               |
+>
+{: .callout}
 
 {% comment %}
 ### References

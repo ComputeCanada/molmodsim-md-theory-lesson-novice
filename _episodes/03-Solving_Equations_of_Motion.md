@@ -216,6 +216,8 @@ Extensions of the original SHAKE algorithm:  RATTLE, QSHAKE, WIGGLE, MSHAKE, P-S
 - The parallel LINCS (P-LINCS) allows to constrain all bonds in large molecules. 
 - Not suitable for constraining both bonds and angles.
 
+<br>
+
 > ## Choosing simulation time step
 >
 > Which of the following methods allows for a time step of 4 fs?
@@ -230,6 +232,8 @@ Extensions of the original SHAKE algorithm:  RATTLE, QSHAKE, WIGGLE, MSHAKE, P-S
 > >
 > {: .solution}
 {: .challenge}
+
+<br>
 
 > ## Specifying Constraints
 > **GROMACS**

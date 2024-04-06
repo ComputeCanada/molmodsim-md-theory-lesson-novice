@@ -53,7 +53,9 @@ keypoints:
 - **Direct space tolerance**. Controls the splitting into direct and reciprocal part. Higher tolerance shifts more charges into Fourier space.
 - **Interpolation order** is the order of the B-spline interpolation. The higher the order, the better the accuracy.   
 
-> ## Electrostatic interactions
+<br>
+
+> ## Challenge: Electrostatic interactions
 >
 > Which of the following statements is incorrect?  
 > For more accurate electrostatic calculations you need to:
@@ -69,14 +71,7 @@ keypoints:
 > {: .solution}
 {: .challenge}
 
-### 6. Electrostatic interactions
-Which of the following statements is incorrect? 
-For more accurate electrostatic calculations you need to:
-1. Decrease grid spacing
-2. Increase the grid dimensions
-3. Increase direct space tolerance
-4. Increase the interpolation order
-
+<br>
 
 > ## PME variables
 > 

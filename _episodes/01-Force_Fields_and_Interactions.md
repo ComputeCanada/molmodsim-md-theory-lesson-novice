@@ -221,17 +221,6 @@ $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}
 - The Lennard-Jones interactions are short-ranged, *r<sup>-6</sup>*.
 - The Coulomb interactions are long-ranged, *r<sup>-1</sup>*. 
 
-> ## Counting Non-Bonded Interactions
->
-> How many non-bonded interactions are in the system with ten Argon atoms? 10, 45, 90, or 200?
->
-> > ## Solution
-> >
-> > Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interaction ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
-> >
-> {: .solution}
-{: .challenge}
-
 ### Bonded Terms
 
 #### The bond potential
@@ -317,17 +306,6 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 | Salt bridges         | ~ 1.2 - 2.5      |$$\frac{kcal}{mol}$$ 
 
 
-> ## Interaction potentials
->
-> Which potential term describes the interaction between two molecules? CMAP, Urey-Bradley, Lennard-Jones or angle?
->
-> > ## Solution
-> >
-> > The Lennard-Jones potential
-> >
-> {: .solution}
-{: .challenge}
-
 ### Exclusions from Non-Bonded Interactions
 - In pairs of atoms connected by chemical bonds bonded energy terms replace non-bonded interactions. 
 - All pairs of connected atoms separated by up to 2 bonds (1-2 and 1-3 pairs) are excluded from non-bonded interactions. It is assumed that they are properly described with bond and angle potentials.
@@ -346,8 +324,22 @@ With the help of MD it is possible to model phenomena that cannot be studied exp
 
 For more examples of the types of information MD simulations can provide read the review article: [Molecular Dynamics Simulation for All](https://www.cell.com/neuron/fulltext/S0896-6273(18)30684-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627318306846%3Fshowall%3Dtrue).
 
+<br>
 
-> ## Exclusions
+> ## Challenge: Counting Non-Bonded Interactions
+>
+> How many non-bonded interactions are in the system with ten Argon atoms? 10, 45, 90, or 200?
+>
+> > ## Solution
+> >
+> > Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interaction ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
+> >
+> {: .solution}
+{: .challenge}
+
+<br>
+
+> ##  Challenge: Exclusions
 >
 > How many 1-4 interactions between carbon atoms are in the system composed of 100 pentane (H3C-CH2-CH2-CH2-CH3) molecules?
 >
@@ -358,6 +350,20 @@ For more examples of the types of information MD simulations can provide read th
 > {: .solution}
 {: .challenge}
 
+<br>
+
+> ##  Challenge: Interaction potentials
+>
+> Which potential term describes the interaction between two molecules? CMAP, Urey-Bradley, Lennard-Jones or angle?
+>
+> > ## Solution
+> >
+> > The Lennard-Jones potential
+> >
+> {: .solution}
+{: .challenge}
+
+<br>
 
 > ## Specifying Exclusions
 > **GROMACS**
@@ -397,16 +403,3 @@ For more examples of the types of information MD simulations can provide read th
 > {: .file-content}
 > If **scaled1-4** is set, the electrostatic interactions for 1-4 pairs are multiplied by a constant factor specified by the **1-4scaling** parameter. The LJ interactions for 1-4 pairs are divided by **scnb**.
 {: .callout}
-
-{% comment %}
-> ## Counting Non-Bonded Interactions (poll #1)
->
-> How many non-bonded interactions are in the system with ten Argon atoms?
->
-> > ## Solution
-> >
-> > Argon atoms are neutral, so there is no Coulomb interaction. Atoms don't interact with themselves and the interaction ij is the same as the interaction ji.  Thus the total number of pairwise non-bonded interactions is (10x10 - 10)/2 = 45.
-> >
-> {: .solution}
-{: .challenge}
-{% endcomment %}
