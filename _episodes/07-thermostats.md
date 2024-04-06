@@ -145,6 +145,38 @@ The time constant parameter in this thermostat controls the period of temperatur
 - Local thermostats work well for large solutes.
 - Temperature of small solutes this approach may significantly fluctuate leading to unrealistic dynamics.
 
+
+> ## Thermodynamic ensembles
+>
+> What thermodynamic ensemble describes an isolated system?
+> 1. Canonical
+> 2. Grand canonical
+> 3. Isothermal-isobaric
+> 4. Microcanonical 
+>
+> > ## Solution
+> >
+> > Microcanonical
+> >
+> {: .solution}
+{: .challenge}
+
+
+> ## Thermostats
+>
+> Which of the following statements is incorrect? 
+> 1. Stochastic temperature control methods impair conformational transitions
+> 2. The Berendsen thermostat is very useful for heating simulation systems
+> 3. Extended system thermostats control temperature without random velocity rescaling
+> 4. Local thermostats work well for small groups of atoms
+>
+> > ## Solution
+> >
+> > Local thermostats work well for small groups of atoms
+> >
+> {: .solution}
+{: .challenge}
+
 >## Specifying local thermostats
 >With NAMD it is possible to set coupling coefficients for each atom in occupancy or beta column of a pdb file:
 >  

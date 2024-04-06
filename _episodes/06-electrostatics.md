@@ -48,26 +48,44 @@ keypoints:
 
 #### Simulation parameters controlling speed and accuracy of PME calculations.
 
-- **Grid spacing**. Lower values lead to higher accuracy but considerably slow down the calculation. Default 1.0 Å. 
+- **Grid spacing**. Lower values lead to higher accuracy but considerably slow down the calculation. 
 - **Grid dimension**. Higher values lead to higher accuracy but considerably slow down the calculation.
 - **Direct space tolerance**. Controls the splitting into direct and reciprocal part. Higher tolerance shifts more charges into Fourier space.
-- **Interpolation order** is the order of the B-spline interpolation. The higher the order, the better the accuracy. Default 4 (cubic spline).   
+- **Interpolation order** is the order of the B-spline interpolation. The higher the order, the better the accuracy.   
 
-| Variable \ MD package | GROMACS                  | NAMD                      | AMBER                  |
-|-----------------------|--------------------------|---------------------------|------------------------|
-| Fourier grid spacing  | fourierspacing (1.2)     | PMEGridSpacing  (1.5)     |                        |
-| Grid Dimension X      | fourier-nx               | PMEGridSizeX              |  nfft1                 |
-| Grid Dimension Y      | fourier-ny               | PMEGridSizeY              |  nfft2                 |
-| Grid Dimension Z      | fourier-nz               | PMEGridSizeZ              |  nfft3                 |
-| Direct space tolerance| ewald-rtol ($$10^{-5}$$) | PMETolerance ($$10^{-5}$$)| dsum_tol ($$10^{-6}$$) |
-| Interpolation order   | pme-order (4)            | PMEInterpOrder (4)        | order (4)              |
-{: .self_study_text :}
+> ## Electrostatic interactions
+>
+> Which of the following statements is incorrect?  
+> For more accurate electrostatic calculations you need to:
+> 1. Decrease grid spacing
+> 2. Increase the grid dimensions
+> 3. Increase direct space tolerance
+> 4. Increase the interpolation order
+>
+> > ## Solution
+> >
+> > Increase direct space tolerance
+> >
+> {: .solution}
+{: .challenge}
 
-| Variable \ MD package | GROMACS                  | NAMD                      | AMBER                  |
-|-----------------------|--------------------------|---------------------------|------------------------|
-| Fourier grid spacing  | fourierspacing (1.2)     | PMEGridSpacing  (1.5)     |                        |
-| Grid Dimension [X,Y,Z]| fourier-[nx,ny,nz]       | PMEGridSize[X,Y,Z]        |  nfft[1,2,3]           |
-| Direct space tolerance| ewald-rtol ($$10^{-5}$$) | PMETolerance ($$10^{-5}$$)| dsum_tol ($$10^{-6}$$) |
-| Interpolation order   | pme-order (4)            | PMEInterpOrder (4)        | order (4)              |
+### 6. Electrostatic interactions
+Which of the following statements is incorrect? 
+For more accurate electrostatic calculations you need to:
+1. Decrease grid spacing
+2. Increase the grid dimensions
+3. Increase direct space tolerance
+4. Increase the interpolation order
 
+
+> ## PME variables
+> 
+> | Variable \ MD package | GROMACS                  | NAMD                      | AMBER                  |
+> |-----------------------|--------------------------|---------------------------|------------------------|
+> | Fourier grid spacing  | fourierspacing (1.2)     | PMEGridSpacing  (1.5)     |                        |
+> | Grid Dimension [X,Y,Z]| fourier-[nx,ny,nz]       | PMEGridSize[X,Y,Z]        |  nfft[1,2,3]           |
+> | Direct space tolerance| ewald-rtol ($$10^{-5}$$) | PMETolerance ($$10^{-5}$$)| dsum_tol ($$10^{-6}$$) |
+> | Interpolation order   | pme-order (4)            | PMEInterpOrder (4)        | order (4)              |
+>
+{: .callout}
 

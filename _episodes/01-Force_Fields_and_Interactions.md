@@ -78,7 +78,6 @@ $U(\vec{r})=\sum{U_{bonded}}(\vec{r})+\sum{U_{non-bonded}}(\vec{r})$
 
 - Only pairwise interactions are considered.
 
-
 ### Classification of force fields. ###
 #### Class 1 force fields.
 - Dynamics of bond stretching and angle bending is described by simple harmonic motion (quadratic approximation)
@@ -211,7 +210,6 @@ $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}
 
 ----
 
-
 #### The electrostatic potential
 - Point charges are assigned to the positions of atomic nuclei to approximate the electrostatic potential around a molecule. 
 - The Coulomb's law: $V_{Elec}=\frac{q_{i}q_{j}}{4\pi\epsilon_{0}\epsilon_{r}r_{ij}}$
@@ -318,6 +316,18 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 | Hydrogen bonds       | ~ 0.5 - 1.0      |$$\frac{kcal}{mol}$$ 
 | Salt bridges         | ~ 1.2 - 2.5      |$$\frac{kcal}{mol}$$ 
 
+
+> ## Interaction potentials
+>
+> Which potential term describes the interaction between two molecules? CMAP, Urey-Bradley, Lennard-Jones or angle?
+>
+> > ## Solution
+> >
+> > The Lennard-Jones potential
+> >
+> {: .solution}
+{: .challenge}
+
 ### Exclusions from Non-Bonded Interactions
 - In pairs of atoms connected by chemical bonds bonded energy terms replace non-bonded interactions. 
 - All pairs of connected atoms separated by up to 2 bonds (1-2 and 1-3 pairs) are excluded from non-bonded interactions. It is assumed that they are properly described with bond and angle potentials.
@@ -335,6 +345,18 @@ With the help of MD it is possible to model phenomena that cannot be studied exp
 - Study biological processes such as (enzyme catalysis, protein complex assembly, protein or RNA folding, etc).
 
 For more examples of the types of information MD simulations can provide read the review article: [Molecular Dynamics Simulation for All](https://www.cell.com/neuron/fulltext/S0896-6273(18)30684-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0896627318306846%3Fshowall%3Dtrue).
+
+
+> ## Exclusions
+>
+> How many 1-4 interactions between carbon atoms are in the system composed of 100 pentane (H3C-CH2-CH2-CH2-CH3) molecules?
+>
+> > ## Solution
+> >
+> > 200
+> >
+> {: .solution}
+{: .challenge}
 
 
 > ## Specifying Exclusions
