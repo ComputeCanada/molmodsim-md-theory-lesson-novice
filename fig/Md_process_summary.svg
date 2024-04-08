@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="17.944666in"
-   height="7.9485126in"
-   viewBox="0 0 455.79451 201.89222"
+   height="8.7712994in"
+   viewBox="0 0 455.79451 222.79101"
    version="1.1"
    id="svg6"
    sodipodi:docname="Md_process_summary.svg"
@@ -30,7 +30,6 @@
          id="stop3438" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient3424"
        inkscape:swatch="gradient">
       <stop
@@ -256,8 +255,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.48412716"
-     inkscape:cx="861.34394"
-     inkscape:cy="381.09822"
+     inkscape:cx="698.16368"
+     inkscape:cy="1296.1471"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -268,13 +267,13 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1372"
-     inkscape:window-height="855"
-     inkscape:window-x="120"
-     inkscape:window-y="249"
+     inkscape:window-height="819"
+     inkscape:window-x="95"
+     inkscape:window-y="25"
      inkscape:window-maximized="0"
      units="in">
     <sodipodi:guide
-       position="378.81044,275.2581"
+       position="378.81044,296.15689"
        orientation="0,-1"
        id="guide867" />
   </sodipodi:namedview>
@@ -308,10 +307,10 @@
          y="-4.9543109"
          id="tspan855">function</tspan></text>
     <rect
-       style="fill:#dae5e3;fill-opacity:1;stroke:none;stroke-width:0.403813;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#dae5e3;fill-opacity:1;stroke:none;stroke-width:0.505174;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect1258-2"
        width="59.893623"
-       height="39.656715"
+       height="62.063877"
        x="-33.638893"
        y="124.33827"
        rx="4.6684818e-06" />
@@ -324,13 +323,23 @@
          sodipodi:role="line"
          id="tspan857"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
-         x="-3.3598208"
-         y="141.28355">Iniitial</tspan><tspan
+         x="-3.3598206"
+         y="141.28355">Initial</tspan><tspan
          sodipodi:role="line"
          style="text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="-3.3598208"
          y="154.51268"
-         id="tspan861">positions</tspan></text>
+         id="tspan861">positions</tspan><tspan
+         sodipodi:role="line"
+         style="text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="-3.3598201"
+         y="167.74181"
+         id="tspan1137">and</tspan><tspan
+         sodipodi:role="line"
+         style="text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="-3.3598199"
+         y="180.97093"
+         id="tspan1139">velocities</tspan></text>
     <ellipse
        style="fill:#c2f6d6;fill-opacity:1;stroke:none;stroke-width:0.528;stroke-opacity:1"
        id="path901-1-8"
