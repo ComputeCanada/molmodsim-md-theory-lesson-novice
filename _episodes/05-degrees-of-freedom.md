@@ -4,17 +4,18 @@ teaching: 10
 exercises: 0
 questions:
 - "How is kinetic energy contained and distributed in a dynamic molecular system"
-- "Why constraints are used in MD simulations, and how they can affect dynamics"
+- "How to increase efficiency of thermodynamic sampling"
+- "How reduction of degrees of freedom affects dynamics"
 objectives:
-- ""
+- "Explain how kinetic energy is distributed in a simulation system"
+- "Understand how to correctly increase efficiency of thermodynamic sampling"
 keypoints:
-- "Degrees of Freedom in Rigid bodies."
 - "Constraints decrease the number of degrees of freedom"
 - "Imposing constraints can affect simulation outcome"
 ---
 ### Molecular degrees of freedom 
-- The number of unique ways a molecule may move (increase its kinetic energy).
-- Describe how kinetic energy is contained and distributed in a molecule. 
+- Refer to the number of unique ways a molecule may move.
+- Molecular degrees of freedom describe how kinetic energy is contained and distributed in a molecule. 
 - Translational, rotational, and vibrational components. 
 
 #### Equipartition theorem
@@ -57,11 +58,14 @@ By reducing the number of degrees of freedom we can increase thermodynamic sampl
 - An implicit solvent model eliminates the degrees of freedom associated with the solvent molecules.
 - Bond constraints eliminate vibrational degrees of freedom and make possible to use longer time steps.
 - Constraints including angles and dihedrals can be also applied. 
+- Coarse-grained models reduce degrees of freedom by averaging interactions across groups of particles.
 
 #### Reduction of the number of degrees of freedom may lead to artifacts. 
 Bond and angle constraints can: 
 {: .instructor_notes :}
 - slow down dihedral angle transitions [[1]](https://aip.scitation.org/doi/10.1063/1.453488) 
 - shift the frequencies of the normal modes in biomolecules [[2]](https://aip.scitation.org/doi/10.1063/1.455654)
-- perturb the dynamics of polypeptides [[3]](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.52.6868).
+- perturb the dynamics of polypeptides [[3]](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.52.6868).  
+Coarse-grained models:
+- Produce approximate dynamics by sacrificing atomic details.
 
