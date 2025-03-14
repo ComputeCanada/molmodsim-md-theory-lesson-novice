@@ -281,6 +281,12 @@ Added off-atom charge sites to represent halogen bonding and aryl nitrogen lone 
 
 Harder E, Damm W, Maple J, Wu C, Reboul M, Xiang JY, et al. OPLS3: A Force Field Providing Broad Coverage of Drug-like Small Molecules and Proteins. J Chem Theory Comput. 2016;12: 281–296. doi:10.1021/acs.jctc.5b00864
 
+##### [OPLS4](https://pubs.acs.org/doi/10.1021/acs.jctc.1c00302) (2021) 
+
+OPLS4 builds upon our previous work with OPLS3e to improve model accuracy on challenging regimes of drug-like chemical space that includes molecular ions and sulfur-containing moieties. Improved accuracy on benchmarks that assess small-molecule solvation and protein–ligand binding.
+
+OPLS4: Improving Force Field Accuracy on Challenging Regimes of Chemical Space. Chao Lu, Chuanjie Wu, Delaram Ghoreishi, Wei Chen, Lingle Wang, Wolfgang Damm, Gregory A. Ross, Markus K. Dahlgren, Ellery Russell, Christopher D. Von Bargen, Robert Abel, Richard A. Friesner, Edward D. Harder. J. Chem. Theory Comput. 2021, 17, 7, 4291–4300
+
 ## Polarizable Force fields
 #### AMBER
 ##### ff02pol [(P. Cieplak et al., 2001)](https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.1065)
@@ -299,9 +305,14 @@ AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) momen
 ##### Q-AMOEBA [(N.Mauger et al., 2022)](https://pubs.acs.org/doi/10.1021/acs.jpcb.2c04454)
 
 #### OPLS
-##### OPLS/PFF https://onlinelibrary.wiley.com/doi/10.1002/jcc.10125
+##### [OPLS/PFF](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10125) (2002)
 
 Force field for water with polarization capabilities. Intended for simulations that explicitly take nuclear quantum effects into account.
+
+##### [OPLS5](https://chemrxiv.org/engage/chemrxiv/article-details/66ba761201103d79c5c60641) (2024)
+
+OPLS5 builds on OPLS4. It adds explicit polarization to improve model accuracy for molecular ions and cation-pi interactions. OPLS5 also includes advances in the functional form for metals. Improved predictions of metal-organic complex structure and energetics. 
+
 
 #### CHARMM 
 ##### CHARMM fluctuating charge model [(S.Patel et al., 2004)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.20077)
