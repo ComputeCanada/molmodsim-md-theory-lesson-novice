@@ -296,7 +296,11 @@ OPLS4: Improving Force Field Accuracy on Challenging Regimes of Chemical Space. 
 ##### AMOEBA-2002 [(Ren and Ponder, 2002)](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10127)
 ##### AMOEBA-2013 [(Shi et al., 2013)](https://pubs.acs.org/doi/10.1021/ct4003702)
 
-AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) moments at each atom and explicitly treats polarization effects under various chemical and physical conditions.
+AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) moments at each atom and explicitly treats polarization effects under various chemical and physical conditions. Dipoles on each atom in AMOEBA can respond to electric field.
+
+##### AMOEBA-2017 [(J. A. Rackers et al., 2017)](https://pubs.rsc.org/en/content/articlelanding/2017/cp/c6cp06017j)
+
+##### AMOEBA-2018 [(C. Zhang et al., 2018)](https://pubs.acs.org/doi/10.1021/acs.jctc.7b01169)
 
 ##### AMOEBA+ [(C. Liu et al., 2019)](https://pubs.acs.org/doi/10.1021/acs.jctc.9b00261)
 
