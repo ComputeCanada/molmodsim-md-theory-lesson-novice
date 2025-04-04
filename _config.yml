@@ -129,3 +129,8 @@ exclude:
 
 # Turn on built-in syntax highlighting.
 highlighter: rouge
+
+plugins:
+       - jekyll-github-metadata
+github_metadata:
+     contributors: false
