@@ -216,12 +216,6 @@ $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}
 
 ![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="360" }
 
-#### Short-range and Long-range Interactions
-- Interaction is short-range if the potential decreases faster than *r<sup>-3</sup>*
-- The Lennard-Jones interactions are short-ranged, *r<sup>-6</sup>*.
-- The Coulomb interactions are long-ranged, *r<sup>-1</sup>*. 
-
-
 #### Electronic polarization   
 Types of polarizable force fields:  
 1. Fluctuating charges: polarization is modeled as a charge transfer process between atoms. In recent years, has not been actively developed.
@@ -229,6 +223,11 @@ Types of polarizable force fields:
 3. Inducible point dipoles (AMOEBA).  
 4. Gaussian Electrostatic Model: Gaussian multipole charge density on each atom. (GEM, pGM).
 
+
+#### Short-range and Long-range Interactions
+- Interaction is short-range if the potential decreases faster than *r<sup>-3</sup>*
+- The Lennard-Jones interactions are short-ranged, *r<sup>-6</sup>*.
+- The Coulomb interactions are long-ranged, *r<sup>-1</sup>*.
 
 ### Bonded Terms
 
