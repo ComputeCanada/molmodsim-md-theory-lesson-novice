@@ -325,6 +325,20 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 - Non-bonded interaction between 1-4 pairs depends on the specific force field. 
 - Some force fields exclude VDW interactions and scale down electrostatic (AMBER) while others may modify both or use electrostatic as is.
 
+### The application of Machine Learning to MD simulations
+
+- Classical force fields are inaccurate. They limit the predictive power of MD simulations. 
+- QM methods are accurate but require enormous computing power.
+
+Could we calculate accurate potential energy from molecular structures without knowing their electronic structures?
+
+What if we used a function that has no physical meaning but is computationally efficient and flexible enough to describe potential energy surfaces accurately?
+
+- Potential energy is fully determined by a molecule's geometry and atomic composition, so it is theoretically possible.
+- Train a model on high level QM calculations 
+- Predict potential energy directly from an atomic structure.
+
+
 ### What Information Can MD Simulations Provide?
 With the help of MD it is possible to model phenomena that cannot be studied experimentally. For example 
 - Understand atomistic details of conformational changes, protein unfolding, interactions between proteins and drugs
