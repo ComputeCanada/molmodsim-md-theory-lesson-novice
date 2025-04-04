@@ -219,7 +219,7 @@ $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}
 #### Electronic polarization   
 Types of polarizable force fields:  
 1. Fluctuating charges: polarization is modeled as a charge transfer process between atoms. In recent years, has not been actively developed.
-2. Drude Oscillators: massless charged particles attached to atoms via harmonic springs (CHARMM-Drude, OPLS5). 
+2. Drude oscillators: massless charged particles attached to atoms via harmonic springs (CHARMM-Drude, OPLS5). 
 3. Inducible point dipoles (AMOEBA).  
 4. Gaussian Electrostatic Model: Gaussian multipole charge density on each atom. (GEM, pGM).
 
