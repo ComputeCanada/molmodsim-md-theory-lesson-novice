@@ -8,7 +8,7 @@ on:
 jobs:
   build-website:
     if: ${{ !endsWith(github.repository, '/styles') }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       RSPM: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'
+          ruby-version: '3.1'
           bundler-cache: true
 
       - name: Set up Python
