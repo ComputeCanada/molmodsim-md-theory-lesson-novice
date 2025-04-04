@@ -1,7 +1,3 @@
-plugins:
-    - jekyll-github-metadata
-github_metadata:
-  contributors: false
 name: Website
 on:
   push:
