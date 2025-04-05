@@ -309,14 +309,14 @@ AMOEBA-2013 uses permanent electrostatic multipole (dipole and quadrupole) momen
 ##### Q-AMOEBA [(N.Mauger et al., 2022)](https://pubs.acs.org/doi/10.1021/acs.jpcb.2c04454)
 
 
-#### GEM (Gaussian Electrostatic Model)
+#### GEM<sup>*</sup> (Gaussian Electrostatic Model)  
+[(J. Chem. Theory Comput. 2014, 10, 4, 1361–1365)](https://pubs.acs.org/doi/10.1021/ct500050p)  
+Gaussian electrostatic model, uses density fitting and Hermite Gaussian auxiliary basis sets to represent atomic electron densities and extend to higher multipoles. Polarization terms from AMOEBA (Implemented in gem.pmemd - experimental)
 
-##### GEM [J. Chem. Theory Comput. 2014, 10, 4, 1361–1365](https://pubs.acs.org/doi/10.1021/ct500050p)  
-Gaussian electrostatic model, uses density fitting and Hermite Gaussian auxiliary basis sets to represent atomic electron densities and extend to higher multipoles. (Implemented in gem.pmemd - experimental)
+#### pGM (polarizable Gaussian Multipoles) 
+[(J. Chem. Theory Comput. 2025, 21, 2, 847–858)](https://doi-org.proxy.hil.unb.ca/10.1021/acs.jctc.4c01368), [(J. Chem. Phys. 2020, 153, 114116)](https://doi.org/10.1063/5.0019560)  
 
-##### pGM  [J. Chem. Theory Comput. 2025, 21, 2, 847–858](https://doi-org.proxy.hil.unb.ca/10.1021/acs.jctc.4c01368), [J. Chem. Phys. 2020, 153, 114116](https://doi.org/10.1063/5.0019560)  
-
-Based on GEM. The key advantage of pGM is its ability to integrate all electrostatic terms in a coherent manner, including all short-range and long-range terms, bonded and nonbonded terms. Implemented in AMBER and AMBERTOOLS 2024, experimental no GPU support.  
+The key advantage of pGM is its ability to integrate all electrostatic terms in a coherent manner, including all short-range and long-range terms, bonded and nonbonded terms. Implemented in AMBER and AMBERTOOLS 2024, experimental no GPU support.  
 
 #### OPLS
 ##### [OPLS/PFF](https://onlinelibrary.wiley.com/doi/10.1002/jcc.10125) (2002)

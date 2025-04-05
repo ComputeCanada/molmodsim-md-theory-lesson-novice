@@ -330,13 +330,17 @@ Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 - Classical force fields are inaccurate. They limit the predictive power of MD simulations. 
 - QM methods are accurate but require enormous computing power.
 
-Could we calculate accurate potential energy from molecular structures without knowing their electronic structures?
-
+Could we calculate accurate potential energy from molecular structures without knowing their electronic structures?  
 What if we used a function that has no physical meaning but is computationally efficient and flexible enough to describe potential energy surfaces accurately?
+
+![Machine Learning Potential]({{ page.root }}/fig/ML01.svg){: width="80%" height="auto" }
 
 - Potential energy is fully determined by a molecule's geometry and atomic composition, so it is theoretically possible.
 - Train a model on high level QM calculations 
 - Predict potential energy directly from an atomic structure.
+
+
+
 
 
 ### What Information Can MD Simulations Provide?
