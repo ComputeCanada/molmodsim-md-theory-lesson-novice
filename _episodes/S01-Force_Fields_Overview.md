@@ -341,6 +341,17 @@ OPLS5 builds on OPLS4. It adds explicit polarization to improve model accuracy f
 
 1. [(F.-U.Lin &  AD. MacKerell, 2020)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6733265/) Force Fields for Small Molecules
 
+## Neural Network Potentials
+
+#### [ANAKIN-ME](https://roitberg.chem.ufl.edu/research/) (Accurate NeurAl networK engINe for Molecular Energies)  
+ANI-1 neural networks are trained on molecules up to up to 8 atoms (H, C, N, O)
+- [ANI-1x](https://doi.org/10.1063/1.5023802)  Trained on 5 million molecular conformations, ωB97X/6-31G(d). 
+- [ANI-1ccx](https://www.nature.com/articles/s41467-019-10827-4) Trained on 500,000 molecular conformations, CCSD(T)/CBS.
+
+ANI-2 neural networks added F, Cl, S.  
+- [ANI-2x](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00121)  Trained on 8.9 million molecular conformations, ωB97X/6-31G(d).  
+
+
 ## Additional Reading
 
 1. [(Dauber-Osguthorpe, 2019)](https://link.springer.com/article/10.1007/s10822-018-0111-4) Biomolecular force fields: where have we been, where are we now, where do we need to go and how do we get there? - Review of the origins of FF based calculations, theory and methodology of FF development.
