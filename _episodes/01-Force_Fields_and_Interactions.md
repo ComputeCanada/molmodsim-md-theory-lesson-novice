@@ -221,7 +221,9 @@ Types of polarizable force fields:
 1. Fluctuating charges: polarization is modeled as a charge transfer process between atoms. In recent years, has not been actively developed.
 2. Drude oscillators: massless charged particles attached to atoms via harmonic springs (CHARMM-Drude, OPLS5). 
 3. Inducible point dipoles (AMOEBA).  
-4. Gaussian Electrostatic Model: Gaussian multipole charge density on each atom. (GEM, pGM).
+4. Gaussian Electrostatic Model (GEM). Gaussian Charge density + AMOEBA-type polarization.
+5. Polarizable Gaussian Multipole (pGM). Permanent Gaussian multipoles + Inducible Gaussian dipoles.  
+<br>
 
 
 #### Short-range and Long-range Interactions
