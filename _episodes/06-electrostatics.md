@@ -57,12 +57,11 @@ keypoints:
 
 > ## Challenge: Electrostatic interactions
 >
-> Which of the following statements is incorrect?  
-> For more accurate electrostatic calculations you need to:
-> 1. Decrease grid spacing
-> 2. Increase the grid dimensions
-> 3. Increase direct space tolerance
-> 4. Increase the interpolation order
+> What would you do to improve electrostatic calculations accuracy?
+> 1. Increase grid spacing
+> 2. Lower the grid dimensions
+> 3. Reduce the interpolation order
+> 4. Make direct space tolerance smaller
 >
 > > ## Solution
 > >
@@ -70,7 +69,6 @@ keypoints:
 > >
 > {: .solution}
 {: .challenge}
-
 <br>
 
 > ## PME variables

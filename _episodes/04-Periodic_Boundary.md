@@ -84,11 +84,11 @@ keypoints:
 
 > ## Periodic box
 >
-> Which of the statements is incorrect?
-> 1. The smallest dimension of a periodic box must be at least as large as the cut-off radius 
-> 2. The minimum box size should extend at least 10 nm from the solute
+> Which of the statements is correct?
+> 1. Ions and water can’t interact with their own periodic images
+> 2. Any box shape works equally well for all systems
 > 3. The smallest dimension of a periodic box must be at least as large as the double cut-off radius
-> 4. There is an equivalent triclinic unit cell for any repeating shape that occupies all of space
+> 4. PBCs eliminate all finite-size effects in simulations
 >
 > > ## Solution
 > >

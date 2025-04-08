@@ -166,10 +166,10 @@ The time constant parameter in this thermostat controls the period of temperatur
 
 > ## Challenge: Thermostats
 >
-> Which of the following statements is incorrect? 
-> 1. Stochastic temperature control methods impair conformational transitions
+> Which of the following statements is correct? 
+> 1. Conformational transitions are not affected by stochastic temperature control methods 
 > 2. The Berendsen thermostat is very useful for heating simulation systems
-> 3. Extended system thermostats control temperature without random velocity rescaling
+> 3. Extended system thermostats control temperature by random velocity rescaling
 > 4. Local thermostats work well for small groups of atoms
 >
 > > ## Solution
