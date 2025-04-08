@@ -60,6 +60,7 @@ By reducing the number of degrees of freedom we can increase thermodynamic sampl
 - Constraints including angles and dihedrals can be also applied. 
 - Coarse-grained models reduce degrees of freedom by averaging interactions across groups of particles.
 
+
 #### Reduction of the number of degrees of freedom may lead to artifacts. 
 Bond and angle constraints can: 
 {: .instructor_notes :}
