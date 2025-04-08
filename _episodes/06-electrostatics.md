@@ -65,7 +65,7 @@ keypoints:
 >
 > > ## Solution
 > >
-> > Increase direct space tolerance
+> > Make direct space tolerance smaller
 > >
 > {: .solution}
 {: .challenge}

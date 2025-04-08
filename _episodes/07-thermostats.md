@@ -174,7 +174,7 @@ The time constant parameter in this thermostat controls the period of temperatur
 >
 > > ## Solution
 > >
-> > Local thermostats work well for small groups of atoms
+> > The Berendsen thermostat is very useful for heating simulation systems
 > >
 > {: .solution}
 {: .challenge}
