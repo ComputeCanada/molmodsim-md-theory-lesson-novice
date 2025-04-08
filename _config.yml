@@ -32,6 +32,7 @@ episode_order:
     - '09-water_models'
     - 'end_of_workshop'
     - 'S01-Force_Fields_Overview'
+    - 'S02-ML_Force_Fields_Overview'    
 
 
 extras_order:
