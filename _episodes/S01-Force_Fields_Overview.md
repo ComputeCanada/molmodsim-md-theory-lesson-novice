@@ -352,6 +352,10 @@ ANI-2 neural networks added F, Cl, S.
 - [ANI-2x](https://pubs.acs.org/doi/10.1021/acs.jctc.0c00121)  Trained on 8.9 million molecular conformations, ωB97X/6-31G(d).  
 
 
+#### [SO3LR](https://chemrxiv.org/engage/chemrxiv/article-details/679bf19781d2151a02991c58)  
+
+Trained on 4 million molecular conformations, PBE0+MBD. SO3krates neural network for semi-local interactions combined with a pairwise force field for short-range repulsion, long-range electrostatics, and dispersion interactions. Scales to 200,000 atoms on a single GPU. Implemented in [JAX-MD](https://jax-md.readthedocs.io/en/main/).
+
 ## Additional Reading
 
 1. [(Dauber-Osguthorpe, 2019)](https://link.springer.com/article/10.1007/s10822-018-0111-4) Biomolecular force fields: where have we been, where are we now, where do we need to go and how do we get there? - Review of the origins of FF based calculations, theory and methodology of FF development.
