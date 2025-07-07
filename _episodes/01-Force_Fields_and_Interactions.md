@@ -173,9 +173,9 @@ $V_{B}(r)=Aexp(-Br) -\frac{C}{r^{6}}$
 - Risk of "buckingham catastrophe" at short distances.
 
 There is only one combining rule for Buckingham potential in GROMACS:  
-$A_{ij}=\sqrt{A_{ii}\timesA_{jj}}$  
+$A_{ij}=\sqrt{A_{ii}\times{A_{jj}}}$  
 $B_{ij}=\frac{2}{\frac{1}{B_{ii}}+\frac{1}{B_{jj}}}$  
-$C_{ij}=\sqrt{C_{ii}\timesC_{jj}}$  
+$C_{ij}=\sqrt{C_{ii}\times{C_{jj}}}$  
 {: .self_study_text :}
 **Combining rule (GROMACS)**:  
 $$A_{ij}=\sqrt{(A_{ii}A_{jj})} \qquad B_{ij}=2/(\frac{1}{B_{ii}}+\frac{1}{B_{jj}}) \qquad  C_{ij}=\sqrt{(C_{ii}C_{jj})}$$
