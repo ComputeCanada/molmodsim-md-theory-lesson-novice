@@ -195,7 +195,7 @@ $$A_{ij}=\sqrt{A_{ii}\times{A_{jj}}} \qquad B_{ij}=\frac{2}{\frac{1}{B_{ii}}+\fr
 > Geometric mean is selected by using rules 1 and 3;
 >  Lorentz–Berthelot rule is selected using rule 2.
 >
-> GROMOS force field requires rule 1; OPLS requires rule 3; CHARM and AMBER require rule 2
+> GROMOS force field requires rule 1; OPLS requires rule 3; CHARMM and AMBER require rule 2
 >
 > The type of potential function is specified in the 'nbfunc' column: 1 selects Lennard-Jones potential, 2 selects Buckingham potential.
 {: .callout .self_study_text }
