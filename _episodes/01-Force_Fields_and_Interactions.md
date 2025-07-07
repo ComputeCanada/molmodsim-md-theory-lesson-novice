@@ -23,8 +23,8 @@ keypoints:
 Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
 {: .text-center :}
 
-- The size and the length of MD simulations has been recently vastly improved.
-- Longer and larger simulations allow us to tackle wider range of problems under a wide variety of conditions.
+- The size and the length of MD simulations have been recently vastly improved.
+- Longer and larger simulations allow us to tackle a wider range of problems under a wider variety of conditions.
 
 ----
 
@@ -55,7 +55,7 @@ The focus will be on reproducibility and automation by introducing scripting and
 ## The theory behind the method of MD. 
 ### Force Fields
 
-- Understanding complex biological phenomena requires simulations of large systems for a long time windows. 
+- Understanding complex biological phenomena requires simulations of large systems for a long time window. 
 - The forces acting between atoms and molecules are very complex.
 - Very fast method of evaluations molecular interactions is needed to achieve these goals.  
 
@@ -99,15 +99,15 @@ Examples of class 3 force fields are: [AMOEBA](https://pubmed.ncbi.nlm.nih.gov/2
 
 ## Energy Terms of Biomolecular Force Fields
 ### Non-Bonded Terms
-- Describe non-elecrostatic and electrostatic interactions between all pairs of atoms. 
+- Describe non-electrostatic and electrostatic interactions between all pairs of atoms. 
 
 ![graph: Interactions]({{ page.root }}/fig/nb_matrix.svg){: width="260" }
 
-- Non-elecrostatic potential energy is most commonly described with the Lennard-Jones potential.
+- Non-electrostatic potential energy is most commonly described with the Lennard-Jones potential.
 
 #### The Lennard-Jones potential
 
-- Approximates the potential energy of non-elecrostatic interaction between a pair of non-bonded atoms or molecules:
+- Approximates the potential energy of non-electrostatic interaction between a pair of non-bonded atoms or molecules:
 
 $V_{LJ}(r)=\frac{C12}{r^{12}}-\frac{C6}{r^{6}}$
 {: .math-center:}
@@ -130,7 +130,7 @@ $C12=4\epsilon\sigma^{12},C6=4\epsilon\sigma^{6}$
 
 #### The Lennard-Jones Combining Rules
 - The *LJ* interactions between different types of atoms are computed by combining the *LJ* parameters. 
-- Avoid huge number of parameters for each combination of different atom types.
+- Avoid a huge number of parameters for each combination of different atom types.
 - Different force fields use different combining rules.
 
 ![Combining rules ]({{ page.root }}/fig/combining_rules.svg){: width="380" }
@@ -146,14 +146,14 @@ $$\sigma_{ij}=\sqrt{\sigma_{ii}\times\sigma_{jj}}\qquad\qquad\qquad \epsilon_{ij
 
 **Lorentz–Berthelot:**
 
-$$\sigma_{ij}=\frac{\sigma_{ii}+\sigma_{jj}}{2},\qquad \epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}\qquad $$ (CHARM, AMBER). 
+$$\sigma_{ij}=\frac{\sigma_{ii}+\sigma_{jj}}{2},\qquad \epsilon_{ij}=\sqrt{\epsilon_{ii}\times\epsilon_{jj}}\qquad $$ (CHARMM, AMBER). 
 
 - Known issues: overestimates the well depth
 
 >## Less common combining rules.
 >**Waldman–Hagler:**
 >
->$$\sigma_{ij}=\left(\frac{\sigma_{ii}^{6}+\sigma_{jj}^{6}}{2}\right)^{\frac{1}{6}}$$ , $$ \epsilon_{ij}=\sqrt{\epsilon_{ij}\epsilon_{jj}}\times\frac{2\sigma_{ii}^3\sigma_{jj}^3}{\sigma_{ii}^6+\sigma_{jj}^6}$$
+>$$\sigma_{ij}=\left(\frac{\sigma_{ii}^{6}+\sigma_{jj}^{6}}{2}\right)^{\frac{1}{6}}$$ , $$ \epsilon_{ij}=\sqrt{\epsilon_{ii}\epsilon_{jj}}\times\frac{2\sigma_{ii}^3\sigma_{jj}^3}{\sigma_{ii}^6+\sigma_{jj}^6}$$
 >
 >This combining rule was developed specifically for simulation of noble gases.
 >
