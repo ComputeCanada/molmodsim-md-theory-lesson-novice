@@ -271,7 +271,6 @@ $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
 
 ![graph: improper-dihedral potential]({{ page.root }}/fig/improper.svg){: width="200" }
 
-Where the dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 {: .self_study_text :}
 - The dihedral angle $$\phi$$ is the angle between planes ijk and ijl.
 
