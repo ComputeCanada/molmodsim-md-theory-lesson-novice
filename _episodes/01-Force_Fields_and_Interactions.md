@@ -290,16 +290,16 @@ $V_{Dihed}=k_\phi(1+cos(n\phi-\delta)) + ...$
 - Implemented in CHARMM and AMOEBA force fields.
 
 ### CHARMM CMAP correction potential
-- Peptide torsion angles: phi, psi, omega.
-- A protein can be seen as a series of linked sequences of peptide units which can rotate around phi/psi angles.
-- phi/psi angles define the conformation of the backbone. 
+- Peptide torsion angles: $\phi$, $\psi$, $\omega$.
+- A protein can be seen as a series of linked sequences of peptide units which can rotate around $\phi/\psi$ angles.
+- $\phi/\psi$ angles define the conformation of the backbone. 
 
 ![graph: Phi Psi]({{ page.root }}/fig/phipsi.png){: width="400" }
 
-- phi/psi dihedral angle potentials correct for force field deficiencies such as errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination, etc. 
+- $\phi/\psi$ dihedral angle potentials correct for force field deficiencies such as errors in non-bonded interactions, electrostatics, lack of coupling terms, inaccurate combination, etc. 
 - CMAP potential was developed to improve the sampling of backbone conformations. 
 - CMAP parameter does not define a continuous function. 
-- it is a grid of energy correction factors defined for each pair of phi/psi angles typically tabulated with 15 degree increments.
+- It is a grid of energy correction factors defined for each pair of$\phi/\psi$ angles typically tabulated with 15 degree increments.
 
 ![graph: Phi Psi]({{ page.root }}/fig/cmap_energy.png){: width="240" }
 
