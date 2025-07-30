@@ -46,7 +46,7 @@ $ \qquad {P}=\frac{NK_{B}T}{V}+\frac{1}{3V}\langle\sum\{r_{ij}F_{ij}}\rangle$
 - Induces artifacts into simulations of inhomogeneous systems such as aqueous biopolymers or liquid/liquid interfaces.
 - Should be avoided for production MD simulations.
 
-The time constant for pressure bath coupling is the main parameter of the Berendsen thermostat. The pressure of the system is corrected such that the deviation exponentially decays with a lifetime defined by this constant. 
+The time constant for pressure bath coupling is the main parameter of the Berendsen barostat. The pressure of the system is corrected such that the deviation exponentially decays with a lifetime defined by this constant. 
 
 Reference: [Molecular dynamics with coupling to an external bath](https://aip.scitation.org/doi/10.1063/1.448118)
 
