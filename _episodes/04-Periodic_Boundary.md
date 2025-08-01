@@ -57,7 +57,7 @@ keypoints:
 - The optimal triclinic cell has about 71% the volume of the optimal rectangular cell.
 
 ###  Box size
-- The minimum box size should extend at least 10 nm from the solute.
+- The minimum box size should extend at least 1 nm from the solute.
 
 ![10 nm margin]({{ page.root }}/fig/box_size-2.svg){: width="200" }
 
@@ -92,7 +92,7 @@ keypoints:
 >
 > > ## Solution
 > >
-> >  The smallest dimension of a periodic box must be at least as large as the cut-off radius 
+> >  The smallest dimension of a periodic box must be at least as large as the double cut-off radius 
 > >
 > {: .solution}
 {: .challenge}
