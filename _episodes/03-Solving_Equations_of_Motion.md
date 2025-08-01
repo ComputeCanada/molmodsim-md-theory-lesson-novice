@@ -34,7 +34,7 @@ keypoints:
 
 $\qquad\boldsymbol{r}(t+\delta{t})=\boldsymbol{r}(t)+\boldsymbol{v}(t)\delta{t}+\frac{1}{2}\boldsymbol{a}(t)\delta{t}^2$
 
-$\qquad\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\frac{1}{2}\boldsymbol{a}(t)\delta{t}$
+$\qquad\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\boldsymbol{a}(t)\delta{t}$
 
 
 - Assumes that acceleration does not change during time step. 
