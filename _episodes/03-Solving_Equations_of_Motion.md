@@ -57,7 +57,7 @@ Drawbacks:
 > 
 >While velocities are not needed to compute trajectories, they are useful for calculating observables e.g. the kinetic energy. The velocities can only be computed once the next positions are calculated:
 >
->$\qquad\boldsymbol{v}(t+\delta{t})=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
+>$\qquad\boldsymbol{v}(t)=\frac{r{(t+\delta{t})-r(t-\delta{t})}}{2\delta{t}}$
 >
 >The Verlet algorithm is time-reversible and energy conserving.
 {: .callout}
