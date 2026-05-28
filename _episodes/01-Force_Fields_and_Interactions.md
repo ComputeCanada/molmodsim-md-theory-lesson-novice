@@ -20,7 +20,7 @@ keypoints:
 
 
 ![MD-timeline: system-size vs. time]({{ page.root }}/fig/MD_size_timeline.png){: width="400" }
-Figure from: [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://youtu.be/EIReA3s1Nwk)
+Figure from: [Scalable molecular dynamics on CPU and GPU architectures with NAMD](https://doi.org/10.1063/5.0014475)
 {: .text-center :}
 
 - The size and the length of MD simulations have been recently vastly improved.
