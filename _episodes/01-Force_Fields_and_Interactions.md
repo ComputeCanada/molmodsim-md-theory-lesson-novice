@@ -33,7 +33,7 @@ Figure from: [Scalable molecular dynamics on CPU and GPU architectures with NAMD
 - System size: 304,780,149 atoms, 350 Å × 350 Å lipid bilayer, simulation time 84 ns
 
 ![Image: Simulation of SARS-CoV-2 with NAMD]({{ page.root }}/fig/Cov2-NAMD.jpg){: width="480" }
-Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://www.biorxiv.org/content/10.1101/2020.11.19.390187v1)
+Figure from [AI-Driven Multiscale Simulations Illuminate Mechanisms of SARS-CoV-2 Spike Dynamics](https://journals.sagepub.com/doi/10.1177/10943420211006452)
 {: .text-center :}
 
 - Showed that spike glycans can modulate the infectivity of the virus.
