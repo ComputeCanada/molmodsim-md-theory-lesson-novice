@@ -48,11 +48,9 @@ MD simulations typically model one of the following thermodynamic ensembles:
 2. **Canonical ensemble (NVT)** — constant number of particles (N), volume (V), and temperature (T)
 3. **Isothermal–isobaric ensemble (NPT)** — constant number of particles (N), pressure (P), and temperature (T)
 
-Simulation of the NVE ensemble is relatively straightforward, provided that the MD algorithm conserves the total energy of the system.
-
-The NVT ensemble is often more practically relevant because, in real experimental systems, temperature is easier to control than total energy. To maintain constant temperature, a **thermostat** algorithm is required.
-
-In many applications, simulations are performed at constant temperature and ambient pressure. In addition to a thermostat, these simulations require a **barostat** algorithm to control the pressure.
+- NVE simulations are straightforward if total energy is conserved.
+- NVT simulations use a **thermostat** to maintain constant temperature.
+- NPT simulations use both a **thermostat** and a **barostat** to maintain constant temperature and pressure.
 
 
 ## Temperature Control Algorithms
