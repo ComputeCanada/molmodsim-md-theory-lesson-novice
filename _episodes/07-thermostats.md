@@ -39,17 +39,21 @@ Velocity distributions obtained from MD simulations of water at different temper
 
 ![Plot of Maxwell-Boltzmann distributions]({{ page.root }}/fig/Maxwell_Boltzmann_distributions.svg){: width="320"} 
 
-## Thermodynamic ensembles
-MD simulations are usually simulate one of the following thermodynamic ensembles:
 
-1. The *microcanonical* or constant *NVE* ensemble.
-2. The *canonical* or constant *NVT* ensemble.
-3. The *isothermal-isobaric* or constant *NPT* ensemble.
+### Common Thermodynamic Ensembles in MD Simulations
 
-- Simulation of *NVE* ensemble is relatively easy to achieve, as long as the MD code manages to conserve the energy of the system.
-- The *NVT* ensemble is more practically relevant, as in the real world it is much easier to manage the temperature of a system rather than it's energy. 
-- Need to use a temperature control algorithm, a *thermostat*.
-- In many cases constant ambient pressure and temperature are desired. In addition to using a thermostat to control the temperature, we also need to use a pressure control algorithm, a *barostat*.
+MD simulations typically model one of the following thermodynamic ensembles:
+
+1. **Microcanonical ensemble (NVE)** — constant number of particles (N), volume (V), and energy (E)
+2. **Canonical ensemble (NVT)** — constant number of particles (N), volume (V), and temperature (T)
+3. **Isothermal–isobaric ensemble (NPT)** — constant number of particles (N), pressure (P), and temperature (T)
+
+Simulation of the NVE ensemble is relatively straightforward, provided that the MD algorithm conserves the total energy of the system.
+
+The NVT ensemble is often more practically relevant because, in real experimental systems, temperature is easier to control than total energy. To maintain constant temperature, a **thermostat** algorithm is required.
+
+In many applications, simulations are performed at constant temperature and ambient pressure. In addition to a thermostat, these simulations require a **barostat** algorithm to control the pressure.
+
 
 ## Temperature Control Algorithms
 - Allow energy to enter and leave the simulated system to keep its temperature constant. 
