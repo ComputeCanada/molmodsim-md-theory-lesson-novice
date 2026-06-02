@@ -21,12 +21,16 @@ keypoints:
 ## Integration Algorithms
 - To simulate evolution of the system in time we need to solve Newtonian equations of motions. 
 - The exact analytical solution is not feasible, the problem is solved numerically. 
+
+#### What Does “Integration” Mean in MD?
 - The approach used to find a numerical approximation to the exact solution is called integration. 
 - The integration algorithm advances positions of all atoms by  small time steps $$\delta{t}$$. 
 - If the time step is small enough the trajectory will be reasonably accurate. 
+
+#### What Makes a Good Integration Algorithm?
 - A good integration algorithm for MD should be time-reversible and energy conserving.
 
-### The Euler Algorithm
+### The Euler Algorithm (Conceptual Starting Point)
 - The simplest integration method
 
 1. Use $\boldsymbol{r}, \boldsymbol{v},\boldsymbol{a}$ at time $t$ to compute   $\boldsymbol{r}(t+\delta{t})$ and $\boldsymbol{v}(t+\delta{t})$:
@@ -41,13 +45,14 @@ $\qquad\boldsymbol{v}(t+\delta{t})=\boldsymbol{v}(t)+\boldsymbol{a}(t)\delta{t}$
 - In reality acceleration is a function of coordinates, it changes when atoms move.
 
 Drawbacks:
-{: .instructor_notes :}
-1. Not energy conserving
-2. Not reversible in time
+- Not energy conserving
+- Not reversible in time
 
 #### Applications
 - Not recommended for classical MD
 - Can be used to integrate some other equations of motion. For example, GROMACS offers a Euler integrator for Brownian (position Langevin) dynamics.
+
+### The Verlet Family of Integrators
 
 > ## The original Verlet Algorithm
 >Verlet improved the Euler integration by using positions at two successive time steps. Using positions from two time steps ensured that acceleration changes were taken into account. Essentially, this algorithm is as follows: calculate the next positions using the current positions, forces, and previous positions:  
@@ -62,7 +67,7 @@ Drawbacks:
 >The Verlet algorithm is time-reversible and energy conserving.
 {: .callout}
 
-### The Velocity Verlet Algorithm
+### Velocity Verlet (The Workhorse of Molecular Dynamics)
 Euler integrator can be improved by introducing evaluation of the acceleration at the next time step. You may recall that acceleration is a function of atomic coordinates and is determined completely by interaction potential. 
 
 - The velocities, positions and forces are calculated at the same time using the following algorithm:
@@ -74,11 +79,11 @@ Euler integrator can be improved by introducing evaluation of the acceleration a
 - The Verlet algorithm is time-reversible and energy conserving.
 
 The Velocity Verlet algorithm is mathematically equivalent to the original Verlet algorithm. It explicitly incorporates velocity, solving the problem of the first time step in the basic Verlet algorithm.  
-
+#### Why this method is so popular
 - *Due to its simplicity and stability the Velocity Verlet has become the most widely used algorithm in the MD simulations.*
 
 
-#### Leap Frog Variant of Velocity Verlet
+#### Leap-Frog Verlet (Equivalent Variant)
 - The leap frog algorithm is a modified version of the Verlet algorithm.
 - The only difference is that the velocities are not calculated at the same time as positions.
 - Positions and velocities are computed at interleaved time points, staggered in such a way that they "leapfrog" over each other.
@@ -129,7 +134,7 @@ Velocity, position, and forces are calculated using the following algorithm:
 {: .callout .self_study_text }
 
 
-## How to Choose Simulation Time Step?
+### How to Choose a Time Step?
 Larger time step allows to run simulation faster, but accuracy decreases.
 
 - Verlet family integrators are stable for time steps: 

@@ -13,7 +13,7 @@ keypoints:
 - "Periodic box should not restrict molecular motions in any way."
 - "The macromolecule shape, rotation and conformational changes should be taken into account in choosing the periodic box parameters."
 ---
-### What is PBC and why is it important?
+## What are Periodic Boundary Conditions (PBCs)?
 
 - In most cases we want to simulate a system in realistic environment, such as solution.
 - Try simulating a droplet of water, it will simply evaporate.
@@ -38,7 +38,7 @@ keypoints:
  
 - Ideal simulation system is a sphere of water surrounding the macromolecule, but spheres can't be packed to fill space.
 
-#### Octahedral and dodecahedral periodic boxes
+#### Truncated octahedron and dodecahedron periodic boxes
 
 - The dodecahedron (12 faces) or the truncated octahedron (14 faces) are closer to sphere.
 
@@ -56,7 +56,7 @@ keypoints:
 
 - The optimal triclinic cell has about 71% the volume of the optimal rectangular cell.
 
-###  Box size
+### Choosing the box size
 - The minimum box size should extend at least 1 nm from the solute.
 
 ![10 nm margin]({{ page.root }}/fig/box_size-2.svg){: width="200" }
@@ -69,8 +69,7 @@ keypoints:
 
 ![]({{ page.root }}/fig/box_size.svg){: width="400" }
 
-
-#### Pitfalls
+#### Common pitfall: elongated molecules
  - A simulation system with elongated solute in cubic or dodecahedral box  will have a large amount of water located far away from the solute.
  - Consider using a narrow rectangular box. 
  - Rotation of elongated macromolecules and/or conformational changes must be taken in consideration.

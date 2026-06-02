@@ -40,28 +40,37 @@ Velocity distributions obtained from MD simulations of water at different temper
 ![Plot of Maxwell-Boltzmann distributions]({{ page.root }}/fig/Maxwell_Boltzmann_distributions.svg){: width="320"} 
 
 
-### Common Thermodynamic Ensembles in MD Simulations
-
+### Thermodynamic Ensembles
 MD simulations typically model one of the following thermodynamic ensembles:
 
 1. **Microcanonical ensemble (NVE)** — constant number of particles (N), volume (V), and energy (E)
 2. **Canonical ensemble (NVT)** — constant number of particles (N), volume (V), and temperature (T)
 3. **Isothermal–isobaric ensemble (NPT)** — constant number of particles (N), pressure (P), and temperature (T)
 
+### Which ensemble should I use?
 - NVE simulations are straightforward if total energy is conserved.
 - NVT simulations use a **thermostat** to maintain constant temperature.
 - NPT simulations use both a **thermostat** and a **barostat** to maintain constant temperature and pressure.
 
-
-## Temperature Control Algorithms
+### Why do we need thermostats?
 - Allow energy to enter and leave the simulated system to keep its temperature constant. 
 - In practice thermostats do that by adjusting the velocities of a subset of particles. 
 - The methods of maintaining temperature fall into four categories:
-
+### Categories of thermostats
 1. Strong coupling methods
 2. Weak coupling methods
 3. Stochastic methods
 4. Extended system dynamics
+
+
+| Method  | Thermostat         | Good for equilibration? | Good for production? | Samples correct NVT? |
+| ------------------ | ----------------------- | -------------------- | -------------------- |
+| Strong  coupling | Velocity rescaling | ✓                       | ✗                    | ✗                    |
+| Weak coupling | Berendsen          | ✓                       | ✗                    | ✗                    |
+| Stochastic | Andersen           | ✓                       | Sometimes            | ✓                    |
+| Stochastic | Langevin           | ✓                       | ✓                    | ✓                    |
+| Stochastic | Bussi              | ✓                       | ✓                    | ✓                    |
+| Extended   | Nosé-Hoover        | ✓                       | ✓                    | ✓                    
 
 ### 1. Strong coupling methods
 #### Velocity rescaling 

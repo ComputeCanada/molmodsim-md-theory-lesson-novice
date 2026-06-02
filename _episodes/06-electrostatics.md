@@ -16,6 +16,9 @@ keypoints:
 
 ![graph: electrostatic potential]({{ page.root }}/fig/Coulomb_interaction.png){: width="260" }
 
+### Why are electrostatic interactions difficult to calculate?
+- Coulomb interactions decay slowly
+- Direct calculation of all pairwise Coulomb interactions scales poorly with system size 
 - Computing Coulomb potentials is often the most time consuming part of any MD simulation. 
 - Fast and efficient algorithms are required for these calculations.
 
@@ -26,27 +29,22 @@ keypoints:
 
 ![Graph: PME Decomposition]({{ page.root }}/fig/PME_decomp.svg){:width="480"}
 
-#### Fast decaying short-ranged potential (Particle part).
+#### Short-range contribution (Particle part)
 - Sum of all pairwise Coulomb interactions within a cutoff radius 
 - Implements same truncation scheme as the LJ potentials.
 
-#### Slow decaying long-ranged potential (Mesh part).
+#### Long-range contribution (Mesh part)
 - Slowly varying, smooth and periodic function.
 - All periodic functions can be represented with a sum of sine or cosine components.
 - Slowly varying functions can be accurately described by only a limited number of low frequency components (k vectors).
 
-#### PME algorithm
+### How PME works
 - Long-range electrostatic interactions are evaluated using 3-D grids in reciprocal Fourier space.
+- FFTs enable efficient computation of reciprocal-space interactions.
 
 ![Image: PME Grid]({{ page.root }}/fig/PME.png)
 
-1. Assign charges to grid cells. Charges in grid cells are obtained by interpolation. 
-2. Compute Fourier transform. 
-3. Compute potential. Coulomb interaction decays rapidly in Fourier space, and summation converges fast.     
-4. Compute inverse Fourier transform. 
-5. Interpolate gridded potentials back to atomic centers.  
-
-#### Simulation parameters controlling speed and accuracy of PME calculations.
+#### Parameters controlling PME accuracy and performance
 
 - **Grid spacing**. Lower values lead to higher accuracy but considerably slow down the calculation. 
 - **Grid dimension**. Higher values lead to higher accuracy but considerably slow down the calculation.

@@ -18,11 +18,18 @@ keypoints:
 - The cutoff distance should be appropriate for the force field and the size of the periodic box.
 ---
 ## Challenges in calculation of non bonded interactions. 
+#### Why Are Non-Bonded Interactions the Computational Bottleneck?  
 - The number of non-bonded interactions increases as the square of the number of atoms. 
 - The most computationally demanding part of a molecular dynamics simulation is the calculation of the non-bonded interactions.
 - Simulation can be significantly accelerated by limiting the number of evaluated non bonded interactions.  
 - Exclude pairs of atoms separated by long distance.
 - Maintain a list of all particles within a predefined cutoff distance of each other.
+
+### The Cutoff Distance
+A cutoff distance defines the maximum separation at which a short-range interaction is explicitly calculated.
+- using cutoff dramatically reduces the number of force calculations
+
+How to identify which atoms are within the cutoff distance?
 
 ## Neighbour Searching Methods
  - Divide simulation system into grid cells - cell lists. 
@@ -46,10 +53,22 @@ keypoints:
 - In practice, almost all simulations use a combination of spatial decomposition and Verlet lists.
 
 
+## Truncation of the Electrostatic Interactions
+
+Electrostatic interactions decay slowly with distance and can remain significant even between atoms that are far apart in the system.
+
+- The electrostatic interaction is divided into two parts: a short-range and a long-range.
+- The short-range contribution is calculated by exact summation. 
+- The forces beyond the cutoff radius are approximated using Particle-Mesh Ewald (PME) method.
+
+Periodic boundary conditions provide the framework needed to handle long-range interactions. 
+
 ## Problems with Truncation of Lennard-Jones Interactions and How to Avoid Them?
 - LJ potential is always truncated at the cutoff distance.
 - Truncation introduces a discontinuity in the potential energy.
 - A sharp change in potential may result in nearly infinite forces. 
+
+### Methods to Handle Cutoff Artifacts
 
 ![Cutoff Methods]({{ page.root }}/fig/Cutoff_Methods.svg)
 Figure 1. The Distance Dependence of Potential and Force for Different Truncation Methods
@@ -69,6 +88,13 @@ Figure 1. The Distance Dependence of Potential and Force for Different Truncatio
 |<br>$\circ$  Modify the shape of the potential function near cutoff.<br>$\circ$  Forces are modified only near the cutoff boundary and they approach zero smoothly.|![]({{ page.root }}/fig/Switching_function.png){: width="150" }  |
 |=====
 
+
+#### Which Method Should You Use?
+Trade-offs between:
+- physical accuracy
+- numerical stability
+- computational efficiency  
+
 ### How to Choose the Appropriate Cutoff Distance?
 - A common practice is to truncate at 2.5 $$\sigma$$.
 - At this distance, the LJ potential is about 1/60 of the well depth $$\epsilon$$. 
@@ -76,6 +102,7 @@ Figure 1. The Distance Dependence of Potential and Force for Different Truncatio
 
 For example for the O, N, C, S, and P atoms in the AMBER99 force field the values of $$\sigma$$ are in the range 1.7-2.1,  while for the Cs ions  $$\sigma=3.4$$. Thus the minimum acceptable cutoff, in this case, is 8.5.
 
+#### Bigger Cutoffs Are Not Always Better
 - Increasing cutoff does not necessarily improve accuracy.  
 - Each force field has been developed using a certain cutoff value, and effects of the truncation were compensated by adjustment of some other parameters.
 - To ensure consistency and reproducibility of simulation you should choose the cutoff appropriate for the force field:
@@ -98,13 +125,7 @@ For such quantities even a cutoff at 2.5 $$ \sigma $$ gives inaccurate results, 
 - Short cutoff may lead to an increase in the temperature of the system over time. 
 - The best practice is to carry out trial simulations without temperature control to test it for energy leaks or sources before a production run.
 
-## Truncation of the Electrostatic Interactions
-- The electrostatic interaction is divided into two parts: a short-range and a long-range.
-- The short-range contribution is calculated by exact summation. 
-- The forces beyond the cutoff radius are approximated using Particle-Mesh Ewald (PME) method.
-
 <br>
-
 > ## Challenge: Truncation of VDW Interactions
 >
 > Which truncation method modifies VDW interactions only near the cut-off distance?
