@@ -27,17 +27,17 @@ keypoints:
 - If energy is spread over many places (degrees of freedom), the temperature will change less.
 - The number of degrees of freedom is an essential quantity for estimating various thermodynamic variables for a simulation system (such as heat capacity, entropy, and temperature).
 
-## Translational degrees of freedom
+#### Translational degrees of freedom
 - Atoms and molecules have three degrees of freedom associated with the translation of their centers of mass about each coordinate axis.
 - Translational degrees of freedom in three dimensions yield $$\frac{3}{2}k_BT$$  of energy.
 
-## Rotational degrees of freedom
+#### Rotational degrees of freedom
 - Atoms have a negligible amount of rotational energy because their mass is concentrated in the nucleus which is very small (about $$10^{-15}$$ m).
 - A linear molecule, has two rotational degrees of freedom. 
 - A nonlinear molecule, where the atoms do not lie along a single axis, has three rotational degrees of freedom, because it can rotate around any of three perpendicular axes.
 - The rotational degrees of freedom contribute $$k_BT$$  to the energy of linear molecules and $$\frac{3}{2}k_BT$$ to the energy of non-linear molecules.
 
-## Vibrational degrees of freedom
+#### Vibrational degrees of freedom
 - A diatomic molecule has one molecular vibration mode.
 - A linear molecule with *N* atoms has *3N − 5* vibrational modes.
 - A non-linear molecule with *N* atoms has *3N − 6* vibrational modes.
@@ -51,22 +51,27 @@ keypoints:
 - Each vibrational degree of freedom contributes $$k_BT$$ to the energy of a molecule. However, this is valid only when $$k_BT$$ is much bigger than energy spacing between vibrational modes.  
 - At low temperature this condition is not satisfied, only a few vibrational states are occupied and the equipartition principle is not typically applicable.
 
-#### Increasing efficiency of thermodynamic sampling.  
+
+#### Why do degrees of freedom matter?
+- More degrees of freedom provide more ways to store energy.
+- Systems with more degrees of freedom generally experience smaller temperature changes for the same energy input.
+
+#### Degrees of freedom and simulation efficiency. 
 By reducing the number of degrees of freedom we can increase thermodynamic sampling efficiency. 
 
 - Force fields remove the electrons’ degrees of freedom by replacing them with atom centered charges. 
 - An implicit solvent model eliminates the degrees of freedom associated with the solvent molecules.
 - Bond constraints eliminate vibrational degrees of freedom and make possible to use longer time steps.
 - Constraints including angles and dihedrals can be also applied. 
+
+#### Coarse-grained models
 - Coarse-grained models reduce degrees of freedom by averaging interactions across groups of particles.
 
-
-#### Reduction of the number of degrees of freedom may lead to artifacts. 
+#### The trade-off: efficiency versus realism
 Bond and angle constraints can: 
 {: .instructor_notes :}
 - slow down dihedral angle transitions [[1]](https://aip.scitation.org/doi/10.1063/1.453488) 
 - shift the frequencies of the normal modes in biomolecules [[2]](https://aip.scitation.org/doi/10.1063/1.455654)
 - perturb the dynamics of polypeptides [[3]](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.52.6868).  
-Coarse-grained models:
-- Produce approximate dynamics by sacrificing atomic details.
+- Coarse-grained models produce approximate dynamics by sacrificing atomic details.
 
